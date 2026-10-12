@@ -332,7 +332,7 @@ Seize tables suffisent à la première version, et chacune appartient à un seul
 
 | Table | Module | Champs principaux |
 | --- | --- | --- |
-| `users` | accounts | e-mail, mot de passe haché, pays, langue, rôle, date de création |
+| `users` | accounts | e-mail, mot de passe haché, nom public, pays, langue, rôle, version de session, date du consentement newsletter, date de création |
 | `user_stacks` | accounts | utilisateur, stack |
 | `services` | routes | nom, catégorie (paiement, SMS, USSD), pays couverts |
 | `routes` | routes | auteur, service, pays, stack, langue, titre, contenu Markdown, état, version, lien vers la traduction |
@@ -341,7 +341,7 @@ Seize tables suffisent à la première version, et chacune appartient à un seul
 | `potholes` | checks | fiche, utilisateur, description, statut (ouvert, confirmé, résolu), date |
 | `sandbox_keys` | sandbox | utilisateur, opérateur, clé hachée, quota, date d'expiration |
 | `sandbox_events` | sandbox | clé, scénario, requête, réponse, webhooks envoyés, date |
-| `api_tokens` | accounts | utilisateur, usage (MCP ou API), jeton haché, dernière utilisation, révoqué |
+| `api_tokens` | accounts | utilisateur, nom, usage (MCP ou API), jeton haché, dernière utilisation, date de révocation |
 
 | Table | Module | Champs principaux |
 | --- | --- | --- |
@@ -372,12 +372,12 @@ L'API REST est le seul point d'accès aux données : l'interface, le serveur MCP
 
 | Ressource | Routes principales |
 | --- | --- |
-| Comptes | `POST /v1/auth/register`, `POST /v1/auth/login`, `POST /v1/auth/reset`, `GET /v1/me` |
+| Comptes | `POST /v1/auth/register`, `POST /v1/auth/login`, `POST /v1/auth/logout`, `POST /v1/auth/forgot`, `POST /v1/auth/reset`, `GET` et `PATCH /v1/me`, `PUT /v1/me/password`, `DELETE /v1/me`, `GET /v1/users/:handle` |
 | Fiches | `GET /v1/routes`, `GET /v1/routes/:id`, `POST /v1/routes`, `PATCH /v1/routes/:id` |
 | Vérifications | `POST /v1/routes/:id/checks`, `POST /v1/routes/:id/potholes` |
 | Piste d'essai | `POST /v1/sandbox/keys`, `GET /v1/sandbox/events`, `POST /v1/sandbox/:provider/*` |
 | Classement | `GET /v1/ranking/countries`, `GET /v1/ranking/developers` |
-| Jetons | `POST /v1/tokens`, `DELETE /v1/tokens/:id` |
+| Jetons | `GET /v1/tokens`, `POST /v1/tokens`, `DELETE /v1/tokens/:id` |
 
 | Ressource | Routes principales |
 | --- | --- |
