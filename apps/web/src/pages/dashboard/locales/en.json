@@ -1,0 +1,22 @@
+{
+  "title": "Dashboard",
+  "greeting": "Logged in as {{handle}}.",
+  "sandbox": "Open the test track",
+  "routes": {
+    "heading": "My itineraries",
+    "emptyTitle": "No itinerary published",
+    "emptyText": "Share the code that works in production. Each published itinerary earns 10 points.",
+    "action": "Write an itinerary"
+  },
+  "checks": {
+    "heading": "My checks",
+    "emptyTitle": "No check yet",
+    "emptyText": "Confirm that an itinerary still works for you. Each check earns 2 points.",
+    "action": "Browse itineraries"
+  },
+  "points": {
+    "heading": "My points",
+    "caption": "Computed from your contributions, never entered by hand.",
+    "profile": "See my public profile"
+  }
+}

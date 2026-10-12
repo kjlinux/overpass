@@ -1,0 +1,17 @@
+{
+  "memberSince": "Member since {{date}}",
+  "country": "Country",
+  "stacks": "Stacks",
+  "noStacks": "No stack given.",
+  "contributions": "Contributions",
+  "kind": "Contribution",
+  "count": "Count",
+  "routes": "Published itineraries",
+  "checks": "Checks",
+  "potholes": "Confirmed potholes",
+  "points": "Points",
+  "pointsCaption": "Published itinerary 10, check 2, confirmed pothole 5.",
+  "emptyTitle": "No contribution yet",
+  "emptyText": "This member's itineraries, checks and potholes will appear here.",
+  "retry": "Try again"
+}

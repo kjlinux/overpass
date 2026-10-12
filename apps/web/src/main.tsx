@@ -6,4 +6,8 @@ import "./index.css";
 await initI18n();
 
 const root = document.getElementById("root");
-if (root !== null) render(<App />, root);
+if (root !== null) {
+  // Preact 11 renders after existing children, so the static skeleton must go first.
+  root.replaceChildren();
+  render(<App />, root);
+}

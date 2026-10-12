@@ -3,7 +3,8 @@ import type { JSX } from "preact";
 import { useLocation } from "preact-iso";
 import { useState } from "preact/hooks";
 import { useTranslation } from "react-i18next";
-import { Button, ButtonLink, cx } from "../components/ui";
+import { Button, cx } from "../components/ui";
+import { AccountLinks } from "./AccountLinks";
 import { LanguageSelect } from "./LanguageSelect";
 import { localizedPath, navItems } from "./nav";
 
@@ -12,39 +13,6 @@ const navLink =
   "flex min-h-tap items-center px-4 font-medium text-ink no-underline hover:underline";
 
 type Props = { language: Language };
-
-function AccountLinks({ language, inMenu }: Props & { inMenu: boolean }): JSX.Element {
-  const { t } = useTranslation("layout");
-  if (inMenu) {
-    return (
-      <>
-        <li class="border-b border-rule lg:hidden">
-          <a href={localizedPath(language, "/sign-in")} class={navLink}>
-            {t("signIn")}
-          </a>
-        </li>
-        <li class="lg:hidden">
-          <a href={localizedPath(language, "/sign-up")} class={navLink}>
-            {t("signUp")}
-          </a>
-        </li>
-      </>
-    );
-  }
-  return (
-    <>
-      <a
-        href={localizedPath(language, "/sign-in")}
-        class="hidden min-h-tap items-center px-2 lg:inline-flex"
-      >
-        {t("signIn")}
-      </a>
-      <ButtonLink href={localizedPath(language, "/sign-up")} class="hidden lg:inline-flex">
-        {t("signUp")}
-      </ButtonLink>
-    </>
-  );
-}
 
 function NavList({ language }: Props): JSX.Element {
   const { t } = useTranslation("layout");

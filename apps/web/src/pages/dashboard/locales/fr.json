@@ -1,0 +1,22 @@
+{
+  "title": "Tableau de bord",
+  "greeting": "Connecté en tant que {{handle}}.",
+  "sandbox": "Ouvrir la piste d'essai",
+  "routes": {
+    "heading": "Mes itinéraires",
+    "emptyTitle": "Aucun itinéraire publié",
+    "emptyText": "Partagez le code qui marche en production. Chaque itinéraire publié rapporte 10 points.",
+    "action": "Écrire un itinéraire"
+  },
+  "checks": {
+    "heading": "Mes vérifications",
+    "emptyTitle": "Aucune vérification",
+    "emptyText": "Confirmez qu'un itinéraire marche encore chez vous. Chaque vérification rapporte 2 points.",
+    "action": "Parcourir les itinéraires"
+  },
+  "points": {
+    "heading": "Mes points",
+    "caption": "Calculés à partir de vos contributions, jamais saisis.",
+    "profile": "Voir mon profil public"
+  }
+}

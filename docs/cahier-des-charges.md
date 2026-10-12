@@ -174,7 +174,7 @@ L'inscription à la newsletter apparaît aussi dans le pied de page et à la fin
 
 | Page | Contenu obligatoire |
 | --- | --- |
-| Inscription | E-mail, mot de passe, pays. Stacks demandées à l'écran suivant, facultatives |
+| Inscription | E-mail, mot de passe, pays, puis confirmation par un lien envoyé par e-mail. Stacks demandées à l'écran suivant, facultatives |
 | Connexion | E-mail, mot de passe, lien « mot de passe oublié » |
 | Mot de passe oublié et réinitialisation | Un champ par écran, confirmation explicite |
 
@@ -232,7 +232,7 @@ L'application doit pouvoir grandir sans réécriture : plus d'utilisateurs, plus
 
 | Exigence | Cible | Moyen |
 | --- | --- | --- |
-| Scalabilité | Passer d'un serveur à plusieurs sans changer le code | API sans état, sessions par jeton, fichiers hors du disque local, tâches longues en file d'attente |
+| Scalabilité | Passer d'un serveur à plusieurs sans changer le code | API sans état, sessions par jeton, compteurs de limitation de débit dans PostgreSQL, fichiers hors du disque local, tâches longues en file d'attente |
 | Évolutivité | Ajouter un opérateur en un dossier, sans toucher au cœur | Architecture en modules, opérateurs du simulateur sous forme d'adaptateurs au contrat commun |
 | Bilingue | Français et anglais partout | Aucune chaîne en dur, fichiers de traduction par module, langue détectée puis mémorisée, URL préfixées `/fr` et `/en` |
 | Contenu bilingue | Une fiche peut exister dans les deux langues | Champ de langue sur la fiche, lien entre traductions, repli sur la langue disponible |
@@ -242,6 +242,16 @@ L'application doit pouvoir grandir sans réécriture : plus d'utilisateurs, plus
 | Données personnelles | Minimum collecté | E-mail, pays, stacks. Suppression du compte en libre-service |
 | Accessibilité | Niveau AA | Contrôle automatique en intégration continue et revue manuelle au clavier |
 | Observabilité | Savoir ce qui casse | Journaux structurés, identifiant de requête, compteur d'erreurs |
+
+**Sécurité des comptes**
+
+- Requêtes forgées depuis un autre site : cookie de session `httpOnly`, `SameSite=Lax`, préfixé `__Host-` et `Secure` en production ; toute requête qui modifie des données est refusée si son en-tête `Origin` n'est pas celui du site, ou s'il manque alors qu'un cookie est présent ; seuls les corps JSON sont acceptés.
+- L'inscription répond toujours de la même façon : une adresse déjà inscrite reçoit un rappel de connexion au lieu du lien de confirmation, sans que l'écran le révèle.
+- La limitation de débit compte par adresse IP sur toutes les routes d'authentification, et par adresse e-mail sur l'inscription et le mot de passe oublié. Les compteurs vivent dans PostgreSQL, partagés par toutes les instances de l'API.
+
+**Risque accepté (revue de sécurité du module comptes)**
+
+- Faible : un tiers peut épuiser les trois demandes de réinitialisation par adresse et par quart d'heure d'une victime, qui doit alors attendre quinze minutes. Non corrigé : cette limite par adresse est précisément ce qui empêche d'inonder une boîte de réception de liens, et ne compter que les adresses existantes révélerait quels comptes existent. La gêne est courte, ne donne aucun accès, et la limite par IP freine celui qui la provoque.
 
 **Sécurité propre au simulateur**
 
@@ -328,11 +338,11 @@ Trois modules s'ajoutent pour la communauté : `discussions`, `blog` et `newslet
 
 ## 9. Modèle de données
 
-Seize tables suffisent à la première version, et chacune appartient à un seul module.
+Dix-sept tables suffisent à la première version : chacune appartient à un seul module, sauf les compteurs de limitation de débit, partagés par l'infrastructure de l'API.
 
 | Table | Module | Champs principaux |
 | --- | --- | --- |
-| `users` | accounts | e-mail, mot de passe haché, pays, langue, rôle, date de création |
+| `users` | accounts | e-mail, mot de passe haché, nom public, pays, langue, rôle, version de session, date du consentement newsletter, date de création |
 | `user_stacks` | accounts | utilisateur, stack |
 | `services` | routes | nom, catégorie (paiement, SMS, USSD), pays couverts |
 | `routes` | routes | auteur, service, pays, stack, langue, titre, contenu Markdown, état, version, lien vers la traduction |
@@ -341,7 +351,8 @@ Seize tables suffisent à la première version, et chacune appartient à un seul
 | `potholes` | checks | fiche, utilisateur, description, statut (ouvert, confirmé, résolu), date |
 | `sandbox_keys` | sandbox | utilisateur, opérateur, clé hachée, quota, date d'expiration |
 | `sandbox_events` | sandbox | clé, scénario, requête, réponse, webhooks envoyés, date |
-| `api_tokens` | accounts | utilisateur, usage (MCP ou API), jeton haché, dernière utilisation, révoqué |
+| `api_tokens` | accounts | utilisateur, nom, usage (MCP ou API), jeton haché, dernière utilisation, date de révocation |
+| `rate_limit_counters` | infrastructure | clé (route et adresse), nombre de requêtes, fin de la fenêtre |
 
 | Table | Module | Champs principaux |
 | --- | --- | --- |
@@ -372,12 +383,12 @@ L'API REST est le seul point d'accès aux données : l'interface, le serveur MCP
 
 | Ressource | Routes principales |
 | --- | --- |
-| Comptes | `POST /v1/auth/register`, `POST /v1/auth/login`, `POST /v1/auth/reset`, `GET /v1/me` |
+| Comptes | `POST /v1/auth/register`, `POST /v1/auth/login`, `POST /v1/auth/logout`, `POST /v1/auth/forgot`, `POST /v1/auth/reset`, `GET` et `PATCH /v1/me`, `PUT /v1/me/password`, `DELETE /v1/me`, `GET /v1/users/:handle` |
 | Fiches | `GET /v1/routes`, `GET /v1/routes/:id`, `POST /v1/routes`, `PATCH /v1/routes/:id` |
 | Vérifications | `POST /v1/routes/:id/checks`, `POST /v1/routes/:id/potholes` |
 | Piste d'essai | `POST /v1/sandbox/keys`, `GET /v1/sandbox/events`, `POST /v1/sandbox/:provider/*` |
 | Classement | `GET /v1/ranking/countries`, `GET /v1/ranking/developers` |
-| Jetons | `POST /v1/tokens`, `DELETE /v1/tokens/:id` |
+| Jetons | `GET /v1/tokens`, `POST /v1/tokens`, `DELETE /v1/tokens/:id` |
 
 | Ressource | Routes principales |
 | --- | --- |

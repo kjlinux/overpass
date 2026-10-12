@@ -1,4 +1,5 @@
 import { ErrorBoundary, LocationProvider, Route, Router } from "preact-iso";
+import { SessionProvider } from "../session";
 import { LanguageShell } from "./LanguageShell";
 import { RootRedirect } from "./RootRedirect";
 
@@ -6,13 +7,15 @@ import { RootRedirect } from "./RootRedirect";
 export function App() {
   return (
     <LocationProvider>
-      <ErrorBoundary>
-        <Router>
-          <Route path="/:lang" component={LanguageShell} />
-          <Route path="/:lang/*" component={LanguageShell} />
-          <Route default component={RootRedirect} />
-        </Router>
-      </ErrorBoundary>
+      <SessionProvider>
+        <ErrorBoundary>
+          <Router>
+            <Route path="/:lang" component={LanguageShell} />
+            <Route path="/:lang/*" component={LanguageShell} />
+            <Route default component={RootRedirect} />
+          </Router>
+        </ErrorBoundary>
+      </SessionProvider>
     </LocationProvider>
   );
 }

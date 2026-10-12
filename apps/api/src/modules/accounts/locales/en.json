@@ -1,0 +1,14 @@
+{
+  "resetMail": {
+    "subject": "Reset your Overpass password",
+    "body": "Hello,\n\nTo choose a new password, open this link within 30 minutes:\n\n{{link}}\n\nThe link works once. If you did not ask for it, ignore this message: your password stays the same.\n\nThe Overpass team"
+  },
+  "confirmMail": {
+    "subject": "Confirm your Overpass sign-up",
+    "body": "Hello,\n\nTo finish signing up, open this link within 24 hours:\n\n{{link}}\n\nIf you did not ask for it, ignore this message: no account was created.\n\nThe Overpass team"
+  },
+  "existsMail": {
+    "subject": "You already have an Overpass account",
+    "body": "Hello,\n\nSomeone, perhaps you, tried to create an account with this address, which already has one.\n\nTo log in: {{signIn}}\nForgot your password: {{forgot}}\n\nIf it was not you, ignore this message: your account has not changed.\n\nThe Overpass team"
+  }
+}

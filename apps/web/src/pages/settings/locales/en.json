@@ -1,0 +1,68 @@
+{
+  "title": "Settings",
+  "tabs": {
+    "label": "Settings sections",
+    "profile": "Profile",
+    "language": "Language",
+    "password": "Password",
+    "tokens": "Tokens",
+    "account": "Account"
+  },
+  "saved": "Changes saved.",
+  "profile": {
+    "heading": "Public profile",
+    "handle": "Public name",
+    "handleHelp": "It appears on your profile and in the ranking, instead of your e-mail address.",
+    "country": "Country",
+    "stacks": "Stacks",
+    "submit": "Save the profile"
+  },
+  "language": {
+    "heading": "Interface language",
+    "label": "Language",
+    "help": "It also applies to the e-mails Overpass sends you.",
+    "submit": "Change language"
+  },
+  "password": {
+    "heading": "Password",
+    "intro": "After the change, your other sessions are closed. This one stays open.",
+    "current": "Current password",
+    "new": "New password",
+    "submit": "Change the password",
+    "done": "Password changed. Your other sessions are closed.",
+    "help": "At least 10 characters. A phrase of a few words is both safe and easy to remember."
+  },
+  "tokens": {
+    "heading": "MCP tokens and API keys",
+    "intro": "A token lets your coding assistant or your scripts read Overpass on your behalf. It can neither create other tokens nor change your account.",
+    "name": "Token name",
+    "nameHelp": "To recognise it later, for example \"Laptop, VS Code\".",
+    "usage": "Use",
+    "mcp": "MCP server",
+    "api": "API",
+    "submit": "Create the token",
+    "createdTitle": "Copy this token now",
+    "createdText": "It will never be shown again. Overpass only keeps a fingerprint of it.",
+    "dismiss": "I copied the token",
+    "list": "Active tokens",
+    "created": "Created on",
+    "lastUsed": "Last used",
+    "never": "Never",
+    "revoke": "Revoke",
+    "revokeLabel": "Revoke the token {{name}}",
+    "revokeTitle": "Revoke \"{{name}}\"?",
+    "revokeText": "Tools that use it lose access at once. This cannot be undone.",
+    "emptyTitle": "No active token",
+    "emptyText": "Create a token to connect the MCP server to your coding assistant."
+  },
+  "account": {
+    "heading": "Delete the account",
+    "intro": "Your account, your stacks and your tokens are erased at once. This cannot be undone.",
+    "password": "Password, to confirm",
+    "submit": "Delete my account",
+    "confirmTitle": "Delete your account for good?",
+    "confirmText": "Your account, your stacks and your tokens will be erased. There is no way back.",
+    "confirm": "Delete the account"
+  },
+  "retry": "Try again"
+}

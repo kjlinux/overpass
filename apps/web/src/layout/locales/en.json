@@ -7,6 +7,9 @@
   "language": "Language",
   "signIn": "Sign in",
   "signUp": "Sign up",
+  "dashboard": "Dashboard",
+  "settings": "Settings",
+  "signOut": "Log out",
   "nav": {
     "routes": "Itineraries",
     "sandbox": "Test track",

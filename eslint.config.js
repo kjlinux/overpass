@@ -42,7 +42,9 @@ export default tseslint.config(
     languageOptions: {
       globals: { ...globals.node },
       parserOptions: {
-        projectService: { allowDefaultProject: ["eslint.config.js", "vitest.config.ts"] },
+        projectService: {
+          allowDefaultProject: ["eslint.config.js", "vitest.config.ts", "playwright.config.ts"],
+        },
         tsconfigRootDir: import.meta.dirname,
       },
     },

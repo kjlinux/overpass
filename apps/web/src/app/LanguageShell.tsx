@@ -7,6 +7,25 @@ import { lazyPage } from "./lazyPage";
 import { RootRedirect } from "./RootRedirect";
 
 const HomePage = lazyPage("app", async () => (await import("./HomePage")).HomePage);
+const accounts = () => import("../pages/accounts");
+const SignUpPage = lazyPage("accounts", async () => (await accounts()).SignUpPage);
+const ConfirmPage = lazyPage("accounts", async () => (await accounts()).ConfirmSignUpPage);
+const StacksPage = lazyPage("accounts", async () => (await accounts()).StacksPage);
+const SignInPage = lazyPage("accounts", async () => (await accounts()).SignInPage);
+const ForgotPage = lazyPage("accounts", async () => (await accounts()).ForgotPasswordPage);
+const ResetPage = lazyPage("accounts", async () => (await accounts()).ResetPasswordPage);
+const DashboardPage = lazyPage(
+  "dashboard",
+  async () => (await import("../pages/dashboard")).DashboardPage,
+);
+const SettingsPage = lazyPage(
+  "settings",
+  async () => (await import("../pages/settings")).SettingsPage,
+);
+const ProfilePage = lazyPage(
+  "profile",
+  async () => (await import("../pages/profile")).PublicProfilePage,
+);
 const ComponentsPage = lazyPage(
   "showcase",
   async () => (await import("../pages/showcase")).ComponentsPage,
@@ -31,6 +50,15 @@ export function LanguageShell() {
       <Router>
         <Route path="/" component={HomePage} />
         <Route path="/components" component={ComponentsPage} />
+        <Route path="/sign-up" component={SignUpPage} />
+        <Route path="/sign-up/confirm" component={ConfirmPage} />
+        <Route path="/sign-up/stacks" component={StacksPage} />
+        <Route path="/sign-in" component={SignInPage} />
+        <Route path="/forgot-password" component={ForgotPage} />
+        <Route path="/reset-password" component={ResetPage} />
+        <Route path="/dashboard" component={DashboardPage} />
+        <Route path="/settings" component={SettingsPage} />
+        <Route path="/members/:handle" component={ProfilePage} />
         <Route default component={NotFound} />
       </Router>
     </ErrorBoundary>
