@@ -1,0 +1,9 @@
+.references/
+.claude/
+node_modules/
+dist/
+coverage/
+package-lock.json
+skills-lock.json
+docs/LICENSES.md
+*.md

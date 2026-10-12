@@ -1,0 +1,6 @@
+{
+  "errors": {
+    "not_found": "Cette ressource est introuvable.",
+    "internal": "Une erreur est survenue. Réessayez dans un instant."
+  }
+}

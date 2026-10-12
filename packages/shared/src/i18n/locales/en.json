@@ -1,0 +1,6 @@
+{
+  "errors": {
+    "not_found": "This resource could not be found.",
+    "internal": "Something went wrong. Please try again in a moment."
+  }
+}

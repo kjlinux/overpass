@@ -1,0 +1,40 @@
+{
+  "name": "overpass",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json",
+    "dev:api": "tsc -b tsconfig.build.json && npm run dev -w @overpass/api",
+    "dev:mcp": "tsc -b tsconfig.build.json && npm run dev -w @overpass/mcp",
+    "db:up": "docker compose up -d --wait db",
+    "db:down": "docker compose down",
+    "typecheck": "tsc -b tsconfig.build.json && npm run typecheck --workspaces --if-present && tsc -p scripts",
+    "lint": "eslint . --max-warnings 0",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "licenses": "node scripts/licenses.ts",
+    "check:repo": "node scripts/check-repo.ts",
+    "check": "npm run typecheck && npm run lint && npm run format:check && npm run test && npm run check:repo"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^22.20.5",
+    "eslint": "^10.12.0",
+    "eslint-plugin-i18next": "^6.1.5",
+    "globals": "^17.13.0",
+    "prettier": "^3.9.10",
+    "tsx": "^4.23.15",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.71.1",
+    "vite": "^7.3.7",
+    "vitest": "^5.0.4"
+  }
+}

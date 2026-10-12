@@ -1,0 +1,9 @@
+node_modules/
+dist/
+coverage/
+.env
+*.tsbuildinfo
+.references/
+.hallmark/
+design-demos/
+.claude/skills/
