@@ -1,6 +1,6 @@
 import { resetInput } from "@overpass/shared";
 import type { JSX } from "preact";
-import { useMemo, useState } from "preact/hooks";
+import { useEffect, useMemo, useState } from "preact/hooks";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../app/useLanguage";
 import { Button, ButtonLink } from "../../components/ui";
@@ -51,6 +51,10 @@ export function ResetPasswordPage(): JSX.Element {
     () => tokenFromHash(typeof location === "undefined" ? "" : location.hash),
     [],
   );
+  // Drop the token from the address bar and history once it has been read.
+  useEffect(() => {
+    if (token !== undefined) history.replaceState(null, "", location.pathname);
+  }, [token]);
   const [done, setDone] = useState(false);
   if (token === undefined || done) {
     const [title, text, href, label] = done

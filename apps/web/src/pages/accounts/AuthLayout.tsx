@@ -14,7 +14,7 @@ export function AuthLayout({ title, intro, children, footer }: Props): JSX.Eleme
   const language = useLanguage();
   return (
     <Layout language={language}>
-      <section class="mx-auto max-w-[480px] py-12 md:py-16">
+      <section class="mx-auto max-w-form py-12 md:py-16">
         <h1 class="text-h1 font-semibold">{title}</h1>
         {intro === undefined ? null : <p class="mt-3 text-ink-2">{intro}</p>}
         <div class="mt-8 border-t border-rule pt-8">{children}</div>

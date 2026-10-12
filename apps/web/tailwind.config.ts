@@ -40,7 +40,7 @@ export default {
     borderRadius: { none: "0", full: "9999px" },
     boxShadow: { none: "none", raised: "var(--shadow-raised)" },
     extend: {
-      maxWidth: { frame: "1200px", prose: "72ch" },
+      maxWidth: { frame: "1200px", prose: "72ch", form: "480px", panel: "560px" },
       minHeight: { tap: "44px" },
       minWidth: { tap: "44px" },
       transitionDuration: { fast: "150ms", base: "200ms", slow: "250ms" },
