@@ -174,7 +174,7 @@ L'inscription à la newsletter apparaît aussi dans le pied de page et à la fin
 
 | Page | Contenu obligatoire |
 | --- | --- |
-| Inscription | E-mail, mot de passe, pays. Stacks demandées à l'écran suivant, facultatives |
+| Inscription | E-mail, mot de passe, pays, puis confirmation par un lien envoyé par e-mail. Stacks demandées à l'écran suivant, facultatives |
 | Connexion | E-mail, mot de passe, lien « mot de passe oublié » |
 | Mot de passe oublié et réinitialisation | Un champ par écran, confirmation explicite |
 
@@ -232,7 +232,7 @@ L'application doit pouvoir grandir sans réécriture : plus d'utilisateurs, plus
 
 | Exigence | Cible | Moyen |
 | --- | --- | --- |
-| Scalabilité | Passer d'un serveur à plusieurs sans changer le code | API sans état, sessions par jeton, fichiers hors du disque local, tâches longues en file d'attente |
+| Scalabilité | Passer d'un serveur à plusieurs sans changer le code | API sans état, sessions par jeton, compteurs de limitation de débit dans PostgreSQL, fichiers hors du disque local, tâches longues en file d'attente |
 | Évolutivité | Ajouter un opérateur en un dossier, sans toucher au cœur | Architecture en modules, opérateurs du simulateur sous forme d'adaptateurs au contrat commun |
 | Bilingue | Français et anglais partout | Aucune chaîne en dur, fichiers de traduction par module, langue détectée puis mémorisée, URL préfixées `/fr` et `/en` |
 | Contenu bilingue | Une fiche peut exister dans les deux langues | Champ de langue sur la fiche, lien entre traductions, repli sur la langue disponible |
@@ -242,6 +242,16 @@ L'application doit pouvoir grandir sans réécriture : plus d'utilisateurs, plus
 | Données personnelles | Minimum collecté | E-mail, pays, stacks. Suppression du compte en libre-service |
 | Accessibilité | Niveau AA | Contrôle automatique en intégration continue et revue manuelle au clavier |
 | Observabilité | Savoir ce qui casse | Journaux structurés, identifiant de requête, compteur d'erreurs |
+
+**Sécurité des comptes**
+
+- Requêtes forgées depuis un autre site : cookie de session `httpOnly`, `SameSite=Lax`, préfixé `__Host-` et `Secure` en production ; toute requête qui modifie des données est refusée si son en-tête `Origin` n'est pas celui du site, ou s'il manque alors qu'un cookie est présent ; seuls les corps JSON sont acceptés.
+- L'inscription répond toujours de la même façon : une adresse déjà inscrite reçoit un rappel de connexion au lieu du lien de confirmation, sans que l'écran le révèle.
+- La limitation de débit compte par adresse IP sur toutes les routes d'authentification, et par adresse e-mail sur l'inscription et le mot de passe oublié. Les compteurs vivent dans PostgreSQL, partagés par toutes les instances de l'API.
+
+**Risque accepté (revue de sécurité du module comptes)**
+
+- Faible : un tiers peut épuiser les trois demandes de réinitialisation par adresse et par quart d'heure d'une victime, qui doit alors attendre quinze minutes. Non corrigé : cette limite par adresse est précisément ce qui empêche d'inonder une boîte de réception de liens, et ne compter que les adresses existantes révélerait quels comptes existent. La gêne est courte, ne donne aucun accès, et la limite par IP freine celui qui la provoque.
 
 **Sécurité propre au simulateur**
 
@@ -328,7 +338,7 @@ Trois modules s'ajoutent pour la communauté : `discussions`, `blog` et `newslet
 
 ## 9. Modèle de données
 
-Seize tables suffisent à la première version, et chacune appartient à un seul module.
+Dix-sept tables suffisent à la première version : chacune appartient à un seul module, sauf les compteurs de limitation de débit, partagés par l'infrastructure de l'API.
 
 | Table | Module | Champs principaux |
 | --- | --- | --- |
@@ -342,6 +352,7 @@ Seize tables suffisent à la première version, et chacune appartient à un seul
 | `sandbox_keys` | sandbox | utilisateur, opérateur, clé hachée, quota, date d'expiration |
 | `sandbox_events` | sandbox | clé, scénario, requête, réponse, webhooks envoyés, date |
 | `api_tokens` | accounts | utilisateur, nom, usage (MCP ou API), jeton haché, dernière utilisation, date de révocation |
+| `rate_limit_counters` | infrastructure | clé (route et adresse), nombre de requêtes, fin de la fenêtre |
 
 | Table | Module | Champs principaux |
 | --- | --- | --- |

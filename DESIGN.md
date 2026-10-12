@@ -157,6 +157,7 @@ Every component is keyboard operable, shows a visible focus ring (2 px accent, 2
 - **field**: label above (600, 16 px), input 44 px tall, paper background, 1 px control outline, square corners, padding 0 12 px. Focus: 2 px accent ring. Help text below in ink-2. Error: danger border, error message below in danger, linked with `aria-describedby`. Validation runs on blur, then on each keystroke once the field has been in error.
 - **select**, **textarea** (min 4 rows), **checkbox** and **radio** (20 px box, 44 px row) share the same tokens.
 - Required fields are the default; optional ones say so in the label.
+- **form-alert**: the error of a whole form, for what belongs to no single field (wrong credentials, too many attempts, unreachable service). Placed first in the form, above the fields, full width. Flat level (no shadow): danger surface background, 1 px danger border with a 4 px left edge, square corners, 16 px padding, a 20 px danger icon then one sentence in ink. `role="alert"`, so it is announced as soon as it appears; it stays until the next submission and has no close button. A problem that concerns one field always goes under that field instead, never in the alert.
 
 ### Cards
 
@@ -174,7 +175,7 @@ Every component is keyboard operable, shows a visible focus ring (2 px accent, 2
 
 ### Tabs
 
-- **tabs**: a rail with a hairline bottom border; each tab is a 44 px button, ink-2 text, active tab in ink with a 2 px accent underline. Arrow keys move between tabs, `role="tablist"`, panels labelled by their tab. Used in the test track inspector (request, response, headers) and in settings.
+- **tabs**: a rail with a hairline bottom border; each tab is a 44 px button, ink-2 text, active tab in ink with a 2 px accent underline. Arrow keys move between tabs, `role="tablist"`, panels labelled by their tab. Tab labels never wrap; when they do not fit, the rail scrolls inside itself, never the page. Used in the test track inspector (request, response, headers) and in settings.
 
 ### Confirmation dialog
 
