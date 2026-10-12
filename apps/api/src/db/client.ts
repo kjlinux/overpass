@@ -22,5 +22,5 @@ export function connectDatabase(url: string): DatabaseConnection {
     query: async <Row>(sql: string, params?: unknown[]) =>
       (await pool.query(sql, params)).rows as Row[],
   };
-  return { db: drizzle(pool) as unknown as Database, executor, close: () => pool.end() };
+  return { db: drizzle(pool), executor, close: () => pool.end() };
 }

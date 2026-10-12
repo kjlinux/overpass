@@ -11,7 +11,9 @@ try {
     direction === "up"
       ? await migrateUp(connection.executor, migrationsDirectory)
       : await migrateDown(connection.executor, migrationsDirectory);
-  process.stdout.write(`${direction}: ${versions.length === 0 ? "nothing to do" : versions.join(", ")}\n`);
+  process.stdout.write(
+    `${direction}: ${versions.length === 0 ? "nothing to do" : versions.join(", ")}\n`,
+  );
 } finally {
   await connection.close();
 }

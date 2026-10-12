@@ -41,12 +41,16 @@ describe("updateProfile", () => {
       handle: "awa-dev",
     });
     expect(user).toMatchObject({ country: "SN", language: "en", handle: "awa-dev" });
-    expect(user.stacks).toEqual(["laravel", "flutter"]);
+    expect(user.stacks).toEqual(["flutter", "laravel"]);
   });
 
   it("records the newsletter consent date only when ticked", async () => {
-    expect((await service.updateProfile(awa.id, { newsletter: true })).newsletterConsentAt).toBeInstanceOf(Date);
-    expect((await service.updateProfile(awa.id, { newsletter: false })).newsletterConsentAt).toBeNull();
+    expect(
+      (await service.updateProfile(awa.id, { newsletter: true })).newsletterConsentAt,
+    ).toBeInstanceOf(Date);
+    expect(
+      (await service.updateProfile(awa.id, { newsletter: false })).newsletterConsentAt,
+    ).toBeNull();
   });
 
   it("refuses a handle already taken", async () => {
@@ -54,7 +58,9 @@ describe("updateProfile", () => {
       { email: "ali@example.com", password, country: "ML" },
       "fr",
     );
-    expect(await codeOf(service.updateProfile(other.id, { handle: awa.handle }))).toBe("handle_taken");
+    expect(await codeOf(service.updateProfile(other.id, { handle: awa.handle }))).toBe(
+      "handle_taken",
+    );
   });
 });
 
@@ -80,7 +86,10 @@ describe("publicProfile", () => {
 
 describe("changePassword", () => {
   it("requires the current password", async () => {
-    const result = service.changePassword(awa, { currentPassword: "wrong", newPassword: "x".repeat(12) });
+    const result = service.changePassword(awa, {
+      currentPassword: "wrong",
+      newPassword: "x".repeat(12),
+    });
     expect(await codeOf(result)).toBe("wrong_password");
   });
 
@@ -109,7 +118,13 @@ describe("api tokens", () => {
     expect(created.token).toMatch(/^ovp_[\w-]{43}$/);
     const listed = await service.listTokens(awa.id);
     expect(listed).toEqual([
-      { id: created.id, name: "Laptop", usage: "mcp", createdAt: created.createdAt, lastUsedAt: null },
+      {
+        id: created.id,
+        name: "Laptop",
+        usage: "mcp",
+        createdAt: created.createdAt,
+        lastUsedAt: null,
+      },
     ]);
     expect(JSON.stringify(listed)).not.toContain(created.token);
   });

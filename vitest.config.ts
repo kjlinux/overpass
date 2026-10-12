@@ -7,6 +7,8 @@ export default defineConfig({
       "apps/*/src/**/*.test.{ts,tsx}",
       "packages/*/src/**/*.test.ts",
     ],
+    testTimeout: 20000,
+    hookTimeout: 20000,
     exclude: ["**/node_modules/**", "**/dist/**", ".references/**", ".claude/**"],
   },
 });

@@ -14,14 +14,18 @@ export type UserRecord = {
   stacks: string[];
 };
 
-export type NewUser = Pick<UserRecord, "email" | "passwordHash" | "handle" | "country" | "language">;
+export type NewUser = Pick<
+  UserRecord,
+  "email" | "passwordHash" | "handle" | "country" | "language"
+>;
 
-export type UserPatch = Partial<
-  Pick<
-    UserRecord,
-    "country" | "language" | "handle" | "newsletterConsentAt" | "passwordHash" | "sessionVersion"
-  >
-> & { stacks?: string[] };
+type Patchable = Pick<
+  UserRecord,
+  "country" | "language" | "handle" | "newsletterConsentAt" | "passwordHash" | "sessionVersion"
+> & { stacks: string[] };
+
+/** Fields left undefined are not changed. */
+export type UserPatch = { [Key in keyof Patchable]?: Patchable[Key] | undefined };
 
 export type TokenRecord = {
   id: string;

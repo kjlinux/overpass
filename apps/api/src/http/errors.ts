@@ -20,7 +20,8 @@ export function sendError(
   error: { code: ErrorCode; status: number; fields?: Record<string, string> | undefined },
 ) {
   const language = pickLanguage(request.headers["accept-language"]);
-  const fields = error.fields === undefined ? {} : { fields: translateFields(error.fields, request) };
+  const fields =
+    error.fields === undefined ? {} : { fields: translateFields(error.fields, request) };
   return reply
     .code(error.status)
     .send(fail({ code: error.code, message: errorMessage(error.code, language), ...fields }));

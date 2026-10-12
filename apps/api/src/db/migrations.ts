@@ -40,7 +40,9 @@ export async function migrateUp(executor: SqlExecutor, directory: string): Promi
   const pending = (await listVersions(directory)).filter((version) => !applied.has(version));
   for (const version of pending) {
     const script = await readScript(directory, version, "up");
-    await executor.exec(`${script};\ninsert into schema_migrations (version) values ('${version}');`);
+    await executor.exec(
+      `${script};\ninsert into schema_migrations (version) values ('${version}');`,
+    );
   }
   return pending;
 }

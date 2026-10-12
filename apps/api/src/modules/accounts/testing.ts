@@ -4,80 +4,111 @@ import { UniqueViolation } from "./model.js";
 import type { AccountsRepository, TokenRecord, UserRecord } from "./model.js";
 
 type StoredToken = TokenRecord & { tokenHash: string; revokedAt: Date | null };
+type UserPart = Pick<
+  AccountsRepository,
+  | "createUser"
+  | "findUserById"
+  | "findUserByEmail"
+  | "findUserByHandle"
+  | "updateUser"
+  | "deleteUser"
+>;
 
-/** In-memory repository with the same unique rules as the SQL schema. */
-export function memoryRepository(): AccountsRepository & { users: Map<string, UserRecord> } {
-  const users = new Map<string, UserRecord>();
-  const tokens = new Map<string, StoredToken>();
-  const clash = (field: "email" | "handle", value: string, id?: string) => {
-    for (const user of users.values()) {
-      if (user[field] === value && user.id !== id) throw new UniqueViolation(field);
-    }
-  };
+/** Runs synchronous code as a promise, so a throw becomes a rejection like in SQL. */
+const settle = <T>(run: () => T): Promise<T> =>
+  new Promise<T>((resolve) => {
+    resolve(run());
+  });
+
+function clash(
+  users: Map<string, UserRecord>,
+  field: "email" | "handle",
+  value: string,
+  id?: string,
+) {
+  for (const user of users.values()) {
+    if (user[field] === value && user.id !== id) throw new UniqueViolation(field);
+  }
+}
+
+function memoryUsers(users: Map<string, UserRecord>, tokens: Map<string, StoredToken>): UserPart {
   const find = (test: (user: UserRecord) => boolean) =>
-    Promise.resolve([...users.values()].find(test) ?? null);
+    settle(() => [...users.values()].find(test) ?? null);
+  const defaults = { role: "member", sessionVersion: 0, newsletterConsentAt: null, stacks: [] };
   return {
-    users,
-    createUser: (input) => {
-      clash("email", input.email);
-      clash("handle", input.handle);
-      const user: UserRecord = {
-        ...input,
-        id: randomUUID(),
-        role: "member",
-        sessionVersion: 0,
-        newsletterConsentAt: null,
-        createdAt: new Date(),
-        stacks: [],
-      };
-      users.set(user.id, user);
-      return Promise.resolve(user);
-    },
-    findUserById: (id) => Promise.resolve(users.get(id) ?? null),
+    createUser: (input) =>
+      settle(() => {
+        clash(users, "email", input.email);
+        clash(users, "handle", input.handle);
+        const user: UserRecord = {
+          ...input,
+          ...defaults,
+          id: randomUUID(),
+          createdAt: new Date(),
+        } as UserRecord;
+        users.set(user.id, user);
+        return user;
+      }),
+    findUserById: (id) => find((user) => user.id === id),
     findUserByEmail: (email) => find((user) => user.email === email),
     findUserByHandle: (handle) => find((user) => user.handle === handle),
-    updateUser: (id, patch) => {
-      const current = users.get(id);
-      if (current === undefined) throw new Error("missing user");
-      if (patch.handle !== undefined) clash("handle", patch.handle, id);
-      const next = { ...current, ...patch };
-      users.set(id, next);
-      return Promise.resolve(next);
-    },
-    deleteUser: (id) => {
-      users.delete(id);
-      for (const [key, token] of tokens) if (token.userId === id) tokens.delete(key);
-      return Promise.resolve();
-    },
-    createToken: ({ tokenHash, ...input }) => {
-      const token: StoredToken = {
-        ...input,
-        id: randomUUID(),
-        createdAt: new Date(),
-        lastUsedAt: null,
-        tokenHash,
-        revokedAt: null,
-      };
-      tokens.set(token.id, token);
-      return Promise.resolve(token);
-    },
-    listActiveTokens: (userId) =>
-      Promise.resolve(
-        [...tokens.values()].filter((t) => t.userId === userId && t.revokedAt === null),
-      ),
-    revokeToken: (userId, tokenId, at) => {
-      const token = tokens.get(tokenId);
-      if (token?.userId !== userId || token.revokedAt !== null) return Promise.resolve(false);
-      tokens.set(tokenId, { ...token, revokedAt: at });
-      return Promise.resolve(true);
-    },
-    findUserByActiveTokenHash: (hash, usedAt) => {
-      const token = [...tokens.values()].find((t) => t.tokenHash === hash && t.revokedAt === null);
-      if (token === undefined) return Promise.resolve(null);
-      tokens.set(token.id, { ...token, lastUsedAt: usedAt });
-      return Promise.resolve(users.get(token.userId) ?? null);
-    },
+    updateUser: (id, patch) =>
+      settle(() => {
+        const current = users.get(id);
+        if (current === undefined) throw new Error("missing user");
+        if (patch.handle !== undefined) clash(users, "handle", patch.handle, id);
+        const defined = Object.entries(patch).filter(([, value]) => value !== undefined);
+        const next: UserRecord = { ...current, ...Object.fromEntries(defined) };
+        users.set(id, { ...next, stacks: [...next.stacks].sort() });
+        return users.get(id) as UserRecord;
+      }),
+    deleteUser: (id) =>
+      settle(() => {
+        users.delete(id);
+        for (const [key, token] of tokens) if (token.userId === id) tokens.delete(key);
+      }),
   };
+}
+
+function memoryTokens(users: Map<string, UserRecord>, tokens: Map<string, StoredToken>) {
+  const active = (test: (token: StoredToken) => boolean) =>
+    [...tokens.values()].filter((token) => token.revokedAt === null && test(token));
+  return {
+    createToken: ({ tokenHash, ...input }) =>
+      settle(() => {
+        const token = { ...input, id: randomUUID(), createdAt: new Date(), lastUsedAt: null };
+        tokens.set(token.id, { ...token, tokenHash, revokedAt: null });
+        return token;
+      }),
+    listActiveTokens: (userId) =>
+      settle(() =>
+        active((token) => token.userId === userId).map(
+          ({ id, userId: owner, name, usage, createdAt, lastUsedAt }) => ({
+            ...{ id, userId: owner, name, usage, createdAt, lastUsedAt },
+          }),
+        ),
+      ),
+    revokeToken: (userId, tokenId, at) =>
+      settle(() => {
+        const [token] = active((t) => t.id === tokenId && t.userId === userId);
+        if (token !== undefined) tokens.set(tokenId, { ...token, revokedAt: at });
+        return token !== undefined;
+      }),
+    findUserByActiveTokenHash: (hash, usedAt) =>
+      settle(() => {
+        const [token] = active((t) => t.tokenHash === hash);
+        if (token === undefined) return null;
+        tokens.set(token.id, { ...token, lastUsedAt: usedAt });
+        return users.get(token.userId) ?? null;
+      }),
+  } satisfies Omit<AccountsRepository, keyof UserPart>;
+}
+
+/** In-memory repository with the same unique rules and ordering as the SQL schema. */
+export function memoryRepository(): AccountsRepository {
+  const users = new Map<string, UserRecord>();
+  const tokens = new Map<string, StoredToken>();
+  return { ...memoryUsers(users, tokens), ...memoryTokens(users, tokens) };
 }
 
 /** Mailer that keeps every message for assertions. */
@@ -85,10 +116,7 @@ export function captureMailer(): Mailer & { sent: MailMessage[] } {
   const sent: MailMessage[] = [];
   return {
     sent,
-    send: (message) => {
-      sent.push(message);
-      return Promise.resolve();
-    },
+    send: (message) => settle(() => void sent.push(message)),
   };
 }
 

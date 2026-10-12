@@ -1,5 +1,11 @@
 import { randomBytes } from "node:crypto";
-import type { ForgotInput, Language, LoginInput, RegisterInput, ResetInput } from "@overpass/shared";
+import type {
+  ForgotInput,
+  Language,
+  LoginInput,
+  RegisterInput,
+  ResetInput,
+} from "@overpass/shared";
 import { AppError } from "../../../http/app-error.js";
 import { resetMail } from "../mail.js";
 import { UniqueViolation } from "../model.js";

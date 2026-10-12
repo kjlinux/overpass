@@ -131,7 +131,9 @@ describe("password reset", () => {
 
   it("refuses a session token used as a reset token", async () => {
     const { session } = await service.login({ email: awa.email, password: awa.password });
-    const error = await rejection(service.resetPassword({ token: session, password: "x".repeat(12) }));
+    const error = await rejection(
+      service.resetPassword({ token: session, password: "x".repeat(12) }),
+    );
     expect(error.code).toBe("reset_invalid");
   });
 });
