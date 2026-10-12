@@ -1,0 +1,52 @@
+{
+  "fields": {
+    "email": "Adresse e-mail",
+    "password": "Mot de passe",
+    "newPassword": "Nouveau mot de passe",
+    "passwordHelp": "Au moins 10 caractères. Une phrase de quelques mots est à la fois sûre et facile à retenir.",
+    "country": "Pays",
+    "countryHelp": "Il date vos vérifications et range vos contributions dans le classement par pays."
+  },
+  "signUp": {
+    "title": "Créer un compte",
+    "intro": "Trois champs. Vos stacks viennent ensuite, si vous le souhaitez.",
+    "submit": "Créer mon compte",
+    "haveAccount": "Déjà inscrit ?",
+    "signIn": "Se connecter"
+  },
+  "stacks": {
+    "title": "Vos stacks",
+    "intro": "Facultatif. Elles servent à vous montrer les itinéraires qui vous concernent. Vous pourrez les changer dans les paramètres.",
+    "legend": "Stacks que vous utilisez",
+    "newsletter": "Recevoir la newsletter hebdomadaire",
+    "newsletterHelp": "Un e-mail de confirmation vous sera envoyé avant tout numéro.",
+    "submit": "Enregistrer et continuer",
+    "skip": "Passer cette étape"
+  },
+  "signIn": {
+    "title": "Connexion",
+    "submit": "Se connecter",
+    "forgot": "Mot de passe oublié ?",
+    "noAccount": "Pas encore de compte ?",
+    "signUp": "Créer un compte"
+  },
+  "forgot": {
+    "title": "Mot de passe oublié",
+    "intro": "Saisissez l'adresse de votre compte. Nous y enverrons un lien valable 30 minutes.",
+    "submit": "Envoyer le lien",
+    "sentTitle": "Vérifiez votre boîte de réception",
+    "sent": "Si un compte existe pour {{email}}, un lien de réinitialisation vient d'y être envoyé. Il expire dans 30 minutes.",
+    "back": "Retour à la connexion"
+  },
+  "reset": {
+    "title": "Nouveau mot de passe",
+    "intro": "Choisissez un nouveau mot de passe. Vos autres sessions seront fermées.",
+    "submit": "Enregistrer le mot de passe",
+    "doneTitle": "Mot de passe modifié",
+    "done": "Votre mot de passe est changé et vos autres sessions sont fermées. Connectez-vous avec le nouveau.",
+    "signIn": "Se connecter",
+    "missingTitle": "Lien incomplet",
+    "missing": "Ce lien ne contient pas de jeton de réinitialisation. Demandez-en un nouveau.",
+    "askAgain": "Demander un nouveau lien"
+  }
+}

@@ -31,7 +31,7 @@ function TabButton({ tabsId, tab, active, onSelect, onKeyDown }: TabButtonProps)
       aria-controls={`${tabsId}-panel-${tab.id}`}
       tabIndex={active ? 0 : -1}
       class={cx(
-        "min-h-tap border-r border-rule px-4 focus-visible:-outline-offset-[3px]",
+        "min-h-tap flex-none whitespace-nowrap border-r border-rule px-4 focus-visible:-outline-offset-[3px]",
         active
           ? "bg-paper font-semibold text-ink shadow-[inset_0_-2px_0_var(--color-accent)]"
           : "text-ink-2 hover:text-ink",
@@ -64,7 +64,11 @@ export function Tabs({ id, label, tabs, initial }: TabsProps): JSX.Element {
   const [active, setActive] = useState(initial ?? tabs[0]?.id);
   return (
     <div class="border border-rule">
-      <div role="tablist" aria-label={label} class="flex border-b border-rule bg-surface">
+      <div
+        role="tablist"
+        aria-label={label}
+        class="flex overflow-x-auto border-b border-rule bg-surface"
+      >
         {tabs.map((tab, index) => (
           <TabButton
             key={tab.id}

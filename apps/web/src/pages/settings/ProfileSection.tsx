@@ -1,0 +1,70 @@
+import { profileUpdateInput } from "@overpass/shared";
+import type { Me } from "@overpass/shared";
+import type { JSX } from "preact";
+import { useState } from "preact/hooks";
+import { useTranslation } from "react-i18next";
+import { useLanguage } from "../../app/useLanguage";
+import { Button } from "../../components/ui";
+import {
+  FormAlert,
+  SelectField,
+  StackChoices,
+  TextField,
+  countryOptions,
+  useForm,
+  useSubmit,
+} from "../../forms";
+import { apiRequest, useSession } from "../../session";
+import { SavedNote, SettingsSection } from "./SettingsSection";
+
+function useProfileEdit(me: Me) {
+  const { setMe } = useSession();
+  const [stacks, setStacks] = useState(me.stacks);
+  const [saved, setSaved] = useState(false);
+  const form = useForm(profileUpdateInput, { handle: me.handle, country: me.country });
+  const submit = useSubmit({
+    validate: () => {
+      setSaved(false);
+      return form.validate();
+    },
+    send: (data) => apiRequest<Me>("PATCH", "/v1/me", { ...data, stacks }),
+    onError: (error) => {
+      form.showApiError(error, { handle_taken: "handle" });
+    },
+    onSuccess: (next) => {
+      setMe(next);
+      setSaved(true);
+    },
+  });
+  return { form, stacks, setStacks, saved, ...submit };
+}
+
+export function ProfileSection({ me }: { me: Me }): JSX.Element {
+  const { t } = useTranslation("settings");
+  const language = useLanguage();
+  const { form, stacks, setStacks, saved, busy, onSubmit } = useProfileEdit(me);
+  return (
+    <SettingsSection heading={t("profile.heading")}>
+      <form class="flex flex-col gap-6" noValidate onSubmit={onSubmit}>
+        <FormAlert error={form.formError} />
+        <TextField
+          id="handle"
+          label={t("profile.handle")}
+          help={t("profile.handleHelp")}
+          form={form}
+        />
+        <SelectField
+          id="country"
+          label={t("profile.country")}
+          options={countryOptions(language)}
+          form={form}
+        />
+        <StackChoices legend={t("profile.stacks")} value={stacks} onChange={setStacks} />
+        <Button type="submit" variant="primary" loading={busy} class="self-start">
+          {t("profile.submit")}
+        </Button>
+        <SavedNote shown={saved} />
+      </form>
+    </SettingsSection>
+  );
+}

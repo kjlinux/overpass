@@ -1,0 +1,67 @@
+{
+  "title": "Paramètres",
+  "tabs": {
+    "label": "Sections des paramètres",
+    "profile": "Profil",
+    "language": "Langue",
+    "password": "Mot de passe",
+    "tokens": "Jetons",
+    "account": "Compte"
+  },
+  "saved": "Modifications enregistrées.",
+  "profile": {
+    "heading": "Profil public",
+    "handle": "Nom public",
+    "handleHelp": "Il apparaît sur votre profil et dans le classement, à la place de votre adresse e-mail.",
+    "country": "Pays",
+    "stacks": "Stacks",
+    "submit": "Enregistrer le profil"
+  },
+  "language": {
+    "heading": "Langue de l'interface",
+    "label": "Langue",
+    "help": "Elle s'applique aussi aux e-mails qu'Overpass vous envoie.",
+    "submit": "Changer de langue"
+  },
+  "password": {
+    "heading": "Mot de passe",
+    "intro": "Après le changement, vos autres sessions sont fermées. Celle-ci reste ouverte.",
+    "current": "Mot de passe actuel",
+    "new": "Nouveau mot de passe",
+    "submit": "Changer le mot de passe",
+    "done": "Mot de passe changé. Vos autres sessions sont fermées.",
+    "help": "Au moins 10 caractères. Une phrase de quelques mots est à la fois sûre et facile à retenir."
+  },
+  "tokens": {
+    "heading": "Jetons MCP et clés d'API",
+    "intro": "Un jeton permet à votre assistant de code ou à vos scripts de lire Overpass en votre nom. Il ne peut ni créer d'autres jetons, ni modifier votre compte.",
+    "name": "Nom du jeton",
+    "nameHelp": "Pour le reconnaître plus tard, par exemple « Portable, VS Code ».",
+    "usage": "Usage",
+    "mcp": "Serveur MCP",
+    "api": "API",
+    "submit": "Créer le jeton",
+    "createdTitle": "Copiez ce jeton maintenant",
+    "createdText": "Il ne sera plus jamais affiché. Overpass n'en garde qu'une empreinte.",
+    "dismiss": "J'ai copié le jeton",
+    "list": "Jetons actifs",
+    "created": "Créé le",
+    "lastUsed": "Dernière utilisation",
+    "never": "Jamais",
+    "revoke": "Révoquer",
+    "revokeLabel": "Révoquer le jeton {{name}}",
+    "revokeTitle": "Révoquer « {{name}} » ?",
+    "revokeText": "Les outils qui l'utilisent perdront l'accès immédiatement. Cette action est définitive.",
+    "emptyTitle": "Aucun jeton actif",
+    "emptyText": "Créez un jeton pour brancher le serveur MCP à votre assistant de code."
+  },
+  "account": {
+    "heading": "Supprimer le compte",
+    "intro": "Votre compte, vos stacks et vos jetons sont effacés immédiatement. Cette action est définitive.",
+    "password": "Mot de passe, pour confirmer",
+    "submit": "Supprimer mon compte",
+    "confirmTitle": "Supprimer définitivement votre compte ?",
+    "confirmText": "Votre compte, vos stacks et vos jetons seront effacés. Vous ne pourrez pas revenir en arrière.",
+    "confirm": "Supprimer le compte"
+  }
+}

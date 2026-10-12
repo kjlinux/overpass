@@ -9,5 +9,8 @@
   "copied": "Copied",
   "code": "Code",
   "close": "Close",
-  "cancel": "Cancel"
+  "cancel": "Cancel",
+  "choose": "Choose",
+  "networkError": "Overpass could not be reached. Check your connection, then try again.",
+  "optional": "optional"
 }

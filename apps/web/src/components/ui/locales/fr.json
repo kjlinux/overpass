@@ -9,5 +9,8 @@
   "copied": "Copié",
   "code": "Code",
   "close": "Fermer",
-  "cancel": "Annuler"
+  "cancel": "Annuler",
+  "choose": "Choisir",
+  "networkError": "Impossible de joindre Overpass. Vérifiez votre connexion, puis réessayez.",
+  "optional": "facultatif"
 }

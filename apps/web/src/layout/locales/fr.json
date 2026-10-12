@@ -7,6 +7,9 @@
   "language": "Langue",
   "signIn": "Connexion",
   "signUp": "S'inscrire",
+  "dashboard": "Tableau de bord",
+  "settings": "Paramètres",
+  "signOut": "Se déconnecter",
   "nav": {
     "routes": "Itinéraires",
     "sandbox": "Piste d'essai",

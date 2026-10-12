@@ -1,0 +1,17 @@
+{
+  "memberSince": "Membre depuis {{date}}",
+  "country": "Pays",
+  "stacks": "Stacks",
+  "noStacks": "Aucune stack renseignée.",
+  "contributions": "Contributions",
+  "kind": "Contribution",
+  "count": "Nombre",
+  "routes": "Itinéraires publiés",
+  "checks": "Vérifications",
+  "potholes": "Pièges confirmés",
+  "points": "Points",
+  "pointsCaption": "Itinéraire publié 10, vérification 2, piège confirmé 5.",
+  "emptyTitle": "Pas encore de contribution",
+  "emptyText": "Les itinéraires, vérifications et pièges de ce membre apparaîtront ici.",
+  "retry": "Réessayer"
+}
