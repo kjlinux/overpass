@@ -46,3 +46,17 @@ Both SKILL.md files were read in full before use. Instructions outside the proje
 - **Audits.** Licence audit clean on 390 packages. `npm audit --omit=dev` reports nothing. The full audit flags braces and postcss-selector-parser, build tools pulled by Tailwind CSS 3 that only read our own sources; accepted and recorded in section 8 of the spec.
 - **Spec.** Section 4 lists the four simulated operators and the PI-SPI documentation link. Section 8 records the retained versions and the lightningcss MPL-2.0 reason. The open points line in section 13 now matches section 4.
 - **Design direction for later.** Jude Koffi recommends starting the huashu-design prototypes and DESIGN.md from the colours of the Systalink website, with freedom to choose. To reconcile with section 12, which asks for a palette of Overpass's own.
+
+### 2026-10-12, Claude Code (Claude Opus 5.5), page weight and decisions
+
+- **Decisions by Jude Koffi.** Cut order: PayDunya first, then PI-SPI; Wave and CinetPay are never cut (spec section 13 updated). Overpass keeps its own palette: no Systalink colour or accent; three original colour directions will be proposed at the DESIGN.md step. JavaScript budget for the empty home page: under 80 KB gzip.
+- **Weight reductions.** Packages marked side-effect free so Zod no longer reaches the browser. Only the active language file is loaded, as its own chunk. The home page is loaded on demand behind a skeleton. React Router runs in declarative mode. i18next-browser-languagedetector was replaced by a small tested detection (URL, stored choice, browser). Result: 142 KB down to 98.6 KB gzip.
+- **Budget check.** `npm run check:budget` builds the web app, follows the Vite manifest from the entry and the home page chunks, gzips each file and fails above 80 KB of JavaScript or 200 KB in total. It is part of `npm run check`.
+- **Blocked.** React DOM alone weighs 65 KB gzip, so React 19 plus i18next exceed 80 KB before any router. Measured alternative, not adopted: Preact with preact-iso (both MIT) and the same i18next code, about 30 KB gzip. React Router 8 does not run on Preact (it needs useOptimistic). Waiting for a decision.
+
+### 2026-10-12, Claude Code (Claude Opus 5.5), switch to Preact
+
+- **Decision by Jude Koffi.** Option A: Preact with preact-iso instead of React and React Router, to meet the 80 KB budget.
+- **Change.** React, React Router, their types and the SWC plugin were removed. Preact 11, preact-iso 2 and @preact/compat 18 (all MIT) were added. Root npm overrides point `react` and `react-dom` to @preact/compat, so react-i18next shares the Preact runtime and real React is never installed. TypeScript paths map the React types to Preact. Vite compiles JSX with its built-in esbuild.
+- **Rendering.** Language routes `/:lang` and `/:lang/*`, unknown paths redirect to the active language, and the home page loads on demand. The skeleton is in index.html, so it paints before any JavaScript. Tests prerender the app with preact-render-to-string.
+- **Result.** Home page JavaScript is 29.8 KB gzip, under the 80 KB budget. All checks pass. Spec section 8 updated.

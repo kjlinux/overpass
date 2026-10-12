@@ -271,7 +271,7 @@ Le navigateur et l'assistant de code entrent par Caddy. Le serveur MCP ne lit ja
 | Couche | Choix | Licence |
 | --- | --- | --- |
 | Langage et exécution | TypeScript 6.0, Node.js 22 LTS | Apache 2.0, MIT |
-| Interface | React 19, Vite 7.3.7 avec le plugin React SWC 4, React Router 8, Tailwind CSS 3.4.19 avec PostCSS | MIT, Apache 2.0 (SWC) |
+| Interface | Preact 11 (API de React, via @preact/compat pour react-i18next), preact-iso pour le routage, Vite 7.3.7, Tailwind CSS 3.4.19 avec PostCSS | MIT |
 | Traductions | i18next | MIT |
 | API | Fastify, validation par Zod | MIT |
 | Accès aux données | Drizzle ORM, node-postgres | Apache 2.0, MIT |
@@ -287,7 +287,8 @@ Les licences sont vérifiées par l'audit automatique, dépendances indirectes c
 **Versions retenues le 12 octobre 2026**
 
 - Vite 8 et Tailwind CSS 4 dépendent de lightningcss, publié sous MPL-2.0, hors de notre liste blanche. L'interface reste donc sur Vite 7.3.7, maintenu, et Tailwind CSS 3.4.19 compilé par PostCSS.
-- Le plugin React classique de Vite passe par Babel, qui tire caniuse-lite sous CC-BY-4.0. Le plugin React basé sur SWC (Apache 2.0) le remplace.
+- Le plugin React classique de Vite passe par Babel, qui tire caniuse-lite sous CC-BY-4.0. Aucun plugin n'est nécessaire : Vite compile le JSX de Preact avec son esbuild intégré. Contrepartie : pas de rafraîchissement à chaud des composants, la page se recharge à chaque modification.
+- Preact remplace React pour tenir le budget de l'accueil : moins de 80 Ko de JavaScript compressé pour la page vide, contrôlé automatiquement par `npm run check:budget`. React DOM pèse à lui seul 65 Ko compressés ; la page vide passe de 98,6 Ko avec React à 29,8 Ko avec Preact. React Router 8 ne fonctionne pas avec Preact, d'où preact-iso. Les paquets `react` et `react-dom` sont redirigés vers @preact/compat dans tout le dépôt.
 - TypeScript reste en 6.0 : typescript-eslint ne prend pas encore en charge TypeScript 7.
 - Tailwind CSS 3 tire des outils de build signalés par `npm audit` (braces, postcss-selector-parser). Ils ne traitent que nos propres sources et ne partent pas dans le navigateur ; les dépendances de production n'ont aucune alerte. À revoir si lightningcss change de licence.
 
@@ -302,7 +303,7 @@ Les licences sont vérifiées par l'audit automatique, dépendances indirectes c
 ```
 overpass/
   apps/
-    web/          interface React
+    web/          interface Preact
     api/          API Fastify, un dossier par module
     mcp/          serveur MCP
   packages/
@@ -529,7 +530,7 @@ Le code est gelé le 24 octobre, ce qui laisse une journée de marge avant la cl
 7. **23 octobre.** Audit des licences, tests de bout en bout, sécurité, vidéo de 90 secondes.
 8. **24 octobre.** Gel du code et soumission.
 
-**Ordre de coupe en cas de retard.** Troisième opérateur, puis envoi automatique de la newsletter (l'inscription reste), puis serveur MCP, puis classement, puis blog, puis discussions. Le simulateur, les fiches et les vérifications ne se coupent pas.
+**Ordre de coupe en cas de retard.** PayDunya, puis PI-SPI, puis envoi automatique de la newsletter (l'inscription reste), puis serveur MCP, puis classement, puis blog, puis discussions. Le simulateur avec Wave et CinetPay, les fiches et les vérifications ne se coupent pas.
 
 **Critères d'acceptation**
 
