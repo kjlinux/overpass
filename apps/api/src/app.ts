@@ -9,6 +9,7 @@ import { registerErrorHandlers } from "./http/errors.js";
 import { registerHealth } from "./http/health.js";
 import { registerOriginCheck } from "./http/origin.js";
 import { registerSecurityHeaders } from "./http/security-headers.js";
+import { counterStoreFor, postgresCounters } from "./limits/index.js";
 import { createMailer } from "./mail/mailer.js";
 import type { Mailer } from "./mail/mailer.js";
 import { registerAccounts } from "./modules/accounts/index.js";
@@ -43,10 +44,10 @@ export async function buildApp({ config, db, mailer }: AppDeps): Promise<Fastify
   registerErrorHandlers(app);
   registerSecurityHeaders(app);
   await app.register(cookie);
-  await app.register(rateLimit, { global: false });
   registerOriginCheck(app, config.WEB_ORIGIN);
   registerHealth(app);
   if (db !== undefined) {
+    await app.register(rateLimit, { global: false, store: counterStoreFor(postgresCounters(db)) });
     await registerAccounts(app, {
       db,
       mailer: mailer ?? createMailer(config, app.log),
