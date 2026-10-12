@@ -12,17 +12,15 @@
   "dependencies": {
     "@overpass/shared": "0.0.0",
     "i18next": "^26.4.4",
-    "i18next-browser-languagedetector": "^8.2.1",
-    "react": "^19.3.0",
-    "react-dom": "^19.3.0",
-    "react-i18next": "^17.0.16",
-    "react-router": "^8.4.0"
+    "preact": "^11.0.1",
+    "preact-iso": "^2.12.2",
+    "react": "npm:@preact/compat@^18.3.2",
+    "react-dom": "npm:@preact/compat@^18.3.2",
+    "react-i18next": "^17.0.16"
   },
   "devDependencies": {
-    "@types/react": "^19.3.0",
-    "@types/react-dom": "^19.3.0",
-    "@vitejs/plugin-react-swc": "^4.3.3",
     "postcss": "^8.5.29",
+    "preact-render-to-string": "^6.8.0",
     "tailwindcss": "^3.4.19",
     "vite": "^7.3.7"
   }

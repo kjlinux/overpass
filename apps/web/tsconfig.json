@@ -6,7 +6,13 @@
     "moduleResolution": "Bundler",
     "lib": ["ES2023", "DOM", "DOM.Iterable"],
     "jsx": "react-jsx",
-    "types": ["vite/client", "node"]
+    "jsxImportSource": "preact",
+    "types": ["vite/client", "node"],
+    "paths": {
+      "react": ["../../node_modules/preact/compat"],
+      "react-dom": ["../../node_modules/preact/compat"],
+      "react/jsx-runtime": ["../../node_modules/preact/jsx-runtime"]
+    }
   },
   "include": ["src", "vite.config.ts", "tailwind.config.ts"]
 }

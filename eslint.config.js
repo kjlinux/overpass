@@ -3,6 +3,21 @@ import i18next from "eslint-plugin-i18next";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 
+const technicalAttributes = [
+  "path",
+  "to",
+  "className",
+  "href",
+  "id",
+  "type",
+  "role",
+  "name",
+  "src",
+  "lang",
+  "aria-busy",
+  "data-testid",
+];
+
 const userMessageRule = {
   selector:
     "Property[key.name=/^(message|title|description|label)$/] > :matches(Literal, TemplateLiteral)",
@@ -31,7 +46,12 @@ export default tseslint.config(
     files: ["apps/web/src/**/*.tsx"],
     languageOptions: { globals: { ...globals.browser } },
     plugins: { i18next },
-    rules: { "i18next/no-literal-string": ["error", { mode: "jsx-only" }] },
+    rules: {
+      "i18next/no-literal-string": [
+        "error",
+        { mode: "jsx-only", "jsx-attributes": { exclude: technicalAttributes } },
+      ],
+    },
   },
   {
     files: ["apps/api/src/**/*.ts", "apps/mcp/src/**/*.ts", "packages/*/src/**/*.ts"],

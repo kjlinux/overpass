@@ -1,22 +1,21 @@
-import { defaultLanguage, supportedLanguages } from "@overpass/shared";
+import { supportedLanguages } from "@overpass/shared";
 import i18next from "i18next";
-import LanguageDetector from "i18next-browser-languagedetector";
 import { initReactI18next } from "react-i18next";
-import en from "./locales/en.json";
-import fr from "./locales/fr.json";
+import { detectLanguage, storedLanguage } from "../app/language";
+import { localeBackend } from "./locale-backend";
 
-export const webResources = { fr: { translation: fr }, en: { translation: en } };
-
-/** Initialises translations; the URL prefix wins, then the stored choice. */
+/** Initialises translations with the detected language only. */
 export async function initI18n(): Promise<void> {
+  const language = detectLanguage(location.pathname, storedLanguage(), navigator.language);
+  document.documentElement.lang = language;
   await i18next
-    .use(LanguageDetector)
+    .use(localeBackend)
     .use(initReactI18next)
     .init({
-      resources: webResources,
+      lng: language,
       supportedLngs: [...supportedLanguages],
-      fallbackLng: defaultLanguage,
-      detection: { order: ["path", "localStorage", "navigator"], caches: ["localStorage"] },
+      fallbackLng: false,
+      load: "languageOnly",
       interpolation: { escapeValue: false },
     });
 }
