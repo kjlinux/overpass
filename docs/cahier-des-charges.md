@@ -103,9 +103,9 @@ Le périmètre tient en dix modules, dont quatre sont indispensables à la soumi
 - Webhook reçu en double
 - Webhook reçu en retard
 
-Opérateurs simulés : Wave et CinetPay au lancement, PayDunya en troisième si le reste est stable. Ce sont les trois dont la documentation technique est publique. Orange Money et Moov Money n'ont pas de simulateur, faute de documentation ouverte, mais ils gardent leurs fiches d'intégration.
+Opérateurs simulés, dans cet ordre : Wave, CinetPay, PI-SPI (le système de paiement instantané de la BCEAO), puis PayDunya. Ce sont les quatre dont la documentation technique est publique. Orange Money et Moov Money n'ont pas de simulateur, faute de documentation technique publique, mais ils gardent leurs fiches d'intégration.
 
-Documentations suivies, consultées le 12 octobre 2026 : [Wave Checkout API](https://docs.wave.com/checkout), [CinetPay](https://docs.cinetpay.com/api/1.0-fr/checkout/initialisation), [PayDunya](https://developers.paydunya.com/doc/FR/http_json). La page [Orange Money Web Payment](https://developer.orange.com/apis/om-webpay) réserve l'accès technique aux marchands inscrits.
+Documentations suivies, consultées le 12 octobre 2026 : [Wave Checkout API](https://docs.wave.com/checkout), [CinetPay](https://docs.cinetpay.com/api/1.0-fr/checkout/initialisation), [PI-SPI](https://developer.pispi.bceao.int), [PayDunya](https://developers.paydunya.com/doc/FR/http_json). La page [Orange Money Web Payment](https://developer.orange.com/apis/om-webpay) réserve l'accès technique aux marchands inscrits.
 
 **Règles de gestion**
 
@@ -270,19 +270,26 @@ Le navigateur et l'assistant de code entrent par Caddy. Le serveur MCP ne lit ja
 
 | Couche | Choix | Licence |
 | --- | --- | --- |
-| Langage et exécution | TypeScript, Node.js LTS | Apache 2.0, MIT |
-| Interface | React, Vite, React Router, Tailwind CSS | MIT |
+| Langage et exécution | TypeScript 6.0, Node.js 22 LTS | Apache 2.0, MIT |
+| Interface | React 19, Vite 7.3.7 avec le plugin React SWC 4, React Router 8, Tailwind CSS 3.4.19 avec PostCSS | MIT, Apache 2.0 (SWC) |
 | Traductions | i18next | MIT |
 | API | Fastify, validation par Zod | MIT |
 | Accès aux données | Drizzle ORM, node-postgres | Apache 2.0, MIT |
 | Base de données | PostgreSQL, recherche plein texte native | Licence PostgreSQL |
 | File d'attente | pg-boss, portée par PostgreSQL | MIT |
 | Serveur MCP | SDK officiel TypeScript | MIT |
-| Tests | Vitest, Playwright | MIT, Apache 2.0 |
+| Tests | Vitest 5, Playwright | MIT, Apache 2.0 |
 | Proxy et HTTPS | Caddy | Apache 2.0 |
 | Déploiement | Docker Compose | Apache 2.0 |
 
-Les licences sont indiquées de mémoire. L'audit automatique fait foi, dépendances indirectes comprises. Les versions sont figées dans le fichier de verrouillage.
+Les licences sont vérifiées par l'audit automatique, dépendances indirectes comprises (rapport dans `docs/LICENSES.md`). Les versions exactes sont figées dans le fichier de verrouillage.
+
+**Versions retenues le 12 octobre 2026**
+
+- Vite 8 et Tailwind CSS 4 dépendent de lightningcss, publié sous MPL-2.0, hors de notre liste blanche. L'interface reste donc sur Vite 7.3.7, maintenu, et Tailwind CSS 3.4.19 compilé par PostCSS.
+- Le plugin React classique de Vite passe par Babel, qui tire caniuse-lite sous CC-BY-4.0. Le plugin React basé sur SWC (Apache 2.0) le remplace.
+- TypeScript reste en 6.0 : typescript-eslint ne prend pas encore en charge TypeScript 7.
+- Tailwind CSS 3 tire des outils de build signalés par `npm audit` (braces, postcss-selector-parser). Ils ne traitent que nos propres sources et ne partent pas dans le navigateur ; les dépendances de production n'ont aucune alerte. À revoir si lightningcss change de licence.
 
 **Pourquoi ces choix**
 
@@ -547,7 +554,7 @@ Le code est gelé le 24 octobre, ce qui laisse une journée de marge avant la cl
 - Pondération des votes du public, des participants et du jury.
 - Stack : tranché le 12 octobre, TypeScript de bout en bout (section 8).
 - Nom : « Overpass API » désigne déjà un service d'OpenStreetMap. Garder le nom avec un qualificatif et un domaine .africa, ou en changer ?
-- Opérateurs simulés : tranché le 12 octobre, Wave, CinetPay puis PayDunya (section 4).
+- Opérateurs simulés : tranché le 12 octobre, Wave, CinetPay, PI-SPI puis PayDunya (section 4).
 - Langue des commentaires de code : anglais par défaut dans ce document.
 - Lecture retenue pour les commentaires : 20 % est un plafond, pas un quota à atteindre.
 

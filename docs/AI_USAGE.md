@@ -38,3 +38,11 @@ Both SKILL.md files were read in full before use. Instructions outside the proje
 - **Blocked, apps/web.** Vite 8 depends on lightningcss (MPL-2.0), and so does Tailwind 4. @vitejs/plugin-react pulls caniuse-lite (CC-BY-4.0) through Babel. The web app was not created. Proposed alternative, audited clean on 173 packages: Vite 7.3.7, @vitejs/plugin-react-swc 4, Tailwind CSS 3.4.19 with PostCSS. Vite 7.3.7 is pinned at the root today only so that Vitest avoids Vite 8.
 - **ECC rules copy.** Replaced the three em dashes of .claude/rules/ecc/common/agents.md with colons, because the spec forbids the character in the whole repository.
 - **Versions.** TypeScript is pinned to 6.0 because typescript-eslint 8.71 does not support TypeScript 7.
+
+### 2026-10-12, Claude Code (Claude Opus 5.5), web app and spec updates
+
+- **Decisions by Jude Koffi.** Adopt the audited web stack. Keep the three default choices from the bootstrap plan. Simulated operators in this order: Wave, CinetPay, PI-SPI (BCEAO instant payment system), then PayDunya.
+- **apps/web.** Vite 7.3.7, @vitejs/plugin-react-swc 4, Tailwind CSS 3.4.19 with PostCSS, React 19, React Router 8, i18next. One placeholder page served under /fr and /en, with every string in the fr and en files. Wired into typecheck, lint (no literal string in JSX), tests, build and repository checks.
+- **Audits.** Licence audit clean on 390 packages. `npm audit --omit=dev` reports nothing. The full audit flags braces and postcss-selector-parser, build tools pulled by Tailwind CSS 3 that only read our own sources; accepted and recorded in section 8 of the spec.
+- **Spec.** Section 4 lists the four simulated operators and the PI-SPI documentation link. Section 8 records the retained versions and the lightningcss MPL-2.0 reason. The open points line in section 13 now matches section 4.
+- **Design direction for later.** Jude Koffi recommends starting the huashu-design prototypes and DESIGN.md from the colours of the Systalink website, with freedom to choose. To reconcile with section 12, which asks for a palette of Overpass's own.
