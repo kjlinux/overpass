@@ -1,0 +1,6 @@
+{
+  "resetMail": {
+    "subject": "Reset your Overpass password",
+    "body": "Hello,\n\nTo choose a new password, open this link within 30 minutes:\n\n{{link}}\n\nThe link works once. If you did not ask for it, ignore this message: your password stays the same.\n\nThe Overpass team"
+  }
+}
