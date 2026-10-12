@@ -31,10 +31,10 @@ function LastAction({ language, inMenu }: Props): JSX.Element {
       </ButtonLink>
     );
   }
+  // Leave the page first, so a protected page does not catch the sign-out and redirect.
   const leave = () => {
-    void signOut().then(() => {
-      route(localizedPath(language, "/"));
-    });
+    route(localizedPath(language, "/"));
+    void signOut();
   };
   return (
     <Button onClick={leave} class={spacing}>

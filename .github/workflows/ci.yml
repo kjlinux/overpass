@@ -28,3 +28,22 @@ jobs:
       - run: docker compose up -d --wait db
       - run: docker compose exec -T db psql -U overpass -d overpass -c "select version();"
       - run: docker compose down
+
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: docker compose up -d --wait db
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-traces
+          path: test-results/
+      - run: docker compose down
