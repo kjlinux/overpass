@@ -273,6 +273,7 @@ Le navigateur et l'assistant de code entrent par Caddy. Le serveur MCP ne lit ja
 | Langage et exécution | TypeScript 6.0, Node.js 22 LTS | Apache 2.0, MIT |
 | Interface | Preact 11 (API de React, via @preact/compat pour react-i18next), preact-iso pour le routage, Vite 7.3.7, Tailwind CSS 3.4.19 avec PostCSS | MIT |
 | Traductions | i18next | MIT |
+| Icônes et polices | lucide-preact (jeu Lucide), IBM Plex Sans et IBM Plex Mono auto-hébergées | ISC, SIL OFL 1.1 |
 | API | Fastify, validation par Zod | MIT |
 | Accès aux données | Drizzle ORM, node-postgres | Apache 2.0, MIT |
 | Base de données | PostgreSQL, recherche plein texte native | Licence PostgreSQL |
