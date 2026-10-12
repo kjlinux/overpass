@@ -5,6 +5,7 @@ import dashboard from "../apps/web/src/pages/dashboard/locales/fr.json" with { t
 import settings from "../apps/web/src/pages/settings/locales/fr.json" with { type: "json" };
 import layout from "../apps/web/src/layout/locales/fr.json" with { type: "json" };
 import api from "../packages/shared/src/i18n/locales/fr.json" with { type: "json" };
+import { linkMailedTo } from "./outbox.js";
 
 const password = "une phrase de passe assez longue";
 
@@ -30,7 +31,11 @@ test("a visitor signs up, signs in again and deletes the account", async ({ page
   await page.getByRole("main").getByLabel(accounts.fields.password, { exact: true }).fill(password);
   await page.getByRole("main").getByLabel(accounts.fields.country).selectOption("CI");
   await page.getByRole("button", { name: accounts.signUp.submit }).click();
+  await expect(
+    page.getByRole("heading", { level: 1, name: accounts.signUp.sentTitle }),
+  ).toBeVisible();
 
+  await page.goto(await linkMailedTo(email));
   await expect(page).toHaveURL(/\/fr\/sign-up\/stacks$/);
   await expect(page.getByRole("main").getByLabel(accounts.stacks.newsletter)).not.toBeChecked();
   await page.getByRole("main").getByLabel("Laravel").check();

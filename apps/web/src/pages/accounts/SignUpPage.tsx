@@ -1,33 +1,40 @@
 import { registerInput } from "@overpass/shared";
-import type { Me } from "@overpass/shared";
 import type { JSX } from "preact";
-import { useLocation } from "preact-iso";
+import { useState } from "preact/hooks";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../app/useLanguage";
 import { Button } from "../../components/ui";
 import { FormAlert, SelectField, TextField, countryOptions, useForm, useSubmit } from "../../forms";
 import type { Bindable } from "../../forms";
 import { localizedPath } from "../../layout/nav";
-import { apiRequest, useSession } from "../../session";
+import { apiRequest } from "../../session";
 import { AuthLayout } from "./AuthLayout";
 
 function useSignUp() {
-  const language = useLanguage();
-  const { route } = useLocation();
-  const { setMe } = useSession();
+  const [sentTo, setSentTo] = useState<string | undefined>(undefined);
   const form = useForm(registerInput, { email: "", password: "", country: "" });
   const submit = useSubmit({
     validate: form.validate,
-    send: (data) => apiRequest<Me>("POST", "/v1/auth/register", data),
+    send: (data) => apiRequest<null>("POST", "/v1/auth/register", data),
     onError: (error) => {
-      form.showApiError(error, { email_taken: "email" });
+      form.showApiError(error);
     },
-    onSuccess: (me) => {
-      setMe(me);
-      route(localizedPath(language, "/sign-up/stacks"));
+    onSuccess: () => {
+      setSentTo(form.values["email"]?.trim());
     },
   });
-  return { form, ...submit };
+  return { form, sentTo, ...submit };
+}
+
+/** The same screen for every address, so it never tells whether an account exists. */
+function CheckInbox({ email }: { email: string }): JSX.Element {
+  const { t } = useTranslation("accounts");
+  return (
+    <AuthLayout title={t("signUp.sentTitle")}>
+      <p role="status">{t("signUp.sent", { email })}</p>
+      <p class="mt-4 text-ink-2">{t("signUp.notReceived")}</p>
+    </AuthLayout>
+  );
 }
 
 function SignUpFields({ form }: { form: Bindable }): JSX.Element {
@@ -65,8 +72,9 @@ function SignUpFields({ form }: { form: Bindable }): JSX.Element {
 export function SignUpPage(): JSX.Element {
   const { t } = useTranslation("accounts");
   const language = useLanguage();
-  const { form, busy, onSubmit } = useSignUp();
+  const { form, sentTo, busy, onSubmit } = useSignUp();
   const signIn = <a href={localizedPath(language, "/sign-in")}>{t("signUp.signIn")}</a>;
+  if (sentTo !== undefined) return <CheckInbox email={sentTo} />;
   return (
     <AuthLayout
       title={t("signUp.title")}

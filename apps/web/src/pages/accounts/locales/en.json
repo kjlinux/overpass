@@ -12,7 +12,10 @@
     "intro": "Three fields. Your stacks come next, if you wish.",
     "submit": "Create my account",
     "haveAccount": "Already a member?",
-    "signIn": "Log in"
+    "signIn": "Log in",
+    "sentTitle": "Check your inbox",
+    "sent": "An e-mail was just sent to {{email}}. Open the link it contains within 24 hours to finish signing up.",
+    "notReceived": "Nothing after a few minutes? Check your spam folder, then start again."
   },
   "stacks": {
     "title": "Your stacks",
@@ -48,5 +51,15 @@
     "missingTitle": "Incomplete link",
     "missing": "This link carries no reset token. Ask for a new one.",
     "askAgain": "Ask for a new link"
+  },
+  "confirm": {
+    "title": "Sign-up confirmation",
+    "working": "Creating your account…",
+    "invalidTitle": "Expired or incomplete link",
+    "invalid": "This confirmation link is no longer valid. Sign up again: a new link will be sent to you.",
+    "takenTitle": "This account already exists",
+    "taken": "This address already has an account, perhaps created with this same link. Log in.",
+    "restart": "Sign up again",
+    "signIn": "Log in"
   }
 }

@@ -27,6 +27,7 @@ const configSchema = z
     SMTP_USER: optionalText,
     SMTP_PASSWORD: optionalText,
     MAIL_FROM: z.string().min(3).default("Overpass <no-reply@localhost>"),
+    MAIL_OUTBOX_DIR: optionalText,
   })
   .refine((config) => config.NODE_ENV !== "production" || config.SMTP_HOST !== undefined, {
     path: ["SMTP_HOST"],
@@ -40,6 +41,8 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
   if (config.NODE_ENV !== "production") return config;
   // Behind a proxy every client would share one IP and one rate-limit budget.
   if (env["TRUST_PROXY"] === undefined) throw new Error("TRUST_PROXY must be set in production");
+  if (config.MAIL_OUTBOX_DIR !== undefined)
+    throw new Error("MAIL_OUTBOX_DIR is for development only");
   if (config.SESSION_SECRET.startsWith("change-me")) {
     throw new Error("SESSION_SECRET still holds the example value");
   }

@@ -12,7 +12,10 @@
     "intro": "Trois champs. Vos stacks viennent ensuite, si vous le souhaitez.",
     "submit": "Créer mon compte",
     "haveAccount": "Déjà inscrit ?",
-    "signIn": "Se connecter"
+    "signIn": "Se connecter",
+    "sentTitle": "Vérifiez votre boîte de réception",
+    "sent": "Un e-mail vient d'être envoyé à {{email}}. Ouvrez le lien qu'il contient dans les 24 heures pour terminer l'inscription.",
+    "notReceived": "Rien reçu après quelques minutes ? Vérifiez les courriers indésirables, puis recommencez."
   },
   "stacks": {
     "title": "Vos stacks",
@@ -48,5 +51,15 @@
     "missingTitle": "Lien incomplet",
     "missing": "Ce lien ne contient pas de jeton de réinitialisation. Demandez-en un nouveau.",
     "askAgain": "Demander un nouveau lien"
+  },
+  "confirm": {
+    "title": "Confirmation de l'inscription",
+    "working": "Création de votre compte…",
+    "invalidTitle": "Lien expiré ou incomplet",
+    "invalid": "Ce lien de confirmation n'est plus valide. Recommencez l'inscription : un nouveau lien vous sera envoyé.",
+    "takenTitle": "Ce compte existe déjà",
+    "taken": "Cette adresse a déjà un compte, peut-être créé avec ce même lien. Connectez-vous.",
+    "restart": "Recommencer l'inscription",
+    "signIn": "Se connecter"
   }
 }

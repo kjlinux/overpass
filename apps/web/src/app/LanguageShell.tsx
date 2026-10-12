@@ -9,6 +9,7 @@ import { RootRedirect } from "./RootRedirect";
 const HomePage = lazyPage("app", async () => (await import("./HomePage")).HomePage);
 const accounts = () => import("../pages/accounts");
 const SignUpPage = lazyPage("accounts", async () => (await accounts()).SignUpPage);
+const ConfirmPage = lazyPage("accounts", async () => (await accounts()).ConfirmSignUpPage);
 const StacksPage = lazyPage("accounts", async () => (await accounts()).StacksPage);
 const SignInPage = lazyPage("accounts", async () => (await accounts()).SignInPage);
 const ForgotPage = lazyPage("accounts", async () => (await accounts()).ForgotPasswordPage);
@@ -50,6 +51,7 @@ export function LanguageShell() {
         <Route path="/" component={HomePage} />
         <Route path="/components" component={ComponentsPage} />
         <Route path="/sign-up" component={SignUpPage} />
+        <Route path="/sign-up/confirm" component={ConfirmPage} />
         <Route path="/sign-up/stacks" component={StacksPage} />
         <Route path="/sign-in" component={SignInPage} />
         <Route path="/forgot-password" component={ForgotPage} />

@@ -46,4 +46,16 @@ describe("loadConfig", () => {
       /SESSION_SECRET/,
     );
   });
+
+  it("refuses a file outbox in production, where mails must really leave", () => {
+    const production = {
+      ...base,
+      NODE_ENV: "production",
+      SMTP_HOST: "smtp.test",
+      TRUST_PROXY: "1",
+    };
+    expect(() => loadConfig({ ...production, MAIL_OUTBOX_DIR: "/tmp/outbox" })).toThrow(
+      /MAIL_OUTBOX_DIR/,
+    );
+  });
 });

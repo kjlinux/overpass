@@ -31,7 +31,7 @@ export function counterStoreFor(counters: CounterStore) {
   return class CounterRateLimitStore implements FastifyRateLimitStore {
     constructor(
       _options: FastifyRateLimitOptions,
-      private readonly prefix = "rl:",
+      readonly prefix = "rl:",
     ) {}
 
     incr(key: string, callback: Callback, timeWindow: number): void {
