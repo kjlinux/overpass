@@ -1,0 +1,13 @@
+{
+  "status": {
+    "clear": "Voie libre",
+    "toVerify": "À vérifier",
+    "broken": "Signalée cassée"
+  },
+  "loading": "Chargement",
+  "copy": "Copier",
+  "copied": "Copié",
+  "code": "Code",
+  "close": "Fermer",
+  "cancel": "Annuler"
+}

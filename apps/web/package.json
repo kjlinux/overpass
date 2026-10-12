@@ -12,6 +12,7 @@
   "dependencies": {
     "@overpass/shared": "0.0.0",
     "i18next": "^26.4.4",
+    "lucide-preact": "^1.55.0",
     "preact": "^11.0.1",
     "preact-iso": "^2.12.2",
     "react": "npm:@preact/compat@^18.3.2",

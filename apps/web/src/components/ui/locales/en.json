@@ -1,0 +1,13 @@
+{
+  "status": {
+    "clear": "Clear road",
+    "toVerify": "To verify",
+    "broken": "Reported broken"
+  },
+  "loading": "Loading",
+  "copy": "Copy",
+  "copied": "Copied",
+  "code": "Code",
+  "close": "Close",
+  "cancel": "Cancel"
+}

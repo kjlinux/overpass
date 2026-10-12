@@ -7,9 +7,10 @@
   </head>
   <body>
     <div id="root">
-      <div aria-busy="true" class="mx-auto max-w-prose px-4 py-24">
-        <div class="h-8 w-40 rounded bg-neutral-200 motion-safe:animate-pulse"></div>
-        <div class="mt-4 h-4 w-72 rounded bg-neutral-200 motion-safe:animate-pulse"></div>
+      <div aria-busy="true" class="mx-auto max-w-frame px-4 py-24 md:px-6 lg:px-8">
+        <div class="skeleton-bar h-8 w-48"></div>
+        <div class="skeleton-bar mt-3 h-4 w-full"></div>
+        <div class="skeleton-bar mt-3 h-4 w-4/5"></div>
       </div>
     </div>
     <script type="module" src="/src/main.tsx"></script>

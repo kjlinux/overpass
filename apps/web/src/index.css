@@ -1,3 +1,99 @@
+@import "./styles/fonts.css";
+@import "./styles/tokens.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Hallmark · macrostructure: Workbench · tone: printed road atlas · anchor hue: ink blue · design-system: DESIGN.md */
+html {
+  -webkit-text-size-adjust: 100%;
+  background: var(--color-paper);
+}
+body {
+  margin: 0;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-text);
+  font-size: 16px;
+  line-height: 1.6;
+}
+code,
+kbd,
+pre {
+  font-family: var(--font-code);
+  font-size: 15px;
+}
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+  border-radius: 0;
+}
+a {
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+.select-wrap {
+  position: relative;
+  display: block;
+}
+.select-wrap::after {
+  content: "";
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  pointer-events: none;
+  border-right: 1.75px solid currentColor;
+  border-bottom: 1.75px solid currentColor;
+  transform: translateY(-70%) rotate(45deg);
+}
+.badge::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  background: currentColor;
+  flex: none;
+}
+.skeleton-bar {
+  background: var(--color-surface);
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+}
+@keyframes skeleton-pulse {
+  50% {
+    opacity: 0.5;
+  }
+}
+.pressable {
+  transition: transform var(--duration-fast) var(--ease-out);
+}
+.pressable:active {
+  transform: translateY(1px);
+}
+.fade-in {
+  animation: fade-in var(--duration-base) var(--ease-out);
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pressable,
+  .skeleton-bar,
+  .fade-in {
+    animation: none;
+    transition: none;
+  }
+  .pressable:active {
+    transform: none;
+  }
+}

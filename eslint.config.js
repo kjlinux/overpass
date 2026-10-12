@@ -16,6 +16,16 @@ const technicalAttributes = [
   "lang",
   "aria-busy",
   "data-testid",
+  "for",
+  "scope",
+  "autocomplete",
+  "inputMode",
+  "value",
+  "class",
+  "aria-controls",
+  "aria-labelledby",
+  "aria-describedby",
+  "language",
 ];
 
 const userMessageRule = {
@@ -60,7 +70,7 @@ export default tseslint.config(
   },
   {
     files: ["**/*.test.ts", "**/*.test.tsx"],
-    rules: { "max-lines-per-function": "off" },
+    rules: { "max-lines-per-function": "off", "i18next/no-literal-string": "off" },
   },
   { files: ["**/*.js"], ...tseslint.configs.disableTypeChecked },
 );

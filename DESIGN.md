@@ -24,7 +24,7 @@ The visual voice is a printed road atlas, not a dashboard: a neutral paper floor
 
 ## Colors
 
-Every colour is declared once as a CSS custom property on `:root`, with the dark values under `[data-theme="dark"]` and under `prefers-color-scheme: dark` when no theme is forced. Components reference roles, never hex values. Values are given in hex.
+Every colour is declared once as a CSS custom property on `:root`, with the dark values under `[data-theme="dark"]`. Light is the default for everyone; the dark theme is a choice made in the settings, never an automatic switch, so that a screen looks the same for the jury and the developer. Components reference roles, never hex values. Values are given in hex.
 
 ### Roles
 
