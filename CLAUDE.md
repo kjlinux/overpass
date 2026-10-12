@@ -57,5 +57,5 @@
 - npm run check:repo: em dash, 200 lines, 20 percent comments, deep imports, licence audit.
 - npm run licenses: audit licences and rewrite docs/LICENSES.md. Run before keeping any new dependency.
 - npm run build: compile packages and apps.
-- npm run dev:api | dev:mcp: start one application in development. apps/web waits for the web stack decision (see docs/AI_USAGE.md).
+- npm run dev:api | dev:web | dev:mcp: start one application in development.
 - npm run db:up | db:down: start or stop PostgreSQL with Docker Compose.
