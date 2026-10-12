@@ -16,13 +16,14 @@ const configSchema = z
     LOG_LEVEL: z
       .enum(["fatal", "error", "warn", "info", "debug", "trace", "silent"])
       .default("info"),
-    TRUST_PROXY: flag.default(false),
+    TRUST_PROXY: z.coerce.number().int().min(0).max(5).default(0),
     DATABASE_URL: z.url(),
     SESSION_SECRET: z.string().min(32),
     WEB_ORIGIN: z.url().default("http://127.0.0.1:5173"),
     SMTP_HOST: optionalText,
     SMTP_PORT: z.coerce.number().int().positive().default(587),
     SMTP_SECURE: flag.default(false),
+    SMTP_REQUIRE_TLS: flag.default(true),
     SMTP_USER: optionalText,
     SMTP_PASSWORD: optionalText,
     MAIL_FROM: z.string().min(3).default("Overpass <no-reply@localhost>"),
@@ -36,9 +37,11 @@ export type Config = z.infer<typeof configSchema>;
 /** Reads and validates the API configuration from the environment. */
 export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
   const config = configSchema.parse(env);
+  if (config.NODE_ENV !== "production") return config;
   // Behind a proxy every client would share one IP and one rate-limit budget.
-  if (config.NODE_ENV === "production" && env["TRUST_PROXY"] === undefined) {
-    throw new Error("TRUST_PROXY must be set explicitly in production");
+  if (env["TRUST_PROXY"] === undefined) throw new Error("TRUST_PROXY must be set in production");
+  if (config.SESSION_SECRET.startsWith("change-me")) {
+    throw new Error("SESSION_SECRET still holds the example value");
   }
   return config;
 }

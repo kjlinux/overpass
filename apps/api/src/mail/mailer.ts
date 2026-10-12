@@ -10,7 +10,13 @@ export type MailLogger = { info(details: object, message: string): void };
 type SmtpConfig = Partial<
   Pick<
     Config,
-    "SMTP_HOST" | "SMTP_PORT" | "SMTP_SECURE" | "SMTP_USER" | "SMTP_PASSWORD" | "MAIL_FROM"
+    | "SMTP_HOST"
+    | "SMTP_PORT"
+    | "SMTP_SECURE"
+    | "SMTP_REQUIRE_TLS"
+    | "SMTP_USER"
+    | "SMTP_PASSWORD"
+    | "MAIL_FROM"
   >
 >;
 
@@ -35,6 +41,8 @@ export function createMailer(config: SmtpConfig, logger: MailLogger): Mailer {
     host: config.SMTP_HOST,
     port: config.SMTP_PORT ?? 587,
     secure: config.SMTP_SECURE ?? false,
+    // Reset links are credentials: never let a stripped STARTTLS send them in clear text.
+    requireTLS: config.SMTP_SECURE !== true && config.SMTP_REQUIRE_TLS !== false,
     ...(auth === undefined ? {} : { auth }),
   });
   return {

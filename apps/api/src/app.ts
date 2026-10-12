@@ -8,6 +8,7 @@ import type { Database } from "./db/client.js";
 import { registerErrorHandlers } from "./http/errors.js";
 import { registerHealth } from "./http/health.js";
 import { registerOriginCheck } from "./http/origin.js";
+import { registerSecurityHeaders } from "./http/security-headers.js";
 import { createMailer } from "./mail/mailer.js";
 import type { Mailer } from "./mail/mailer.js";
 import { registerAccounts } from "./modules/accounts/index.js";
@@ -20,6 +21,11 @@ export type AppConfig = Pick<
 
 export type AppDeps = { config: AppConfig; db?: Database; mailer?: Mailer };
 
+/** Trusts exactly the given number of proxies, so a forged X-Forwarded-For is ignored. */
+function trustedHops(count: number) {
+  return count === 0 ? false : (_address: string, hop: number) => hop < count;
+}
+
 const redactedHeaders = ["req.headers.cookie", "req.headers.authorization"];
 
 /** Builds the stateless API instance without starting it; modules need a database. */
@@ -28,13 +34,14 @@ export async function buildApp({ config, db, mailer }: AppDeps): Promise<Fastify
     logger: { level: config.LOG_LEVEL, redact: redactedHeaders },
     genReqId: () => randomUUID(),
     requestIdHeader: "x-request-id",
-    trustProxy: config.TRUST_PROXY,
+    trustProxy: trustedHops(config.TRUST_PROXY),
   });
   app.addHook("onRequest", (request, reply, done) => {
     reply.raw.setHeader("x-request-id", request.id);
     done();
   });
   registerErrorHandlers(app);
+  registerSecurityHeaders(app);
   await app.register(cookie);
   await app.register(rateLimit, { global: false });
   registerOriginCheck(app, config.WEB_ORIGIN);

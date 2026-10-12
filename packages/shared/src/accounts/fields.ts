@@ -39,9 +39,26 @@ export const stacksSchema = z
 
 export const languageSchema = z.enum(supportedLanguages, { error: codeOr("language_invalid") });
 
+/** Names that would let a member pass for the team; dev- belongs to generated handles. */
+const reservedHandles = new Set([
+  "admin",
+  "administrator",
+  "moderator",
+  "overpass",
+  "staff",
+  "support",
+  "team",
+  "api",
+  "root",
+  "system",
+]);
+
 export const handleSchema = z
   .string({ error: codeOr("handle_invalid") })
-  .regex(/^[a-z0-9][a-z0-9-]{1,28}[a-z0-9]$/, { error: "handle_invalid" });
+  .regex(/^[a-z0-9][a-z0-9-]{1,28}[a-z0-9]$/, { error: "handle_invalid" })
+  .refine((handle) => !reservedHandles.has(handle) && !handle.startsWith("dev-"), {
+    error: "handle_reserved",
+  });
 
 export const tokenUsageSchema = z.enum(["mcp", "api"], { error: codeOr("usage_invalid") });
 

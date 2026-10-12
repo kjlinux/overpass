@@ -36,14 +36,19 @@ describe("validateAll", () => {
 });
 
 describe("safeNext", () => {
-  it("keeps a path inside the site", () => {
-    expect(safeNext("/fr/settings", "/fr/dashboard")).toBe("/fr/settings");
+  it("keeps a path inside the site, with its query", () => {
+    expect(safeNext("/fr/settings?tab=tokens", "/fr/dashboard")).toBe("/fr/settings?tab=tokens");
   });
 
-  it.each(["https://evil.test", "//evil.test", "/\\evil.test", "javascript:alert(1)", null])(
-    "falls back for %s",
-    (next) => {
-      expect(safeNext(next, "/fr/dashboard")).toBe("/fr/dashboard");
-    },
-  );
+  it.each([
+    "https://evil.test",
+    "//evil.test",
+    "/\\evil.test",
+    "/\t/evil.test",
+    "/\n/evil.test",
+    "javascript:alert(1)",
+    null,
+  ])("falls back for %s", (next) => {
+    expect(safeNext(next, "/fr/dashboard")).toBe("/fr/dashboard");
+  });
 });

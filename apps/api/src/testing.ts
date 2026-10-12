@@ -14,7 +14,7 @@ export async function createTestApp() {
     config: {
       NODE_ENV: "test",
       LOG_LEVEL: "silent",
-      TRUST_PROXY: false,
+      TRUST_PROXY: 0,
       WEB_ORIGIN: webOrigin,
       SESSION_SECRET: "test-secret-with-at-least-32-characters!",
     },

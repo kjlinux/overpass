@@ -1,7 +1,8 @@
-import { profileUpdateInput } from "@overpass/shared";
+import { handleSchema, profileUpdateInput } from "@overpass/shared";
 import type { Me } from "@overpass/shared";
 import type { JSX } from "preact";
-import { useState } from "preact/hooks";
+import { useMemo, useState } from "preact/hooks";
+import { z } from "zod";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../app/useLanguage";
 import { Button } from "../../components/ui";
@@ -21,13 +22,26 @@ function useProfileEdit(me: Me) {
   const { setMe } = useSession();
   const [stacks, setStacks] = useState(me.stacks);
   const [saved, setSaved] = useState(false);
-  const form = useForm(profileUpdateInput, { handle: me.handle, country: me.country });
+  // The current handle may be a generated dev- one, which members cannot pick but may keep.
+  const schema = useMemo(
+    () =>
+      profileUpdateInput.extend({
+        handle: z.union([z.literal(me.handle), handleSchema]).optional(),
+      }),
+    [me.handle],
+  );
+  const form = useForm(schema, { handle: me.handle, country: me.country });
   const submit = useSubmit({
     validate: () => {
       setSaved(false);
       return form.validate();
     },
-    send: (data) => apiRequest<Me>("PATCH", "/v1/me", { ...data, stacks }),
+    send: ({ handle, ...data }) =>
+      apiRequest<Me>("PATCH", "/v1/me", {
+        ...data,
+        stacks,
+        ...(handle === me.handle ? {} : { handle }),
+      }),
     onError: (error) => {
       form.showApiError(error, { handle_taken: "handle" });
     },

@@ -14,7 +14,7 @@ describe("loadConfig", () => {
   it("requires an SMTP server in production", () => {
     expect(() => loadConfig({ ...base, NODE_ENV: "production" })).toThrow();
     expect(
-      loadConfig({ ...base, NODE_ENV: "production", SMTP_HOST: "smtp.test", TRUST_PROXY: "true" })
+      loadConfig({ ...base, NODE_ENV: "production", SMTP_HOST: "smtp.test", TRUST_PROXY: "1" })
         .SMTP_HOST,
     ).toBe("smtp.test");
   });
@@ -26,6 +26,24 @@ describe("loadConfig", () => {
   it("requires TRUST_PROXY to be set explicitly in production", () => {
     const production = { ...base, NODE_ENV: "production", SMTP_HOST: "smtp.test" };
     expect(() => loadConfig(production)).toThrow(/TRUST_PROXY/);
-    expect(loadConfig({ ...production, TRUST_PROXY: "true" }).TRUST_PROXY).toBe(true);
+    expect(loadConfig({ ...production, TRUST_PROXY: "1" }).TRUST_PROXY).toBe(1);
+  });
+
+  it("counts proxy hops instead of trusting every forwarded address", () => {
+    expect(() => loadConfig({ ...base, TRUST_PROXY: "true" })).toThrow();
+    expect(loadConfig(base).TRUST_PROXY).toBe(0);
+  });
+
+  it("refuses the example session secret in production", () => {
+    const production = {
+      ...base,
+      NODE_ENV: "production",
+      SMTP_HOST: "smtp.test",
+      TRUST_PROXY: "1",
+    };
+    const placeholder = "change-me-to-32-random-characters-or-more";
+    expect(() => loadConfig({ ...production, SESSION_SECRET: placeholder })).toThrow(
+      /SESSION_SECRET/,
+    );
   });
 });

@@ -8,7 +8,7 @@ beforeAll(async () => {
     config: {
       NODE_ENV: "test",
       LOG_LEVEL: "silent",
-      TRUST_PROXY: false,
+      TRUST_PROXY: 0,
       WEB_ORIGIN: "http://web.test",
       SESSION_SECRET: "test-secret-with-at-least-32-characters!",
     },
@@ -41,5 +41,12 @@ describe("api", () => {
       headers: { "x-request-id": "trace-1" },
     });
     expect(response.headers["x-request-id"]).toBe("trace-1");
+  });
+
+  it("sends hardening headers on every answer", async () => {
+    const response = await app.inject({ method: "GET", url: "/v1/health" });
+    expect(response.headers["x-content-type-options"]).toBe("nosniff");
+    expect(response.headers["referrer-policy"]).toBe("no-referrer");
+    expect(response.headers["x-frame-options"]).toBe("DENY");
   });
 });

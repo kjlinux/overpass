@@ -82,12 +82,20 @@ describe("profileUpdateInput", () => {
 
 describe("handleSchema", () => {
   it("accepts lower-case letters, digits and inner hyphens", () => {
-    expect(handleSchema.safeParse("dev-7f3a2c").success).toBe(true);
+    expect(handleSchema.safeParse("awa-dev-2").success).toBe(true);
   });
 
-  it.each(["ab", "-dev", "dev-", "Dev", "dév", "a".repeat(31)])("rejects %s", (handle) => {
-    expect(handleSchema.safeParse(handle).success).toBe(false);
+  it("reserves staff names and the generated dev- prefix", () => {
+    const result = handleSchema.safeParse("support");
+    expect(result.success ? undefined : result.error.issues[0]?.message).toBe("handle_reserved");
   });
+
+  it.each(["ab", "-dev", "dev-", "Dev", "dév", "a".repeat(31), "admin", "overpass", "dev-123abc"])(
+    "rejects %s",
+    (handle) => {
+      expect(handleSchema.safeParse(handle).success).toBe(false);
+    },
+  );
 });
 
 describe("tokenCreateInput", () => {
