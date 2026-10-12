@@ -9,8 +9,20 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@fastify/cookie": "^11.1.3",
+    "@fastify/rate-limit": "^11.2.1",
+    "@node-rs/argon2": "^2.2.2",
     "@overpass/shared": "0.0.0",
+    "drizzle-orm": "^0.45.4",
     "fastify": "^5.12.5",
+    "jose": "^6.2.12",
+    "nodemailer": "^10.1.0",
+    "pg": "^8.23.1",
     "zod": "^4.6.6"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.9",
+    "@types/nodemailer": "^8.0.2",
+    "@types/pg": "^8.23.1"
   }
 }

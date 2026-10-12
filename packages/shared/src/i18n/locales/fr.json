@@ -1,6 +1,32 @@
 {
   "errors": {
     "not_found": "Cette ressource est introuvable.",
-    "internal": "Une erreur est survenue. Réessayez dans un instant."
+    "internal": "Une erreur est survenue. Réessayez dans un instant.",
+    "validation_failed": "Certains champs sont à corriger.",
+    "email_taken": "Un compte existe déjà avec cette adresse e-mail.",
+    "invalid_credentials": "Adresse e-mail ou mot de passe incorrect.",
+    "unauthorized": "Connectez-vous pour continuer.",
+    "forbidden_origin": "Cette requête ne vient pas d'Overpass et a été refusée.",
+    "rate_limited": "Trop de tentatives. Patientez une minute avant de réessayer.",
+    "reset_invalid": "Ce lien de réinitialisation a expiré ou a déjà servi. Demandez-en un nouveau.",
+    "wrong_password": "Le mot de passe actuel est incorrect.",
+    "token_not_found": "Ce jeton est introuvable ou déjà révoqué.",
+    "handle_taken": "Ce nom public est déjà pris."
+  },
+  "fields": {
+    "required": "Ce champ est obligatoire.",
+    "unknown_field": "La requête contient un champ inconnu.",
+    "email_invalid": "Saisissez une adresse e-mail valide, par exemple awa@exemple.com.",
+    "password_too_short": "Le mot de passe doit compter au moins 10 caractères.",
+    "password_too_long": "Le mot de passe ne doit pas dépasser 128 caractères.",
+    "password_required": "Saisissez votre mot de passe.",
+    "country_invalid": "Choisissez votre pays dans la liste.",
+    "stacks_invalid": "Choisissez vos stacks dans la liste proposée.",
+    "language_invalid": "Choisissez une langue proposée.",
+    "handle_invalid": "De 3 à 30 caractères : lettres minuscules, chiffres et tirets, sans tiret au début ni à la fin.",
+    "usage_invalid": "Choisissez l'usage du jeton : MCP ou API.",
+    "token_name_invalid": "Donnez un nom de 1 à 60 caractères à ce jeton.",
+    "newsletter_invalid": "Cochez ou décochez la case.",
+    "reset_invalid": "Ce lien de réinitialisation n'est pas valide."
   }
 }

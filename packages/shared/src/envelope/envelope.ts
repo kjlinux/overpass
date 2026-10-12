@@ -1,10 +1,14 @@
 import { z } from "zod";
 
+export const fieldErrorSchema = z.object({ code: z.string(), message: z.string() });
+
 export const apiErrorSchema = z.object({
   code: z.string(),
   message: z.string(),
+  fields: z.record(z.string(), fieldErrorSchema).optional(),
 });
 
+export type FieldError = z.infer<typeof fieldErrorSchema>;
 export type ApiError = z.infer<typeof apiErrorSchema>;
 
 /** Builds the response envelope schema around a data schema. */

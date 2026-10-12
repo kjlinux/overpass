@@ -1,6 +1,32 @@
 {
   "errors": {
     "not_found": "This resource could not be found.",
-    "internal": "Something went wrong. Please try again in a moment."
+    "internal": "Something went wrong. Please try again in a moment.",
+    "validation_failed": "Some fields need fixing.",
+    "email_taken": "An account already exists with this e-mail address.",
+    "invalid_credentials": "Incorrect e-mail address or password.",
+    "unauthorized": "Log in to continue.",
+    "forbidden_origin": "This request did not come from Overpass and was refused.",
+    "rate_limited": "Too many attempts. Wait a minute before trying again.",
+    "reset_invalid": "This reset link has expired or was already used. Ask for a new one.",
+    "wrong_password": "The current password is incorrect.",
+    "token_not_found": "This token does not exist or was already revoked.",
+    "handle_taken": "This public name is already taken."
+  },
+  "fields": {
+    "required": "This field is required.",
+    "unknown_field": "The request contains an unknown field.",
+    "email_invalid": "Enter a valid e-mail address, for example awa@example.com.",
+    "password_too_short": "The password must be at least 10 characters long.",
+    "password_too_long": "The password must not exceed 128 characters.",
+    "password_required": "Enter your password.",
+    "country_invalid": "Choose your country from the list.",
+    "stacks_invalid": "Choose your stacks from the list.",
+    "language_invalid": "Choose one of the offered languages.",
+    "handle_invalid": "3 to 30 characters: lower-case letters, digits and hyphens, no hyphen at either end.",
+    "usage_invalid": "Choose what the token is for: MCP or API.",
+    "token_name_invalid": "Give this token a name of 1 to 60 characters.",
+    "newsletter_invalid": "Tick or untick the box.",
+    "reset_invalid": "This reset link is not valid."
   }
 }
