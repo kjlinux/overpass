@@ -1,7 +1,10 @@
 import { randomUUID } from "node:crypto";
+import type { Language, RegisterInput } from "@overpass/shared";
+import type { MailMessage } from "../../mail/mailer.js";
 export { captureMailer } from "../../mail/testing.js";
 import { UniqueViolation } from "./model.js";
 import type { AccountsRepository, TokenRecord, UserRecord } from "./model.js";
+import type { AccountsService } from "./service.js";
 
 type StoredToken = TokenRecord & { tokenHash: string; revokedAt: Date | null };
 type UserPart = Pick<
@@ -135,3 +138,21 @@ export function memoryRepository(): AccountsRepository {
 }
 
 export const testSecret = "test-secret-with-at-least-32-characters!";
+
+/** The token carried in the fragment of the link of a mail. */
+export function linkToken(text: string): string {
+  const token = /#token=([\w.-]+)/.exec(text)?.[1];
+  if (token === undefined) throw new Error("no token in mail");
+  return token;
+}
+
+/** Signs up through the confirmation e-mail, as a member would. */
+export async function signUp(
+  service: AccountsService,
+  mailer: { sent: MailMessage[] },
+  input: RegisterInput,
+  language: Language = "fr",
+) {
+  await service.register(input, language);
+  return service.confirmSignUp(linkToken(mailer.sent.at(-1)?.text ?? ""));
+}

@@ -6,6 +6,7 @@ const minute = 60 * 1000;
 /** Per-IP budgets of the authentication routes. */
 export const limits = {
   register: { max: 10, timeWindow: 60 * minute },
+  confirm: { max: 20, timeWindow: 60 * minute },
   login: { max: 10, timeWindow: 15 * minute },
   logout: { max: 30, timeWindow: minute },
   forgot: { max: 5, timeWindow: 15 * minute },
@@ -15,8 +16,9 @@ export const limits = {
   tokens: { max: 30, timeWindow: 60 * minute },
 };
 
-/** Per-address budget against mail bombing; login has none, so nobody can lock an account out. */
+/** Per-address budgets against mail bombing; login has none, so nobody can lock an account out. */
 export const addressLimits = {
+  register: { max: 3, timeWindow: 15 * minute },
   forgot: { max: 3, timeWindow: 15 * minute },
 };
 

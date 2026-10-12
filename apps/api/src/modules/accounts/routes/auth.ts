@@ -1,22 +1,41 @@
 import { ok, pickLanguage } from "@overpass/shared";
 import { parseInput } from "../../../http/validate.js";
 import { addressLimiter, limits } from "../limits.js";
-import { forgotInput, loginInput, registerInput, resetInput, toMe } from "../schemas.js";
+import {
+  confirmInput,
+  forgotInput,
+  loginInput,
+  registerInput,
+  resetInput,
+  toMe,
+} from "../schemas.js";
 import type { RouteContext } from "./context.js";
 
-export function authRoutes({ app, service, cookies }: RouteContext): void {
+/** Sign-up answers 202 whatever the address; only the mailed link opens a session. */
+export function signUpRoutes({ app, service, cookies }: RouteContext): void {
   app.post(
     "/v1/auth/register",
-    { config: { rateLimit: limits.register } },
+    { config: { rateLimit: limits.register }, preHandler: addressLimiter(app, "register") },
     async (request, reply) => {
       const input = parseInput(registerInput, request.body);
-      const language = pickLanguage(request.headers["accept-language"]);
-      const { user, session } = await service.register(input, language);
+      await service.register(input, pickLanguage(request.headers["accept-language"]));
+      return reply.code(202).send(ok(null));
+    },
+  );
+
+  app.post(
+    "/v1/auth/confirm",
+    { config: { rateLimit: limits.confirm } },
+    async (request, reply) => {
+      const { token } = parseInput(confirmInput, request.body);
+      const { user, session } = await service.confirmSignUp(token);
       cookies.set(reply, session);
       return reply.code(201).send(ok(toMe(user)));
     },
   );
+}
 
+export function authRoutes({ app, service, cookies }: RouteContext): void {
   app.post("/v1/auth/login", { config: { rateLimit: limits.login } }, async (request, reply) => {
     const { user, session } = await service.login(parseInput(loginInput, request.body));
     cookies.set(reply, session);

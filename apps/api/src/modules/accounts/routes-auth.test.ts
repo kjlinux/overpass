@@ -21,53 +21,6 @@ afterEach(() => close());
 const post = (url: string, payload: object, headers: Record<string, string> = {}) =>
   app.inject({ method: "POST", url, payload, headers: { origin: webOrigin, ...headers } });
 
-describe("POST /v1/auth/register", () => {
-  it("creates the account, opens an httpOnly session and hides the hash", async () => {
-    const response = await post(
-      "/v1/auth/register",
-      { email: "Awa@Example.com", password, country: "CI" },
-      { "accept-language": "en" },
-    );
-    expect(response.statusCode).toBe(201);
-    const { data } = response.json<Body>();
-    expect(data).toMatchObject({ email: "awa@example.com", country: "CI", language: "en" });
-    expect(JSON.stringify(data)).not.toMatch(/argon2|passwordHash/);
-    const cookie = response.cookies.find((c) => c.name === "overpass_session");
-    expect(cookie).toMatchObject({ httpOnly: true, sameSite: "Lax", path: "/" });
-  });
-
-  it("answers translated field errors with stable codes", async () => {
-    const response = await post(
-      "/v1/auth/register",
-      { email: "nope", password: "short" },
-      { "accept-language": "en" },
-    );
-    expect(response.statusCode).toBe(400);
-    const { error } = response.json<Body>();
-    expect(error).toMatchObject({
-      code: "validation_failed",
-      fields: {
-        email: { code: "email_invalid" },
-        password: { code: "password_too_short" },
-        country: { code: "required", message: "This field is required." },
-      },
-    });
-  });
-
-  it("refuses a second account with the same e-mail", async () => {
-    await registerAccount(app, "awa@example.com");
-    const response = await post("/v1/auth/register", {
-      email: "awa@example.com",
-      password,
-      country: "SN",
-    });
-    expect([response.statusCode, response.json<Body>().error?.["code"]]).toEqual([
-      409,
-      "email_taken",
-    ]);
-  });
-});
-
 describe("login and logout", () => {
   beforeEach(async () => {
     await registerAccount(app, "awa@example.com");
@@ -113,8 +66,8 @@ describe("password reset", () => {
     const cookie = await registerAccount(app, "awa@example.com");
     expect((await post("/v1/auth/forgot", { email: "ghost@example.com" })).statusCode).toBe(202);
     expect((await post("/v1/auth/forgot", { email: "awa@example.com" })).statusCode).toBe(202);
-    expect(mailer.sent).toHaveLength(1);
-    const token = /#token=([\w.-]+)/.exec(mailer.sent[0]?.text ?? "")?.[1] ?? "";
+    expect(mailer.sent.filter((mail) => mail.text.includes("reset-password"))).toHaveLength(1);
+    const token = /#token=([\w.-]+)/.exec(mailer.sent.at(-1)?.text ?? "")?.[1] ?? "";
     const reset = await post("/v1/auth/reset", { token, password: "a brand new passphrase" });
     expect(reset.statusCode).toBe(200);
     expect((await app.inject({ url: "/v1/me", headers: { cookie } })).statusCode).toBe(401);

@@ -3,22 +3,26 @@ import { AppError } from "../../http/app-error.js";
 import type { UserRecord } from "./model.js";
 import { createAccountsService } from "./service.js";
 import type { AccountsService } from "./service.js";
-import { captureMailer, memoryRepository, testSecret } from "./testing.js";
+import { captureMailer, memoryRepository, signUp, testSecret } from "./testing.js";
 
 const password = "correct horse battery";
 
 let service: AccountsService;
+let mailer: ReturnType<typeof captureMailer>;
 let awa: UserRecord;
 let session: string;
 
 beforeEach(async () => {
+  mailer = captureMailer();
   service = createAccountsService({
     repository: memoryRepository(),
-    mailer: captureMailer(),
+    mailer,
     secret: testSecret,
     webOrigin: "https://overpass.test",
   });
-  ({ user: awa, session } = await service.register(
+  ({ user: awa, session } = await signUp(
+    service,
+    mailer,
     { email: "awa@example.com", password, country: "CI" },
     "fr",
   ));
@@ -54,7 +58,9 @@ describe("updateProfile", () => {
   });
 
   it("refuses a handle already taken", async () => {
-    const { user: other } = await service.register(
+    const { user: other } = await signUp(
+      service,
+      mailer,
       { email: "ali@example.com", password, country: "ML" },
       "fr",
     );
@@ -137,7 +143,9 @@ describe("api tokens", () => {
   });
 
   it("will not revoke another user's token", async () => {
-    const { user: other } = await service.register(
+    const { user: other } = await signUp(
+      service,
+      mailer,
       { email: "ali@example.com", password, country: "ML" },
       "fr",
     );

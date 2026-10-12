@@ -3,6 +3,7 @@ import type { Mailer } from "../../../mail/mailer.js";
 import type { AccountsRepository } from "../model.js";
 import { signedTokens } from "../signed-tokens.js";
 import type { SignedTokens } from "../signed-tokens.js";
+import { signupTokens } from "../signup-tokens.js";
 
 /** Counts a user's contributions; the routes and checks modules will provide it. */
 export type ContributionsSource = (userId: string) => Promise<Contributions>;
@@ -17,7 +18,10 @@ export type AccountsDeps = {
   now?: () => Date;
 };
 
-export type ServiceContext = Required<Omit<AccountsDeps, "secret">> & { tokens: SignedTokens };
+export type ServiceContext = Required<Omit<AccountsDeps, "secret">> & {
+  tokens: SignedTokens;
+  signups: ReturnType<typeof signupTokens>;
+};
 
 const noContributions: ContributionsSource = () =>
   Promise.resolve({ routes: 0, checks: 0, potholes: 0 });
@@ -31,5 +35,6 @@ export function createContext(deps: AccountsDeps): ServiceContext {
     onBackgroundError: deps.onBackgroundError ?? (() => undefined),
     now: deps.now ?? (() => new Date()),
     tokens: signedTokens(deps.secret),
+    signups: signupTokens(deps.secret),
   };
 }

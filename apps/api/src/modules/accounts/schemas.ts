@@ -4,6 +4,7 @@ import type { UserRecord } from "./model.js";
 
 export {
   accountDeleteInput,
+  confirmInput,
   forgotInput,
   loginInput,
   passwordChangeInput,

@@ -4,6 +4,8 @@ import { createTestDatabase } from "./db/testing.js";
 import { captureMailer } from "./mail/testing.js";
 
 export const webOrigin = "http://web.test";
+
+const mailers = new WeakMap<FastifyInstance, ReturnType<typeof captureMailer>>();
 export const password = "correct horse battery";
 
 /** A full API on an in-process PostgreSQL, with mails captured instead of sent. */
@@ -21,6 +23,7 @@ export async function createTestApp() {
     db: database.db,
     mailer,
   });
+  mailers.set(app, mailer);
   const close = async () => {
     await app.close();
     await database.close();
@@ -35,13 +38,13 @@ export function sessionCookie(response: LightMyRequestResponse): string {
   return `${cookie.name}=${cookie.value}`;
 }
 
-/** Registers an account through the API and returns its session cookie. */
+/** Signs up through the API and the confirmation e-mail, then returns the session cookie. */
 export async function registerAccount(app: FastifyInstance, email: string): Promise<string> {
-  const response = await app.inject({
-    method: "POST",
-    url: "/v1/auth/register",
-    headers: { origin: webOrigin },
-    payload: { email, password, country: "CI" },
-  });
-  return sessionCookie(response);
+  const headers = { origin: webOrigin };
+  const payload = { email, password, country: "CI" };
+  await app.inject({ method: "POST", url: "/v1/auth/register", headers, payload });
+  const mail = mailers.get(app)?.sent.findLast((message) => message.to === email);
+  const token = /#token=([\w.-]+)/.exec(mail?.text ?? "")?.[1] ?? "";
+  const confirm = { method: "POST", url: "/v1/auth/confirm", headers, payload: { token } } as const;
+  return sessionCookie(await app.inject(confirm));
 }

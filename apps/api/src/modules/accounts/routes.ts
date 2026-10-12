@@ -1,7 +1,7 @@
 import type { FastifyInstance } from "fastify";
 import type { SessionCookies } from "./cookies.js";
 import { authGuard } from "./guard.js";
-import { authRoutes, recoveryRoutes } from "./routes/auth.js";
+import { authRoutes, recoveryRoutes, signUpRoutes } from "./routes/auth.js";
 import { meRoutes } from "./routes/me.js";
 import { tokenRoutes } from "./routes/tokens.js";
 import type { AccountsService } from "./service.js";
@@ -16,6 +16,7 @@ export function registerAccountsRoutes(
   app.addHook("onSend", async (_request, reply) => {
     reply.header("cache-control", "no-store");
   });
+  signUpRoutes(context);
   authRoutes(context);
   recoveryRoutes(context);
   meRoutes(context);

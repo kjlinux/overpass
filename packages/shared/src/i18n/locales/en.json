@@ -14,7 +14,8 @@
     "handle_taken": "This public name is already taken.",
     "bad_request": "This request is malformed.",
     "payload_too_large": "This request is too large.",
-    "unsupported_media_type": "Send the data as JSON."
+    "unsupported_media_type": "Send the data as JSON.",
+    "signup_invalid": "This confirmation link has expired or is not valid. Sign up again."
   },
   "fields": {
     "required": "This field is required.",
@@ -32,6 +33,7 @@
     "newsletter_invalid": "Tick or untick the box.",
     "reset_invalid": "This reset link is not valid.",
     "id_invalid": "This identifier is not valid.",
-    "handle_reserved": "This name is reserved. Choose another one."
+    "handle_reserved": "This name is reserved. Choose another one.",
+    "signup_invalid": "This confirmation link is not valid."
   }
 }

@@ -14,7 +14,8 @@
     "handle_taken": "Ce nom public est déjà pris.",
     "bad_request": "Cette requête est mal formée.",
     "payload_too_large": "Cette requête est trop volumineuse.",
-    "unsupported_media_type": "Envoyez les données au format JSON."
+    "unsupported_media_type": "Envoyez les données au format JSON.",
+    "signup_invalid": "Ce lien de confirmation a expiré ou n'est pas valide. Recommencez l'inscription."
   },
   "fields": {
     "required": "Ce champ est obligatoire.",
@@ -32,6 +33,7 @@
     "newsletter_invalid": "Cochez ou décochez la case.",
     "reset_invalid": "Ce lien de réinitialisation n'est pas valide.",
     "id_invalid": "Cet identifiant n'est pas valide.",
-    "handle_reserved": "Ce nom est réservé. Choisissez-en un autre."
+    "handle_reserved": "Ce nom est réservé. Choisissez-en un autre.",
+    "signup_invalid": "Ce lien de confirmation n'est pas valide."
   }
 }

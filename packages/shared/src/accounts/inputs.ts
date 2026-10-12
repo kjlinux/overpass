@@ -17,6 +17,10 @@ export const registerInput = z.strictObject({
   country: countrySchema,
 });
 
+export const confirmInput = z.strictObject({
+  token: z.string({ error: "signup_invalid" }).min(1).max(4096, { error: "signup_invalid" }),
+});
+
 export const loginInput = z.strictObject({
   email: emailSchema,
   password: currentPasswordSchema,
@@ -50,6 +54,7 @@ export const tokenCreateInput = z.strictObject({
 });
 
 export type RegisterInput = z.infer<typeof registerInput>;
+export type ConfirmInput = z.infer<typeof confirmInput>;
 export type LoginInput = z.infer<typeof loginInput>;
 export type ForgotInput = z.infer<typeof forgotInput>;
 export type ResetInput = z.infer<typeof resetInput>;

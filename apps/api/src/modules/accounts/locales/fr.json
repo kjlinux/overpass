@@ -2,5 +2,13 @@
   "resetMail": {
     "subject": "Réinitialisez votre mot de passe Overpass",
     "body": "Bonjour,\n\nPour choisir un nouveau mot de passe, ouvrez ce lien dans les 30 minutes :\n\n{{link}}\n\nLe lien ne sert qu'une fois. Si vous n'avez rien demandé, ignorez ce message : votre mot de passe reste inchangé.\n\nL'équipe Overpass"
+  },
+  "confirmMail": {
+    "subject": "Confirmez votre inscription à Overpass",
+    "body": "Bonjour,\n\nPour terminer votre inscription, ouvrez ce lien dans les 24 heures :\n\n{{link}}\n\nSi vous n'avez rien demandé, ignorez ce message : aucun compte n'a été créé.\n\nL'équipe Overpass"
+  },
+  "existsMail": {
+    "subject": "Vous avez déjà un compte Overpass",
+    "body": "Bonjour,\n\nQuelqu'un, peut-être vous, a voulu créer un compte avec cette adresse, qui en a déjà un.\n\nPour vous connecter : {{signIn}}\nMot de passe oublié : {{forgot}}\n\nSi ce n'était pas vous, ignorez ce message : votre compte n'a pas changé.\n\nL'équipe Overpass"
   }
 }
