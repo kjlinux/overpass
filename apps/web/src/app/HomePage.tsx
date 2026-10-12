@@ -1,12 +1,17 @@
 import { useTranslation } from "react-i18next";
+import { Layout } from "../layout";
+import { useLanguage } from "./useLanguage";
 
-/** Placeholder home page until the screens are designed from DESIGN.md. */
+/** Placeholder home page until the screens are built from DESIGN.md. */
 export function HomePage() {
   const { t } = useTranslation();
+  const language = useLanguage();
   return (
-    <main className="mx-auto max-w-prose px-4 py-24">
-      <h1 className="text-3xl font-semibold">{t("app.name")}</h1>
-      <p className="mt-4 text-base leading-relaxed">{t("app.tagline")}</p>
-    </main>
+    <Layout language={language}>
+      <section class="max-w-prose py-16 md:py-24">
+        <h1 class="text-display font-semibold md:text-display-lg">{t("app.tagline")}</h1>
+        <p class="mt-6">{t("app.intro")}</p>
+      </section>
+    </Layout>
   );
 }

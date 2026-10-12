@@ -1,0 +1,14 @@
+{
+  "notFound": {
+    "code": "Error 404",
+    "title": "This page does not exist",
+    "text": "The address may be wrong, or the page has moved. Start again from the home page or the itinerary catalogue."
+  },
+  "server": {
+    "code": "Server error",
+    "title": "Overpass could not display this page",
+    "text": "Something failed on our side. Reload the page in a moment; if the problem persists, start again from the home page."
+  },
+  "backHome": "Back to the home page",
+  "browseRoutes": "Browse the itineraries"
+}

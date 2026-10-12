@@ -1,0 +1,14 @@
+{
+  "notFound": {
+    "code": "Erreur 404",
+    "title": "Cette page n'existe pas",
+    "text": "L'adresse est peut-être erronée, ou la page a été déplacée. Repartez de l'accueil ou du catalogue des itinéraires."
+  },
+  "server": {
+    "code": "Erreur serveur",
+    "title": "Overpass n'a pas pu afficher cette page",
+    "text": "Une erreur s'est produite de notre côté. Rechargez la page dans un instant ; si le problème persiste, repartez de l'accueil."
+  },
+  "backHome": "Retour à l'accueil",
+  "browseRoutes": "Parcourir les itinéraires"
+}

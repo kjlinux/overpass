@@ -1,0 +1,89 @@
+{
+  "title": "Components",
+  "intro": "Every component of the design system, with sample content. Everything works with the keyboard, with a visible focus and 44 px touch targets.",
+  "buttons": {
+    "title": "Buttons",
+    "primary": "Run the simulated payment",
+    "secondary": "Browse the itineraries",
+    "ghost": "Cancel",
+    "danger": "Delete the token",
+    "loading": "Sending",
+    "disabled": "Unavailable",
+    "copy": "Copy the key"
+  },
+  "fields": {
+    "title": "Fields",
+    "amount": "Amount",
+    "amountHelp": "In CFA francs, without decimals.",
+    "operator": "Operator",
+    "operators": {
+      "wave": "Wave",
+      "cinetpay": "CinetPay",
+      "pispi": "PI-SPI",
+      "paydunya": "PayDunya"
+    },
+    "webhook": "Webhook URL",
+    "webhookError": "This address is local. Enter a public address reachable from the Internet.",
+    "notes": "Notes",
+    "scenario": "Scenario",
+    "success": "Successful payment",
+    "timeout": "Timeout on the operator side",
+    "newsletter": "Get the weekly digest"
+  },
+  "cards": {
+    "title": "Card and status badges",
+    "cardTitle": "Wave Checkout, Côte d'Ivoire",
+    "cardMeta": "Laravel, verified 3 days ago",
+    "cardText": "The code that works, the known traps and dated verifications by other developers.",
+    "cardAction": "Test on the test track",
+    "unofficial": "Unofficial",
+    "selectedChip": "Côte d'Ivoire"
+  },
+  "table": {
+    "title": "Table",
+    "caption": "Sample itineraries and their state",
+    "service": "Service",
+    "country": "Country",
+    "stack": "Stack",
+    "status": "State",
+    "countries": {
+      "CI": "Côte d'Ivoire",
+      "SN": "Senegal",
+      "CM": "Cameroon"
+    }
+  },
+  "tabs": {
+    "title": "Tabs",
+    "label": "Exchange inspector",
+    "request": "Request",
+    "response": "Response"
+  },
+  "dialog": {
+    "title": "Confirmation dialog",
+    "open": "Delete the token",
+    "heading": "Delete this token?",
+    "text": "Assistants using it will lose access immediately. This action is permanent.",
+    "confirm": "Delete the token"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "neutral": "Information",
+    "success": "Success",
+    "warning": "Warning",
+    "danger": "Error",
+    "neutralText": "The webhook will be delivered in a few seconds.",
+    "successText": "Simulated payment finished. The webhook was delivered in 212 ms.",
+    "warningText": "This sheet has not been verified for 4 months.",
+    "dangerText": "The webhook could not be delivered: the address answered 500. Check your server, then run it again."
+  },
+  "code": {
+    "title": "Code block with copy",
+    "sample": "npx overpass-mcp --token ovp_pat_7f3a…c91d"
+  },
+  "states": {
+    "title": "Loading skeleton and empty state",
+    "emptyTitle": "No itineraries yet",
+    "emptyText": "Itineraries are the integration sheets verified by the community.",
+    "emptyAction": "Publish an itinerary"
+  }
+}

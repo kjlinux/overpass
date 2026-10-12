@@ -1,16 +1,13 @@
-import i18next from "i18next";
 import { prerender } from "preact-iso";
-import { initReactI18next } from "react-i18next";
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
-import en from "../i18n/locales/en.json";
-import fr from "../i18n/locales/fr.json";
+import { setupTestI18n } from "../i18n/test-i18n";
+import fr from "./locales/fr.json";
+import errorsFr from "../pages/errors/locales/fr.json";
+import showcaseFr from "../pages/showcase/locales/fr.json";
 import { App } from "./App";
 
 beforeAll(async () => {
-  await i18next.use(initReactI18next).init({
-    lng: "fr",
-    resources: { fr: { translation: fr }, en: { translation: en } },
-  });
+  await setupTestI18n("fr");
 });
 
 function renderAt(path: string) {
@@ -23,14 +20,22 @@ afterEach(() => {
 });
 
 describe("App", () => {
-  it("renders the home page under a language prefix", async () => {
+  it("renders the home page under a language prefix, inside the layout", async () => {
     const { html } = await renderAt("/fr");
     expect(html).toContain(fr.app.tagline);
+    expect(html).toContain('aria-label="Navigation principale"');
+    expect(html).toContain("<footer");
   });
 
-  it("redirects an unknown page under a language", async () => {
+  it("renders the components page", async () => {
+    const { html } = await renderAt("/fr/components");
+    expect(html).toContain(showcaseFr.title);
+  });
+
+  it("shows the 404 page for an unknown path under a language", async () => {
     const { html } = await renderAt("/fr/nowhere");
-    expect(html).toContain('aria-busy="true"');
+    expect(html).toContain(errorsFr.notFound.title);
+    expect(html).toContain('href="/fr"');
   });
 
   it("shows the skeleton while redirecting an unknown prefix", async () => {

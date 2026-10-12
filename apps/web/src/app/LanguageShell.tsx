@@ -1,10 +1,16 @@
 import { useEffect } from "preact/hooks";
-import { Route, Router, lazy, useRoute } from "preact-iso";
+import { Route, Router, useRoute } from "preact-iso";
 import { useTranslation } from "react-i18next";
+import { ErrorBoundary, ErrorPage } from "../pages/errors";
 import { rememberLanguage, toLanguage } from "./language";
+import { lazyPage } from "./lazyPage";
 import { RootRedirect } from "./RootRedirect";
 
-const HomePage = lazy(async () => (await import("./HomePage")).HomePage);
+const HomePage = lazyPage("app", async () => (await import("./HomePage")).HomePage);
+const ComponentsPage = lazyPage(
+  "showcase",
+  async () => (await import("../pages/showcase")).ComponentsPage,
+);
 
 /** Applies the language of the URL prefix and routes the rest of the path. */
 export function LanguageShell() {
@@ -21,9 +27,19 @@ export function LanguageShell() {
 
   if (language === undefined) return <RootRedirect />;
   return (
-    <Router>
-      <Route path="/" component={HomePage} />
-      <Route default component={RootRedirect} />
-    </Router>
+    <ErrorBoundary language={language}>
+      <Router>
+        <Route path="/" component={HomePage} />
+        <Route path="/components" component={ComponentsPage} />
+        <Route default component={NotFound} />
+      </Router>
+    </ErrorBoundary>
   );
+}
+
+function NotFound() {
+  const { i18n } = useTranslation();
+  const language = toLanguage(i18n.language);
+  if (language === undefined) return <RootRedirect />;
+  return <ErrorPage kind="notFound" language={language} />;
 }

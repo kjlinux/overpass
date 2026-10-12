@@ -1,0 +1,42 @@
+{
+  "wordmark": "Overpass",
+  "skipToContent": "Aller au contenu",
+  "mainNavigation": "Navigation principale",
+  "menu": "Menu",
+  "closeMenu": "Fermer le menu",
+  "language": "Langue",
+  "signIn": "Connexion",
+  "signUp": "S'inscrire",
+  "nav": {
+    "routes": "Itinéraires",
+    "sandbox": "Piste d'essai",
+    "discussions": "Discussions",
+    "blog": "Blog",
+    "docs": "Docs"
+  },
+  "newsletter": {
+    "title": "Recevoir le résumé hebdomadaire",
+    "email": "Adresse e-mail",
+    "language": "Langue de la newsletter",
+    "subscribe": "S'abonner",
+    "inactive": "Inscription inactive pour l'instant : la newsletter arrive avec le module communauté."
+  },
+  "groups": {
+    "product": "Produit",
+    "community": "Communauté",
+    "legal": "Légal"
+  },
+  "links": {
+    "routes": "Itinéraires",
+    "sandbox": "Piste d'essai",
+    "pricing": "Tarifs",
+    "docs": "Documentation",
+    "discussions": "Discussions",
+    "blog": "Blog",
+    "ranking": "Classement",
+    "about": "À propos",
+    "legal": "Mentions légales",
+    "privacy": "Confidentialité"
+  },
+  "legalLine": "Overpass par Ghostapi, Côte d'Ivoire. Code sous licence libre."
+}

@@ -1,0 +1,89 @@
+{
+  "title": "Composants",
+  "intro": "Chaque composant du système de design, avec un contenu d'exemple. Tout fonctionne au clavier, avec un focus visible et des zones tactiles de 44 px.",
+  "buttons": {
+    "title": "Boutons",
+    "primary": "Lancer le paiement simulé",
+    "secondary": "Parcourir les itinéraires",
+    "ghost": "Annuler",
+    "danger": "Supprimer le jeton",
+    "loading": "Envoi en cours",
+    "disabled": "Indisponible",
+    "copy": "Copier la clé"
+  },
+  "fields": {
+    "title": "Champs",
+    "amount": "Montant",
+    "amountHelp": "En francs CFA, sans décimales.",
+    "operator": "Opérateur",
+    "operators": {
+      "wave": "Wave",
+      "cinetpay": "CinetPay",
+      "pispi": "PI-SPI",
+      "paydunya": "PayDunya"
+    },
+    "webhook": "URL du webhook",
+    "webhookError": "Cette adresse est locale. Indiquez une adresse publique joignable depuis Internet.",
+    "notes": "Notes",
+    "scenario": "Scénario",
+    "success": "Paiement réussi",
+    "timeout": "Délai dépassé côté opérateur",
+    "newsletter": "Recevoir le résumé hebdomadaire"
+  },
+  "cards": {
+    "title": "Carte et badges d'état",
+    "cardTitle": "Wave Checkout, Côte d'Ivoire",
+    "cardMeta": "Laravel, vérifiée il y a 3 jours",
+    "cardText": "Le code qui marche, les pièges connus et des vérifications datées par d'autres développeurs.",
+    "cardAction": "Tester sur la piste d'essai",
+    "unofficial": "Non officiel",
+    "selectedChip": "Côte d'Ivoire"
+  },
+  "table": {
+    "title": "Tableau",
+    "caption": "Itinéraires d'exemple et leur état",
+    "service": "Service",
+    "country": "Pays",
+    "stack": "Stack",
+    "status": "État",
+    "countries": {
+      "CI": "Côte d'Ivoire",
+      "SN": "Sénégal",
+      "CM": "Cameroun"
+    }
+  },
+  "tabs": {
+    "title": "Onglets",
+    "label": "Inspecteur de l'échange",
+    "request": "Requête",
+    "response": "Réponse"
+  },
+  "dialog": {
+    "title": "Fenêtre de confirmation",
+    "open": "Supprimer le jeton",
+    "heading": "Supprimer ce jeton ?",
+    "text": "Les assistants qui l'utilisent perdront l'accès immédiatement. Cette action est définitive.",
+    "confirm": "Supprimer le jeton"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "neutral": "Information",
+    "success": "Succès",
+    "warning": "Alerte",
+    "danger": "Erreur",
+    "neutralText": "Le webhook sera livré dans quelques secondes.",
+    "successText": "Paiement simulé terminé. Le webhook a été livré en 212 ms.",
+    "warningText": "Cette fiche n'a pas été vérifiée depuis 4 mois.",
+    "dangerText": "Le webhook n'a pas pu être livré : l'adresse a répondu 500. Vérifiez votre serveur puis relancez."
+  },
+  "code": {
+    "title": "Bloc de code avec copie",
+    "sample": "npx overpass-mcp --token ovp_pat_7f3a…c91d"
+  },
+  "states": {
+    "title": "Squelette de chargement et état vide",
+    "emptyTitle": "Aucun itinéraire pour l'instant",
+    "emptyText": "Les itinéraires sont les fiches d'intégration vérifiées par la communauté.",
+    "emptyAction": "Publier un itinéraire"
+  }
+}
