@@ -90,11 +90,14 @@ describe("login and logout", () => {
     });
   });
 
-  it("clears the cookie on logout", async () => {
-    const response = await post("/v1/auth/logout", {});
-    const cookie = response.cookies.find((c) => c.name === "overpass_session");
+  it("clears the cookie on logout and ends every copy of the session", async () => {
+    const login = await post("/v1/auth/login", { email: "awa@example.com", password });
+    const cookie = sessionCookie(login);
+    const response = await post("/v1/auth/logout", {}, { cookie });
+    expect((await app.inject({ url: "/v1/me", headers: { cookie } })).statusCode).toBe(401);
+    const cleared = response.cookies.find((c) => c.name === "overpass_session");
     expect(response.statusCode).toBe(200);
-    expect(cookie?.value).toBe("");
+    expect(cleared?.value).toBe("");
   });
 
   it("requires a session to read the profile", async () => {
@@ -142,9 +145,30 @@ describe("protections", () => {
     expect((await attempt("awa@example.com", "10.0.0.2")).statusCode).toBe(401);
   });
 
-  it("limits login attempts per e-mail across IP addresses", async () => {
-    for (let i = 0; i < 20; i++) await attempt("awa@example.com", `10.0.1.${String(i)}`);
-    expect((await attempt("Awa@Example.com", "10.0.2.1")).statusCode).toBe(429);
+  it("does not let failed attempts from many addresses lock an account out", async () => {
+    await registerAccount(app, "awa@example.com");
+    for (let i = 0; i < 25; i++) await attempt("awa@example.com", `10.0.1.${String(i)}`);
+    const owner = await app.inject({
+      method: "POST",
+      url: "/v1/auth/login",
+      remoteAddress: "10.0.2.1",
+      payload: { email: "awa@example.com", password },
+      headers: { origin: webOrigin },
+    });
+    expect(owner.statusCode).toBe(200);
+  });
+
+  it("limits reset requests per e-mail across IP addresses", async () => {
+    const forgot = (ip: string) =>
+      app.inject({
+        method: "POST",
+        url: "/v1/auth/forgot",
+        remoteAddress: ip,
+        payload: { email: "awa@example.com" },
+        headers: { origin: webOrigin },
+      });
+    for (let i = 0; i < 3; i++) expect((await forgot(`10.0.3.${String(i)}`)).statusCode).toBe(202);
+    expect((await forgot("10.0.4.1")).statusCode).toBe(429);
   });
 
   it("refuses a mutation sent from another origin", async () => {
@@ -167,6 +191,7 @@ describe("protections", () => {
       payload: "email=a%40b.co&password=x",
     });
     expect(response.statusCode).toBe(415);
+    expect(response.json<Body>().error?.["code"]).toBe("unsupported_media_type");
   });
 
   it("never lets a browser cache account responses", async () => {

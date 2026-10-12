@@ -93,6 +93,19 @@ describe("sessions", () => {
   });
 });
 
+describe("logout", () => {
+  it("closes every session of the account, copies included", async () => {
+    const { session } = await service.register(awa, "fr");
+    const copy = (await service.login({ email: awa.email, password: awa.password })).session;
+    await service.logout(session);
+    expect(await service.authenticateSession(copy)).toBeNull();
+  });
+
+  it("ignores an invalid session", async () => {
+    await expect(service.logout("not-a-jwt")).resolves.toBeUndefined();
+  });
+});
+
 describe("password reset", () => {
   beforeEach(async () => {
     await service.register(awa, "fr");
@@ -135,5 +148,14 @@ describe("password reset", () => {
       service.resetPassword({ token: session, password: "x".repeat(12) }),
     );
     expect(error.code).toBe("reset_invalid");
+  });
+
+  it("revokes the personal tokens, so an intruder's token stops working", async () => {
+    const { user } = await service.login({ email: awa.email, password: awa.password });
+    const { token } = await service.createToken(user.id, { name: "x", usage: "api" });
+    await service.requestReset({ email: awa.email });
+    const reset = resetTokenFrom(mailer.sent[0]?.text ?? "");
+    await service.resetPassword({ token: reset, password: "a brand new passphrase" });
+    expect(await service.authenticateToken(token)).toBeNull();
   });
 });

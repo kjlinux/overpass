@@ -117,4 +117,20 @@ describe.each(factories)("accounts repository (%s)", (_name, factory) => {
     expect(await repository.listActiveTokens(user.id)).toEqual([]);
     expect(await repository.findUserByActiveTokenHash("h1", new Date())).toBeNull();
   });
+
+  it("rotates credentials with an atomic version increment", async () => {
+    const user = await repository.createUser(awa);
+    const first = await repository.rotateCredentials(user.id, { passwordHash: "new-hash" });
+    const second = await repository.rotateCredentials(user.id, {});
+    expect([first.sessionVersion, second.sessionVersion]).toEqual([1, 2]);
+    expect(second.passwordHash).toBe("new-hash");
+  });
+
+  it("revokes every active token of a user at once", async () => {
+    const user = await repository.createUser(awa);
+    await repository.createToken({ userId: user.id, name: "a", usage: "api", tokenHash: "h1" });
+    await repository.createToken({ userId: user.id, name: "b", usage: "mcp", tokenHash: "h2" });
+    await repository.revokeAllTokens(user.id, new Date());
+    expect(await repository.listActiveTokens(user.id)).toEqual([]);
+  });
 });
