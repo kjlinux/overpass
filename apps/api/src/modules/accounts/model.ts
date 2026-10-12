@@ -19,10 +19,9 @@ export type NewUser = Pick<
   "email" | "passwordHash" | "handle" | "country" | "language"
 >;
 
-type Patchable = Pick<
-  UserRecord,
-  "country" | "language" | "handle" | "newsletterConsentAt" | "passwordHash" | "sessionVersion"
-> & { stacks: string[] };
+type Patchable = Pick<UserRecord, "country" | "language" | "handle" | "newsletterConsentAt"> & {
+  stacks: string[];
+};
 
 /** Fields left undefined are not changed. */
 export type UserPatch = { [Key in keyof Patchable]?: Patchable[Key] | undefined };
@@ -46,6 +45,9 @@ export type AccountsRepository = {
   findUserByHandle(handle: string): Promise<UserRecord | null>;
   updateUser(id: string, patch: UserPatch): Promise<UserRecord>;
   deleteUser(id: string): Promise<void>;
+  /** Optionally sets a new hash and increments session_version in one statement. */
+  rotateCredentials(id: string, change: { passwordHash?: string }): Promise<UserRecord>;
+  revokeAllTokens(userId: string, at: Date): Promise<void>;
   createToken(token: NewToken): Promise<TokenRecord>;
   listActiveTokens(userId: string): Promise<TokenRecord[]>;
   revokeToken(userId: string, tokenId: string, at: Date): Promise<boolean>;

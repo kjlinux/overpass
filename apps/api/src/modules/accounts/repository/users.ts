@@ -1,4 +1,4 @@
-import { asc, eq, inArray } from "drizzle-orm";
+import { asc, eq, inArray, sql } from "drizzle-orm";
 import type { SQL } from "drizzle-orm";
 import type { Database } from "../../../db/client.js";
 import { UniqueViolation } from "../model.js";
@@ -99,6 +99,15 @@ export function userQueries(db: Database) {
       });
       const user = await reads.findUserById(id);
       if (user === null) throw new Error("updated user vanished");
+      return user;
+    },
+    rotateCredentials: async (id: string, change: { passwordHash?: string }) => {
+      await db
+        .update(users)
+        .set({ ...change, sessionVersion: sql`${users.sessionVersion} + 1`, updatedAt: new Date() })
+        .where(eq(users.id, id));
+      const user = await reads.findUserById(id);
+      if (user === null) throw new Error("rotated user vanished");
       return user;
     },
     deleteUser: async (id: string) => {

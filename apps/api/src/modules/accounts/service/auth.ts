@@ -1,13 +1,6 @@
 import { randomBytes } from "node:crypto";
-import type {
-  ForgotInput,
-  Language,
-  LoginInput,
-  RegisterInput,
-  ResetInput,
-} from "@overpass/shared";
+import type { Language, LoginInput, RegisterInput } from "@overpass/shared";
 import { AppError } from "../../../http/app-error.js";
-import { resetMail } from "../mail.js";
 import { UniqueViolation } from "../model.js";
 import type { UserRecord } from "../model.js";
 import { hashPassword, verifyPassword } from "../passwords.js";
@@ -36,6 +29,12 @@ async function createWithHandle(ctx: ServiceContext, input: RegisterInput, langu
 }
 
 export function authService(ctx: ServiceContext) {
+  const authenticateSession = async (token: string) => {
+    const claims = await ctx.tokens.verifySession(token);
+    if (claims === null) return null;
+    const user = await ctx.repository.findUserById(claims.userId);
+    return user?.sessionVersion === claims.version ? user : null;
+  };
   const open = async (user: UserRecord): Promise<SessionResult> => ({
     user,
     session: await ctx.tokens.signSession(user),
@@ -52,32 +51,12 @@ export function authService(ctx: ServiceContext) {
       return open(user);
     },
 
-    authenticateSession: async (token: string) => {
-      const claims = await ctx.tokens.verifySession(token);
-      if (claims === null) return null;
-      const user = await ctx.repository.findUserById(claims.userId);
-      return user?.sessionVersion === claims.version ? user : null;
-    },
+    authenticateSession,
 
-    /** Resolves before the mail leaves, so timing does not reveal whether the account exists. */
-    requestReset: async (input: ForgotInput) => {
-      const user = await ctx.repository.findUserByEmail(input.email);
-      if (user === null) return;
-      const token = await ctx.tokens.signReset(user);
-      const link = `${ctx.webOrigin}/${user.language}/reset-password#token=${token}`;
-      ctx.mailer.send(resetMail(user.email, user.language, link)).catch(ctx.onBackgroundError);
-    },
-
-    resetPassword: async (input: ResetInput) => {
-      const claims = await ctx.tokens.verifyReset(input.token);
-      const user = claims === null ? null : await ctx.repository.findUserById(claims.userId);
-      if (user === null || claims?.fingerprint !== ctx.tokens.fingerprint(user.passwordHash)) {
-        throw new AppError("reset_invalid", 400);
-      }
-      await ctx.repository.updateUser(user.id, {
-        passwordHash: await hashPassword(input.password),
-        sessionVersion: user.sessionVersion + 1,
-      });
+    /** Stateless sessions can only be ended by moving the version, so every copy stops working. */
+    logout: async (token: string) => {
+      const user = await authenticateSession(token);
+      if (user !== null) await ctx.repository.rotateCredentials(user.id, {});
     },
   };
 }

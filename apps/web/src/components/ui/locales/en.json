@@ -12,5 +12,6 @@
   "cancel": "Cancel",
   "choose": "Choose",
   "networkError": "Overpass could not be reached. Check your connection, then try again.",
-  "optional": "optional"
+  "optional": "optional",
+  "retry": "Try again"
 }

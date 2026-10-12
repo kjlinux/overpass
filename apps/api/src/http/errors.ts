@@ -32,6 +32,14 @@ function statusOf(error: unknown): number | undefined {
   return typeof error.statusCode === "number" ? error.statusCode : undefined;
 }
 
+/** Names the framework's own 4xx answers; anything else in that range is a bad request. */
+function clientErrorCodes(status: number): ErrorCode | undefined {
+  if (status === 413) return "payload_too_large";
+  if (status === 415) return "unsupported_media_type";
+  if (status === 429) return "rate_limited";
+  return status >= 400 && status < 500 ? "bad_request" : undefined;
+}
+
 /** Answers unknown routes and every failure with translated envelopes. */
 export function registerErrorHandlers(app: FastifyInstance): void {
   app.setNotFoundHandler((request, reply) =>
@@ -40,10 +48,9 @@ export function registerErrorHandlers(app: FastifyInstance): void {
   app.setErrorHandler((error, request, reply) => {
     if (error instanceof AppError) return sendError(request, reply, error);
     const status = statusOf(error);
-    if (status === 429) return sendError(request, reply, { code: "rate_limited", status });
-    if (status !== undefined && status >= 400 && status < 500) {
-      return sendError(request, reply, { code: "validation_failed", status });
-    }
+    const code = status === undefined ? undefined : clientErrorCodes(status);
+    if (status !== undefined && code !== undefined)
+      return sendError(request, reply, { code, status });
     request.log.error({ err: error }, "unhandled error");
     return sendError(request, reply, { code: "internal", status: 500 });
   });

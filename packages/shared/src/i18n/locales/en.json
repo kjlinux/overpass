@@ -7,11 +7,14 @@
     "invalid_credentials": "Incorrect e-mail address or password.",
     "unauthorized": "Log in to continue.",
     "forbidden_origin": "This request did not come from Overpass and was refused.",
-    "rate_limited": "Too many attempts. Wait a minute before trying again.",
+    "rate_limited": "Too many attempts. Try again in a few minutes.",
     "reset_invalid": "This reset link has expired or was already used. Ask for a new one.",
     "wrong_password": "The current password is incorrect.",
     "token_not_found": "This token does not exist or was already revoked.",
-    "handle_taken": "This public name is already taken."
+    "handle_taken": "This public name is already taken.",
+    "bad_request": "This request is malformed.",
+    "payload_too_large": "This request is too large.",
+    "unsupported_media_type": "Send the data as JSON."
   },
   "fields": {
     "required": "This field is required.",

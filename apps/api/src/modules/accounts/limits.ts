@@ -15,9 +15,8 @@ export const limits = {
   tokens: { max: 30, timeWindow: 60 * minute },
 };
 
-/** Per-address budgets, so spreading attempts across IP addresses does not help. */
+/** Per-address budget against mail bombing; login has none, so nobody can lock an account out. */
 export const addressLimits = {
-  login: { max: 20, timeWindow: 15 * minute },
   forgot: { max: 3, timeWindow: 15 * minute },
 };
 

@@ -17,17 +17,15 @@ export function authRoutes({ app, service, cookies }: RouteContext): void {
     },
   );
 
-  app.post(
-    "/v1/auth/login",
-    { config: { rateLimit: limits.login }, preHandler: addressLimiter(app, "login") },
-    async (request, reply) => {
-      const { user, session } = await service.login(parseInput(loginInput, request.body));
-      cookies.set(reply, session);
-      return reply.send(ok(toMe(user)));
-    },
-  );
+  app.post("/v1/auth/login", { config: { rateLimit: limits.login } }, async (request, reply) => {
+    const { user, session } = await service.login(parseInput(loginInput, request.body));
+    cookies.set(reply, session);
+    return reply.send(ok(toMe(user)));
+  });
 
-  app.post("/v1/auth/logout", { config: { rateLimit: limits.logout } }, (_request, reply) => {
+  app.post("/v1/auth/logout", { config: { rateLimit: limits.logout } }, async (request, reply) => {
+    const session = cookies.read(request);
+    if (session !== undefined) await service.logout(session);
     cookies.clear(reply);
     return reply.send(ok(null));
   });

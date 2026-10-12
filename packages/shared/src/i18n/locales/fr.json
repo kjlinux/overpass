@@ -7,11 +7,14 @@
     "invalid_credentials": "Adresse e-mail ou mot de passe incorrect.",
     "unauthorized": "Connectez-vous pour continuer.",
     "forbidden_origin": "Cette requête ne vient pas d'Overpass et a été refusée.",
-    "rate_limited": "Trop de tentatives. Patientez une minute avant de réessayer.",
+    "rate_limited": "Trop de tentatives. Réessayez dans quelques minutes.",
     "reset_invalid": "Ce lien de réinitialisation a expiré ou a déjà servi. Demandez-en un nouveau.",
     "wrong_password": "Le mot de passe actuel est incorrect.",
     "token_not_found": "Ce jeton est introuvable ou déjà révoqué.",
-    "handle_taken": "Ce nom public est déjà pris."
+    "handle_taken": "Ce nom public est déjà pris.",
+    "bad_request": "Cette requête est mal formée.",
+    "payload_too_large": "Cette requête est trop volumineuse.",
+    "unsupported_media_type": "Envoyez les données au format JSON."
   },
   "fields": {
     "required": "Ce champ est obligatoire.",

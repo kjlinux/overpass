@@ -13,9 +13,10 @@ describe("loadConfig", () => {
 
   it("requires an SMTP server in production", () => {
     expect(() => loadConfig({ ...base, NODE_ENV: "production" })).toThrow();
-    expect(loadConfig({ ...base, NODE_ENV: "production", SMTP_HOST: "smtp.test", TRUST_PROXY: "true" }).SMTP_HOST).toBe(
-      "smtp.test",
-    );
+    expect(
+      loadConfig({ ...base, NODE_ENV: "production", SMTP_HOST: "smtp.test", TRUST_PROXY: "true" })
+        .SMTP_HOST,
+    ).toBe("smtp.test");
   });
 
   it("refuses a session secret shorter than 32 characters", () => {

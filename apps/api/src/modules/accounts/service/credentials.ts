@@ -15,10 +15,8 @@ export function credentialService(ctx: ServiceContext) {
   return {
     changePassword: async (user: UserRecord, input: PasswordChangeInput) => {
       await requirePassword(user, input.currentPassword);
-      const updated = await ctx.repository.updateUser(user.id, {
-        passwordHash: await hashPassword(input.newPassword),
-        sessionVersion: user.sessionVersion + 1,
-      });
+      const passwordHash = await hashPassword(input.newPassword);
+      const updated = await ctx.repository.rotateCredentials(user.id, { passwordHash });
       return { user: updated, session: await ctx.tokens.signSession(updated) };
     },
 

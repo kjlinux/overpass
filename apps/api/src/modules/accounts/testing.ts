@@ -70,6 +70,19 @@ function memoryUsers(users: Map<string, UserRecord>, tokens: Map<string, StoredT
   };
 }
 
+function memoryCredentials(users: Map<string, UserRecord>) {
+  return {
+    rotateCredentials: (id, change) =>
+      settle(() => {
+        const current = users.get(id);
+        if (current === undefined) throw new Error("missing user");
+        const next = { ...current, ...change, sessionVersion: current.sessionVersion + 1 };
+        users.set(id, next);
+        return next;
+      }),
+  } satisfies Pick<AccountsRepository, "rotateCredentials">;
+}
+
 function memoryTokens(users: Map<string, UserRecord>, tokens: Map<string, StoredToken>) {
   const active = (test: (token: StoredToken) => boolean) =>
     [...tokens.values()].filter((token) => token.revokedAt === null && test(token));
@@ -94,6 +107,12 @@ function memoryTokens(users: Map<string, UserRecord>, tokens: Map<string, Stored
         if (token !== undefined) tokens.set(tokenId, { ...token, revokedAt: at });
         return token !== undefined;
       }),
+    revokeAllTokens: (userId, at) =>
+      settle(() => {
+        for (const token of active((t) => t.userId === userId)) {
+          tokens.set(token.id, { ...token, revokedAt: at });
+        }
+      }),
     findUserByActiveTokenHash: (hash, usedAt) =>
       settle(() => {
         const [token] = active((t) => t.tokenHash === hash);
@@ -101,14 +120,18 @@ function memoryTokens(users: Map<string, UserRecord>, tokens: Map<string, Stored
         tokens.set(token.id, { ...token, lastUsedAt: usedAt });
         return users.get(token.userId) ?? null;
       }),
-  } satisfies Omit<AccountsRepository, keyof UserPart>;
+  } satisfies Omit<AccountsRepository, keyof UserPart | "rotateCredentials">;
 }
 
 /** In-memory repository with the same unique rules and ordering as the SQL schema. */
 export function memoryRepository(): AccountsRepository {
   const users = new Map<string, UserRecord>();
   const tokens = new Map<string, StoredToken>();
-  return { ...memoryUsers(users, tokens), ...memoryTokens(users, tokens) };
+  return {
+    ...memoryUsers(users, tokens),
+    ...memoryCredentials(users),
+    ...memoryTokens(users, tokens),
+  };
 }
 
 export const testSecret = "test-secret-with-at-least-32-characters!";

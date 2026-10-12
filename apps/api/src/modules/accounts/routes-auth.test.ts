@@ -9,7 +9,6 @@ import {
 } from "../../testing.js";
 
 type Body = { data: Record<string, unknown> | null; error: Record<string, unknown> | null };
-
 let app: FastifyInstance;
 let mailer: Awaited<ReturnType<typeof createTestApp>>["mailer"];
 let close: () => Promise<void>;

@@ -12,5 +12,6 @@
   "cancel": "Annuler",
   "choose": "Choisir",
   "networkError": "Impossible de joindre Overpass. Vérifiez votre connexion, puis réessayez.",
-  "optional": "facultatif"
+  "optional": "facultatif",
+  "retry": "Réessayer"
 }

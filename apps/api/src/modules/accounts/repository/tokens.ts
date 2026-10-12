@@ -38,6 +38,13 @@ export function tokenQueries(db: Database) {
       return rows.length === 1;
     },
 
+    revokeAllTokens: async (userId: string, at: Date): Promise<void> => {
+      await db
+        .update(apiTokens)
+        .set({ revokedAt: at })
+        .where(and(eq(apiTokens.userId, userId), isNull(apiTokens.revokedAt)));
+    },
+
     /** Marks the token as used and returns its owner id in one statement. */
     touchActiveToken: async (tokenHash: string, usedAt: Date): Promise<string | null> => {
       const [row] = await db

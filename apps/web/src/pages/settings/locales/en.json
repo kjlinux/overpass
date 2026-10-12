@@ -63,5 +63,6 @@
     "confirmTitle": "Delete your account for good?",
     "confirmText": "Your account, your stacks and your tokens will be erased. There is no way back.",
     "confirm": "Delete the account"
-  }
+  },
+  "retry": "Try again"
 }

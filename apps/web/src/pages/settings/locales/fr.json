@@ -63,5 +63,6 @@
     "confirmTitle": "Supprimer définitivement votre compte ?",
     "confirmText": "Votre compte, vos stacks et vos jetons seront effacés. Vous ne pourrez pas revenir en arrière.",
     "confirm": "Supprimer le compte"
-  }
+  },
+  "retry": "Réessayer"
 }

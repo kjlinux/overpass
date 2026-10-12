@@ -35,5 +35,10 @@ export type Config = z.infer<typeof configSchema>;
 
 /** Reads and validates the API configuration from the environment. */
 export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
-  return configSchema.parse(env);
+  const config = configSchema.parse(env);
+  // Behind a proxy every client would share one IP and one rate-limit budget.
+  if (config.NODE_ENV === "production" && env["TRUST_PROXY"] === undefined) {
+    throw new Error("TRUST_PROXY must be set explicitly in production");
+  }
+  return config;
 }
