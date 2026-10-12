@@ -1,7 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { detectLanguage, initialLanguage, toLanguage } from "../app/language";
-import en from "./locales/en.json";
-import fr from "./locales/fr.json";
+import { indexLoaders, namespaceOf, namespaces } from "./locale-backend";
+
+const files = import.meta.glob<Record<string, unknown>>("../**/locales/*.json", {
+  eager: true,
+  import: "default",
+});
 
 function keysOf(value: object, prefix = ""): string[] {
   return Object.entries(value).flatMap(([key, child]) =>
@@ -12,8 +16,21 @@ function keysOf(value: object, prefix = ""): string[] {
 }
 
 describe("web translations", () => {
-  it("has the same keys in French and English", () => {
-    expect(keysOf(en)).toEqual(keysOf(fr));
+  it("has the same keys in every language of each module", () => {
+    for (const namespace of namespaces) {
+      const languages = Object.entries(files).filter(([path]) => namespaceOf(path) === namespace);
+      expect(languages.length, namespace).toBeGreaterThan(1);
+      const [reference, ...others] = languages.map(([, json]) => keysOf(json));
+      for (const keys of others) expect(keys, namespace).toEqual(reference);
+    }
+  });
+
+  it("names a namespace after the folder that owns the locales directory", () => {
+    expect(namespaceOf("/src/components/ui/locales/fr.json")).toBe("ui");
+    const index = indexLoaders({
+      "/src/app/locales/en.json": () => Promise.resolve({ default: {} }),
+    });
+    expect([...index.keys()]).toEqual(["app/en"]);
   });
 });
 

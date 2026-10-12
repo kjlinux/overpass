@@ -3,7 +3,13 @@ export type Manifest = Record<string, ManifestChunk>;
 export type Budget = { jsGzipBytes: number; totalGzipBytes: number };
 
 export const homeBudget: Budget = { jsGzipBytes: 80 * 1024, totalGzipBytes: 200 * 1024 };
-export const homeRoots = ["index.html", "src/app/HomePage.tsx", "src/i18n/locales/fr.json"];
+export const homeRoots = [
+  "index.html",
+  "src/app/HomePage.tsx",
+  "src/app/locales/fr.json",
+  "src/layout/locales/fr.json",
+  "src/components/ui/locales/fr.json",
+];
 
 /** Lists the built files a first visit to the home page downloads. */
 export function homeAssets(manifest: Manifest, roots: string[]): string[] {
