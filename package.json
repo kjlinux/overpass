@@ -16,6 +16,8 @@
     "dev:mcp": "tsc -b tsconfig.build.json && npm run dev -w @overpass/mcp",
     "db:up": "docker compose up -d --wait db",
     "db:down": "docker compose down",
+    "db:migrate": "npm run db:migrate -w @overpass/api",
+    "db:rollback": "npm run db:rollback -w @overpass/api",
     "typecheck": "tsc -b tsconfig.build.json && npm run typecheck --workspaces --if-present && tsc -p scripts",
     "lint": "eslint . --max-warnings 0",
     "format": "prettier --write .",

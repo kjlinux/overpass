@@ -7,9 +7,11 @@ export type Mailer = { send(message: MailMessage): Promise<void> };
 
 export type MailLogger = { info(details: object, message: string): void };
 
-type SmtpConfig = Pick<
-  Config,
-  "SMTP_HOST" | "SMTP_PORT" | "SMTP_SECURE" | "SMTP_USER" | "SMTP_PASSWORD" | "MAIL_FROM"
+type SmtpConfig = Partial<
+  Pick<
+    Config,
+    "SMTP_HOST" | "SMTP_PORT" | "SMTP_SECURE" | "SMTP_USER" | "SMTP_PASSWORD" | "MAIL_FROM"
+  >
 >;
 
 /** Development transport: writes the whole message, links included, to the logs. */
@@ -31,13 +33,13 @@ export function createMailer(config: SmtpConfig, logger: MailLogger): Mailer {
       : { user: config.SMTP_USER, pass: config.SMTP_PASSWORD ?? "" };
   const transport = nodemailer.createTransport({
     host: config.SMTP_HOST,
-    port: config.SMTP_PORT,
-    secure: config.SMTP_SECURE,
+    port: config.SMTP_PORT ?? 587,
+    secure: config.SMTP_SECURE ?? false,
     ...(auth === undefined ? {} : { auth }),
   });
   return {
     send: async (message) => {
-      await transport.sendMail({ from: config.MAIL_FROM, ...message });
+      await transport.sendMail({ from: config.MAIL_FROM ?? "no-reply@localhost", ...message });
     },
   };
 }

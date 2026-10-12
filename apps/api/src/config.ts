@@ -2,6 +2,12 @@ import { z } from "zod";
 
 const flag = z.enum(["true", "false"]).transform((value) => value === "true");
 
+/** An empty line in .env means "not set". */
+const optionalText = z.preprocess(
+  (value) => (value === "" ? undefined : value),
+  z.string().min(1).optional(),
+);
+
 const configSchema = z
   .object({
     NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
@@ -14,11 +20,11 @@ const configSchema = z
     DATABASE_URL: z.url(),
     SESSION_SECRET: z.string().min(32),
     WEB_ORIGIN: z.url().default("http://127.0.0.1:5173"),
-    SMTP_HOST: z.string().min(1).optional(),
+    SMTP_HOST: optionalText,
     SMTP_PORT: z.coerce.number().int().positive().default(587),
     SMTP_SECURE: flag.default(false),
-    SMTP_USER: z.string().min(1).optional(),
-    SMTP_PASSWORD: z.string().min(1).optional(),
+    SMTP_USER: optionalText,
+    SMTP_PASSWORD: optionalText,
     MAIL_FROM: z.string().min(3).default("Overpass <no-reply@localhost>"),
   })
   .refine((config) => config.NODE_ENV !== "production" || config.SMTP_HOST !== undefined, {

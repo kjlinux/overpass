@@ -27,6 +27,7 @@
     "usage_invalid": "Choisissez l'usage du jeton : MCP ou API.",
     "token_name_invalid": "Donnez un nom de 1 à 60 caractères à ce jeton.",
     "newsletter_invalid": "Cochez ou décochez la case.",
-    "reset_invalid": "Ce lien de réinitialisation n'est pas valide."
+    "reset_invalid": "Ce lien de réinitialisation n'est pas valide.",
+    "id_invalid": "Cet identifiant n'est pas valide."
   }
 }

@@ -1,7 +1,19 @@
-import { afterAll, describe, expect, it } from "vitest";
+import type { FastifyInstance } from "fastify";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { buildApp } from "./app.js";
 
-const app = buildApp({ LOG_LEVEL: "silent" });
+let app: FastifyInstance;
+beforeAll(async () => {
+  app = await buildApp({
+    config: {
+      NODE_ENV: "test",
+      LOG_LEVEL: "silent",
+      TRUST_PROXY: false,
+      WEB_ORIGIN: "http://web.test",
+      SESSION_SECRET: "test-secret-with-at-least-32-characters!",
+    },
+  });
+});
 afterAll(() => app.close());
 
 describe("api", () => {

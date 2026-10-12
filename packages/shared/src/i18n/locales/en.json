@@ -27,6 +27,7 @@
     "usage_invalid": "Choose what the token is for: MCP or API.",
     "token_name_invalid": "Give this token a name of 1 to 60 characters.",
     "newsletter_invalid": "Tick or untick the box.",
-    "reset_invalid": "This reset link is not valid."
+    "reset_invalid": "This reset link is not valid.",
+    "id_invalid": "This identifier is not valid."
   }
 }

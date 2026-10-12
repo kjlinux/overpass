@@ -7,7 +7,7 @@
     "outDir": "dist",
     "types": ["node"]
   },
-  "include": ["src"],
+  "include": ["src", "src/**/*.json"],
   "exclude": ["src/**/*.test.ts", "src/**/testing.ts"],
   "references": [
     {

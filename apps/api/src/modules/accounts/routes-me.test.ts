@@ -1,6 +1,12 @@
 import type { FastifyInstance } from "fastify";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { createTestApp, password, registerAccount, sessionCookie, webOrigin } from "../../testing.js";
+import {
+  createTestApp,
+  password,
+  registerAccount,
+  sessionCookie,
+  webOrigin,
+} from "../../testing.js";
 
 type Body = { data: Record<string, unknown> | null; error: Record<string, unknown> | null };
 
@@ -14,8 +20,18 @@ beforeEach(async () => {
 });
 afterEach(() => close());
 
-const send = (method: "POST" | "PATCH" | "PUT" | "DELETE" | "GET", url: string, payload?: object, auth = cookie) =>
-  app.inject({ method, url, ...(payload ? { payload } : {}), headers: { origin: webOrigin, cookie: auth } });
+const send = (
+  method: "POST" | "PATCH" | "PUT" | "DELETE" | "GET",
+  url: string,
+  payload?: object,
+  auth = cookie,
+) =>
+  app.inject({
+    method,
+    url,
+    ...(payload ? { payload } : {}),
+    headers: { origin: webOrigin, cookie: auth },
+  });
 
 describe("profile", () => {
   it("updates stacks and records the newsletter consent", async () => {
@@ -29,7 +45,12 @@ describe("profile", () => {
   });
 
   it("refuses a cookie-authenticated change without an Origin header", async () => {
-    const response = await app.inject({ method: "PATCH", url: "/v1/me", payload: {}, headers: { cookie } });
+    const response = await app.inject({
+      method: "PATCH",
+      url: "/v1/me",
+      payload: {},
+      headers: { cookie },
+    });
     expect(response.statusCode).toBe(403);
   });
 
@@ -44,8 +65,18 @@ describe("profile", () => {
 
 describe("password and deletion", () => {
   it("changes the password, renews this session and closes the old one", async () => {
-    expect((await send("PUT", "/v1/me/password", { currentPassword: "nope", newPassword: "x".repeat(12) })).statusCode).toBe(403);
-    const response = await send("PUT", "/v1/me/password", { currentPassword: password, newPassword: "x".repeat(12) });
+    expect(
+      (
+        await send("PUT", "/v1/me/password", {
+          currentPassword: "nope",
+          newPassword: "x".repeat(12),
+        })
+      ).statusCode,
+    ).toBe(403);
+    const response = await send("PUT", "/v1/me/password", {
+      currentPassword: password,
+      newPassword: "x".repeat(12),
+    });
     expect(response.statusCode).toBe(200);
     expect((await send("GET", "/v1/me", undefined, sessionCookie(response))).statusCode).toBe(200);
     expect((await send("GET", "/v1/me")).statusCode).toBe(401);
@@ -80,7 +111,12 @@ describe("tokens", () => {
   it("does not let a token manage tokens or the account", async () => {
     const created = await send("POST", "/v1/tokens", { name: "Laptop", usage: "api" });
     const bearer = { authorization: `Bearer ${String(created.json<Body>().data?.["token"])}` };
-    const attempt = await app.inject({ method: "POST", url: "/v1/tokens", payload: { name: "x", usage: "api" }, headers: bearer });
+    const attempt = await app.inject({
+      method: "POST",
+      url: "/v1/tokens",
+      payload: { name: "x", usage: "api" },
+      headers: bearer,
+    });
     expect(attempt.statusCode).toBe(401);
   });
 

@@ -1,6 +1,12 @@
 import type { FastifyInstance } from "fastify";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { createTestApp, password, registerAccount, sessionCookie, webOrigin } from "../../testing.js";
+import {
+  createTestApp,
+  password,
+  registerAccount,
+  sessionCookie,
+  webOrigin,
+} from "../../testing.js";
 
 type Body = { data: Record<string, unknown> | null; error: Record<string, unknown> | null };
 
@@ -51,8 +57,15 @@ describe("POST /v1/auth/register", () => {
 
   it("refuses a second account with the same e-mail", async () => {
     await registerAccount(app, "awa@example.com");
-    const response = await post("/v1/auth/register", { email: "awa@example.com", password, country: "SN" });
-    expect([response.statusCode, response.json<Body>().error?.["code"]]).toEqual([409, "email_taken"]);
+    const response = await post("/v1/auth/register", {
+      email: "awa@example.com",
+      password,
+      country: "SN",
+    });
+    expect([response.statusCode, response.json<Body>().error?.["code"]]).toEqual([
+      409,
+      "email_taken",
+    ]);
   });
 });
 
@@ -86,7 +99,10 @@ describe("login and logout", () => {
 
   it("requires a session to read the profile", async () => {
     const response = await app.inject({ url: "/v1/me" });
-    expect([response.statusCode, response.json<Body>().error?.["code"]]).toEqual([401, "unauthorized"]);
+    expect([response.statusCode, response.json<Body>().error?.["code"]]).toEqual([
+      401,
+      "unauthorized",
+    ]);
   });
 });
 
@@ -104,19 +120,43 @@ describe("password reset", () => {
 });
 
 describe("protections", () => {
-  it("limits login attempts per address", async () => {
-    const attempts = Array.from({ length: 11 }, () =>
-      post("/v1/auth/login", { email: "awa@example.com", password: "wrong" }),
-    );
-    const codes = (await Promise.all(attempts)).map((r) => r.statusCode);
-    expect(codes.filter((code) => code === 429)).toHaveLength(1);
-    const last = await post("/v1/auth/login", { email: "awa@example.com", password: "wrong" });
-    expect(last.json<Body>().error?.["code"]).toBe("rate_limited");
+  const attempt = (email: string, remoteAddress: string) =>
+    app.inject({
+      method: "POST",
+      url: "/v1/auth/login",
+      remoteAddress,
+      payload: { email, password: "wrong" },
+      headers: { origin: webOrigin },
+    });
+
+  it("limits login attempts per IP address", async () => {
+    const codes: number[] = [];
+    for (let i = 0; i < 11; i++)
+      codes.push((await attempt(`u${String(i)}@example.com`, "10.0.0.1")).statusCode);
+    expect(codes.slice(0, 10).every((code) => code === 401)).toBe(true);
+    const blocked = await attempt("awa@example.com", "10.0.0.1");
+    expect([blocked.statusCode, blocked.json<Body>().error?.["code"]]).toEqual([
+      429,
+      "rate_limited",
+    ]);
+    expect((await attempt("awa@example.com", "10.0.0.2")).statusCode).toBe(401);
+  });
+
+  it("limits login attempts per e-mail across IP addresses", async () => {
+    for (let i = 0; i < 20; i++) await attempt("awa@example.com", `10.0.1.${String(i)}`);
+    expect((await attempt("Awa@Example.com", "10.0.2.1")).statusCode).toBe(429);
   });
 
   it("refuses a mutation sent from another origin", async () => {
-    const response = await post("/v1/auth/login", { email: "a@b.co", password }, { origin: "https://evil.test" });
-    expect([response.statusCode, response.json<Body>().error?.["code"]]).toEqual([403, "forbidden_origin"]);
+    const response = await post(
+      "/v1/auth/login",
+      { email: "a@b.co", password },
+      { origin: "https://evil.test" },
+    );
+    expect([response.statusCode, response.json<Body>().error?.["code"]]).toEqual([
+      403,
+      "forbidden_origin",
+    ]);
   });
 
   it("refuses form-encoded bodies, which a foreign page could post", async () => {
