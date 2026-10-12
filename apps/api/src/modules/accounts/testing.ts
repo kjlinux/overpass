@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import type { MailMessage, Mailer } from "../../mail/mailer.js";
+export { captureMailer } from "../../mail/testing.js";
 import { UniqueViolation } from "./model.js";
 import type { AccountsRepository, TokenRecord, UserRecord } from "./model.js";
 
@@ -109,15 +109,6 @@ export function memoryRepository(): AccountsRepository {
   const users = new Map<string, UserRecord>();
   const tokens = new Map<string, StoredToken>();
   return { ...memoryUsers(users, tokens), ...memoryTokens(users, tokens) };
-}
-
-/** Mailer that keeps every message for assertions. */
-export function captureMailer(): Mailer & { sent: MailMessage[] } {
-  const sent: MailMessage[] = [];
-  return {
-    sent,
-    send: (message) => settle(() => void sent.push(message)),
-  };
 }
 
 export const testSecret = "test-secret-with-at-least-32-characters!";
