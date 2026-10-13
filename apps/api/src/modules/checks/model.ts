@@ -1,4 +1,4 @@
-import type { PotholeStatus } from "@overpass/shared";
+import type { PotholeStatus, StateCounts } from "@overpass/shared";
 
 export type CheckRecord = {
   id: string;
@@ -38,6 +38,7 @@ export type ChecksRepository = {
   /** Unresolved first, newest first, bounded. */
   potholesForRoute(routeId: string): Promise<PotholeRecord[]>;
   countByUser(userId: string): Promise<{ checks: number; potholes: number }>;
+  stateCounts(routeId: string, since: Date): Promise<StateCounts>;
 };
 
 /** What this module needs to know about routes, provided by the routes module. */
@@ -45,4 +46,6 @@ export type RouteDirectory = {
   /** The live route's author, or null when the route is unknown or deleted. */
   facts(routeId: string): Promise<{ authorId: string | null } | null>;
   titles(routeIds: string[]): Promise<Map<string, string>>;
+  /** Records that the service of a clear route works in its country. */
+  confirmCoverage(routeId: string, at: Date): Promise<void>;
 };

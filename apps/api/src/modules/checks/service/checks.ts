@@ -2,13 +2,14 @@ import { checkEligibility, routeRules } from "@overpass/shared";
 import type { CheckCreateInput, MyCheck } from "@overpass/shared";
 import { AppError } from "../../../http/app-error.js";
 import type { Account } from "../../accounts/index.js";
-import { liveRoute, toCheck, toMyCheck } from "./context.js";
+import { confirmCoverageIfClear, liveRoute, toCheck, toMyCheck } from "./context.js";
 import type { ChecksDeps } from "./context.js";
 
 const day = 86_400_000;
 const myChecksLimit = 100;
 
-export function checkService({ repository, routes, now }: ChecksDeps) {
+export function checkService(deps: ChecksDeps) {
+  const { repository, routes, now } = deps;
   return {
     createCheck: async (account: Account, routeId: string, input: CheckCreateInput) => {
       const facts = await liveRoute(routes, routeId);
@@ -24,6 +25,7 @@ export function checkService({ repository, routes, now }: ChecksDeps) {
       const check = { routeId, userId: account.id, ...input, checkedAt: at };
       const created = await repository.insertCheckUnlessRecent(check, since);
       if (created === null) throw new AppError("check_too_soon", 409);
+      await confirmCoverageIfClear(deps, routeId);
       return toCheck(created, account.handle);
     },
 

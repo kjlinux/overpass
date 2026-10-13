@@ -4,6 +4,7 @@ import type {
   PotholeCreateInput,
   PotholeStatus,
   RouteDetail,
+  Service,
 } from "@overpass/shared";
 import type { JSX } from "preact";
 import { useState } from "preact/hooks";
@@ -13,6 +14,7 @@ import { FormAlert } from "../../forms";
 import { Markdown } from "../../markdown";
 import { CheckList, PotholeList } from "./CommunityLists";
 import { Contents } from "./Contents";
+import { CoverageSection } from "./CoverageSection";
 import { ReportDialog, VerifyDialog } from "./dialogs";
 import { RouteActions } from "./RouteActions";
 import { RouteHead } from "./RouteHead";
@@ -25,7 +27,12 @@ export type RouteViewActions = {
   remove: () => Promise<ApiError | undefined>;
 };
 
-export type RouteViewProps = { route: RouteDetail; now: Date; actions: RouteViewActions };
+export type RouteViewProps = {
+  route: RouteDetail;
+  now: Date;
+  actions: RouteViewActions;
+  service?: Service | undefined;
+};
 
 type Open = "verify" | "report" | "remove" | null;
 type Failure = (failure: ApiError | undefined) => void;
@@ -95,6 +102,7 @@ function Body(props: BodyProps): JSX.Element {
         class="max-w-prose border-t border-ink py-8 lg:hidden"
       />
       <CheckList route={route} />
+      {props.service === undefined ? null : <CoverageSection service={props.service} />}
     </div>
   );
 }

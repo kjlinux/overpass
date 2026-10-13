@@ -5,11 +5,22 @@ import { routeStates } from "./rules.js";
 
 export const serviceCategories = ["payment", "sms", "ussd"] as const;
 
+/** How a covered country was confirmed: a dated source, or a clear road on the platform. */
+export const coverageSchema = z.object({
+  country: z.string(),
+  basis: z.enum(["source", "community"]),
+  source: z.string().nullable(),
+  consultedOn: z.string().nullable(),
+  routeId: z.uuid().nullable(),
+  confirmedAt: z.string().nullable(),
+});
+
 export const serviceSchema = z.object({
   slug: z.string(),
   name: z.string(),
   category: z.enum(serviceCategories),
   countries: z.array(z.string()),
+  coverage: z.array(coverageSchema),
   simulated: z.boolean(),
 });
 
@@ -70,6 +81,7 @@ export const myCheckSchema = checkSchema.omit({ handle: true }).extend({
   route: z.object({ id: z.uuid(), title: z.string() }),
 });
 
+export type Coverage = z.infer<typeof coverageSchema>;
 export type Service = z.infer<typeof serviceSchema>;
 export type RouteSummary = z.infer<typeof routeSummarySchema>;
 export type RouteCheck = z.infer<typeof checkSchema>;

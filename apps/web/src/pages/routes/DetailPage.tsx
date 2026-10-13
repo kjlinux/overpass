@@ -1,4 +1,4 @@
-import type { ApiError, PotholeStatus, RouteDetail } from "@overpass/shared";
+import type { ApiError, PotholeStatus, RouteDetail, Service } from "@overpass/shared";
 import type { JSX } from "preact";
 import { useLocation, useRoute } from "preact-iso";
 import { useTranslation } from "react-i18next";
@@ -37,7 +37,12 @@ function useActions(id: string, reload: () => Promise<void>): RouteViewActions {
 function Loaded(props: { route: RouteDetail; reload: () => Promise<void> }): JSX.Element {
   const { route, reload } = props;
   const actions = useActions(route.id, reload);
-  return <RouteView route={route} now={new Date()} actions={actions} />;
+  const services = useApi<Service[]>("/v1/services").state;
+  const service =
+    services.status === "ready"
+      ? services.data.find((candidate) => candidate.slug === route.service.slug)
+      : undefined;
+  return <RouteView route={route} now={new Date()} actions={actions} service={service} />;
 }
 
 /** Reads the itinerary in the interface language, falling back to the one that exists. */

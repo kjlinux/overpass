@@ -2,6 +2,7 @@ import type { Language } from "@overpass/shared";
 import {
   boolean,
   char,
+  date,
   integer,
   pgTable,
   primaryKey,
@@ -28,7 +29,11 @@ export const serviceCountries = pgTable(
     serviceId: uuid("service_id").notNull(),
     country: char("country", { length: 2 }).notNull(),
     confirmed: boolean("confirmed").notNull().default(false),
-    source: text("source").notNull(),
+    basis: text("basis").$type<"source" | "community">().notNull().default("source"),
+    source: text("source"),
+    consultedOn: date("consulted_on", { mode: "string" }),
+    routeId: uuid("route_id"),
+    confirmedAt: utc("confirmed_at"),
   },
   (table) => [primaryKey({ columns: [table.serviceId, table.country] })],
 );

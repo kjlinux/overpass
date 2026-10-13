@@ -1,10 +1,11 @@
 import type { PotholeCreateInput, PotholeUpdateInput } from "@overpass/shared";
 import { AppError } from "../../../http/app-error.js";
 import type { Account } from "../../accounts/index.js";
-import { liveRoute, toPothole } from "./context.js";
+import { confirmCoverageIfClear, liveRoute, toPothole } from "./context.js";
 import type { ChecksDeps } from "./context.js";
 
-export function potholeService({ repository, routes, handles, now }: ChecksDeps) {
+export function potholeService(deps: ChecksDeps) {
+  const { repository, routes, handles, now } = deps;
   return {
     reportPothole: async (account: Account, routeId: string, input: PotholeCreateInput) => {
       await liveRoute(routes, routeId);
@@ -24,6 +25,7 @@ export function potholeService({ repository, routes, handles, now }: ChecksDeps)
       }
       const updated = await repository.setPotholeStatus(potholeId, input.status, now());
       if (updated === null) throw new AppError("pothole_exists", 409);
+      await confirmCoverageIfClear(deps, pothole.routeId);
       const reporter = updated.userId ?? "";
       const names = await handles(reporter === "" ? [] : [reporter]);
       return toPothole(updated, names.get(reporter) ?? "");

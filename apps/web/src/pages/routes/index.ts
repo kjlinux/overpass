@@ -11,3 +11,4 @@ export { EditorView } from "./EditorView";
 export { draftFrom, newDraft } from "./draft";
 export { formatDate, statusOf } from "./format";
 export { useApi } from "./useApi";
+export { CoverageSection } from "./CoverageSection";

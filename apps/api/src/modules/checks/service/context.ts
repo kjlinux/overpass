@@ -1,3 +1,4 @@
+import { freshnessStart, routeState } from "@overpass/shared";
 import type { MyCheck, Pothole, RouteCheck } from "@overpass/shared";
 import { AppError } from "../../../http/app-error.js";
 import type { HandleDirectory } from "../../accounts/index.js";
@@ -39,6 +40,13 @@ export function toPothole(record: PotholeRecord, handle: string): Pothole {
     createdAt: record.createdAt.toISOString(),
     updatedAt: record.updatedAt.toISOString(),
   };
+}
+
+/** Members complete the coverage map: a route that turns clear confirms its country. */
+export async function confirmCoverageIfClear(deps: ChecksDeps, routeId: string): Promise<void> {
+  const at = deps.now();
+  const counts = await deps.repository.stateCounts(routeId, freshnessStart(at));
+  if (routeState(counts) === "clear") await deps.routes.confirmCoverage(routeId, at);
 }
 
 /** The live route's facts, or a 404 for an unknown or deleted route. */

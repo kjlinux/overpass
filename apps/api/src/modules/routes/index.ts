@@ -29,6 +29,7 @@ export function routeDirectory(
     },
     titles: (ids) => repository.titles(ids),
     countByAuthor: (authorId) => repository.countByAuthor(authorId),
+    confirmCoverage: (routeId, at) => repository.confirmCoverage(routeId, at),
   };
 }
 

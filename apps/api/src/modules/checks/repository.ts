@@ -1,4 +1,4 @@
-import { and, count, desc, eq, gt, sql } from "drizzle-orm";
+import { and, count, countDistinct, desc, eq, gt, gte, ne, sql } from "drizzle-orm";
 import type { Database } from "../../db/client.js";
 import type { PotholeStatus } from "@overpass/shared";
 import type { ChecksRepository, NewCheck, NewPothole } from "./model.js";
@@ -109,6 +109,18 @@ function potholeQueries(db: Database) {
   };
 }
 
+/** The same counts as the SQL state condition, for one route. */
+async function stateCounts(db: Database, routeId: string, since: Date) {
+  const recent = and(eq(checks.routeId, routeId), gte(checks.checkedAt, since));
+  const [checked] = await db
+    .select({ n: countDistinct(checks.userId) })
+    .from(checks)
+    .where(recent);
+  const unresolved = and(eq(potholes.routeId, routeId), ne(potholes.status, "resolved"));
+  const [open] = await db.select({ n: count() }).from(potholes).where(unresolved);
+  return { recentCheckers: checked?.n ?? 0, unresolvedPotholes: open?.n ?? 0 };
+}
+
 /** PostgreSQL implementation of the checks storage port, through Drizzle. */
 export function createChecksRepository(db: Database): ChecksRepository {
   return {
@@ -118,5 +130,6 @@ export function createChecksRepository(db: Database): ChecksRepository {
     checksByUser: (userId, limit) => listChecks(db, checks.userId, userId, limit),
     ...potholeQueries(db),
     countByUser: (userId) => countByUser(db, userId),
+    stateCounts: (routeId, since) => stateCounts(db, routeId, since),
   };
 }

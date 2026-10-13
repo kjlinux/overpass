@@ -31,8 +31,12 @@ export function toSummary(row: RouteRow, author: string): RouteSummary {
 }
 
 export function toService(record: ServiceRecord): Service {
-  const { slug, name, category, countries, simulated } = record;
-  return { slug, name, category, countries, simulated };
+  const { slug, name, category, simulated } = record;
+  const coverage = record.coverage.map((entry) => ({
+    ...entry,
+    confirmedAt: entry.confirmedAt?.toISOString() ?? null,
+  }));
+  return { slug, name, category, simulated, countries: coverage.map((c) => c.country), coverage };
 }
 
 /** Summaries with the handles of their authors, fetched in one query. */

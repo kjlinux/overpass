@@ -3,13 +3,19 @@ create table service_countries (
   service_id uuid not null references services (id) on delete cascade,
   country char(2) not null,
   confirmed boolean not null default false,
-  source text not null check (source like 'https://%'),
-  primary key (service_id, country)
+  -- A country is confirmed by a checked source, or by members when a route there turns clear.
+  basis text not null default 'source' check (basis in ('source', 'community')),
+  source text check (source like 'https://%'),
+  consulted_on date,
+  route_id uuid references routes (id) on delete set null,
+  confirmed_at timestamptz,
+  primary key (service_id, country),
+  check (basis = 'community' or (source is not null and consulted_on is not null))
 );
 
--- Candidates from the sources consulted on 2026-10-13, all waiting for a human confirmation.
-insert into service_countries (service_id, country, source)
-select services.id, candidate.country, candidate.source
+-- Candidates from the sources consulted on 2026-10-13.
+insert into service_countries (service_id, country, source, consulted_on)
+select services.id, candidate.country, candidate.source, date '2026-10-13'
 from services
 join (values
   ('wave', 'SN', 'https://apps.apple.com/sn/app/wave-mobile-money/id1523884528'),
@@ -64,5 +70,11 @@ join (values
   ('moov-money', 'CF', 'https://media.casablanca-bourse.com/sites/default/files/2026-02/maroc_telecom_2025.pdf'),
   ('moov-money', 'MR', 'https://media.casablanca-bourse.com/sites/default/files/2026-02/maroc_telecom_2025.pdf')
 ) as candidate (slug, country, source) on candidate.slug = services.slug;
+
+-- Confirmations decided by Jude Koffi on 2026-10-13 against the sources above.
+update service_countries set confirmed = true, confirmed_at = timestamptz '2026-10-13 12:00:00+00'
+where service_id in (select id from services where slug in ('pi-spi', 'cinetpay', 'paydunya', 'orange-money'))
+   or (service_id = (select id from services where slug = 'wave') and country in ('SN', 'CI'))
+   or (service_id = (select id from services where slug = 'moov-money') and country = 'CI');
 
 alter table services drop column countries;

@@ -1,12 +1,22 @@
 import type { Language, RouteState } from "@overpass/shared";
 
+export type CoverageRecord = {
+  country: string;
+  basis: "source" | "community";
+  source: string | null;
+  consultedOn: string | null;
+  routeId: string | null;
+  confirmedAt: Date | null;
+};
+
 export type ServiceRecord = {
   id: string;
   slug: string;
   name: string;
   category: "payment" | "sms" | "ussd";
-  countries: string[];
   simulated: boolean;
+  /** Confirmed countries only. */
+  coverage: CoverageRecord[];
 };
 
 export type RouteRecord = {
@@ -60,6 +70,8 @@ export type ListedRow = RouteRow & { rank: number };
 export type RoutesRepository = {
   services(): Promise<ServiceRecord[]>;
   serviceBySlug(slug: string): Promise<ServiceRecord | null>;
+  /** Marks the country of a clear route as covered by its service, unless already confirmed. */
+  confirmCoverage(routeId: string, at: Date): Promise<void>;
   /** Inserts the route and its version 1 together; returns the new id. */
   insertRoute(route: NewRoute): Promise<string>;
   /** Applies the patch, bumps the version and stores it; false when the route is gone. */
