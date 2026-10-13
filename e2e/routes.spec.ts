@@ -6,7 +6,7 @@ import { newMember } from "./members.js";
 
 /** A word no other itinerary contains, so the full-text search finds exactly ours. */
 const uniqueWord = (seed: string) =>
-  `kpalime${[...seed].map((char) => String.fromCharCode(97 + (char.charCodeAt(0) % 26))).join("")}`;
+  `kpalime${seed.replace(/./g, (char) => String.fromCharCode(97 + (char.charCodeAt(0) % 26)))}`;
 
 async function verify(page: Page, url: string): Promise<void> {
   await page.goto(url);
@@ -20,6 +20,8 @@ async function verify(page: Page, url: string): Promise<void> {
 test("an itinerary is published, found by search, checked by two others and turns clear", async ({
   browser,
 }) => {
+  // Three members sign up through their e-mail before the route can turn clear.
+  test.setTimeout(90_000);
   const stamp = `${String(Date.now())}-${test.info().project.name}`;
   const word = uniqueWord(stamp);
   const title = `Encaisser Wave depuis Laravel ${word}`;
