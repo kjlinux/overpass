@@ -344,9 +344,9 @@ Dix-sept tables suffisent à la première version : chacune appartient à un seu
 | --- | --- | --- |
 | `users` | accounts | e-mail, mot de passe haché, nom public, pays, langue, rôle, version de session, date du consentement newsletter, date de création |
 | `user_stacks` | accounts | utilisateur, stack |
-| `services` | routes | nom, catégorie (paiement, SMS, USSD), pays couverts |
-| `routes` | routes | auteur, service, pays, stack, langue, titre, contenu Markdown, état, version, lien vers la traduction |
-| `route_versions` | routes | fiche, numéro, contenu, auteur, date |
+| `services` | routes | identifiant court, nom, catégorie (paiement, SMS, USSD), pays couverts, opérateur simulé ou non |
+| `routes` | routes | auteur, service, pays, stack, langue, titre, contenu Markdown, version, groupe de traduction, date de suppression |
+| `route_versions` | routes | fiche, numéro, titre, contenu, auteur, date |
 | `checks` | checks | fiche, utilisateur, pays, environnement (test ou production), date |
 | `potholes` | checks | fiche, utilisateur, description, statut (ouvert, confirmé, résolu), date |
 | `sandbox_keys` | sandbox | utilisateur, opérateur, clé hachée, quota, date d'expiration |
@@ -367,6 +367,7 @@ Dix-sept tables suffisent à la première version : chacune appartient à un seu
 
 - Identifiants en UUID, dates en UTC, suppression logique pour les fiches.
 - Les points du classement sont calculés à partir de `routes`, `checks` et `potholes`, puis mis en cache. Ils ne sont jamais saisis.
+- L'état d'une fiche (voie libre, à vérifier, signalée cassée) n'est pas stocké : il est calculé à chaque lecture à partir de `checks` et `potholes`. Les versions française et anglaise d'une fiche partagent un groupe de traduction, une seule fiche par langue.
 - Les événements de la piste d'essai sont purgés après 7 jours.
 - Chaque migration est versionnée et réversible.
 
@@ -384,8 +385,8 @@ L'API REST est le seul point d'accès aux données : l'interface, le serveur MCP
 | Ressource | Routes principales |
 | --- | --- |
 | Comptes | `POST /v1/auth/register`, `POST /v1/auth/login`, `POST /v1/auth/logout`, `POST /v1/auth/forgot`, `POST /v1/auth/reset`, `GET` et `PATCH /v1/me`, `PUT /v1/me/password`, `DELETE /v1/me`, `GET /v1/users/:handle` |
-| Fiches | `GET /v1/routes`, `GET /v1/routes/:id`, `POST /v1/routes`, `PATCH /v1/routes/:id` |
-| Vérifications | `POST /v1/routes/:id/checks`, `POST /v1/routes/:id/potholes` |
+| Fiches | `GET /v1/services`, `GET /v1/routes`, `GET /v1/routes/:id`, `POST /v1/routes`, `PATCH /v1/routes/:id`, `DELETE /v1/routes/:id`, `GET /v1/me/routes` |
+| Vérifications | `POST /v1/routes/:id/checks`, `POST /v1/routes/:id/potholes`, `PATCH /v1/potholes/:id`, `GET /v1/me/checks` |
 | Piste d'essai | `POST /v1/sandbox/keys`, `GET /v1/sandbox/events`, `POST /v1/sandbox/:provider/*` |
 | Classement | `GET /v1/ranking/countries`, `GET /v1/ranking/developers` |
 | Jetons | `GET /v1/tokens`, `POST /v1/tokens`, `DELETE /v1/tokens/:id` |
