@@ -9,7 +9,7 @@ const mailers = new WeakMap<FastifyInstance, ReturnType<typeof captureMailer>>()
 export const password = "correct horse battery";
 
 /** A full API on an in-process PostgreSQL, with mails captured instead of sent. */
-export async function createTestApp() {
+export async function createTestApp(options: { now?: () => Date } = {}) {
   const database = await createTestDatabase();
   const mailer = captureMailer();
   const app = await buildApp({
@@ -22,13 +22,14 @@ export async function createTestApp() {
     },
     db: database.db,
     mailer,
+    ...(options.now === undefined ? {} : { now: options.now }),
   });
   mailers.set(app, mailer);
   const close = async () => {
     await app.close();
     await database.close();
   };
-  return { app, mailer, close };
+  return { app, mailer, close, db: database.db };
 }
 
 /** The session cookie set by a response, as a Cookie header value. */

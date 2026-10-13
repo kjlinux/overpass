@@ -80,7 +80,7 @@ Overpass sert quatre profils, et chacun doit atteindre son but en moins de trois
 
 ## 4. Périmètre fonctionnel
 
-Le périmètre tient en dix modules, dont quatre sont indispensables à la soumission.
+Le périmètre tient en dix modules, dont quatre sont indispensables à la soumission, complétés par les ajouts décidés le 13 octobre 2026 décrits plus bas.
 
 | Module | Priorité | Contenu |
 | --- | --- | --- |
@@ -131,6 +131,25 @@ Documentations suivies, consultées le 12 octobre 2026 : [Wave Checkout API](htt
 - Tout sujet ou réponse peut être signalé. Deux signalements le masquent jusqu'à la décision d'un modérateur.
 - Un article passe par un brouillon et une relecture de l'équipe avant publication.
 - La newsletter n'est envoyée qu'aux adresses confirmées, et chaque numéro porte un lien de désinscription.
+
+**Ajouts décidés le 13 octobre 2026**
+
+**1. Relais local des webhooks (P0).** Recevoir un callback exige d'habitude une URL publique en HTTPS, ce qui bloque quiconque développe sur son poste. Overpass fournit une commande, du type « npx overpass listen --forward-to http://localhost:3000/webhook », qui ouvre une connexion sortante vers Overpass et rejoue chaque webhook simulé sur le serveur local du développeur. Aucun tunnel, aucun certificat, aucune ouverture de port. Le relais transmet le corps et les en-têtes sans les modifier, pour que la vérification de signature fonctionne comme en production. L'inspecteur montre chaque livraison : envoyée, reçue en local, code de réponse, durée, bouton Rejouer. La commande s'authentifie avec une clé de test et ne reçoit que les webhooks de cette clé. Elle vit dans apps/cli, sous licence MIT.
+
+**2. Relais des callbacks réels (P1, bêta).** Overpass attribue au développeur une URL publique en HTTPS à déclarer chez l'opérateur réel. Les callbacks reçus sont rejoués sur son poste par la même commande. Limites : usage de développement uniquement, quotas stricts, rien n'est conservé au-delà de 24 heures, mention claire que des données de paiement réelles transitent par Overpass.
+
+**3. Démo guidée PI-SPI (P0 si PI-SPI est livré).** Un parcours pas à pas dans la piste d'essai : obtenir un jeton, créer une demande de paiement, la voir payée, recevoir le webhook sur son poste local. Chaque étape affiche la requête à copier et la réponse obtenue. Le simulateur complète le sandbox officiel de la BCEAO avec les scénarios d'échec et un accès sans certificat, et renvoie vers lui.
+
+**4. Actualités, blogs des membres et abonnements (P1).** Les actualités sont une rubrique tenue par l'administration seule. Chaque membre dispose de son blog, à une adresse du type /blog/@pseudo, et y publie ses articles en Markdown, sans relecture préalable. Tout membre connecté peut commenter un article et lui donner une étoile, une par compte et par article. Un membre peut suivre un auteur : son fil « Pour moi » affiche d'abord les articles des auteurs suivis, puis les articles récents les mieux notés. L'administration peut masquer ou bloquer un article ou un commentaire et suspendre un blog. Deux signalements masquent un contenu en attendant une décision. Tables ajoutées : follows, post_comments, post_stars. Le fil est une requête PostgreSQL, sans base en graphe. Points : étoile reçue 1.
+
+**5. Entraide autour des API (P1).** Les fiches et les questions viennent des membres, l'équipe ne code que les opérateurs simulés. Sur une fiche, un bouton « Ça ne marche pas chez moi » ouvre une discussion déjà rattachée à la fiche, au service et au pays. Le formulaire de question a un champ pour le message d'erreur et un pour le code, et masque avant publication les clés, jetons et secrets collés par mégarde. Un membre peut proposer un service absent de la liste, que l'administration valide. Sur un service sans simulateur, un bouton « Je veux un simulateur » permet un vote par compte, avec un classement public des demandes.
+
+**6. Assistant « Demande à Overpass » (P2, optionnel).** Construit seulement si tout le reste est en ligne le 21 octobre. Il cherche dans les fiches, les discussions et les articles, puis répond en citant chaque source avec son lien et l'état de la fiche. Sans source pertinente, il dit qu'il ne sait pas. Modèle ouvert sous licence permissive, hébergé sur un serveur GPU Systalink, sans API d'IA propriétaire. VoltAgent orchestre la recherche et la réponse. Les contenus lus sont des données, jamais des instructions.
+
+**Règles de couverture des opérateurs (13 octobre 2026)**
+
+- Seuls les pays confirmés d'un opérateur sont affichés, chacun avec sa source et sa date de consultation.
+- Un pays non confirmé devient confirmé dès qu'une fiche de ce service dans ce pays atteint l'état « voie libre ». Ce sont les membres qui complètent la carte.
 
 **Hors périmètre de la première version**
 
@@ -344,9 +363,10 @@ Dix-sept tables suffisent à la première version : chacune appartient à un seu
 | --- | --- | --- |
 | `users` | accounts | e-mail, mot de passe haché, nom public, pays, langue, rôle, version de session, date du consentement newsletter, date de création |
 | `user_stacks` | accounts | utilisateur, stack |
-| `services` | routes | nom, catégorie (paiement, SMS, USSD), pays couverts |
-| `routes` | routes | auteur, service, pays, stack, langue, titre, contenu Markdown, état, version, lien vers la traduction |
-| `route_versions` | routes | fiche, numéro, contenu, auteur, date |
+| `services` | routes | identifiant court, nom, catégorie (paiement, SMS, USSD), opérateur simulé ou non |
+| `service_countries` | routes | service, pays, confirmé, base (source ou communauté), source, date de consultation, fiche qui a confirmé, date de confirmation |
+| `routes` | routes | auteur, service, pays, stack, langue, titre, contenu Markdown, version, groupe de traduction, date de suppression |
+| `route_versions` | routes | fiche, numéro, titre, contenu, auteur, date |
 | `checks` | checks | fiche, utilisateur, pays, environnement (test ou production), date |
 | `potholes` | checks | fiche, utilisateur, description, statut (ouvert, confirmé, résolu), date |
 | `sandbox_keys` | sandbox | utilisateur, opérateur, clé hachée, quota, date d'expiration |
@@ -367,6 +387,7 @@ Dix-sept tables suffisent à la première version : chacune appartient à un seu
 
 - Identifiants en UUID, dates en UTC, suppression logique pour les fiches.
 - Les points du classement sont calculés à partir de `routes`, `checks` et `potholes`, puis mis en cache. Ils ne sont jamais saisis.
+- L'état d'une fiche (voie libre, à vérifier, signalée cassée) n'est pas stocké : il est calculé à chaque lecture à partir de `checks` et `potholes`. Les versions française et anglaise d'une fiche partagent un groupe de traduction, une seule fiche par langue.
 - Les événements de la piste d'essai sont purgés après 7 jours.
 - Chaque migration est versionnée et réversible.
 
@@ -384,8 +405,8 @@ L'API REST est le seul point d'accès aux données : l'interface, le serveur MCP
 | Ressource | Routes principales |
 | --- | --- |
 | Comptes | `POST /v1/auth/register`, `POST /v1/auth/login`, `POST /v1/auth/logout`, `POST /v1/auth/forgot`, `POST /v1/auth/reset`, `GET` et `PATCH /v1/me`, `PUT /v1/me/password`, `DELETE /v1/me`, `GET /v1/users/:handle` |
-| Fiches | `GET /v1/routes`, `GET /v1/routes/:id`, `POST /v1/routes`, `PATCH /v1/routes/:id` |
-| Vérifications | `POST /v1/routes/:id/checks`, `POST /v1/routes/:id/potholes` |
+| Fiches | `GET /v1/services`, `GET /v1/routes`, `GET /v1/routes/:id`, `POST /v1/routes`, `PATCH /v1/routes/:id`, `DELETE /v1/routes/:id`, `GET /v1/me/routes` |
+| Vérifications | `POST /v1/routes/:id/checks`, `POST /v1/routes/:id/potholes`, `PATCH /v1/potholes/:id`, `GET /v1/me/checks` |
 | Piste d'essai | `POST /v1/sandbox/keys`, `GET /v1/sandbox/events`, `POST /v1/sandbox/:provider/*` |
 | Classement | `GET /v1/ranking/countries`, `GET /v1/ranking/developers` |
 | Jetons | `GET /v1/tokens`, `POST /v1/tokens`, `DELETE /v1/tokens/:id` |

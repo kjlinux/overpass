@@ -15,7 +15,12 @@
     "bad_request": "This request is malformed.",
     "payload_too_large": "This request is too large.",
     "unsupported_media_type": "Send the data as JSON.",
-    "signup_invalid": "This confirmation link has expired or is not valid. Sign up again."
+    "signup_invalid": "This confirmation link has expired or is not valid. Sign up again.",
+    "forbidden": "Only the author of this itinerary can do that.",
+    "own_route": "You wrote this itinerary: another developer has to check it.",
+    "check_too_soon": "You already checked this itinerary in the last 30 days.",
+    "translation_exists": "This itinerary already exists in that language.",
+    "pothole_exists": "You already reported an unresolved pothole on this itinerary."
   },
   "fields": {
     "required": "This field is required.",
@@ -34,6 +39,19 @@
     "reset_invalid": "This reset link is not valid.",
     "id_invalid": "This identifier is not valid.",
     "handle_reserved": "This name is reserved. Choose another one.",
-    "signup_invalid": "This confirmation link is not valid."
+    "signup_invalid": "This confirmation link is not valid.",
+    "service_invalid": "Choose a service from the list.",
+    "stack_invalid": "Choose a stack from the list.",
+    "title_invalid": "The title must be 8 to 140 characters long.",
+    "content_required": "Write the content of the itinerary.",
+    "content_too_long": "The content must not exceed 50,000 characters.",
+    "state_invalid": "Choose one of the offered states.",
+    "environment_invalid": "Choose the environment: test or production.",
+    "description_invalid": "Describe the trap in 10 to 2,000 characters.",
+    "status_invalid": "Choose a status: confirmed or resolved.",
+    "query_invalid": "The search must not exceed 200 characters.",
+    "cursor_invalid": "This page link is no longer valid. Start the search again.",
+    "limit_invalid": "Ask for 1 to 50 itineraries per page.",
+    "nothing_to_update": "Change at least one field before saving."
   }
 }

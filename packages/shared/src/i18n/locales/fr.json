@@ -15,7 +15,12 @@
     "bad_request": "Cette requête est mal formée.",
     "payload_too_large": "Cette requête est trop volumineuse.",
     "unsupported_media_type": "Envoyez les données au format JSON.",
-    "signup_invalid": "Ce lien de confirmation a expiré ou n'est pas valide. Recommencez l'inscription."
+    "signup_invalid": "Ce lien de confirmation a expiré ou n'est pas valide. Recommencez l'inscription.",
+    "forbidden": "Seul l'auteur de cette fiche peut faire cela.",
+    "own_route": "Vous êtes l'auteur de cette fiche : un autre développeur doit la vérifier.",
+    "check_too_soon": "Vous avez déjà vérifié cette fiche ces 30 derniers jours.",
+    "translation_exists": "Cette fiche existe déjà dans cette langue.",
+    "pothole_exists": "Vous avez déjà signalé un nid-de-poule non résolu sur cette fiche."
   },
   "fields": {
     "required": "Ce champ est obligatoire.",
@@ -34,6 +39,19 @@
     "reset_invalid": "Ce lien de réinitialisation n'est pas valide.",
     "id_invalid": "Cet identifiant n'est pas valide.",
     "handle_reserved": "Ce nom est réservé. Choisissez-en un autre.",
-    "signup_invalid": "Ce lien de confirmation n'est pas valide."
+    "signup_invalid": "Ce lien de confirmation n'est pas valide.",
+    "service_invalid": "Choisissez un service dans la liste.",
+    "stack_invalid": "Choisissez une stack dans la liste.",
+    "title_invalid": "Le titre doit compter de 8 à 140 caractères.",
+    "content_required": "Rédigez le contenu de la fiche.",
+    "content_too_long": "Le contenu ne doit pas dépasser 50 000 caractères.",
+    "state_invalid": "Choisissez un état proposé.",
+    "environment_invalid": "Choisissez l'environnement : test ou production.",
+    "description_invalid": "Décrivez le piège en 10 à 2 000 caractères.",
+    "status_invalid": "Choisissez un statut : confirmé ou résolu.",
+    "query_invalid": "La recherche ne doit pas dépasser 200 caractères.",
+    "cursor_invalid": "Ce lien de page n'est plus valide. Recommencez la recherche.",
+    "limit_invalid": "Demandez entre 1 et 50 fiches par page.",
+    "nothing_to_update": "Modifiez au moins un champ avant d'enregistrer."
   }
 }

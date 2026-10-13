@@ -1,6 +1,6 @@
 import type { Me } from "@overpass/shared";
 import type { JSX } from "preact";
-import { useEffect } from "preact/hooks";
+import { useEffect, useRef } from "preact/hooks";
 import { useLocation } from "preact-iso";
 import { useTranslation } from "react-i18next";
 import { PageSkeleton } from "../app/PageSkeleton";
@@ -29,8 +29,10 @@ export function RequireSession({ children }: Props): JSX.Element {
   const { me, unavailable, refresh } = useSession();
   const { route, url } = useLocation();
   const language = useLanguage();
+  const ownUrl = useRef(url);
   useEffect(() => {
-    if (me !== null) return;
+    // A page still shown while the next one loads must not redirect for the next URL.
+    if (me !== null || url !== ownUrl.current) return;
     route(`${localizedPath(language, "/sign-in")}?next=${encodeURIComponent(url)}`, true);
   }, [me, route, url, language]);
   if (unavailable) return <Unavailable retry={() => void refresh()} />;

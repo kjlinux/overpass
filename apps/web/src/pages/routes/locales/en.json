@@ -1,0 +1,142 @@
+{
+  "catalogue": {
+    "title": "Itineraries",
+    "intro": "Integration sheets written and checked by other developers, sorted by service, country and stack.",
+    "results_one": "{{count}} itinerary shown",
+    "results_other": "{{count}} itineraries shown",
+    "more": "Show the next itineraries",
+    "emptyTitle": "No itinerary matches",
+    "emptyText": "Remove a filter, or publish the sheet the community is missing.",
+    "write": "Write an itinerary",
+    "resultsHeading": "Results"
+  },
+  "filters": {
+    "heading": "Filters",
+    "search": "Search",
+    "searchHelp": "A service, a word from the content, an error message.",
+    "service": "Service",
+    "country": "Country",
+    "stack": "Stack",
+    "language": "Language",
+    "state": "State",
+    "any": "All",
+    "submit": "Search",
+    "reset": "Clear the filters"
+  },
+  "card": {
+    "lastCheck": "Checked on {{date}}",
+    "neverChecked": "Never checked",
+    "by": "by {{author}}"
+  },
+  "detail": {
+    "trail": "Breadcrumb",
+    "facts": {
+      "service": "Service",
+      "country": "Country",
+      "stack": "Stack",
+      "language": "Language",
+      "author": "Author",
+      "version": "Version",
+      "versionValue": "{{version}}, on {{date}}"
+    },
+    "deletedAuthor": "Deleted account",
+    "stateHeading": "Road state",
+    "state": {
+      "clear": "{{count}} developers made it work in the last 90 days.",
+      "one": "Only one developer checked it in the last 90 days: a clear road needs two.",
+      "none": "Nobody checked it in the last 90 days.",
+      "broken": "{{count}} potholes are not resolved."
+    },
+    "lastCheck": "Last checked on {{date}}.",
+    "logLabel_one": "{{count}} check in the last 90 days, one cell per week",
+    "logLabel_other": "{{count}} checks in the last 90 days, one cell per week",
+    "logFrom": "90 days ago",
+    "logTo": "today",
+    "test": "Try it on the test track",
+    "testSoon": "The {{service}} test track comes with the next module.",
+    "testNone": "No test track for {{service}}: its technical documentation is not public.",
+    "verify": "It works for me",
+    "verifyNote": "Confirms the sheet works today, with your country and your environment.",
+    "verifyOwn": "You wrote this sheet: another developer has to check it.",
+    "verifyTooSoon": "You already checked it. You can check it again from {{date}}.",
+    "verifySignIn": "Sign in to check",
+    "verified": "Thank you, your check is recorded.",
+    "contents": "On this sheet",
+    "fallback": "This itinerary does not exist in your language yet. You are reading the {{language}} version.",
+    "readIn": "Read in {{language}}",
+    "translate": "Translate this itinerary",
+    "edit": "Edit",
+    "remove": "Delete",
+    "removeTitle": "Delete this itinerary?",
+    "removeText": "It will disappear from the catalogue and from searches. Its checks will no longer count.",
+    "removed": "The itinerary was deleted.",
+    "notFoundTitle": "Itinerary not found",
+    "notFoundText": "Its author may have deleted it.",
+    "back": "Back to itineraries",
+    "actions": "State and actions"
+  },
+  "potholes": {
+    "heading": "Potholes",
+    "intro": "Traps reported by other developers. Two unresolved potholes are enough to report the sheet broken.",
+    "empty": "No pothole reported yet.",
+    "report": "Report a pothole",
+    "status": {
+      "open": "Open",
+      "confirmed": "Confirmed",
+      "resolved": "Resolved"
+    },
+    "confirm": "Confirm",
+    "resolve": "Mark resolved",
+    "reported": "Thank you, the pothole is reported."
+  },
+  "checks": {
+    "heading": "Checks",
+    "intro": "Each line is a developer who made this sheet work on their side, on that date.",
+    "empty": "Nobody has checked it yet.",
+    "environment": {
+      "test": "test",
+      "production": "production"
+    }
+  },
+  "dialog": {
+    "verifyTitle": "It works for me",
+    "verifyText": "Your check is dated today and visible to everyone. You can check this sheet again in 30 days.",
+    "country": "Country where you made it work",
+    "environment": "Environment",
+    "verifySubmit": "Confirm the check",
+    "reportTitle": "Report a pothole",
+    "reportText": "Describe what does not work, as you would have liked to read it before integrating.",
+    "description": "What does not work",
+    "reportSubmit": "Send the report",
+    "cancel": "Cancel"
+  },
+  "editor": {
+    "titleCreate": "Write an itinerary",
+    "titleEdit": "Edit the itinerary",
+    "titleTranslate": "Translate the itinerary",
+    "intro": "Start from the template: prerequisites, installation, payment, webhook, known traps. Every save creates a version.",
+    "title": "Title",
+    "titleHelp": "8 to 140 characters. Name the service, the action and the stack.",
+    "service": "Service",
+    "country": "Country",
+    "stack": "Stack",
+    "language": "Language of the sheet",
+    "languageHelp": "Changing the language replaces untouched content with the template of that language.",
+    "content": "Content in Markdown",
+    "contentHelp": "Headings, lists and code blocks between three backticks. HTML is not interpreted.",
+    "write": "Write",
+    "preview": "Preview",
+    "submitCreate": "Publish the itinerary",
+    "submitEdit": "Save a new version",
+    "cancel": "Cancel",
+    "languageLocked": "A version keeps its language: to write another language, translate the sheet from its page."
+  },
+  "coverage": {
+    "heading": "Countries covered by {{service}}",
+    "intro": "Only confirmed countries are shown: by a dated source, or by a sheet that reached a clear road.",
+    "source": "Source consulted on {{date}}:",
+    "community": "Confirmed by members, through a sheet on a clear road:",
+    "route": "see the sheet",
+    "none": "No confirmed country yet. Publish a sheet and get it checked to complete the map."
+  }
+}

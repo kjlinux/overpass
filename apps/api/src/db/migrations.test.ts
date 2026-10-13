@@ -23,11 +23,23 @@ afterEach(() => pg.close());
 describe("migrations", () => {
   it("creates the accounts tables and records the version", async () => {
     const applied = await migrateUp(executor, migrationsDirectory);
-    expect(applied).toEqual(["0001_accounts", "0002_rate_limits"]);
+    expect(applied).toEqual([
+      "0001_accounts",
+      "0002_rate_limits",
+      "0003_routes",
+      "0004_checks",
+      "0005_service_countries",
+    ]);
     expect(await tables()).toEqual([
       "api_tokens",
+      "checks",
+      "potholes",
       "rate_limit_counters",
+      "route_versions",
+      "routes",
       "schema_migrations",
+      "service_countries",
+      "services",
       "user_stacks",
       "users",
     ]);
@@ -40,12 +52,15 @@ describe("migrations", () => {
 
   it("reverts the last migration and can apply it again", async () => {
     await migrateUp(executor, migrationsDirectory);
-    expect(await migrateDown(executor, migrationsDirectory, 2)).toEqual([
+    expect(await migrateDown(executor, migrationsDirectory, 5)).toEqual([
+      "0005_service_countries",
+      "0004_checks",
+      "0003_routes",
       "0002_rate_limits",
       "0001_accounts",
     ]);
     expect(await tables()).toEqual(["schema_migrations"]);
-    expect(await migrateUp(executor, migrationsDirectory)).toHaveLength(2);
+    expect(await migrateUp(executor, migrationsDirectory)).toHaveLength(5);
   });
 
   it("stores identifiers as UUID and dates as timestamptz", async () => {

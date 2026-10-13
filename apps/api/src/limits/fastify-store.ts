@@ -43,11 +43,12 @@ export function counterStoreFor(counters: CounterStore) {
       answer(counters.peek(this.prefix + key), callback);
     }
 
-    // The plugin passes its merged settings with routeInfo, not the declared route options.
+    // A route limiter carries routeInfo; app.createRateLimit has none and names its own keys.
     child(options: ChildOptions): FastifyRateLimitStore {
       const route = (options as { routeInfo?: RouteInfo }).routeInfo ?? options;
-      const scope = `${String(route.method)}${String(route.url)}`;
-      return new CounterRateLimitStore(options, `${this.prefix}${scope}:`);
+      const { method, url } = route;
+      const scope = typeof method === "string" && typeof url === "string" ? `${method}${url}:` : "";
+      return new CounterRateLimitStore(options, `${this.prefix}${scope}`);
     }
   };
 }

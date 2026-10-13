@@ -5,6 +5,7 @@ import type { Database } from "../db/client.js";
 import { createTestDatabase } from "../db/testing.js";
 import { counterStoreFor, postgresCounters } from "./index.js";
 import type { CounterStore } from "./index.js";
+import { rateLimitCounters } from "./counters.js";
 
 let db: Database;
 let close: () => Promise<void>;
@@ -74,6 +75,24 @@ describe("rate-limit store", () => {
     expect((await second.inject({ url: "/limited" })).statusCode).toBe(200);
     expect((await first.inject({ url: "/limited" })).statusCode).toBe(429);
     await Promise.all([first.close(), second.close()]);
+  });
+
+  it("keys a limiter built outside any route by its own key, never by undefined", async () => {
+    const app = await server();
+    const check = app.createRateLimit({
+      max: 3,
+      timeWindow: 60_000,
+      keyGenerator: () => "register:awa@example.com",
+    });
+    app.get("/address", async (request) => (await check(request)).isAllowed);
+    await app.inject({ url: "/address" });
+    await app.inject({ url: "/limited" });
+    const rows = await db.select({ key: rateLimitCounters.key }).from(rateLimitCounters);
+    expect(rows.map((row) => row.key).sort()).toEqual([
+      "rl:GET/limited:127.0.0.1",
+      "rl:register:awa@example.com",
+    ]);
+    await app.close();
   });
 
   it("gives each route its own budget", async () => {

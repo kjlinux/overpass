@@ -26,6 +26,11 @@ const ProfilePage = lazyPage(
   "profile",
   async () => (await import("../pages/profile")).PublicProfilePage,
 );
+const routes = () => import("../pages/routes");
+const CataloguePage = lazyPage("routes", async () => (await routes()).CataloguePage);
+const DetailPage = lazyPage("routes", async () => (await routes()).DetailPage);
+const NewRoutePage = lazyPage("routes", async () => (await routes()).NewRoutePage);
+const EditRoutePage = lazyPage("routes", async () => (await routes()).EditRoutePage);
 const ComponentsPage = lazyPage(
   "showcase",
   async () => (await import("../pages/showcase")).ComponentsPage,
@@ -59,6 +64,10 @@ export function LanguageShell() {
         <Route path="/dashboard" component={DashboardPage} />
         <Route path="/settings" component={SettingsPage} />
         <Route path="/members/:handle" component={ProfilePage} />
+        <Route path="/routes" component={CataloguePage} />
+        <Route path="/routes/new" component={NewRoutePage} />
+        <Route path="/routes/:id/edit" component={EditRoutePage} />
+        <Route path="/routes/:id" component={DetailPage} />
         <Route default component={NotFound} />
       </Router>
     </ErrorBoundary>
