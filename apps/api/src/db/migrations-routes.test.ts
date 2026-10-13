@@ -44,13 +44,13 @@ describe("routes and checks migrations", () => {
     expect(rows.filter((row) => row.simulated)).toHaveLength(4);
   });
 
-  it("keeps every candidate country unconfirmed, each with its source", async () => {
-    const rows = await executor.query<{ confirmed: boolean; source: string }>(
-      "select confirmed, source from service_countries",
+  it("confirms the decided lists and keeps every candidate with its source and date", async () => {
+    const rows = await executor.query<{ confirmed: boolean; source: string; consulted: string }>(
+      "select confirmed, source, consulted_on::text as consulted from service_countries",
     );
-    expect(rows.length).toBeGreaterThan(30);
-    expect(rows.filter((row) => row.confirmed)).toEqual([]);
+    expect(rows.filter((row) => row.confirmed)).toHaveLength(38);
     expect(rows.every((row) => row.source.startsWith("https://"))).toBe(true);
+    expect(rows.every((row) => row.consulted === "2026-10-13")).toBe(true);
   });
 
   it("indexes French itineraries with French stemming", async () => {

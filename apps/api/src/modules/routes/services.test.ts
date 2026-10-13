@@ -1,32 +1,44 @@
-import { sql } from "drizzle-orm";
+import type { Service } from "@overpass/shared";
 import type { FastifyInstance } from "fastify";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import type { Database } from "../../db/client.js";
 import { call } from "../../testing-routes.js";
 import { createTestApp } from "../../testing.js";
 
 let app: FastifyInstance;
-let db: Database;
 let close: () => Promise<void>;
 
-type ServiceBody = { slug: string; countries: string[] }[];
+const service = async (slug: string): Promise<Service | undefined> => {
+  const services = (await call(app, "GET", "/v1/services")).body.data as unknown as Service[];
+  return services.find((candidate) => candidate.slug === slug);
+};
 
 beforeEach(async () => {
-  ({ app, db, close } = await createTestApp());
+  ({ app, close } = await createTestApp());
 });
 afterEach(() => close());
 
 describe("GET /v1/services and covered countries", () => {
-  it("shows no country until somebody has confirmed it", async () => {
-    const services = (await call(app, "GET", "/v1/services")).body.data as unknown as ServiceBody;
-    expect(services.map((service) => service.countries)).toEqual(services.map(() => []));
+  it("shows only the confirmed countries of each operator", async () => {
+    expect((await service("pi-spi"))?.countries).toEqual([
+      "BF",
+      "BJ",
+      "CI",
+      "GW",
+      "ML",
+      "NE",
+      "SN",
+      "TG",
+    ]);
+    expect((await service("wave"))?.countries).toEqual(["CI", "SN"]);
+    expect((await service("moov-money"))?.countries).toEqual(["CI"]);
+    expect((await service("orange-money"))?.countries).not.toContain("LR");
   });
 
-  it("shows only the confirmed countries of a service", async () => {
-    await db.execute(
-      sql`update service_countries set confirmed = true where country in ('SN', 'CI') and service_id = (select id from services where slug = 'pi-spi')`,
-    );
-    const services = (await call(app, "GET", "/v1/services")).body.data as unknown as ServiceBody;
-    expect(services.find((service) => service.slug === "pi-spi")?.countries).toEqual(["CI", "SN"]);
+  it("gives the source and the consultation date of each confirmed country", async () => {
+    expect((await service("wave"))?.coverage).toEqual([
+      expect.objectContaining({ country: "CI", basis: "source", consultedOn: "2026-10-13" }),
+      expect.objectContaining({ country: "SN", basis: "source", consultedOn: "2026-10-13" }),
+    ]);
+    expect((await service("wave"))?.coverage[0]?.source).toMatch(/^https:\/\//);
   });
 });
