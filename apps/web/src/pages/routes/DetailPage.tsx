@@ -45,7 +45,7 @@ export function DetailPage(): JSX.Element {
   const { t } = useTranslation("ui");
   const language = useLanguage();
   const { params } = useRoute();
-  const { state, reload } = useApi<RouteDetail>(
+  const { state, reload, refresh } = useApi<RouteDetail>(
     `/v1/routes/${params["id"] ?? ""}?lang=${language}`,
   );
   if (state.status === "notFound") return <ErrorPage kind="notFound" language={language} />;
@@ -56,7 +56,7 @@ export function DetailPage(): JSX.Element {
           <Skeleton lines={8} />
         </div>
       ) : null}
-      {state.status === "ready" ? <Loaded route={state.data} reload={reload} /> : null}
+      {state.status === "ready" ? <Loaded route={state.data} reload={refresh} /> : null}
       {state.status === "error" ? (
         <div class="flex flex-col items-start gap-4 py-12">
           <FormAlert error={state.error} />
