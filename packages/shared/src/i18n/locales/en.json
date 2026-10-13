@@ -19,7 +19,8 @@
     "forbidden": "Only the author of this itinerary can do that.",
     "own_route": "You wrote this itinerary: another developer has to check it.",
     "check_too_soon": "You already checked this itinerary in the last 30 days.",
-    "translation_exists": "This itinerary already exists in that language."
+    "translation_exists": "This itinerary already exists in that language.",
+    "pothole_exists": "You already reported an unresolved pothole on this itinerary."
   },
   "fields": {
     "required": "This field is required.",

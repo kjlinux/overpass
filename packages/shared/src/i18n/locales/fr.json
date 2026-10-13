@@ -19,7 +19,8 @@
     "forbidden": "Seul l'auteur de cette fiche peut faire cela.",
     "own_route": "Vous êtes l'auteur de cette fiche : un autre développeur doit la vérifier.",
     "check_too_soon": "Vous avez déjà vérifié cette fiche ces 30 derniers jours.",
-    "translation_exists": "Cette fiche existe déjà dans cette langue."
+    "translation_exists": "Cette fiche existe déjà dans cette langue.",
+    "pothole_exists": "Vous avez déjà signalé un nid-de-poule non résolu sur cette fiche."
   },
   "fields": {
     "required": "Ce champ est obligatoire.",

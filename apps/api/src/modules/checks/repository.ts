@@ -59,31 +59,53 @@ function listChecks(
     .limit(limit);
 }
 
+/** True for the partial unique index that allows one unresolved pothole per account and route. */
+function isDuplicateReport(error: unknown): boolean {
+  return [error, (error as { cause?: unknown } | null)?.cause].some((candidate) => {
+    const { code, constraint } = (candidate ?? {}) as { code?: string; constraint?: string };
+    return code === "23505" && constraint === "potholes_one_unresolved_per_user";
+  });
+}
+
+async function nullOnDuplicate<T>(run: () => Promise<T>): Promise<T | null> {
+  try {
+    return await run();
+  } catch (error) {
+    if (isDuplicateReport(error)) return null;
+    throw error;
+  }
+}
+
+const potholesShown = 100;
+
 function potholeQueries(db: Database) {
   return {
-    insertPothole: async ({ at, ...pothole }: NewPothole) => {
-      const values = { ...pothole, createdAt: at, updatedAt: at };
-      const [created] = await db.insert(potholes).values(values).returning();
-      if (created === undefined) throw new Error("pothole insert returned nothing");
-      return created;
-    },
+    insertPothole: ({ at, ...pothole }: NewPothole) =>
+      nullOnDuplicate(async () => {
+        const values = { ...pothole, createdAt: at, updatedAt: at };
+        const [created] = await db.insert(potholes).values(values).returning();
+        if (created === undefined) throw new Error("pothole insert returned nothing");
+        return created;
+      }),
     findPothole: async (id: string) =>
       (await db.select().from(potholes).where(eq(potholes.id, id)).limit(1))[0] ?? null,
-    setPotholeStatus: async (id: string, status: PotholeStatus, at: Date) => {
-      const [updated] = await db
-        .update(potholes)
-        .set({ status, updatedAt: at })
-        .where(eq(potholes.id, id))
-        .returning();
-      if (updated === undefined) throw new Error("pothole update returned nothing");
-      return updated;
-    },
+    setPotholeStatus: (id: string, status: PotholeStatus, at: Date) =>
+      nullOnDuplicate(async () => {
+        const [updated] = await db
+          .update(potholes)
+          .set({ status, updatedAt: at })
+          .where(eq(potholes.id, id))
+          .returning();
+        if (updated === undefined) throw new Error("pothole update returned nothing");
+        return updated;
+      }),
     potholesForRoute: (routeId: string) =>
       db
         .select()
         .from(potholes)
         .where(eq(potholes.routeId, routeId))
-        .orderBy(desc(potholes.createdAt)),
+        .orderBy(sql`${potholes.status} = 'resolved'`, desc(potholes.createdAt))
+        .limit(potholesShown),
   };
 }
 

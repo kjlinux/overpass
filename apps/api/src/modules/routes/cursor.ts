@@ -4,7 +4,7 @@ import type { Cursor } from "./model.js";
 
 const cursorSchema = z.union([
   z.object({ mode: z.literal("date"), key: z.iso.datetime(), id: z.uuid() }),
-  z.object({ mode: z.literal("rank"), key: z.number(), id: z.uuid() }),
+  z.object({ mode: z.literal("rank"), key: z.number().min(0).max(1e6), id: z.uuid() }),
 ]);
 
 /** Opaque to clients; it only carries the sort key and id of the last row served. */

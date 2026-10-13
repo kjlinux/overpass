@@ -22,4 +22,6 @@ create table potholes (
 );
 
 create index potholes_unresolved_idx on potholes (route_id) where status <> 'resolved';
+-- One account alone must never be able to report a route broken.
+create unique index potholes_one_unresolved_per_user on potholes (route_id, user_id) where status <> 'resolved';
 create index potholes_user_idx on potholes (user_id);

@@ -9,7 +9,9 @@ export function potholeService({ repository, routes, handles, now }: ChecksDeps)
     reportPothole: async (account: Account, routeId: string, input: PotholeCreateInput) => {
       await liveRoute(routes, routeId);
       const pothole = { routeId, userId: account.id, description: input.description, at: now() };
-      return toPothole(await repository.insertPothole(pothole), account.handle);
+      const created = await repository.insertPothole(pothole);
+      if (created === null) throw new AppError("pothole_exists", 409);
+      return toPothole(created, account.handle);
     },
 
     /** Only the author of the route, or an admin, confirms or resolves a reported trap. */
@@ -21,6 +23,7 @@ export function potholeService({ repository, routes, handles, now }: ChecksDeps)
         throw new AppError("forbidden", 403);
       }
       const updated = await repository.setPotholeStatus(potholeId, input.status, now());
+      if (updated === null) throw new AppError("pothole_exists", 409);
       const reporter = updated.userId ?? "";
       const names = await handles(reporter === "" ? [] : [reporter]);
       return toPothole(updated, names.get(reporter) ?? "");

@@ -14,8 +14,12 @@ import type { RoutesService } from "./service.js";
 
 const hour = 60 * 60 * 1000;
 
-/** Per-IP budgets: publishing is rare, editing a draft is frequent. */
+const minute = 60 * 1000;
+
+/** Per-IP budgets: reads run full-text and state SQL, publishing is rare, editing frequent. */
 const limits = {
+  list: { max: 120, timeWindow: minute },
+  read: { max: 240, timeWindow: minute },
   create: { max: 20, timeWindow: hour },
   update: { max: 120, timeWindow: hour },
   remove: { max: 20, timeWindow: hour },
@@ -25,10 +29,10 @@ type Context = { app: FastifyInstance; service: RoutesService; resolve: AccountR
 
 function readRoutes({ app, service, resolve }: Context): void {
   app.get("/v1/services", async () => ok(await service.services()));
-  app.get("/v1/routes", async (request) =>
+  app.get("/v1/routes", { config: { rateLimit: limits.list } }, async (request) =>
     ok(await service.list(parseInput(routeListQuery, request.query))),
   );
-  app.get("/v1/routes/:id", async (request) => {
+  app.get("/v1/routes/:id", { config: { rateLimit: limits.read } }, async (request) => {
     const { id } = parseInput(idParams, request.params);
     const { lang } = parseInput(routeReadQuery, request.query);
     return ok(await service.read(id, await resolve(request), lang));

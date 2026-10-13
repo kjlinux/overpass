@@ -30,9 +30,12 @@ export type ChecksRepository = {
   insertCheckUnlessRecent(check: NewCheck, since: Date): Promise<CheckRecord | null>;
   checksForRoute(routeId: string, limit: number): Promise<CheckRecord[]>;
   checksByUser(userId: string, limit: number): Promise<CheckRecord[]>;
-  insertPothole(pothole: NewPothole): Promise<PotholeRecord>;
+  /** Null when the account already has an unresolved pothole on that route. */
+  insertPothole(pothole: NewPothole): Promise<PotholeRecord | null>;
   findPothole(id: string): Promise<PotholeRecord | null>;
-  setPotholeStatus(id: string, status: PotholeStatus, at: Date): Promise<PotholeRecord>;
+  /** Null when reopening would give the reporter two unresolved potholes on the route. */
+  setPotholeStatus(id: string, status: PotholeStatus, at: Date): Promise<PotholeRecord | null>;
+  /** Unresolved first, newest first, bounded. */
   potholesForRoute(routeId: string): Promise<PotholeRecord[]>;
   countByUser(userId: string): Promise<{ checks: number; potholes: number }>;
 };

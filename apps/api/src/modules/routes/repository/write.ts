@@ -63,5 +63,8 @@ export async function updateRoute(
 }
 
 export async function softDelete(db: Database, id: string, at: Date): Promise<void> {
-  await db.update(routes).set({ deletedAt: at }).where(eq(routes.id, id));
+  await db
+    .update(routes)
+    .set({ deletedAt: at })
+    .where(and(eq(routes.id, id), isNull(routes.deletedAt)));
 }
