@@ -1,0 +1,3 @@
+{
+  "template": "## Prérequis\n\n- Le compte ou la clé d'API à obtenir.\n- La version du framework utilisée.\n\n## Installation\n\nLes paquets à installer et la configuration à ajouter.\n\n## Paiement\n\nLe code qui crée le paiement, avec ses paramètres.\n\n```\n\n```\n\n## Webhook\n\nComment recevoir et vérifier la notification de l'opérateur.\n\n```\n\n```\n\n## Pièges connus\n\n- Ce que la documentation officielle ne dit pas.\n"
+}
