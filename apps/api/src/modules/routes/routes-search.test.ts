@@ -76,6 +76,13 @@ describe("GET /v1/routes", () => {
     expect(new Set(ids.map((item) => item.id)).size).toBe(2);
   });
 
+  it("rejects a rank cursor outside the range of a rank", async () => {
+    const forged = Buffer.from(
+      JSON.stringify({ mode: "rank", key: 1e39, id: "00000000-0000-4000-8000-000000000001" }),
+    ).toString("base64url");
+    expect((await call(app, "GET", `/v1/routes?q=wave&cursor=${forged}`)).status).toBe(400);
+  });
+
   it("rejects a forged cursor and an unknown state", async () => {
     expect((await call(app, "GET", "/v1/routes?cursor=forged")).status).toBe(400);
     expect((await call(app, "GET", "/v1/routes?state=open")).status).toBe(400);
