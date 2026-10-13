@@ -27,7 +27,7 @@
     "licenses": "node scripts/licenses.ts",
     "check:repo": "node scripts/check-repo.ts",
     "check:budget": "npm run build && node scripts/check-budget.ts",
-    "check": "npm run typecheck && npm run lint && npm run format:check && npm run test && npm run check:repo && npm run check:budget",
+    "check": "npm run typecheck && npm run lint && npm run format:check && npm run test:coverage && npm run check:repo && npm run check:budget",
     "test:e2e": "playwright test",
     "scan:agents": "node scripts/agent-scan.ts"
   },
