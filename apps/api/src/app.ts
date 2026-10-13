@@ -12,6 +12,7 @@ import { registerSecurityHeaders } from "./http/security-headers.js";
 import { counterStoreFor, postgresCounters } from "./limits/index.js";
 import { createMailer } from "./mail/mailer.js";
 import type { Mailer } from "./mail/mailer.js";
+import { itineraries } from "./itineraries.js";
 import { registerAccounts } from "./modules/accounts/index.js";
 
 export type AppConfig = Pick<
@@ -20,7 +21,7 @@ export type AppConfig = Pick<
 > &
   Partial<Config>;
 
-export type AppDeps = { config: AppConfig; db?: Database; mailer?: Mailer };
+export type AppDeps = { config: AppConfig; db?: Database; mailer?: Mailer; now?: () => Date };
 
 /** Trusts exactly the given number of proxies, so a forged X-Forwarded-For is ignored. */
 function trustedHops(count: number) {
@@ -30,7 +31,7 @@ function trustedHops(count: number) {
 const redactedHeaders = ["req.headers.cookie", "req.headers.authorization"];
 
 /** Builds the stateless API instance without starting it; modules need a database. */
-export async function buildApp({ config, db, mailer }: AppDeps): Promise<FastifyInstance> {
+export async function buildApp({ config, db, mailer, now }: AppDeps): Promise<FastifyInstance> {
   const app = Fastify({
     logger: { level: config.LOG_LEVEL, redact: redactedHeaders },
     genReqId: () => randomUUID(),
@@ -48,13 +49,16 @@ export async function buildApp({ config, db, mailer }: AppDeps): Promise<Fastify
   registerHealth(app);
   if (db !== undefined) {
     await app.register(rateLimit, { global: false, store: counterStoreFor(postgresCounters(db)) });
-    await registerAccounts(app, {
+    const catalogue = itineraries(db, now ?? (() => new Date()));
+    const { resolveAccount } = await registerAccounts(app, {
       db,
       mailer: mailer ?? createMailer(config, app.log),
       secret: config.SESSION_SECRET,
       webOrigin: config.WEB_ORIGIN,
       secureCookies: config.NODE_ENV === "production",
+      contributions: catalogue.contributions,
     });
+    await catalogue.register(app, resolveAccount);
   }
   return app;
 }

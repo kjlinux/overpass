@@ -67,7 +67,7 @@ export default tseslint.config(
   },
   {
     files: ["apps/api/src/**/*.ts", "apps/mcp/src/**/*.ts", "packages/*/src/**/*.ts"],
-    ignores: ["**/*.test.ts"],
+    ignores: ["**/*.test.ts", "**/testing.ts", "**/testing-*.ts"],
     rules: { "no-restricted-syntax": ["error", userMessageRule] },
   },
   {
