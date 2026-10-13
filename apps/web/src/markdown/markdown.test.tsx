@@ -26,7 +26,7 @@ describe("Markdown rendering", () => {
   it("renders fenced code in a copyable code block with its language", () => {
     const out = html("```php\necho 'ok';\n```");
     expect(out).toContain("php");
-    expect(out).toContain("echo &#39;ok&#39;;");
+    expect(out).toContain("<code>echo 'ok';</code>");
     expect(out).toContain("aria-live");
   });
 
@@ -43,14 +43,17 @@ describe("Markdown sanitising", () => {
     const out = html('<script>alert(1)</script>\n\n<img src=x onerror="alert(1)">');
     expect(out).not.toContain("<script");
     expect(out).not.toContain("<img");
-    expect(out).toContain("&lt;script&gt;");
+    expect(out).toContain("&lt;script>alert(1)&lt;/script>");
   });
 
-  it("drops javascript and data links but keeps their text", () => {
-    const out = html("[clic](javascript:alert(1)) [data](data:text/html;base64,PHNjcmlwdD4=)");
-    expect(out).not.toContain("javascript:");
-    expect(out).not.toContain("data:text");
+  it("never turns javascript, data or relative targets into links", () => {
+    const out = html(
+      "[clic](javascript:alert(1)) [data](data:text/html;base64,PHNjcmlwdD4=) [admin](/admin)",
+    );
+    expect(out).not.toContain("<a");
+    expect(out).not.toContain("href");
     expect(out).toContain("clic");
+    expect(out).toContain("<span>admin</span>");
   });
 
   it("opens safe links without leaking the referrer", () => {
