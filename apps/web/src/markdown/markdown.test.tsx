@@ -12,7 +12,7 @@ const html = (source: string) => render(<Markdown source={source} />);
 describe("Markdown rendering", () => {
   it("renders headings, paragraphs, lists and emphasis", () => {
     const out = html("## Prérequis\n\nUn **compte** et une *clé*.\n\n- un\n- deux");
-    expect(out).toContain('<h2 id="prerequis"');
+    expect(out).toContain('<h2 id="s-prerequis"');
     expect(out).toContain("<strong>compte</strong>");
     expect(out).toContain("<em>clé</em>");
     expect(out).toContain("<li>un</li>");
@@ -80,10 +80,14 @@ describe("safeHref", () => {
 });
 
 describe("headingsOf", () => {
+  it("prefixes member anchors so a heading cannot take a page id", () => {
+    expect(headingsOf("## potholes")).toEqual([{ id: "s-potholes", text: "potholes" }]);
+  });
+
   it("lists the section headings with stable anchors", () => {
     expect(headingsOf("## Prérequis\n\ntext\n\n## Recevoir le webhook\n\n### Détail")).toEqual([
-      { id: "prerequis", text: "Prérequis" },
-      { id: "recevoir-le-webhook", text: "Recevoir le webhook" },
+      { id: "s-prerequis", text: "Prérequis" },
+      { id: "s-recevoir-le-webhook", text: "Recevoir le webhook" },
     ]);
   });
 });

@@ -46,6 +46,7 @@ describe("RouteCard", () => {
     expect(html).toContain("Laravel");
     expect(html).toContain(`href="/fr/routes/${summary.id}"`);
     expect(html).toContain("9 oct. 2026");
+    expect(html).toContain("Français");
   });
 
   it("says when an itinerary was never checked", () => {

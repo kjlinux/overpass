@@ -28,7 +28,7 @@ describe("RouteView content", () => {
   it("renders the Markdown in a 72 character column with copyable code", () => {
     const html = view(detail);
     expect(html).toContain("max-w-prose");
-    expect(html).toContain('<h2 id="prerequis"');
+    expect(html).toContain('<h2 id="s-prerequis"');
     expect(html).toContain("abort_unless");
     expect(html).toContain("aria-live");
   });
@@ -67,6 +67,16 @@ describe("RouteView actions", () => {
     expect(html).toContain('aria-disabled="true"');
     expect(html).toContain(fr.detail.verifyOwn);
     expect(html).toContain(fr.detail.edit);
+  });
+
+  it("ties each moderation button to the pothole it acts on", () => {
+    const html = view({
+      ...detail,
+      potholes: [{ ...detail.potholes[0]!, status: "open" }],
+      viewer: { isAuthor: true, eligibility: "own_route", nextCheckAt: null },
+    });
+    expect(html).toContain('id="pothole-p1"');
+    expect(html.match(/aria-describedby="pothole-p1"/g)).toHaveLength(2);
   });
 
   it("gives the date of the next possible check", () => {

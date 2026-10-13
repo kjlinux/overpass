@@ -46,7 +46,7 @@ describe("EditorView", () => {
   it("shows a live preview of the Markdown, never raw HTML", () => {
     const html = editor({ ...newDraft("fr"), content: "## Essai\n\n<script>x</script>" });
     expect(html).toContain(fr.editor.preview);
-    expect(html).toContain('<h2 id="essai"');
+    expect(html).toContain('<h2 id="s-essai"');
     expect(html).not.toContain("<script>x");
   });
 });
