@@ -6,7 +6,8 @@
     "heading": "Mes itinéraires",
     "emptyTitle": "Aucun itinéraire publié",
     "emptyText": "Partagez le code qui marche en production. Chaque itinéraire publié rapporte 10 points.",
-    "action": "Écrire un itinéraire"
+    "action": "Écrire un itinéraire",
+    "edit": "Modifier"
   },
   "checks": {
     "heading": "Mes vérifications",

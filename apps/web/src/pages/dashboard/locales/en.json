@@ -6,7 +6,8 @@
     "heading": "My itineraries",
     "emptyTitle": "No itinerary published",
     "emptyText": "Share the code that works in production. Each published itinerary earns 10 points.",
-    "action": "Write an itinerary"
+    "action": "Write an itinerary",
+    "edit": "Edit"
   },
   "checks": {
     "heading": "My checks",

@@ -1,12 +1,13 @@
-import type { Me } from "@overpass/shared";
-import { CircleCheck, Route } from "lucide-preact";
+import type { Me, MyCheck, RouteSummary } from "@overpass/shared";
 import type { ComponentChildren, JSX } from "preact";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../app/useLanguage";
-import { ButtonLink, EmptyState, Skeleton } from "../../components/ui";
+import { ButtonLink, Skeleton } from "../../components/ui";
 import { Layout } from "../../layout";
 import { localizedPath } from "../../layout/nav";
 import { RequireSession, usePublicProfile } from "../../session";
+import { useApi } from "../routes/useApi";
+import { MyChecksList, MyRoutesList } from "./MyLists";
 
 function Column({ heading, children }: { heading: string; children: ComponentChildren }) {
   return (
@@ -39,34 +40,27 @@ function PointsColumn({ handle }: { handle: string }): JSX.Element {
   );
 }
 
-function EmptyColumns(): JSX.Element {
+function Loading(): JSX.Element {
+  return <Skeleton title={false} lines={3} />;
+}
+
+function RoutesColumn(): JSX.Element {
   const { t } = useTranslation("dashboard");
-  const language = useLanguage();
-  const write = (
-    <ButtonLink href={localizedPath(language, "/routes/new")}>{t("routes.action")}</ButtonLink>
-  );
-  const browse = (
-    <ButtonLink href={localizedPath(language, "/routes")}>{t("checks.action")}</ButtonLink>
-  );
+  const { state } = useApi<RouteSummary[]>("/v1/me/routes");
   return (
-    <>
-      <Column heading={t("routes.heading")}>
-        <EmptyState
-          icon={Route}
-          title={t("routes.emptyTitle")}
-          description={t("routes.emptyText")}
-          action={write}
-        />
-      </Column>
-      <Column heading={t("checks.heading")}>
-        <EmptyState
-          icon={CircleCheck}
-          title={t("checks.emptyTitle")}
-          description={t("checks.emptyText")}
-          action={browse}
-        />
-      </Column>
-    </>
+    <Column heading={t("routes.heading")}>
+      {state.status === "ready" ? <MyRoutesList routes={state.data} /> : <Loading />}
+    </Column>
+  );
+}
+
+function ChecksColumn(): JSX.Element {
+  const { t } = useTranslation("dashboard");
+  const { state } = useApi<MyCheck[]>("/v1/me/checks");
+  return (
+    <Column heading={t("checks.heading")}>
+      {state.status === "ready" ? <MyChecksList checks={state.data} /> : <Loading />}
+    </Column>
   );
 }
 
@@ -85,14 +79,15 @@ function Board({ me }: { me: Me }): JSX.Element {
         </ButtonLink>
       </div>
       <div class="mt-10 grid lg:grid-cols-3 lg:divide-x lg:divide-rule lg:border-t lg:border-rule lg:pt-8">
-        <EmptyColumns />
+        <RoutesColumn />
+        <ChecksColumn />
         <PointsColumn handle={me.handle} />
       </div>
     </section>
   );
 }
 
-/** The member's home: empty sections until the itinerary and check modules exist. */
+/** The member's home: my itineraries, my checks, my points and the test track. */
 export function DashboardPage(): JSX.Element {
   const language = useLanguage();
   return (

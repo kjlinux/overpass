@@ -12,7 +12,7 @@ beforeAll(async () => {
   vi.stubGlobal("location", new URL(`/fr/routes/${detail.id}`, "http://localhost"));
 });
 
-const noop = () => undefined;
+const noop = () => Promise.resolve(undefined);
 const view = (route: RouteDetail) =>
   render(
     <LocationProvider>

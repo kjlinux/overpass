@@ -1,0 +1,132 @@
+{
+  "catalogue": {
+    "title": "Itinéraires",
+    "intro": "Des fiches d'intégration écrites et vérifiées par d'autres développeurs, classées par service, pays et stack.",
+    "results_one": "{{count}} itinéraire affiché",
+    "results_other": "{{count}} itinéraires affichés",
+    "more": "Afficher les itinéraires suivants",
+    "emptyTitle": "Aucun itinéraire ne correspond",
+    "emptyText": "Retirez un filtre, ou publiez la fiche qui manque à la communauté.",
+    "write": "Écrire un itinéraire"
+  },
+  "filters": {
+    "heading": "Filtres",
+    "search": "Rechercher",
+    "searchHelp": "Un service, un mot du contenu, un message d'erreur.",
+    "service": "Service",
+    "country": "Pays",
+    "stack": "Stack",
+    "language": "Langue",
+    "state": "État",
+    "any": "Tous",
+    "submit": "Rechercher",
+    "reset": "Effacer les filtres"
+  },
+  "card": {
+    "lastCheck": "Vérifiée le {{date}}",
+    "neverChecked": "Jamais vérifiée",
+    "by": "par {{author}}"
+  },
+  "detail": {
+    "trail": "Fil d'Ariane",
+    "facts": {
+      "service": "Service",
+      "country": "Pays",
+      "stack": "Stack",
+      "language": "Langue",
+      "author": "Auteur",
+      "version": "Version",
+      "versionValue": "{{version}}, le {{date}}"
+    },
+    "deletedAuthor": "Compte supprimé",
+    "stateHeading": "État de la route",
+    "state": {
+      "clear": "{{count}} développeurs l'ont fait marcher ces 90 derniers jours.",
+      "one": "Un seul développeur l'a vérifiée ces 90 derniers jours : il en faut deux pour la voie libre.",
+      "none": "Personne ne l'a vérifiée ces 90 derniers jours.",
+      "broken": "{{count}} nids-de-poule ne sont pas résolus."
+    },
+    "lastCheck": "Dernière vérification le {{date}}.",
+    "logLabel_one": "{{count}} vérification ces 90 derniers jours, une case par semaine",
+    "logLabel_other": "{{count}} vérifications ces 90 derniers jours, une case par semaine",
+    "logFrom": "il y a 90 jours",
+    "logTo": "aujourd'hui",
+    "test": "Tester sur la piste d'essai",
+    "testSoon": "La piste d'essai de {{service}} arrive avec le prochain module.",
+    "testNone": "Pas de piste d'essai pour {{service}} : sa documentation technique n'est pas publique.",
+    "verify": "Ça marche chez moi",
+    "verifyNote": "Confirme que la fiche fonctionne aujourd'hui, avec votre pays et votre environnement.",
+    "verifyOwn": "Vous êtes l'auteur de cette fiche : un autre développeur doit la vérifier.",
+    "verifyTooSoon": "Vous l'avez déjà vérifiée. Prochaine vérification possible à partir du {{date}}.",
+    "verifySignIn": "Se connecter pour vérifier",
+    "verified": "Merci, votre vérification est enregistrée.",
+    "contents": "Sur cette fiche",
+    "fallback": "Cet itinéraire n'existe pas encore dans votre langue. Vous lisez la version {{language}}.",
+    "readIn": "Lire en {{language}}",
+    "translate": "Traduire cet itinéraire",
+    "edit": "Modifier",
+    "remove": "Supprimer",
+    "removeTitle": "Supprimer cet itinéraire ?",
+    "removeText": "Il disparaîtra du catalogue et des recherches. Ses vérifications ne compteront plus.",
+    "removed": "L'itinéraire a été supprimé.",
+    "notFoundTitle": "Itinéraire introuvable",
+    "notFoundText": "Il a peut-être été supprimé par son auteur.",
+    "back": "Retour aux itinéraires",
+    "actions": "État et actions"
+  },
+  "potholes": {
+    "heading": "Nids-de-poule",
+    "intro": "Pièges signalés par d'autres développeurs. Deux nids-de-poule non résolus suffisent à signaler la fiche cassée.",
+    "empty": "Aucun nid-de-poule signalé pour l'instant.",
+    "report": "Signaler un nid-de-poule",
+    "status": {
+      "open": "Ouvert",
+      "confirmed": "Confirmé par l'auteur",
+      "resolved": "Résolu"
+    },
+    "confirm": "Confirmer",
+    "resolve": "Marquer résolu",
+    "reported": "Merci, le nid-de-poule est signalé."
+  },
+  "checks": {
+    "heading": "Vérifications",
+    "intro": "Chaque ligne est un développeur qui a fait marcher cette fiche chez lui, à cette date.",
+    "empty": "Personne ne l'a encore vérifiée.",
+    "environment": {
+      "test": "test",
+      "production": "production"
+    }
+  },
+  "dialog": {
+    "verifyTitle": "Ça marche chez moi",
+    "verifyText": "Votre vérification est datée d'aujourd'hui et visible de tous. Vous pourrez revérifier cette fiche dans 30 jours.",
+    "country": "Pays où vous l'avez fait marcher",
+    "environment": "Environnement",
+    "verifySubmit": "Confirmer la vérification",
+    "reportTitle": "Signaler un nid-de-poule",
+    "reportText": "Décrivez ce qui ne marche pas, comme vous l'auriez voulu le lire avant d'intégrer.",
+    "description": "Ce qui ne marche pas",
+    "reportSubmit": "Envoyer le signalement",
+    "cancel": "Annuler"
+  },
+  "editor": {
+    "titleCreate": "Écrire un itinéraire",
+    "titleEdit": "Modifier l'itinéraire",
+    "titleTranslate": "Traduire l'itinéraire",
+    "intro": "Partez du modèle : prérequis, installation, paiement, webhook, pièges connus. Chaque enregistrement crée une version.",
+    "title": "Titre",
+    "titleHelp": "De 8 à 140 caractères. Nommez le service, l'action et la stack.",
+    "service": "Service",
+    "country": "Pays",
+    "stack": "Stack",
+    "language": "Langue de la fiche",
+    "languageHelp": "Changer de langue remplace le contenu encore vide par le modèle de cette langue.",
+    "content": "Contenu en Markdown",
+    "contentHelp": "Titres, listes et blocs de code entre trois accents graves. Le HTML n'est pas interprété.",
+    "write": "Écrire",
+    "preview": "Aperçu",
+    "submitCreate": "Publier l'itinéraire",
+    "submitEdit": "Enregistrer une nouvelle version",
+    "cancel": "Annuler"
+  }
+}
