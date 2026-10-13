@@ -13,6 +13,8 @@
 }
 .markdown h2:first-child {
   margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
 }
 .markdown h3,
 .markdown h4 {

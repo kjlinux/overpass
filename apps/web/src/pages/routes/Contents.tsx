@@ -41,7 +41,7 @@ export function Contents({ route }: { route: RouteDetail }): JSX.Element {
         <Entries route={route} />
       </div>
       <details class="lg:hidden">
-        <summary class="flex min-h-tap cursor-pointer items-center font-semibold">
+        <summary class="min-h-tap cursor-pointer py-3 font-semibold">
           {t("detail.contents")}
         </summary>
         <Entries route={route} />

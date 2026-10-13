@@ -25,7 +25,9 @@ export function RouteCard({ route }: { route: RouteSummary }): JSX.Element {
       href={localizedPath(language, `/routes/${route.id}`)}
       class="flex h-full flex-col gap-3 border border-rule bg-paper p-4 text-ink no-underline hover:bg-surface sm:p-6"
     >
-      <StatusBadge status={statusOf(route.state)} />
+      <span class="self-start">
+        <StatusBadge status={statusOf(route.state)} />
+      </span>
       <h3 class="text-h3 font-semibold [overflow-wrap:anywhere]">{route.title}</h3>
       <p class="text-ink-2">
         {route.service.name} · {countryName(route.country, language)}

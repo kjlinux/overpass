@@ -30,7 +30,9 @@ export function MyRoutesList({ routes }: { routes: RouteSummary[] }): JSX.Elemen
     <ul class="m-0 list-none border-t border-rule p-0">
       {routes.map((route) => (
         <li key={route.id} class={rowClass}>
-          <StatusBadge status={statusOf(route.state)} />
+          <span class="self-start">
+            <StatusBadge status={statusOf(route.state)} />
+          </span>
           <a
             class="font-semibold [overflow-wrap:anywhere]"
             href={localizedPath(language, `/routes/${route.id}`)}
