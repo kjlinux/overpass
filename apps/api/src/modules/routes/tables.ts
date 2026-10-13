@@ -18,9 +18,20 @@ export const services = pgTable("services", {
   slug: text("slug").notNull(),
   name: text("name").notNull(),
   category: text("category").$type<"payment" | "sms" | "ussd">().notNull(),
-  countries: char("countries", { length: 2 }).array().notNull(),
   simulated: boolean("simulated").notNull(),
 });
+
+/** Mirror of migrations/0005_service_countries: a covered country is shown once confirmed. */
+export const serviceCountries = pgTable(
+  "service_countries",
+  {
+    serviceId: uuid("service_id").notNull(),
+    country: char("country", { length: 2 }).notNull(),
+    confirmed: boolean("confirmed").notNull().default(false),
+    source: text("source").notNull(),
+  },
+  (table) => [primaryKey({ columns: [table.serviceId, table.country] })],
+);
 
 export const routes = pgTable("routes", {
   id: uuid("id").primaryKey().defaultRandom(),
