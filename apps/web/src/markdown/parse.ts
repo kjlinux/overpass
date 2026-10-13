@@ -39,6 +39,11 @@ export function slugify(text: string): string {
     .replace(/^-|-$/g, "");
 }
 
+/** Member anchors carry a prefix, so a heading can never take an id the page already uses. */
+export function anchorOf(text: string): string {
+  return `s-${slugify(text)}`;
+}
+
 /** Plain text of an inline node, for anchors and alternative text. */
 export function textOf(nodes: MarkdownNode[]): string {
   return nodes
@@ -53,5 +58,5 @@ export function headingsOf(source: string): { id: string; text: string }[] {
   return parseMarkdown(source)
     .filter(({ token }) => token.type === "heading_open" && ["h1", "h2"].includes(token.tag))
     .map(({ children }) => textOf(children))
-    .map((text) => ({ id: slugify(text), text }));
+    .map((text) => ({ id: anchorOf(text), text }));
 }

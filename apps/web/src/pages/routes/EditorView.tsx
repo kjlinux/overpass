@@ -77,6 +77,7 @@ function ContentField({ binding }: { binding: FieldBinding }): JSX.Element {
           onInput={binding.onInput}
           onBlur={binding.onBlur}
           spellcheck={false}
+          wrap="off"
         />
       )}
     </Field>

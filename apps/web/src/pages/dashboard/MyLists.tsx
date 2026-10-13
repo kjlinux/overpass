@@ -10,6 +10,32 @@ import { formatDate, statusOf } from "../routes/format";
 
 const rowClass = "flex flex-col gap-2 border-b border-rule py-4";
 
+function MyRouteRow({ route }: { route: RouteSummary }): JSX.Element {
+  const { t } = useTranslation("dashboard");
+  const language = useLanguage();
+  return (
+    <li class={rowClass}>
+      <span class="self-start">
+        <StatusBadge status={statusOf(route.state)} />
+      </span>
+      <a
+        id={`mine-${route.id}`}
+        class="font-semibold [overflow-wrap:anywhere]"
+        href={localizedPath(language, `/routes/${route.id}`)}
+      >
+        {route.title}
+      </a>
+      <a
+        class="inline-flex min-h-tap items-center self-start"
+        aria-describedby={`mine-${route.id}`}
+        href={localizedPath(language, `/routes/${route.id}/edit`)}
+      >
+        {t("routes.edit")}
+      </a>
+    </li>
+  );
+}
+
 export function MyRoutesList({ routes }: { routes: RouteSummary[] }): JSX.Element {
   const { t } = useTranslation("dashboard");
   const language = useLanguage();
@@ -29,23 +55,7 @@ export function MyRoutesList({ routes }: { routes: RouteSummary[] }): JSX.Elemen
   return (
     <ul class="m-0 list-none border-t border-rule p-0">
       {routes.map((route) => (
-        <li key={route.id} class={rowClass}>
-          <span class="self-start">
-            <StatusBadge status={statusOf(route.state)} />
-          </span>
-          <a
-            class="font-semibold [overflow-wrap:anywhere]"
-            href={localizedPath(language, `/routes/${route.id}`)}
-          >
-            {route.title}
-          </a>
-          <a
-            class="inline-flex min-h-tap items-center self-start"
-            href={localizedPath(language, `/routes/${route.id}/edit`)}
-          >
-            {t("routes.edit")}
-          </a>
-        </li>
+        <MyRouteRow key={route.id} route={route} />
       ))}
     </ul>
   );
@@ -81,7 +91,7 @@ export function MyChecksList({ checks }: { checks: MyCheck[] }): JSX.Element {
             {check.route.title}
           </a>
           <span class="text-caption text-ink-2">
-            {countryName(check.country, language)} · {check.environment}
+            {countryName(check.country, language)} · {t(`checks.environment.${check.environment}`)}
           </span>
         </li>
       ))}

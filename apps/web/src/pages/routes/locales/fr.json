@@ -7,7 +7,8 @@
     "more": "Afficher les itinéraires suivants",
     "emptyTitle": "Aucun itinéraire ne correspond",
     "emptyText": "Retirez un filtre, ou publiez la fiche qui manque à la communauté.",
-    "write": "Écrire un itinéraire"
+    "write": "Écrire un itinéraire",
+    "resultsHeading": "Résultats"
   },
   "filters": {
     "heading": "Filtres",
@@ -81,7 +82,7 @@
     "report": "Signaler un nid-de-poule",
     "status": {
       "open": "Ouvert",
-      "confirmed": "Confirmé par l'auteur",
+      "confirmed": "Confirmé",
       "resolved": "Résolu"
     },
     "confirm": "Confirmer",
@@ -127,6 +128,7 @@
     "preview": "Aperçu",
     "submitCreate": "Publier l'itinéraire",
     "submitEdit": "Enregistrer une nouvelle version",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "languageLocked": "Une version garde sa langue : pour une autre langue, traduisez la fiche depuis sa page."
   }
 }

@@ -1,5 +1,5 @@
 import type { ApiError } from "@overpass/shared";
-import { useCallback, useEffect, useState } from "preact/hooks";
+import { useCallback, useEffect, useRef, useState } from "preact/hooks";
 import { apiRequest } from "../../session";
 
 export type Loaded<T> =
@@ -11,11 +11,15 @@ export type Loaded<T> =
 /** Loads a GET resource whenever its path changes; refresh keeps the shown data meanwhile. */
 export function useApi<T>(path: string | null) {
   const [state, setState] = useState<Loaded<T>>({ status: "loading" });
+  const latest = useRef(0);
   const load = useCallback(
     async (quiet = false) => {
       if (path === null) return;
+      const request = ++latest.current;
       if (!quiet) setState({ status: "loading" });
       const result = await apiRequest<T>("GET", path);
+      // A slower answer to a superseded request must not replace the newer one.
+      if (request !== latest.current) return;
       if (result.error === null) setState({ status: "ready", data: result.data });
       else if (result.error.code === "not_found") setState({ status: "notFound" });
       else setState({ status: "error", error: result.error });

@@ -72,7 +72,7 @@ describe("RouteView actions", () => {
   it("ties each moderation button to the pothole it acts on", () => {
     const html = view({
       ...detail,
-      potholes: [{ ...detail.potholes[0]!, status: "open" }],
+      potholes: detail.potholes.map((pothole) => ({ ...pothole, status: "open" as const })),
       viewer: { isAuthor: true, eligibility: "own_route", nextCheckAt: null },
     });
     expect(html).toContain('id="pothole-p1"');

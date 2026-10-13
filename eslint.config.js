@@ -10,6 +10,7 @@ const technicalAttributes = [
   "href",
   "id",
   "type",
+  "wrap",
   "role",
   "name",
   "src",

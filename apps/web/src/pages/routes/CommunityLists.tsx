@@ -34,18 +34,46 @@ function Section({ id, title, intro, action, children }: SectionProps): JSX.Elem
 }
 
 type PotholeProps = {
+  busy: boolean;
   pothole: Pothole;
   canModerate: boolean;
   onStatus: (id: string, status: PotholeStatus) => void;
 };
 
-function PotholeRow({ pothole, canModerate, onStatus }: PotholeProps): JSX.Element {
+/** Each button names its pothole for screen readers, since every row repeats the same labels. */
+function Moderation(props: Omit<PotholeProps, "canModerate">): JSX.Element {
+  const { busy, pothole, onStatus } = props;
+  const { t } = useTranslation("routes");
+  const next: PotholeStatus[] =
+    pothole.status === "open" ? ["confirmed", "resolved"] : ["resolved"];
+  return (
+    <div class="flex flex-wrap gap-2">
+      {next.map((status) => (
+        <Button
+          key={status}
+          variant="ghost"
+          loading={busy}
+          aria-describedby={`pothole-${pothole.id}`}
+          onClick={() => {
+            onStatus(pothole.id, status);
+          }}
+        >
+          {t(status === "confirmed" ? "potholes.confirm" : "potholes.resolve")}
+        </Button>
+      ))}
+    </div>
+  );
+}
+
+function PotholeRow({ busy, pothole, canModerate, onStatus }: PotholeProps): JSX.Element {
   const { t } = useTranslation("routes");
   const language = useLanguage();
   const resolved = pothole.status === "resolved";
   return (
     <li class="flex flex-col gap-2 border-b border-rule px-2 py-4">
-      <p class={resolved ? "text-ink-2" : undefined}>{pothole.description}</p>
+      <p id={`pothole-${pothole.id}`} class={resolved ? "text-ink-2" : undefined}>
+        {pothole.description}
+      </p>
       <p class="flex flex-wrap items-center gap-x-3 gap-y-1 text-caption text-ink-2">
         <span class="font-semibold text-ink">{t(`potholes.status.${pothole.status}`)}</span>
         <span>
@@ -53,38 +81,21 @@ function PotholeRow({ pothole, canModerate, onStatus }: PotholeProps): JSX.Eleme
         </span>
       </p>
       {canModerate && !resolved ? (
-        <div class="flex flex-wrap gap-2">
-          {pothole.status === "open" ? (
-            <Button
-              variant="ghost"
-              onClick={() => {
-                onStatus(pothole.id, "confirmed");
-              }}
-            >
-              {t("potholes.confirm")}
-            </Button>
-          ) : null}
-          <Button
-            variant="ghost"
-            onClick={() => {
-              onStatus(pothole.id, "resolved");
-            }}
-          >
-            {t("potholes.resolve")}
-          </Button>
-        </div>
+        <Moderation busy={busy} pothole={pothole} onStatus={onStatus} />
       ) : null}
     </li>
   );
 }
 
 export type PotholeListProps = {
+  busyId?: string | null;
   route: RouteDetail;
   onReport: () => void;
   onStatus: (id: string, status: PotholeStatus) => void;
 };
 
-export function PotholeList({ route, onReport, onStatus }: PotholeListProps): JSX.Element {
+export function PotholeList(props: PotholeListProps): JSX.Element {
+  const { route, onReport, onStatus, busyId = null } = props;
   const { t } = useTranslation("routes");
   const member = route.viewer.eligibility !== "anonymous";
   const action = member ? <Button onClick={onReport}>{t("potholes.report")}</Button> : undefined;
@@ -103,6 +114,7 @@ export function PotholeList({ route, onReport, onStatus }: PotholeListProps): JS
             <PotholeRow
               key={pothole.id}
               pothole={pothole}
+              busy={busyId === pothole.id}
               canModerate={route.viewer.isAuthor}
               onStatus={onStatus}
             />

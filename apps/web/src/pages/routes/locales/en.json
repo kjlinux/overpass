@@ -7,7 +7,8 @@
     "more": "Show the next itineraries",
     "emptyTitle": "No itinerary matches",
     "emptyText": "Remove a filter, or publish the sheet the community is missing.",
-    "write": "Write an itinerary"
+    "write": "Write an itinerary",
+    "resultsHeading": "Results"
   },
   "filters": {
     "heading": "Filters",
@@ -81,7 +82,7 @@
     "report": "Report a pothole",
     "status": {
       "open": "Open",
-      "confirmed": "Confirmed by the author",
+      "confirmed": "Confirmed",
       "resolved": "Resolved"
     },
     "confirm": "Confirm",
@@ -127,6 +128,7 @@
     "preview": "Preview",
     "submitCreate": "Publish the itinerary",
     "submitEdit": "Save a new version",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "languageLocked": "A version keeps its language: to write another language, translate the sheet from its page."
   }
 }

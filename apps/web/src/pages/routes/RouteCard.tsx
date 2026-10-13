@@ -1,4 +1,4 @@
-import { countryName, stackNames } from "@overpass/shared";
+import { countryName, languageNames, stackNames } from "@overpass/shared";
 import type { RouteSummary, StackId } from "@overpass/shared";
 import type { JSX } from "preact";
 import { useTranslation } from "react-i18next";
@@ -37,7 +37,7 @@ export function RouteCard({ route }: { route: RouteSummary }): JSX.Element {
       </p>
       <div class="mt-auto flex flex-wrap gap-2">
         <Chip>{stackName(route.stack)}</Chip>
-        <Chip>{route.language.toUpperCase()}</Chip>
+        <Chip>{languageNames[route.language]}</Chip>
       </div>
     </a>
   );

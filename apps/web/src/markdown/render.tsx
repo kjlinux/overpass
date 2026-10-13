@@ -2,7 +2,7 @@ import { h } from "preact";
 import type { ComponentChildren, JSX } from "preact";
 import { CodeBlock, InlineCode } from "../components/ui";
 import { safeHref } from "./links";
-import { slugify, textOf } from "./parse";
+import { anchorOf, textOf } from "./parse";
 import type { MarkdownNode } from "./parse";
 
 type Tag = string;
@@ -43,7 +43,7 @@ function renderCode({ token }: MarkdownNode, key: number): JSX.Element {
 /** Page titles are h1, so member headings start at h2 and stop at h4. */
 function renderHeading({ token, children }: MarkdownNode, key: number): JSX.Element {
   const level = Math.min(4, Math.max(2, Number(token.tag.slice(1))));
-  const id = slugify(textOf(children));
+  const id = anchorOf(textOf(children));
   return h(`h${String(level)}`, { id, key }, renderAll(children));
 }
 

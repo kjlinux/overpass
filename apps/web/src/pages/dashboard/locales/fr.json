@@ -13,11 +13,16 @@
     "heading": "Mes vérifications",
     "emptyTitle": "Aucune vérification",
     "emptyText": "Confirmez qu'un itinéraire marche encore chez vous. Chaque vérification rapporte 2 points.",
-    "action": "Parcourir les itinéraires"
+    "action": "Parcourir les itinéraires",
+    "environment": {
+      "test": "test",
+      "production": "production"
+    }
   },
   "points": {
     "heading": "Mes points",
     "caption": "Calculés à partir de vos contributions, jamais saisis.",
     "profile": "Voir mon profil public"
-  }
+  },
+  "sandboxSoon": "La piste d'essai arrive avec le prochain module."
 }

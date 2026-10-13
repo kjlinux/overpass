@@ -9,6 +9,7 @@ import type { JSX } from "preact";
 import { useState } from "preact/hooks";
 import { useTranslation } from "react-i18next";
 import { ConfirmDialog } from "../../components/ui";
+import { FormAlert } from "../../forms";
 import { Markdown } from "../../markdown";
 import { CheckList, PotholeList } from "./CommunityLists";
 import { Contents } from "./Contents";
@@ -27,10 +28,14 @@ export type RouteViewActions = {
 export type RouteViewProps = { route: RouteDetail; now: Date; actions: RouteViewActions };
 
 type Open = "verify" | "report" | "remove" | null;
+type Failure = (failure: ApiError | undefined) => void;
 
-type RailProps = RouteViewProps & { onOpen: (open: Open) => void; notice: string | null };
+/** What the last action said: a success sentence or the error the API returned. */
+type Outcome = { notice: string | null; failure: ApiError | undefined };
 
-function Rail({ route, now, onOpen, notice }: RailProps): JSX.Element {
+type RailProps = RouteViewProps & { onOpen: (open: Open) => void; outcome: Outcome };
+
+function Rail({ route, now, onOpen, outcome }: RailProps): JSX.Element {
   const { t } = useTranslation("routes");
   return (
     <aside
@@ -49,8 +54,9 @@ function Rail({ route, now, onOpen, notice }: RailProps): JSX.Element {
           }}
         />
         <p role="status" class="text-success empty:hidden">
-          {notice ?? ""}
+          {outcome.notice ?? ""}
         </p>
+        <FormAlert error={outcome.failure} />
         <Contents route={route} />
       </div>
     </aside>
@@ -58,8 +64,17 @@ function Rail({ route, now, onOpen, notice }: RailProps): JSX.Element {
 }
 
 /** Content first in the reading column; under 1024 px the state block sits before the checks. */
-function Body(props: RouteViewProps & { onOpen: (open: Open) => void }): JSX.Element {
-  const { route, now, actions, onOpen } = props;
+type BodyProps = RouteViewProps & { onOpen: (open: Open) => void; onFailure: Failure };
+
+function Body(props: BodyProps): JSX.Element {
+  const { route, now, actions, onOpen, onFailure } = props;
+  const [busyId, setBusyId] = useState<string | null>(null);
+  const setStatus = async (id: string, status: PotholeStatus) => {
+    if (busyId !== null) return;
+    setBusyId(id);
+    onFailure(await actions.setStatus(id, status));
+    setBusyId(null);
+  };
   return (
     <div class="min-w-0 lg:col-start-1 lg:row-start-1 lg:pr-12">
       <div class="max-w-prose py-8">
@@ -70,7 +85,8 @@ function Body(props: RouteViewProps & { onOpen: (open: Open) => void }): JSX.Ele
         onReport={() => {
           onOpen("report");
         }}
-        onStatus={(id, status) => void actions.setStatus(id, status)}
+        busyId={busyId}
+        onStatus={(id, status) => void setStatus(id, status)}
       />
       <StateBlock
         route={route}
@@ -89,17 +105,19 @@ type DialogsProps = {
   open: Open;
   close: () => void;
   onDone: (message: string) => void;
+  onFailure: Failure;
 };
 
-function RouteDialogs({ route, actions, open, close, onDone }: DialogsProps): JSX.Element {
+function RouteDialogs(props: DialogsProps): JSX.Element {
+  const { route, actions, open, close, onDone, onFailure } = props;
   const { t } = useTranslation("routes");
   const after = (message: string) => (error: ApiError | undefined) => {
     if (error === undefined) onDone(message);
     return error;
   };
-  const remove = () => {
+  const remove = async () => {
     close();
-    void actions.remove();
+    onFailure(await actions.remove());
   };
   return (
     <>
@@ -120,7 +138,7 @@ function RouteDialogs({ route, actions, open, close, onDone }: DialogsProps): JS
         description={t("detail.removeText")}
         confirmLabel={t("detail.remove")}
         destructive
-        onConfirm={remove}
+        onConfirm={() => void remove()}
         onCancel={close}
       />
     </>
@@ -130,23 +148,30 @@ function RouteDialogs({ route, actions, open, close, onDone }: DialogsProps): JS
 /** The detail of an itinerary: read it, then test it, verify it or report a pothole. */
 export function RouteView(props: RouteViewProps): JSX.Element {
   const [open, setOpen] = useState<Open>(null);
-  const [notice, setNotice] = useState<string | null>(null);
+  const [outcome, setOutcome] = useState<Outcome>({ notice: null, failure: undefined });
   const close = () => {
     setOpen(null);
+  };
+  const onDone = (notice: string) => {
+    setOutcome({ notice, failure: undefined });
+  };
+  const onFailure: Failure = (failure) => {
+    setOutcome({ notice: null, failure });
   };
   return (
     <article>
       <RouteHead route={props.route} />
       <div class="grid lg:grid-cols-[minmax(0,1fr)_320px]">
-        <Rail {...props} onOpen={setOpen} notice={notice} />
-        <Body {...props} onOpen={setOpen} />
+        <Rail {...props} onOpen={setOpen} outcome={outcome} />
+        <Body {...props} onOpen={setOpen} onFailure={onFailure} />
       </div>
       <RouteDialogs
         route={props.route}
         actions={props.actions}
         open={open}
         close={close}
-        onDone={setNotice}
+        onDone={onDone}
+        onFailure={onFailure}
       />
     </article>
   );

@@ -38,7 +38,7 @@ export function EditorFields({ form, services, languageLocked }: EditorFieldsPro
           <SelectField
             id="language"
             label={t("editor.language")}
-            {...(languageLocked ? {} : { help: t("editor.languageHelp") })}
+            help={t(languageLocked ? "editor.languageLocked" : "editor.languageHelp")}
             options={languageOptions}
             form={form}
           />

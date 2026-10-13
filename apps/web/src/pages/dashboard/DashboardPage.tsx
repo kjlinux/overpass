@@ -2,7 +2,7 @@ import type { Me, MyCheck, RouteSummary } from "@overpass/shared";
 import type { ComponentChildren, JSX } from "preact";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../app/useLanguage";
-import { ButtonLink, Skeleton } from "../../components/ui";
+import { Button, Skeleton } from "../../components/ui";
 import { Layout } from "../../layout";
 import { localizedPath } from "../../layout/nav";
 import { RequireSession, usePublicProfile } from "../../session";
@@ -64,9 +64,28 @@ function ChecksColumn(): JSX.Element {
   );
 }
 
+/** Shown but disabled, with its reason, until the sandbox module ships its page. */
+function SandboxShortcut(): JSX.Element {
+  const { t } = useTranslation("dashboard");
+  return (
+    <div class="flex flex-col items-start gap-2">
+      <Button
+        variant="primary"
+        aria-disabled="true"
+        aria-describedby="sandbox-note"
+        class="aria-disabled:cursor-not-allowed aria-disabled:border-rule aria-disabled:bg-surface aria-disabled:text-ink-2"
+      >
+        {t("sandbox")}
+      </Button>
+      <p id="sandbox-note" class="text-caption text-ink-2">
+        {t("sandboxSoon")}
+      </p>
+    </div>
+  );
+}
+
 function Board({ me }: { me: Me }): JSX.Element {
   const { t } = useTranslation("dashboard");
-  const language = useLanguage();
   return (
     <section class="py-12 md:py-16">
       <div class="flex flex-wrap items-end justify-between gap-6">
@@ -74,9 +93,7 @@ function Board({ me }: { me: Me }): JSX.Element {
           <h1 class="text-h1 font-semibold">{t("title")}</h1>
           <p class="mt-2 text-ink-2">{t("greeting", { handle: me.handle })}</p>
         </div>
-        <ButtonLink variant="primary" href={localizedPath(language, "/sandbox")}>
-          {t("sandbox")}
-        </ButtonLink>
+        <SandboxShortcut />
       </div>
       <div class="mt-10 grid lg:grid-cols-3 lg:divide-x lg:divide-rule lg:border-t lg:border-rule lg:pt-8">
         <RoutesColumn />

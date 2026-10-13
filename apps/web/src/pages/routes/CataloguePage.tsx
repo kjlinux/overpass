@@ -54,6 +54,20 @@ function Results({ query }: { query: CatalogueQuery }): JSX.Element {
   return <CatalogueResults page={page} onMore={() => void more()} loadingMore={loadingMore} />;
 }
 
+function CatalogueHeader(): JSX.Element {
+  const { t } = useTranslation("routes");
+  const language = useLanguage();
+  return (
+    <div class="flex flex-wrap items-end justify-between gap-6 border-b border-rule pb-6">
+      <div class="max-w-prose">
+        <h1 class="text-h1 font-semibold">{t("catalogue.title")}</h1>
+        <p class="mt-2 text-ink-2">{t("catalogue.intro")}</p>
+      </div>
+      <ButtonLink href={localizedPath(language, "/routes/new")}>{t("catalogue.write")}</ButtonLink>
+    </div>
+  );
+}
+
 /** Search, filters and cards; the filters live in the URL so a search can be shared. */
 export function CataloguePage(): JSX.Element {
   const { t } = useTranslation("routes");
@@ -67,15 +81,7 @@ export function CataloguePage(): JSX.Element {
   return (
     <Layout language={language}>
       <section class="py-12 md:py-16">
-        <div class="flex flex-wrap items-end justify-between gap-6 border-b border-rule pb-6">
-          <div class="max-w-prose">
-            <h1 class="text-h1 font-semibold">{t("catalogue.title")}</h1>
-            <p class="mt-2 text-ink-2">{t("catalogue.intro")}</p>
-          </div>
-          <ButtonLink href={localizedPath(language, "/routes/new")}>
-            {t("catalogue.write")}
-          </ButtonLink>
-        </div>
+        <CatalogueHeader />
         <div class="mt-8 grid gap-8 lg:grid-cols-[280px_minmax(0,1fr)] lg:gap-0">
           <div class="lg:border-r lg:border-rule lg:pr-8">
             <CatalogueFilters
@@ -85,9 +91,12 @@ export function CataloguePage(): JSX.Element {
               onApply={apply}
             />
           </div>
-          <div class="min-w-0 lg:pl-8">
+          <section aria-labelledby="results-heading" class="min-w-0 lg:pl-8">
+            <h2 id="results-heading" class="sr-only">
+              {t("catalogue.resultsHeading")}
+            </h2>
             <Results query={query} />
-          </div>
+          </section>
         </div>
       </section>
     </Layout>
