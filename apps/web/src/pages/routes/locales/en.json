@@ -130,5 +130,13 @@
     "submitEdit": "Save a new version",
     "cancel": "Cancel",
     "languageLocked": "A version keeps its language: to write another language, translate the sheet from its page."
+  },
+  "coverage": {
+    "heading": "Countries covered by {{service}}",
+    "intro": "Only confirmed countries are shown: by a dated source, or by a sheet that reached a clear road.",
+    "source": "Source consulted on {{date}}:",
+    "community": "Confirmed by members, through a sheet on a clear road:",
+    "route": "see the sheet",
+    "none": "No confirmed country yet. Publish a sheet and get it checked to complete the map."
   }
 }

@@ -1,11 +1,11 @@
-import type { RouteDetail } from "@overpass/shared";
+import type { RouteDetail, Service } from "@overpass/shared";
 import { LocationProvider } from "preact-iso";
 import { render } from "preact-render-to-string";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 import { setupTestI18n } from "../../i18n/test-i18n";
-import { detail } from "./fixtures";
+import { detail, services } from "./fixtures";
 import fr from "./locales/fr.json";
-import { RouteView, weeksWithChecks } from "./index";
+import { CoverageSection, RouteView, weeksWithChecks } from "./index";
 
 beforeAll(async () => {
   await setupTestI18n("fr");
@@ -93,6 +93,28 @@ describe("RouteView actions", () => {
       viewer: { isAuthor: false, eligibility: "anonymous", nextCheckAt: null },
     });
     expect(html).toContain("/fr/sign-in?next=");
+  });
+});
+
+describe("CoverageSection", () => {
+  const coverage = (service: Service) =>
+    render(
+      <LocationProvider>
+        <CoverageSection service={service} />
+      </LocationProvider>,
+    );
+
+  it("names each source with its consultation date, then what members confirmed", () => {
+    const html = coverage(services[0] as Service);
+    expect(html).toContain("Côte d’Ivoire");
+    expect(html).toContain('href="https://apps.apple.com/sn/app/wave-mobile-money/id1523884528"');
+    expect(html).toContain("13 oct. 2026");
+    expect(html).toContain("Ouganda");
+    expect(html).toContain(fr.coverage.community);
+  });
+
+  it("says when no country is confirmed yet", () => {
+    expect(coverage(services[1] as Service)).toContain(fr.coverage.none);
   });
 });
 

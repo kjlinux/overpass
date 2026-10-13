@@ -130,5 +130,13 @@
     "submitEdit": "Enregistrer une nouvelle version",
     "cancel": "Annuler",
     "languageLocked": "Une version garde sa langue : pour une autre langue, traduisez la fiche depuis sa page."
+  },
+  "coverage": {
+    "heading": "Pays couverts par {{service}}",
+    "intro": "Seuls les pays confirmés sont affichés : par une source datée, ou par une fiche passée en voie libre.",
+    "source": "Source consultée le {{date}} :",
+    "community": "Confirmés par les membres, grâce à une fiche en voie libre :",
+    "route": "voir la fiche",
+    "none": "Aucun pays confirmé pour l'instant. Publiez une fiche et faites-la vérifier pour compléter la carte."
   }
 }
