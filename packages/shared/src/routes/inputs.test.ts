@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   checkCreateInput,
   fieldErrors,
+  fieldMessage,
   potholeCreateInput,
   potholeUpdateInput,
   routeCreateInput,
@@ -125,6 +126,12 @@ describe("check and pothole inputs", () => {
     expect(codes(potholeUpdateInput.safeParse({ status: "open" }))).toEqual({
       status: "status_invalid",
     });
+  });
+});
+
+describe("fieldMessage", () => {
+  it("falls back to the required message for a code it does not know", () => {
+    expect(fieldMessage("no_such_code", "fr")).toBe(fieldMessage("required", "fr"));
   });
 });
 
