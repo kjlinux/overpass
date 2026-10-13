@@ -44,6 +44,15 @@ describe("routes and checks migrations", () => {
     expect(rows.filter((row) => row.simulated)).toHaveLength(4);
   });
 
+  it("keeps every candidate country unconfirmed, each with its source", async () => {
+    const rows = await executor.query<{ confirmed: boolean; source: string }>(
+      "select confirmed, source from service_countries",
+    );
+    expect(rows.length).toBeGreaterThan(30);
+    expect(rows.filter((row) => row.confirmed)).toEqual([]);
+    expect(rows.every((row) => row.source.startsWith("https://"))).toBe(true);
+  });
+
   it("indexes French itineraries with French stemming", async () => {
     await insertRoute("fr", "Encaisser les paiements Wave", "Les webhooks signés arrivent.");
     const rows = await executor.query(

@@ -29,7 +29,7 @@ export async function createTestApp(options: { now?: () => Date } = {}) {
     await app.close();
     await database.close();
   };
-  return { app, mailer, close };
+  return { app, mailer, close, db: database.db };
 }
 
 /** The session cookie set by a response, as a Cookie header value. */
