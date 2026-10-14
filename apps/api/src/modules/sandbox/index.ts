@@ -7,6 +7,7 @@ import type { AccountResolver } from "../accounts/index.js";
 import { createGateway } from "./gateway.js";
 import { registerGatewayRoutes } from "./gateway-routes.js";
 import { systemResolver } from "./network/resolve.js";
+import { registerOpenApiRoute } from "./openapi/route.js";
 import type { HostResolver } from "./network/resolve.js";
 import { eventsRepository, keysRepository } from "./repository.js";
 import { memoryBus } from "./relay/bus.js";
@@ -20,6 +21,7 @@ import { createSandboxService } from "./service.js";
 export { isPublicAddress } from "./network/addresses.js";
 export { publicAddresses, systemResolver } from "./network/resolve.js";
 export type { HostResolver } from "./network/resolve.js";
+export { buildSandboxOpenApi, openApiFile } from "./openapi/build.js";
 export { memoryBus, postgresBus } from "./relay/bus.js";
 export type { RelayBus } from "./relay/bus.js";
 
@@ -66,6 +68,7 @@ export async function registerSandbox(
   await app.register((scope) => {
     registerSandboxRoutes(scope, service, options.resolveAccount);
     registerRelayRoutes(scope, relayDeps);
+    registerOpenApiRoute(scope, options.providers);
     return Promise.resolve();
   });
   await app.register((scope) => {

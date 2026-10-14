@@ -76,6 +76,7 @@ export type WebhookSpec = {
   secretPrefix?: string;
   /** Payload schema of each documented event type, for the OpenAPI webhooks section. */
   events?: Readonly<Record<string, ZodType>>;
+  signatureHeader?: string;
   render(event: ProviderEvent, options: { secret: string; now: Date }): RenderedWebhook;
 };
 

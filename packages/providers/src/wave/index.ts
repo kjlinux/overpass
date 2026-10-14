@@ -4,6 +4,7 @@ import { waveErrors } from "./errors.js";
 import en from "./locales/en.json" with { type: "json" };
 import fr from "./locales/fr.json" with { type: "json" };
 import protocol from "./protocol.json" with { type: "json" };
+import { waveEvents } from "./schemas.js";
 import type { WaveOutcome } from "./session.js";
 import { signWave, waveJson } from "./wire.js";
 
@@ -35,6 +36,7 @@ export const wave: ProviderAdapter<WaveOutcome> = {
     duplicate_webhook: { payment: "succeeded" },
     late_webhook: { payment: "succeeded" },
   },
+  auth: { type: "bearer" },
   credential: (request) => bearer.exec(request.headers.authorization ?? "")?.[1],
   errors: {
     notFound: waveErrors.unknownRoute,
@@ -44,6 +46,8 @@ export const wave: ProviderAdapter<WaveOutcome> = {
   endpoints: waveEndpoints,
   webhooks: {
     secretPrefix: "wave_sn_WHS_",
+    events: waveEvents,
+    signatureHeader: "wave-signature",
     render(event, { secret, now }) {
       const body = waveJson({ id: event.id, type: event.type, data: event.payload });
       const signature = signWave(secret, Math.floor(now.getTime() / 1000), body);

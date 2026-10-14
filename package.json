@@ -26,6 +26,7 @@
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "licenses": "node scripts/licenses.ts",
+    "openapi": "tsc -b tsconfig.build.json && npm run openapi -w @overpass/api",
     "check:repo": "node scripts/check-repo.ts",
     "check:budget": "npm run build && node scripts/check-budget.ts",
     "check": "npm run typecheck && npm run lint && npm run format:check && npm run test:coverage && npm run check:repo && npm run check:budget",

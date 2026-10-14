@@ -22,7 +22,9 @@ type Doc = {
   components: { securitySchemes: Record<string, unknown> };
 };
 
-const english = buildSandboxOpenApi(providers, "en") as Doc;
+const english = buildSandboxOpenApi(providers, "en") as unknown as Doc;
+const notHeaders = (operation: Operation | undefined) =>
+  operation?.parameters?.filter((parameter) => parameter.in !== "header");
 
 describe("buildSandboxOpenApi", () => {
   it("describes an OpenAPI 3.1 document for the simulator only", () => {
@@ -53,13 +55,20 @@ describe("buildSandboxOpenApi", () => {
 
   it("turns path and query parameters into OpenAPI parameters", () => {
     const read = english.paths["/v1/sandbox/wave/v1/checkout/sessions/{id}"]?.get;
-    expect(read?.parameters).toEqual([
+    expect(notHeaders(read)).toEqual([
       expect.objectContaining({ name: "id", in: "path", required: true }),
     ]);
     const byTransaction = english.paths["/v1/sandbox/wave/v1/checkout/sessions"]?.get;
-    expect(byTransaction?.parameters).toEqual([
+    expect(notHeaders(byTransaction)).toEqual([
       expect.objectContaining({ name: "transaction_id", in: "query" }),
     ]);
+  });
+
+  it("lets every provider call choose its scenario by header", () => {
+    const create = english.paths["/v1/sandbox/wave/v1/checkout/sessions"]?.post;
+    expect(create?.parameters).toContainEqual(
+      expect.objectContaining({ name: "Overpass-Scenario", in: "header" }),
+    );
   });
 
   it("lists every documented endpoint of every provider", () => {
@@ -90,7 +99,7 @@ describe("buildSandboxOpenApi", () => {
   });
 
   it("speaks the reader's language and marks the providers unofficial", () => {
-    const french = buildSandboxOpenApi(providers, "fr") as Doc;
+    const french = buildSandboxOpenApi(providers, "fr") as unknown as Doc;
     expect(french.paths["/v1/sandbox/listen"]?.get?.summary).not.toBe(
       english.paths["/v1/sandbox/listen"]?.get?.summary,
     );

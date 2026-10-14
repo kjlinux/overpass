@@ -9,5 +9,13 @@
     "Undocumented bodies: validation errors are 400, an exceeded quota is 429 and a conflict is 409, the last two without a body.",
     "Retries: five attempts over about 37 minutes, instead of the 3 days Wave announces.",
     "wave_launch_url leads to an Overpass page, never to Wave."
-  ]
+  ],
+  "endpoints": {
+    "POST /v1/checkout/sessions": "Create a checkout session",
+    "GET /v1/checkout/sessions": "Find a session by transaction id",
+    "GET /v1/checkout/sessions/search": "Search the sessions of a client reference",
+    "GET /v1/checkout/sessions/:id": "Read a checkout session",
+    "POST /v1/checkout/sessions/:id/refund": "Refund a paid session",
+    "POST /v1/checkout/sessions/:id/expire": "Expire an open session"
+  }
 }

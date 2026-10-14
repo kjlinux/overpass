@@ -9,5 +9,13 @@
     "Corps non documentés : erreurs de validation en 400, quota dépassé en 429 et conflit en 409, ces deux derniers sans corps.",
     "Reprises : cinq tentatives sur environ 37 minutes, au lieu des 3 jours annoncés par Wave.",
     "wave_launch_url mène à une page d'Overpass, jamais à Wave."
-  ]
+  ],
+  "endpoints": {
+    "POST /v1/checkout/sessions": "Créer une session de paiement",
+    "GET /v1/checkout/sessions": "Retrouver une session par son identifiant de transaction",
+    "GET /v1/checkout/sessions/search": "Chercher les sessions d'une référence client",
+    "GET /v1/checkout/sessions/:id": "Lire une session de paiement",
+    "POST /v1/checkout/sessions/:id/refund": "Rembourser une session payée",
+    "POST /v1/checkout/sessions/:id/expire": "Faire expirer une session ouverte"
+  }
 }

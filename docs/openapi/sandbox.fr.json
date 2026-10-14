@@ -1,0 +1,1507 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "API du simulateur Overpass",
+    "version": "1",
+    "description": "Opérateurs simulés à partir de leur documentation publique, sans lien avec les opérateurs réels : chaque opérateur est non officiel. Authentifiez-vous avec une clé de test Overpass, là où l'opérateur attend son identifiant. L'en-tête Overpass-Scenario choisit le scénario d'un appel.",
+    "x-providers": [
+      {
+        "id": "wave",
+        "name": "Wave",
+        "unofficial": true,
+        "docsUrl": "https://docs.wave.com/checkout",
+        "docsVersion": "Changelog 2024-03-29",
+        "consultedAt": "2026-10-14"
+      }
+    ]
+  },
+  "paths": {
+    "/v1/sandbox/wave/v1/checkout/sessions": {
+      "post": {
+        "summary": "Créer une session de paiement",
+        "tags": [
+          "Wave"
+        ],
+        "security": [
+          {
+            "wave": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Overpass-Scenario",
+            "in": "header",
+            "required": false,
+            "description": "Scénario de cet appel, à la place de celui de la clé",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "success",
+                "insufficient_funds",
+                "timeout",
+                "duplicate_webhook",
+                "late_webhook"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "amount": {
+                    "type": "string",
+                    "pattern": "^(0|[1-9]\\d*)(\\.\\d{1,2})?$"
+                  },
+                  "currency": {
+                    "type": "string",
+                    "pattern": "^[A-Z]{3}$"
+                  },
+                  "error_url": {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  "success_url": {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  "client_reference": {
+                    "type": "string",
+                    "maxLength": 255
+                  },
+                  "restrict_payer_mobile": {
+                    "type": "string",
+                    "pattern": "^\\+\\d{6,15}$"
+                  },
+                  "enforce_payer_mobile": {
+                    "type": "string",
+                    "pattern": "^\\+\\d{6,15}$"
+                  },
+                  "aggregated_merchant_id": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "amount",
+                  "currency",
+                  "error_url",
+                  "success_url"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "amount": {
+                      "type": "string"
+                    },
+                    "checkout_status": {
+                      "type": "string",
+                      "enum": [
+                        "open",
+                        "complete",
+                        "expired"
+                      ]
+                    },
+                    "client_reference": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "currency": {
+                      "type": "string"
+                    },
+                    "error_url": {
+                      "type": "string"
+                    },
+                    "last_payment_error": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string"
+                            },
+                            "message": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "message"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "business_name": {
+                      "type": "string"
+                    },
+                    "payment_status": {
+                      "type": "string",
+                      "enum": [
+                        "processing",
+                        "cancelled",
+                        "succeeded"
+                      ]
+                    },
+                    "transaction_id": {
+                      "type": "string"
+                    },
+                    "aggregated_merchant_id": {
+                      "type": "string"
+                    },
+                    "restrict_payer_mobile": {
+                      "type": "string"
+                    },
+                    "enforce_payer_mobile": {
+                      "type": "string"
+                    },
+                    "success_url": {
+                      "type": "string"
+                    },
+                    "wave_launch_url": {
+                      "type": "string"
+                    },
+                    "when_completed": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "when_created": {
+                      "type": "string"
+                    },
+                    "when_expires": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "amount",
+                    "checkout_status",
+                    "client_reference",
+                    "currency",
+                    "error_url",
+                    "last_payment_error",
+                    "business_name",
+                    "payment_status",
+                    "transaction_id",
+                    "success_url",
+                    "wave_launch_url",
+                    "when_completed",
+                    "when_created",
+                    "when_expires"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "details": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "loc": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "msg": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "details"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Retrouver une session par son identifiant de transaction",
+        "tags": [
+          "Wave"
+        ],
+        "security": [
+          {
+            "wave": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "transaction_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Overpass-Scenario",
+            "in": "header",
+            "required": false,
+            "description": "Scénario de cet appel, à la place de celui de la clé",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "success",
+                "insufficient_funds",
+                "timeout",
+                "duplicate_webhook",
+                "late_webhook"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "amount": {
+                      "type": "string"
+                    },
+                    "checkout_status": {
+                      "type": "string",
+                      "enum": [
+                        "open",
+                        "complete",
+                        "expired"
+                      ]
+                    },
+                    "client_reference": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "currency": {
+                      "type": "string"
+                    },
+                    "error_url": {
+                      "type": "string"
+                    },
+                    "last_payment_error": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string"
+                            },
+                            "message": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "message"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "business_name": {
+                      "type": "string"
+                    },
+                    "payment_status": {
+                      "type": "string",
+                      "enum": [
+                        "processing",
+                        "cancelled",
+                        "succeeded"
+                      ]
+                    },
+                    "transaction_id": {
+                      "type": "string"
+                    },
+                    "aggregated_merchant_id": {
+                      "type": "string"
+                    },
+                    "restrict_payer_mobile": {
+                      "type": "string"
+                    },
+                    "enforce_payer_mobile": {
+                      "type": "string"
+                    },
+                    "success_url": {
+                      "type": "string"
+                    },
+                    "wave_launch_url": {
+                      "type": "string"
+                    },
+                    "when_completed": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "when_created": {
+                      "type": "string"
+                    },
+                    "when_expires": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "amount",
+                    "checkout_status",
+                    "client_reference",
+                    "currency",
+                    "error_url",
+                    "last_payment_error",
+                    "business_name",
+                    "payment_status",
+                    "transaction_id",
+                    "success_url",
+                    "wave_launch_url",
+                    "when_completed",
+                    "when_created",
+                    "when_expires"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "details": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "loc": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "msg": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "details"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sandbox/wave/v1/checkout/sessions/search": {
+      "get": {
+        "summary": "Chercher les sessions d'une référence client",
+        "tags": [
+          "Wave"
+        ],
+        "security": [
+          {
+            "wave": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "client_reference",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Overpass-Scenario",
+            "in": "header",
+            "required": false,
+            "description": "Scénario de cet appel, à la place de celui de la clé",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "success",
+                "insufficient_funds",
+                "timeout",
+                "duplicate_webhook",
+                "late_webhook"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "result": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string"
+                          },
+                          "amount": {
+                            "type": "string"
+                          },
+                          "checkout_status": {
+                            "type": "string",
+                            "enum": [
+                              "open",
+                              "complete",
+                              "expired"
+                            ]
+                          },
+                          "client_reference": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "currency": {
+                            "type": "string"
+                          },
+                          "error_url": {
+                            "type": "string"
+                          },
+                          "last_payment_error": {
+                            "anyOf": [
+                              {
+                                "type": "object",
+                                "properties": {
+                                  "code": {
+                                    "type": "string"
+                                  },
+                                  "message": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "code",
+                                  "message"
+                                ],
+                                "additionalProperties": false
+                              },
+                              {
+                                "type": "null"
+                              }
+                            ]
+                          },
+                          "business_name": {
+                            "type": "string"
+                          },
+                          "payment_status": {
+                            "type": "string",
+                            "enum": [
+                              "processing",
+                              "cancelled",
+                              "succeeded"
+                            ]
+                          },
+                          "transaction_id": {
+                            "type": "string"
+                          },
+                          "aggregated_merchant_id": {
+                            "type": "string"
+                          },
+                          "restrict_payer_mobile": {
+                            "type": "string"
+                          },
+                          "enforce_payer_mobile": {
+                            "type": "string"
+                          },
+                          "success_url": {
+                            "type": "string"
+                          },
+                          "wave_launch_url": {
+                            "type": "string"
+                          },
+                          "when_completed": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "when_created": {
+                            "type": "string"
+                          },
+                          "when_expires": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "amount",
+                          "checkout_status",
+                          "client_reference",
+                          "currency",
+                          "error_url",
+                          "last_payment_error",
+                          "business_name",
+                          "payment_status",
+                          "transaction_id",
+                          "success_url",
+                          "wave_launch_url",
+                          "when_completed",
+                          "when_created",
+                          "when_expires"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "result"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "details": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "loc": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "msg": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "loc",
+                          "msg"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message",
+                    "details"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sandbox/wave/v1/checkout/sessions/{id}": {
+      "get": {
+        "summary": "Lire une session de paiement",
+        "tags": [
+          "Wave"
+        ],
+        "security": [
+          {
+            "wave": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Overpass-Scenario",
+            "in": "header",
+            "required": false,
+            "description": "Scénario de cet appel, à la place de celui de la clé",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "success",
+                "insufficient_funds",
+                "timeout",
+                "duplicate_webhook",
+                "late_webhook"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "amount": {
+                      "type": "string"
+                    },
+                    "checkout_status": {
+                      "type": "string",
+                      "enum": [
+                        "open",
+                        "complete",
+                        "expired"
+                      ]
+                    },
+                    "client_reference": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "currency": {
+                      "type": "string"
+                    },
+                    "error_url": {
+                      "type": "string"
+                    },
+                    "last_payment_error": {
+                      "anyOf": [
+                        {
+                          "type": "object",
+                          "properties": {
+                            "code": {
+                              "type": "string"
+                            },
+                            "message": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "code",
+                            "message"
+                          ],
+                          "additionalProperties": false
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "business_name": {
+                      "type": "string"
+                    },
+                    "payment_status": {
+                      "type": "string",
+                      "enum": [
+                        "processing",
+                        "cancelled",
+                        "succeeded"
+                      ]
+                    },
+                    "transaction_id": {
+                      "type": "string"
+                    },
+                    "aggregated_merchant_id": {
+                      "type": "string"
+                    },
+                    "restrict_payer_mobile": {
+                      "type": "string"
+                    },
+                    "enforce_payer_mobile": {
+                      "type": "string"
+                    },
+                    "success_url": {
+                      "type": "string"
+                    },
+                    "wave_launch_url": {
+                      "type": "string"
+                    },
+                    "when_completed": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "when_created": {
+                      "type": "string"
+                    },
+                    "when_expires": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "id",
+                    "amount",
+                    "checkout_status",
+                    "client_reference",
+                    "currency",
+                    "error_url",
+                    "last_payment_error",
+                    "business_name",
+                    "payment_status",
+                    "transaction_id",
+                    "success_url",
+                    "wave_launch_url",
+                    "when_completed",
+                    "when_created",
+                    "when_expires"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sandbox/wave/v1/checkout/sessions/{id}/refund": {
+      "post": {
+        "summary": "Rembourser une session payée",
+        "tags": [
+          "Wave"
+        ],
+        "security": [
+          {
+            "wave": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Overpass-Scenario",
+            "in": "header",
+            "required": false,
+            "description": "Scénario de cet appel, à la place de celui de la clé",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "success",
+                "insufficient_funds",
+                "timeout",
+                "duplicate_webhook",
+                "late_webhook"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sandbox/wave/v1/checkout/sessions/{id}/expire": {
+      "post": {
+        "summary": "Faire expirer une session ouverte",
+        "tags": [
+          "Wave"
+        ],
+        "security": [
+          {
+            "wave": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Overpass-Scenario",
+            "in": "header",
+            "required": false,
+            "description": "Scénario de cet appel, à la place de celui de la clé",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "success",
+                "insufficient_funds",
+                "timeout",
+                "duplicate_webhook",
+                "late_webhook"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        }
+      }
+    },
+    "/v1/sandbox/listen": {
+      "get": {
+        "summary": "Recevoir les webhooks de sa clé sur son poste (relais local, flux SSE)",
+        "description": "Ouvre une connexion sortante qui transmet chaque webhook avec son corps brut et ses en-têtes. Après une coupure, envoyez Last-Event-ID pour recevoir les webhooks manqués.",
+        "tags": [
+          "Overpass"
+        ],
+        "security": [
+          {
+            "overpass": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Last-Event-ID",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ouvre une connexion sortante qui transmet chaque webhook avec son corps brut et ses en-têtes. Après une coupure, envoyez Last-Event-ID pour recevoir les webhooks manqués.",
+            "content": {
+              "text/event-stream": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "provider": {
+                          "type": "string"
+                        },
+                        "keyPrefix": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "provider",
+                        "keyPrefix"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "deliveryId": {
+                          "type": "string",
+                          "format": "uuid",
+                          "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                        },
+                        "eventType": {
+                          "type": "string"
+                        },
+                        "source": {
+                          "type": "string",
+                          "enum": [
+                            "simulated",
+                            "provider_callback"
+                          ]
+                        },
+                        "method": {
+                          "type": "string",
+                          "const": "POST"
+                        },
+                        "headers": {
+                          "type": "object",
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "additionalProperties": {
+                            "type": "string"
+                          }
+                        },
+                        "body": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "deliveryId",
+                        "eventType",
+                        "source",
+                        "method",
+                        "headers",
+                        "body"
+                      ],
+                      "additionalProperties": false
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "429": {
+            "description": "Too Many Requests"
+          }
+        }
+      }
+    },
+    "/v1/sandbox/deliveries/{id}/result": {
+      "post": {
+        "summary": "Signaler ce qu'a répondu le serveur local",
+        "tags": [
+          "Overpass"
+        ],
+        "security": [
+          {
+            "overpass": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "anyOf": [
+                      {
+                        "type": "integer",
+                        "minimum": 100,
+                        "maximum": 599
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "durationMs": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 600000
+                  },
+                  "error": {
+                    "type": "string",
+                    "enum": [
+                      "timeout",
+                      "connection_failed"
+                    ]
+                  }
+                },
+                "required": [
+                  "status",
+                  "durationMs"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    }
+  },
+  "webhooks": {
+    "wave.checkout.session.completed": {
+      "post": {
+        "summary": "Webhook simulé, signé comme le documente l'opérateur",
+        "tags": [
+          "Wave"
+        ],
+        "parameters": [
+          {
+            "name": "wave-signature",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "type": "string",
+                    "const": "checkout.session.completed"
+                  },
+                  "data": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "amount": {
+                        "type": "string"
+                      },
+                      "checkout_status": {
+                        "type": "string",
+                        "enum": [
+                          "open",
+                          "complete",
+                          "expired"
+                        ]
+                      },
+                      "client_reference": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "currency": {
+                        "type": "string"
+                      },
+                      "error_url": {
+                        "type": "string"
+                      },
+                      "last_payment_error": {
+                        "anyOf": [
+                          {
+                            "type": "object",
+                            "properties": {
+                              "code": {
+                                "type": "string"
+                              },
+                              "message": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "code",
+                              "message"
+                            ],
+                            "additionalProperties": false
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "business_name": {
+                        "type": "string"
+                      },
+                      "payment_status": {
+                        "type": "string",
+                        "enum": [
+                          "processing",
+                          "cancelled",
+                          "succeeded"
+                        ]
+                      },
+                      "transaction_id": {
+                        "type": "string"
+                      },
+                      "aggregated_merchant_id": {
+                        "type": "string"
+                      },
+                      "restrict_payer_mobile": {
+                        "type": "string"
+                      },
+                      "enforce_payer_mobile": {
+                        "type": "string"
+                      },
+                      "success_url": {
+                        "type": "string"
+                      },
+                      "wave_launch_url": {
+                        "type": "string"
+                      },
+                      "when_completed": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "when_created": {
+                        "type": "string"
+                      },
+                      "when_expires": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "amount",
+                      "checkout_status",
+                      "client_reference",
+                      "currency",
+                      "error_url",
+                      "last_payment_error",
+                      "business_name",
+                      "payment_status",
+                      "transaction_id",
+                      "success_url",
+                      "wave_launch_url",
+                      "when_completed",
+                      "when_created",
+                      "when_expires"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "id",
+                  "type",
+                  "data"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "wave.checkout.session.payment_failed": {
+      "post": {
+        "summary": "Webhook simulé, signé comme le documente l'opérateur",
+        "tags": [
+          "Wave"
+        ],
+        "parameters": [
+          {
+            "name": "wave-signature",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "type": "string",
+                    "const": "checkout.session.payment_failed"
+                  },
+                  "data": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "payment_status": {
+                        "type": "string",
+                        "const": "failed"
+                      },
+                      "checkout_status": {
+                        "type": "string",
+                        "const": "failed"
+                      },
+                      "last_payment_error": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "string"
+                          },
+                          "message": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "code",
+                          "message"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "required": [
+                      "id",
+                      "payment_status",
+                      "checkout_status",
+                      "last_payment_error"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "id",
+                  "type",
+                  "data"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "wave": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Clé de test Overpass"
+      },
+      "overpass": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Clé de test Overpass"
+      }
+    }
+  }
+}

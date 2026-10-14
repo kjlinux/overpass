@@ -1,5 +1,14 @@
 import type { Endpoint, EndpointInput, ObjectStore } from "@overpass/simulator";
 import { missing, waveErrors } from "./errors.js";
+import {
+  checkoutSession,
+  referenceQuery,
+  searchResult,
+  sessionCreateBody,
+  transactionQuery,
+  validationError,
+  waveError,
+} from "./schemas.js";
 import { openSession, settle } from "./session.js";
 import type { Session, WaveOutcome } from "./session.js";
 import { validateSession } from "./validation.js";
@@ -59,12 +68,39 @@ async function expire({ params, store, now }: Input) {
   return { response: { status: 200, body: null } };
 }
 
+const found404 = { 200: checkoutSession, 404: waveError };
+
 /** Paths of https://docs.wave.com/checkout; "search" precedes ":id" so it is not read as an id. */
 export const waveEndpoints: Endpoint<WaveOutcome>[] = [
-  { method: "POST", path: "/v1/checkout/sessions", handle: create },
-  { method: "GET", path: "/v1/checkout/sessions", handle: byTransaction },
-  { method: "GET", path: "/v1/checkout/sessions/search", handle: search },
-  { method: "GET", path: "/v1/checkout/sessions/:id", handle: read },
-  { method: "POST", path: "/v1/checkout/sessions/:id/refund", handle: refund },
-  { method: "POST", path: "/v1/checkout/sessions/:id/expire", handle: expire },
+  {
+    method: "POST",
+    path: "/v1/checkout/sessions",
+    handle: create,
+    docs: { body: sessionCreateBody, responses: { 200: checkoutSession, 400: validationError } },
+  },
+  {
+    method: "GET",
+    path: "/v1/checkout/sessions",
+    handle: byTransaction,
+    docs: { query: transactionQuery, responses: { ...found404, 400: validationError } },
+  },
+  {
+    method: "GET",
+    path: "/v1/checkout/sessions/search",
+    handle: search,
+    docs: { query: referenceQuery, responses: { 200: searchResult, 400: validationError } },
+  },
+  { method: "GET", path: "/v1/checkout/sessions/:id", handle: read, docs: { responses: found404 } },
+  {
+    method: "POST",
+    path: "/v1/checkout/sessions/:id/refund",
+    handle: refund,
+    docs: { responses: { 200: null, 400: waveError, 404: waveError } },
+  },
+  {
+    method: "POST",
+    path: "/v1/checkout/sessions/:id/expire",
+    handle: expire,
+    docs: { responses: { 200: null, 404: waveError, 409: null } },
+  },
 ];
