@@ -5,7 +5,8 @@ describe("createSseParser", () => {
   it("emits complete frames whatever the chunk boundaries", () => {
     const parser = createSseParser();
     const text = 'event: ready\ndata: {"a":1}\n\nid: 7\nevent: webhook\ndata: {"b":2}\n\n';
-    const frames = [...text].flatMap((character) => parser.push(character));
+    const characters = Array.from({ length: text.length }, (_, index) => text.charAt(index));
+    const frames = characters.flatMap((character) => parser.push(character));
     expect(frames).toEqual([
       { event: "ready", id: undefined, data: '{"a":1}' },
       { event: "webhook", id: "7", data: '{"b":2}' },

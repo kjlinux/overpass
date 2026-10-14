@@ -1,4 +1,5 @@
 import type { ServerResponse } from "node:http";
+import type { RelayWebhook } from "@overpass/shared";
 import type { RelayDelivery } from "./repository.js";
 
 export const heartbeatMs = 15_000;
@@ -20,11 +21,12 @@ export function writeEvent(raw: ServerResponse, event: string, data: unknown, id
 
 /** The body travels as the exact string the provider signed; headers travel untouched. */
 export function writeDelivery(raw: ServerResponse, delivery: RelayDelivery): void {
-  const data = {
+  const data: RelayWebhook = {
     deliveryId: delivery.id,
     eventType: delivery.eventType,
+    source: "simulated",
     method: "POST",
-    headers: delivery.headers,
+    headers: delivery.headers as Record<string, string>,
     body: delivery.body,
   };
   writeEvent(raw, "webhook", data, delivery.seq);

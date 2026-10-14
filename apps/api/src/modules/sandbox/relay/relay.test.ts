@@ -86,6 +86,7 @@ describe("GET /v1/sandbox/listen", () => {
     expect(message.id).toMatch(/^\d+$/);
     expect(message.data).toMatchObject({
       method: "POST",
+      source: "simulated",
       headers: { "content-type": "application/json" },
       eventType: "payment.paid",
     });

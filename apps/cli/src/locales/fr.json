@@ -1,0 +1,23 @@
+{
+  "help": "Usage : overpass listen --forward-to <url> --key <clé de test> --api <url de l'API Overpass>\n\nRejoue sur votre serveur local les webhooks simulés par la piste d'essai Overpass.\nConnexion sortante uniquement : ni tunnel, ni URL publique, ni port ouvert.\n\nOptions :\n  --forward-to  URL de votre serveur local, par exemple http://localhost:3000/webhook\n  --key         clé de test Overpass (ou variable OVERPASS_KEY)\n  --api         URL de l'API Overpass (ou variable OVERPASS_API_URL)\n  --help        affiche cette aide\n",
+  "ready": "Relais prêt pour {provider}, clé {keyPrefix}. Webhooks rejoués vers {forwardTo}. Ctrl+C pour arrêter.",
+  "forwarded": "{time}  {eventType}  {status} en {duration} ms",
+  "forward_failed": "{time}  {eventType}  échec : {error}",
+  "reconnecting": "Connexion perdue. Nouvel essai dans {seconds} s.",
+  "report_failed": "Le résultat de cette livraison n'a pas pu être envoyé à Overpass.",
+  "unauthorized": "Clé de test refusée. Vérifiez qu'elle est active et copiée en entier depuis la piste d'essai.",
+  "stopped": "Relais arrêté.",
+  "errors": {
+    "missing_forward": "Indiquez votre serveur local avec --forward-to, par exemple http://localhost:3000/webhook.",
+    "missing_key": "Indiquez votre clé de test avec --key ou la variable OVERPASS_KEY.",
+    "missing_api": "Indiquez l'API Overpass avec --api ou la variable OVERPASS_API_URL.",
+    "invalid_forward": "--forward-to doit être une URL http ou https.",
+    "invalid_key": "La clé doit commencer par ovp_test_.",
+    "invalid_api": "--api doit être une URL http ou https.",
+    "unknown_command": "Commande inconnue. Utilisez overpass listen ou overpass --help."
+  },
+  "failures": {
+    "timeout": "pas de réponse à temps",
+    "connection_failed": "serveur local injoignable"
+  }
+}
