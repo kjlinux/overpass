@@ -5,8 +5,8 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { sendWebhook } from "./http-client.js";
 
 type Received = {
-  method?: string;
-  url?: string;
+  method: string | undefined;
+  url: string | undefined;
   headers: IncomingMessage["headers"];
   body: string;
 };
@@ -35,7 +35,14 @@ beforeEach(async () => {
   await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
   port = (server.address() as AddressInfo).port;
 });
-afterEach(() => new Promise<void>((resolve) => server.close(() => resolve())));
+afterEach(
+  () =>
+    new Promise<void>((resolve) => {
+      server.close(() => {
+        resolve();
+      });
+    }),
+);
 
 const body = '{"id":"evt_1", "type":"checkout.session.completed", "data":{"amount":"1000"}}';
 const headers = { "content-type": "application/json", "wave-signature": "t=1,v1=abc" };

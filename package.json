@@ -14,6 +14,7 @@
     "dev:api": "tsc -b tsconfig.build.json && npm run dev -w @overpass/api",
     "dev:web": "tsc -b tsconfig.build.json && npm run dev -w @overpass/web",
     "dev:mcp": "tsc -b tsconfig.build.json && npm run dev -w @overpass/mcp",
+    "dev:worker": "tsc -b tsconfig.build.json && npm run dev:worker -w @overpass/api",
     "db:up": "docker compose up -d --wait db",
     "db:down": "docker compose down",
     "db:migrate": "npm run db:migrate -w @overpass/api",

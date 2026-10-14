@@ -59,3 +59,7 @@ export async function registerSandbox(
     return Promise.resolve();
   });
 }
+export { createDeliveryWorker, relayChannel } from "./delivery/worker.js";
+export type { DeliveryWorker, Notifier } from "./delivery/worker.js";
+export { defaultLoop, startWorkerLoop } from "./delivery/loop.js";
+export { postgresNotifier } from "./delivery/notifier.js";
