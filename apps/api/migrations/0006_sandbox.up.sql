@@ -60,6 +60,8 @@ create table sandbox_deliveries (
   duration_ms integer,
   last_error text,
   due_at timestamptz not null,
+  -- A claimed delivery is invisible to other workers until its lease ends.
+  leased_until timestamptz,
   sent_at timestamptz,
   delivered_at timestamptz,
   created_at timestamptz not null default now()
