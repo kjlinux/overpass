@@ -22,7 +22,10 @@
   },
   "scenario": {
     "heading": "Scénario",
-    "success": { "label": "Paiement réussi", "help": "Le webhook de succès, livré tout de suite." },
+    "success": {
+      "label": "Paiement réussi",
+      "help": "Le webhook de succès, livré tout de suite."
+    },
     "insufficient_funds": {
       "label": "Solde insuffisant",
       "help": "Le paiement échoue, le webhook d'échec part tout de suite."
@@ -48,14 +51,14 @@
     "revealTitle": "Copiez cette clé maintenant.",
     "revealBody": "Overpass n'en garde qu'une empreinte : elle ne sera plus jamais affichée.",
     "meta": "Expire le {{date}}, quota de {{quota}} appels par jour",
-    "current": "Clé utilisée",
     "use": "Utiliser",
     "revoke": "Révoquer",
     "revokeTitle": "Révoquer cette clé ?",
     "revokeBody": "Les appels et le relais qui l'utilisent seront refusés aussitôt. Son historique reste visible 7 jours.",
     "revokeConfirm": "Révoquer la clé",
     "secret": "Secret des webhooks",
-    "secretHelp": "Vérifiez la signature des webhooks avec ce secret, comme avec celui de l'opérateur."
+    "secretHelp": "Vérifiez la signature des webhooks avec ce secret, comme avec celui de l'opérateur.",
+    "yours": "Votre clé de test"
   },
   "target": {
     "heading": "Où envoyer les webhooks",
@@ -67,7 +70,10 @@
       "label": "Relais local sur mon poste",
       "help": "Pour votre serveur en développement : ni URL publique, ni tunnel."
     },
-    "url": { "label": "Mon URL publique", "help": "Une adresse privée ou locale est refusée." },
+    "url": {
+      "label": "Mon URL publique",
+      "help": "Une adresse privée ou locale est refusée."
+    },
     "terminal": "Terminal, votre clé est déjà insérée",
     "terminalPrefix": "Terminal : remplacez le début de clé par votre clé complète",
     "relayHelp": "La commande ouvre une connexion sortante vers Overpass et rejoue chaque webhook sur votre serveur, corps et en-têtes intacts.",
@@ -118,7 +124,7 @@
       "leaves": "part à {{time}}",
       "sent": "envoyé à {{time}}",
       "waiting": "en attente",
-      "relayWait": "attend votre relais",
+      "relayWait": "attend la commande overpass-cli",
       "passed": "transmis",
       "received": "reçu, {{status}} en {{duration}} ms",
       "notYet": "pas encore reçu",

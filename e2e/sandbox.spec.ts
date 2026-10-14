@@ -47,6 +47,10 @@ test("the public demo shows a webhook within 30 seconds, without an account", as
     timeout: 30_000,
   });
   await expect(page.getByText(sandbox.deliveries.same)).toBeVisible();
+  const overflow = await page.evaluate(
+    () => document.documentElement.scrollWidth - window.innerWidth,
+  );
+  expect(overflow).toBe(0);
 });
 
 test("a member runs every Wave scenario and receives its webhook", async ({ browser }, info) => {

@@ -36,7 +36,7 @@ export const testProvider: ProviderAdapter<Outcome> = {
       method: "POST",
       path: "/payments",
       async handle({ request, outcome, store, newId }) {
-        const payment = { id: `pay_${newId()}`, body: request.body, status: outcome.status };
+        const payment = { status: outcome.status, id: `pay_${newId()}`, body: request.body };
         await store.put("payment", payment.id, payment);
         const events =
           outcome.status === "expired"

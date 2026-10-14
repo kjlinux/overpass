@@ -47,6 +47,12 @@ describe("POST /v1/sandbox/keys/:id/run", () => {
       response: { status: 201 },
     });
     expect(event.request.headers.authorization).toBeUndefined();
+    // The provider's key order survives storage, so the inspector shows the body as it was sent.
+    expect(Object.keys(JSON.parse(event.response.body as string) as object)).toEqual([
+      "status",
+      "id",
+      "body",
+    ]);
     expect(event.deliveries.map((delivery) => delivery.eventType)).toEqual(["payment.failed"]);
   });
 

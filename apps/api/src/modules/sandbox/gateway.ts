@@ -116,7 +116,12 @@ async function simulate(
     return { response: deps.simulator.refusal(call.provider, "notFound", request) };
   }
   const credential = deps.simulator.credential(call.provider, request) ?? "";
-  const response = { status: result.response.status, body: result.response.body ?? null };
+  // Stored as text: jsonb would sort the keys, and the inspector must show the order the provider sent.
+  const raw = result.response.body;
+  const response = {
+    status: result.response.status,
+    body: typeof raw === "string" || raw === undefined ? (raw ?? null) : JSON.stringify(raw),
+  };
   const eventId = await deps.events.record(
     {
       keyId: key.id,

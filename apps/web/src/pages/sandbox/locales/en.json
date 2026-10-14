@@ -22,7 +22,10 @@
   },
   "scenario": {
     "heading": "Scenario",
-    "success": { "label": "Payment succeeds", "help": "The success webhook, delivered at once." },
+    "success": {
+      "label": "Payment succeeds",
+      "help": "The success webhook, delivered at once."
+    },
     "insufficient_funds": {
       "label": "Insufficient funds",
       "help": "The payment fails, the failure webhook leaves at once."
@@ -48,14 +51,14 @@
     "revealTitle": "Copy this key now.",
     "revealBody": "Overpass keeps only a digest of it: it will never be shown again.",
     "meta": "Expires on {{date}}, quota of {{quota}} calls a day",
-    "current": "Key in use",
     "use": "Use",
     "revoke": "Revoke",
     "revokeTitle": "Revoke this key?",
     "revokeBody": "Calls and relays using it are refused at once. Its history stays visible for 7 days.",
     "revokeConfirm": "Revoke the key",
     "secret": "Webhook secret",
-    "secretHelp": "Check the webhook signature with this secret, as you would with the provider's."
+    "secretHelp": "Check the webhook signature with this secret, as you would with the provider's.",
+    "yours": "Your test key"
   },
   "target": {
     "heading": "Where webhooks go",
@@ -67,7 +70,10 @@
       "label": "Local relay on my machine",
       "help": "For your development server: no public URL, no tunnel."
     },
-    "url": { "label": "My public URL", "help": "A private or local address is refused." },
+    "url": {
+      "label": "My public URL",
+      "help": "A private or local address is refused."
+    },
     "terminal": "Terminal, your key is already in",
     "terminalPrefix": "Terminal: replace the key prefix with your full key",
     "relayHelp": "The command opens an outgoing connection to Overpass and replays each webhook on your server, body and headers untouched.",
@@ -118,7 +124,7 @@
       "leaves": "leaves at {{time}}",
       "sent": "sent at {{time}}",
       "waiting": "waiting",
-      "relayWait": "waits for your relay",
+      "relayWait": "waits for overpass-cli",
       "passed": "passed on",
       "received": "received, {{status}} in {{duration}} ms",
       "notYet": "not received yet",

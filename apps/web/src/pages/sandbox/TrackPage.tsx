@@ -148,7 +148,7 @@ function Bench({ providers }: { providers: SandboxProvider[] }): JSX.Element {
   if (provider === undefined) return <Skeleton />;
   const scenario = choices.picked ?? track.current?.scenario ?? "success";
   return (
-    <div class="grid lg:grid-cols-[400px_minmax(0,1fr)]">
+    <div class="grid grid-cols-[minmax(0,1fr)] lg:grid-cols-[400px_minmax(0,1fr)]">
       <Setup
         providers={providers}
         provider={provider}

@@ -26,7 +26,7 @@ function Reveal({ secret }: { secret: string }): JSX.Element {
         <strong>{t("keys.revealTitle")}</strong> {t("keys.revealBody")}
       </p>
       <div class="mt-3 bg-paper">
-        <CodeBlock code={secret} language={t("keys.current")} />
+        <CodeBlock code={secret} language={t("keys.yours")} />
       </div>
     </div>
   );

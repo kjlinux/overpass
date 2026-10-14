@@ -24,7 +24,7 @@ export const wave: ProviderAdapter<WaveOutcome> = {
     name: "Wave",
     countries: ["SN", "CI"],
     docsUrl: "https://docs.wave.com/checkout",
-    docsVersion: "Changelog 2024-03-29",
+    docsVersion: "2024-03-29",
     consultedAt: "2026-10-14",
     unofficial: true,
     copy: { fr, en },

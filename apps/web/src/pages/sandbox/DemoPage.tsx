@@ -92,7 +92,7 @@ export function DemoPage(): JSX.Element {
         <h1 class="text-h1 font-semibold md:text-[40px]">{t("demo.title")}</h1>
         <p class="mt-3">{t("demo.intro")}</p>
       </div>
-      <div class="grid lg:grid-cols-[400px_minmax(0,1fr)]">
+      <div class="grid grid-cols-[minmax(0,1fr)] lg:grid-cols-[400px_minmax(0,1fr)]">
         <Controls
           scenario={scenario}
           onScenario={setScenario}
