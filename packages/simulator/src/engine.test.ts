@@ -10,7 +10,13 @@ function run(scenario: Parameters<typeof base>[0], partial: Parameters<typeof re
 }
 
 function base(scenario: "success" | "insufficient_funds" | "timeout" | "duplicate_webhook") {
-  return { scenario, store: memoryStore(), now, newId: sequentialIds() };
+  return {
+    scenario,
+    store: memoryStore(),
+    now,
+    newId: sequentialIds(),
+    webOrigin: "https://web.test",
+  };
 }
 
 describe("createSimulator", () => {
@@ -120,12 +126,26 @@ describe("provider hooks", () => {
     expect(simulator.credential("nope", presented)).toBeUndefined();
   });
 
+  it("lets the provider shape a refusal from the request", () => {
+    const missing = request({ method: "GET", path: "/" });
+    expect(simulator.refusal("fake", "unauthorized", missing)).toEqual({
+      status: 401,
+      body: { error: "missing_key" },
+    });
+  });
+
+  it("gives endpoints the web origin for links they return", async () => {
+    const result = await run("success", { method: "GET", path: "/origin" });
+    expect(result?.response.body).toEqual({ origin: "https://web.test" });
+  });
+
   it("answers refusals in the provider format", () => {
-    expect(simulator.refusal("fake", "unauthorized")).toEqual({
+    const presented = request({ method: "GET", path: "/", headers: { "x-fake-key": "k" } });
+    expect(simulator.refusal("fake", "unauthorized", presented)).toEqual({
       status: 401,
       body: { error: "unauthorized" },
     });
-    expect(simulator.refusal("fake", "tooManyRequests").status).toBe(429);
+    expect(simulator.refusal("fake", "tooManyRequests", presented).status).toBe(429);
   });
 
   it("renders and signs a webhook the way the provider documents it", () => {

@@ -22,6 +22,7 @@ export type SandboxOptions = {
   providers: readonly ProviderAdapter[];
   resolveAccount: AccountResolver;
   serverSecret: string;
+  webOrigin: string;
   resolveHost?: HostResolver;
   now: () => Date;
 };
@@ -48,6 +49,7 @@ export async function registerSandbox(
     events,
     simulator,
     counters: options.counters,
+    webOrigin: options.webOrigin,
     now: options.now,
   });
   await app.register((scope) => {

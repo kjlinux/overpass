@@ -18,6 +18,7 @@ export type CallContext = {
   store: ObjectStore;
   now: Date;
   newId: () => string;
+  webOrigin: string;
 };
 
 export type Simulation = { response: SimResponse; webhooks: ScheduledWebhook[] };
@@ -31,7 +32,7 @@ export type Simulator = {
     context: CallContext,
   ): Promise<Simulation | undefined>;
   credential(provider: string, request: SimRequest): string | undefined;
-  refusal(provider: string, reason: Refusal): SimResponse;
+  refusal(provider: string, reason: Refusal, request: SimRequest): SimResponse;
   secretPrefix(provider: string): string;
   renderWebhook(
     provider: string,
@@ -66,7 +67,7 @@ async function dispatch(
       webhooks: scheduleWebhooks(result.events ?? [], context.scenario, timing),
     };
   }
-  return { response: adapter.errors.notFound(), webhooks: [] };
+  return { response: adapter.errors.notFound(request), webhooks: [] };
 }
 
 /** The provider-agnostic engine: it only knows the adapters it is given. */
@@ -92,7 +93,7 @@ export function createSimulator(
       return adapter === undefined ? undefined : dispatch(adapter, request, context, timing);
     },
     credential: (provider, request) => registry.get(provider)?.credential(request),
-    refusal: (provider, reason) => require(provider).errors[reason](),
+    refusal: (provider, reason, request) => require(provider).errors[reason](request),
     secretPrefix: (provider) => require(provider).webhooks.secretPrefix ?? "",
     renderWebhook: (provider, event, options) => require(provider).webhooks.render(event, options),
   };

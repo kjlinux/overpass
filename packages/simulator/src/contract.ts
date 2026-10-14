@@ -45,6 +45,8 @@ export type EndpointInput<Outcome> = {
   store: ObjectStore;
   now: Date;
   newId: () => string;
+  /** Where links meant for a browser point, never to the real provider. */
+  webOrigin: string;
 };
 
 export type EndpointResult = { response: SimResponse; events?: readonly ProviderEvent[] };
@@ -89,5 +91,5 @@ export type ProviderAdapter<Outcome = unknown> = {
   scenarios: Readonly<Record<Scenario, Outcome>>;
   webhooks: WebhookSpec;
   credential(request: SimRequest): string | undefined;
-  errors: Readonly<Record<Refusal, () => SimResponse>>;
+  errors: Readonly<Record<Refusal, (request: SimRequest) => SimResponse>>;
 };

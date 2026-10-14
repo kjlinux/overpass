@@ -71,6 +71,7 @@ async function registerModules(
     providers: sandbox?.providers ?? providers,
     resolveAccount,
     serverSecret: config.SESSION_SECRET,
+    webOrigin: config.WEB_ORIGIN,
     now: clock,
     ...(sandbox?.resolveHost === undefined ? {} : { resolveHost: sandbox.resolveHost }),
   });

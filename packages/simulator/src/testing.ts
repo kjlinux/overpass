@@ -30,10 +30,19 @@ export const fakeProvider: ProviderAdapter<FakeOutcome> = {
   credential: (request) => request.headers["x-fake-key"],
   errors: {
     notFound: () => ({ status: 404, body: { error: "not_found" } }),
-    unauthorized: () => ({ status: 401, body: { error: "unauthorized" } }),
+    unauthorized: (request) => ({
+      status: 401,
+      body: { error: request.headers["x-fake-key"] === undefined ? "missing_key" : "unauthorized" },
+    }),
     tooManyRequests: () => ({ status: 429, body: { error: "slow_down" } }),
   },
   endpoints: [
+    {
+      method: "GET",
+      path: "/origin",
+      handle: ({ webOrigin }) =>
+        Promise.resolve({ response: { status: 200, body: { origin: webOrigin } } }),
+    },
     {
       method: "POST",
       path: "/payments",

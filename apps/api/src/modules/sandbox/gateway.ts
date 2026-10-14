@@ -29,6 +29,7 @@ export type GatewayDeps = {
   events: EventsRepository;
   simulator: Simulator;
   counters: CounterStore;
+  webOrigin: string;
   now: () => Date;
 };
 
@@ -107,9 +108,9 @@ async function simulate(
   const scenario = pickScenario(call.headers["overpass-scenario"], key.scenario);
   const store = objectStore(deps.db, key.id, key.provider);
   const newId = () => randomBytes(10).toString("hex");
-  const context = { scenario, store, now, newId };
+  const context = { scenario, store, now, newId, webOrigin: deps.webOrigin };
   const result = await deps.simulator.handle(call.provider, request, context);
-  if (result === undefined) return deps.simulator.refusal(call.provider, "notFound");
+  if (result === undefined) return deps.simulator.refusal(call.provider, "notFound", request);
   const credential = deps.simulator.credential(call.provider, request) ?? "";
   const response = { status: result.response.status, body: result.response.body ?? null };
   await deps.events.record(
@@ -134,9 +135,10 @@ export function createGateway(deps: GatewayDeps) {
     const body = parseBody(call.rawBody, call.headers["content-type"]);
     const request: SimRequest = { ...call, body };
     const key = await authenticate(deps, call, request);
-    if (key === undefined) return simulator.refusal(call.provider, "unauthorized");
+    if (key === undefined) return simulator.refusal(call.provider, "unauthorized", request);
     const usage = await deps.counters.hit(`sandbox:key:${key.id}`, quotaWindowMs);
-    if (usage.count > key.quota) return simulator.refusal(call.provider, "tooManyRequests");
+    if (usage.count > key.quota)
+      return simulator.refusal(call.provider, "tooManyRequests", request);
     return simulate(deps, call, request, key);
   };
 }
