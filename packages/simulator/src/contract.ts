@@ -1,3 +1,5 @@
+import type { ZodType } from "zod";
+
 /** The five scenarios every simulated provider must answer. */
 export const scenarios = [
   "success",
@@ -51,10 +53,18 @@ export type EndpointInput<Outcome> = {
 
 export type EndpointResult = { response: SimResponse; events?: readonly ProviderEvent[] };
 
+/** The schemas OpenAPI is generated from; null marks a documented empty body. */
+export type EndpointDocs = {
+  query?: ZodType;
+  body?: ZodType;
+  responses: Readonly<Record<number, ZodType | null>>;
+};
+
 /** Part 1: an entry point copied from the provider's public documentation. */
 export type Endpoint<Outcome> = {
   method: HttpMethod;
   path: string;
+  docs?: EndpointDocs;
   handle(input: EndpointInput<Outcome>): Promise<EndpointResult>;
 };
 
@@ -64,10 +74,20 @@ export type RenderedWebhook = { body: string; headers: Readonly<Record<string, s
 export type WebhookSpec = {
   /** Mirrors the documented secret format, such as a provider's key prefix. */
   secretPrefix?: string;
+  /** Payload schema of each documented event type, for the OpenAPI webhooks section. */
+  events?: Readonly<Record<string, ZodType>>;
   render(event: ProviderEvent, options: { secret: string; now: Date }): RenderedWebhook;
 };
 
-export type ProviderCopy = { summary: string; notes: readonly string[] };
+/** endpoints maps "METHOD /path" to a one-line summary for the generated reference. */
+export type ProviderCopy = {
+  summary: string;
+  notes: readonly string[];
+  endpoints?: Readonly<Record<string, string>>;
+};
+
+/** How a developer presents the test key, as the provider documents its credential. */
+export type AuthDoc = { type: "bearer" } | { type: "header"; name: string };
 
 /** Part 4: who the provider is and which documentation the simulation follows. */
 export type ProviderIdentity = {
@@ -91,5 +111,6 @@ export type ProviderAdapter<Outcome = unknown> = {
   scenarios: Readonly<Record<Scenario, Outcome>>;
   webhooks: WebhookSpec;
   credential(request: SimRequest): string | undefined;
+  auth?: AuthDoc;
   errors: Readonly<Record<Refusal, (request: SimRequest) => SimResponse>>;
 };

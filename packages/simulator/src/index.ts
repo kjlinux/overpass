@@ -1,6 +1,8 @@
 export { scenarios } from "./contract.js";
 export type {
+  AuthDoc,
   Endpoint,
+  EndpointDocs,
   EndpointInput,
   EndpointResult,
   HttpMethod,
