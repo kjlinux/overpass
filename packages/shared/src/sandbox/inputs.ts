@@ -54,3 +54,12 @@ export const sandboxIdParams = z.object({ id: idSchema });
 
 export type SandboxKeyCreateInput = z.infer<typeof sandboxKeyCreateInput>;
 export type SandboxKeyUpdateInput = z.infer<typeof sandboxKeyUpdateInput>;
+
+/** What the local relay reports after forwarding a webhook to the developer's server. */
+export const relayResultInput = z.strictObject({
+  status: z.number({ error: "result_invalid" }).int().min(100).max(599).nullable(),
+  durationMs: z.number({ error: "result_invalid" }).int().min(0).max(600_000),
+  error: z.enum(["timeout", "connection_failed"], { error: "result_invalid" }).optional(),
+});
+
+export type RelayResultInput = z.infer<typeof relayResultInput>;

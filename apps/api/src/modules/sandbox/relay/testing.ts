@@ -41,5 +41,10 @@ export async function openStream(base: string, key: string, lastEventId?: string
       buffer += chunk.value;
     }
   }
-  return { next, close: () => controller.abort() };
+  return {
+    next,
+    close: () => {
+      controller.abort();
+    },
+  };
 }

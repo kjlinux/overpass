@@ -59,6 +59,7 @@
     "webhook_url_invalid": "Enter a full http or https URL, for example https://example.com/webhook.",
     "webhook_url_required": "Enter the URL that will receive the webhooks.",
     "webhook_url_private": "This URL points to a private or local address. Use the local relay for your machine.",
-    "provider_not_simulated": "This provider has no simulator."
+    "provider_not_simulated": "This provider has no simulator.",
+    "result_invalid": "The relay sent an unreadable delivery result."
   }
 }

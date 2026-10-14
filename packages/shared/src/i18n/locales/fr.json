@@ -59,6 +59,7 @@
     "webhook_url_invalid": "Saisissez une URL http ou https complète, par exemple https://exemple.com/webhook.",
     "webhook_url_required": "Saisissez l'URL qui recevra les webhooks.",
     "webhook_url_private": "Cette URL vise une adresse privée ou locale. Utilisez le relais local pour votre poste.",
-    "provider_not_simulated": "Cet opérateur n'a pas de simulateur."
+    "provider_not_simulated": "Cet opérateur n'a pas de simulateur.",
+    "result_invalid": "Le relais a envoyé un résultat de livraison illisible."
   }
 }

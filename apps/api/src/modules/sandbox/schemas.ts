@@ -1,4 +1,5 @@
 export {
+  relayResultInput,
   sandboxEventsQuery,
   sandboxIdParams,
   sandboxKeyCreateInput,

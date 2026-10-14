@@ -9,12 +9,19 @@ import { registerGatewayRoutes } from "./gateway-routes.js";
 import { systemResolver } from "./network/resolve.js";
 import type { HostResolver } from "./network/resolve.js";
 import { eventsRepository, keysRepository } from "./repository.js";
+import { memoryBus } from "./relay/bus.js";
+import type { RelayBus } from "./relay/bus.js";
+import { createRelayHub } from "./relay/hub.js";
+import { relayRepository } from "./relay/repository.js";
+import { registerRelayRoutes } from "./relay/routes.js";
 import { registerSandboxRoutes } from "./routes.js";
 import { createSandboxService } from "./service.js";
 
 export { isPublicAddress } from "./network/addresses.js";
 export { publicAddresses, systemResolver } from "./network/resolve.js";
 export type { HostResolver } from "./network/resolve.js";
+export { memoryBus, postgresBus } from "./relay/bus.js";
+export type { RelayBus } from "./relay/bus.js";
 
 export type SandboxOptions = {
   db: Database;
@@ -24,6 +31,7 @@ export type SandboxOptions = {
   serverSecret: string;
   webOrigin: string;
   resolveHost?: HostResolver;
+  bus?: RelayBus;
   now: () => Date;
 };
 
@@ -52,8 +60,12 @@ export async function registerSandbox(
     webOrigin: options.webOrigin,
     now: options.now,
   });
+  const relays = relayRepository(options.db);
+  const hub = createRelayHub(options.bus ?? memoryBus(), relays);
+  const relayDeps = { keys, relays, hub, resolve: options.resolveAccount, now: options.now };
   await app.register((scope) => {
     registerSandboxRoutes(scope, service, options.resolveAccount);
+    registerRelayRoutes(scope, relayDeps);
     return Promise.resolve();
   });
   await app.register((scope) => {

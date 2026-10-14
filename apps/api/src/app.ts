@@ -17,7 +17,8 @@ import type { Mailer } from "./mail/mailer.js";
 import { itineraries } from "./itineraries.js";
 import { registerAccounts } from "./modules/accounts/index.js";
 import { registerSandbox } from "./modules/sandbox/index.js";
-import type { HostResolver } from "./modules/sandbox/index.js";
+import { memoryBus, postgresBus } from "./modules/sandbox/index.js";
+import type { HostResolver, RelayBus } from "./modules/sandbox/index.js";
 
 export type AppConfig = Pick<
   Config,
@@ -26,7 +27,24 @@ export type AppConfig = Pick<
   Partial<Config>;
 
 /** Tests swap the simulated providers and the DNS resolver; production uses the real ones. */
-export type SandboxDeps = { providers?: readonly ProviderAdapter[]; resolveHost?: HostResolver };
+export type SandboxDeps = {
+  providers?: readonly ProviderAdapter[];
+  resolveHost?: HostResolver;
+  bus?: RelayBus;
+};
+
+/** Instances share relay announcements through PostgreSQL; without a URL, one process is enough. */
+function relayBus(
+  app: FastifyInstance,
+  config: AppConfig,
+  injected: RelayBus | undefined,
+): RelayBus {
+  if (injected !== undefined) return injected;
+  const bus =
+    config.DATABASE_URL === undefined ? memoryBus() : postgresBus(config.DATABASE_URL, app.log);
+  app.addHook("onClose", () => bus.close());
+  return bus;
+}
 
 export type AppDeps = {
   config: AppConfig;
@@ -73,6 +91,7 @@ async function registerModules(
     serverSecret: config.SESSION_SECRET,
     webOrigin: config.WEB_ORIGIN,
     now: clock,
+    bus: relayBus(app, config, sandbox?.bus),
     ...(sandbox?.resolveHost === undefined ? {} : { resolveHost: sandbox.resolveHost }),
   });
 }
