@@ -172,6 +172,13 @@ describe("provider hooks", () => {
     expect(simulator.secretPrefix("fake")).toBe("");
   });
 
+  it("gives the documented example call of a provider, or nothing", () => {
+    const example = { method: "POST" as const, path: "/payments", body: { amount: 1 } };
+    expect(createSimulator([{ ...fakeProvider, example }]).example("fake")).toEqual(example);
+    expect(simulator.example("fake")).toBeUndefined();
+    expect(simulator.example("nope")).toBeUndefined();
+  });
+
   it("refuses to render for an unknown provider", () => {
     const event = { id: "e", type: "t", payload: {} };
     expect(() => simulator.renderWebhook("nope", event, { secret: "s", now })).toThrow(/nope/);

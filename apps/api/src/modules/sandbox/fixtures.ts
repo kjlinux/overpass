@@ -30,6 +30,7 @@ export const testProvider: ProviderAdapter<Outcome> = {
     unauthorized: () => ({ status: 401, body: { code: "invalid-auth" } }),
     tooManyRequests: () => ({ status: 429, body: { code: "rate-limited" } }),
   },
+  example: { method: "POST", path: "/payments", body: { amount: 2500 } },
   endpoints: [
     {
       method: "POST",
