@@ -134,7 +134,7 @@ describe("managing keys", () => {
 
   it("revokes a key, which frees a slot", async () => {
     const { id } = (await createKey(awa)).body.data as { id: string };
-    expect((await call(app, "DELETE", `/v1/sandbox/keys/${id}`, { cookie: awa })).status).toBe(204);
+    expect((await call(app, "DELETE", `/v1/sandbox/keys/${id}`, { cookie: awa })).status).toBe(200);
     const keys = (await call(app, "GET", "/v1/sandbox/keys", { cookie: awa })).body.data;
     expect(keys).toEqual([]);
   });

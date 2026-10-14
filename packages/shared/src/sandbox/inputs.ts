@@ -43,7 +43,11 @@ export const sandboxKeyUpdateInput = z
 
 export const sandboxEventsQuery = z.object({
   keyId: idSchema,
-  before: z.iso.datetime({ offset: true, error: "cursor_invalid" }).optional(),
+  before: z.coerce
+    .number({ error: "cursor_invalid" })
+    .int({ error: "cursor_invalid" })
+    .positive({ error: "cursor_invalid" })
+    .optional(),
 });
 
 export const sandboxIdParams = z.object({ id: idSchema });

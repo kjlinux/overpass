@@ -18,6 +18,7 @@ create index sandbox_keys_user on sandbox_keys (user_id) where revoked_at is nul
 
 create table sandbox_events (
   id uuid primary key default gen_random_uuid(),
+  seq bigint generated always as identity unique,
   key_id uuid not null references sandbox_keys (id) on delete cascade,
   provider text not null,
   scenario text not null,
@@ -25,7 +26,7 @@ create table sandbox_events (
   response jsonb not null,
   created_at timestamptz not null default now()
 );
-create index sandbox_events_key on sandbox_events (key_id, created_at desc);
+create index sandbox_events_key on sandbox_events (key_id, seq desc);
 create index sandbox_events_age on sandbox_events (created_at);
 
 create table sandbox_objects (

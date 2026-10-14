@@ -1,3 +1,3 @@
-import type { ProviderIdentity } from "@overpass/simulator";
+import type { ProviderAdapter } from "@overpass/simulator";
 
-export const providers: readonly ProviderIdentity[] = [];
+export const providers: readonly ProviderAdapter[] = [];

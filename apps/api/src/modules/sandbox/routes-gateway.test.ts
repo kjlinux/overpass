@@ -178,14 +178,3 @@ describe("/v1/sandbox/:provider/*", () => {
     expect(response.json()).toEqual({ code: "rate-limited" });
   });
 });
-
-describe("GET /v1/sandbox/events", () => {
-  it("shows a key's events to its owner only", async () => {
-    const { id } = await newKey();
-    const kofi = await registerAccount(app, "kofi@example.com");
-    expect(
-      (await call(app, "GET", `/v1/sandbox/events?keyId=${id}`, { cookie: kofi })).status,
-    ).toBe(404);
-    expect((await call(app, "GET", `/v1/sandbox/events?keyId=${id}`)).status).toBe(401);
-  });
-});

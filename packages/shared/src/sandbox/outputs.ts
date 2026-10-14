@@ -39,6 +39,7 @@ export const sandboxDeliverySchema = z.object({
 
 export const sandboxEventSchema = z.object({
   id: z.uuid(),
+  cursor: z.number().int(),
   provider: z.string(),
   scenario: z.enum(scenarios),
   request: z.object({

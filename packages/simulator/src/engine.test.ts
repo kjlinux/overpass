@@ -143,6 +143,15 @@ describe("provider hooks", () => {
     });
   });
 
+  it("gives the documented prefix of webhook secrets, or none", () => {
+    const prefixed = {
+      ...fakeProvider,
+      webhooks: { ...fakeProvider.webhooks, secretPrefix: "whs_" },
+    };
+    expect(createSimulator([prefixed]).secretPrefix("fake")).toBe("whs_");
+    expect(simulator.secretPrefix("fake")).toBe("");
+  });
+
   it("refuses to render for an unknown provider", () => {
     const event = { id: "e", type: "t", payload: {} };
     expect(() => simulator.renderWebhook("nope", event, { secret: "s", now })).toThrow(/nope/);

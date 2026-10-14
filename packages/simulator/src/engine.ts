@@ -32,6 +32,7 @@ export type Simulator = {
   ): Promise<Simulation | undefined>;
   credential(provider: string, request: SimRequest): string | undefined;
   refusal(provider: string, reason: Refusal): SimResponse;
+  secretPrefix(provider: string): string;
   renderWebhook(
     provider: string,
     event: ProviderEvent,
@@ -92,6 +93,7 @@ export function createSimulator(
     },
     credential: (provider, request) => registry.get(provider)?.credential(request),
     refusal: (provider, reason) => require(provider).errors[reason](),
+    secretPrefix: (provider) => require(provider).webhooks.secretPrefix ?? "",
     renderWebhook: (provider, event, options) => require(provider).webhooks.render(event, options),
   };
 }
