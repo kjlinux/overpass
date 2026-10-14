@@ -7,7 +7,7 @@ import type {
   SandboxProvider,
   SandboxTarget,
 } from "@overpass/shared";
-import type { ProviderIdentity, Scenario } from "@overpass/simulator";
+import type { ExampleCall, ProviderIdentity, Scenario } from "@overpass/simulator";
 import type { DeliveryRow, EventRow, KeyRow } from "./repository.js";
 
 type StoredRequest = SandboxEvent["request"];
@@ -58,7 +58,11 @@ export function toEvent(row: EventRow, deliveries: DeliveryRow[]): SandboxEvent 
 }
 
 /** Falls back to English, then to any language the provider folder ships. */
-export function toProvider(identity: ProviderIdentity, language: Language): SandboxProvider {
+export function toProvider(
+  identity: ProviderIdentity,
+  language: Language,
+  example?: ExampleCall,
+): SandboxProvider {
   const copy = identity.copy[language] ?? identity.copy.en ?? Object.values(identity.copy)[0];
   return {
     id: identity.id,
@@ -68,6 +72,7 @@ export function toProvider(identity: ProviderIdentity, language: Language): Sand
     docsVersion: identity.docsVersion,
     consultedAt: identity.consultedAt,
     officialSandboxUrl: identity.officialSandboxUrl ?? null,
+    example: example === undefined ? null : { method: example.method, path: example.path },
     unofficial: true,
     summary: copy?.summary ?? identity.name,
     notes: [...(copy?.notes ?? [])],

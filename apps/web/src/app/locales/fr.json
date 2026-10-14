@@ -2,6 +2,8 @@
   "app": {
     "name": "Overpass",
     "tagline": "La bourse des intégrations africaines vérifiées.",
-    "intro": "Les développeurs y échangent ce que la documentation officielle ne dit pas : le code qui marche, les pièges connus et des vérifications datées."
+    "intro": "Les développeurs y échangent ce que la documentation officielle ne dit pas : le code qui marche, les pièges connus et des vérifications datées.",
+    "demo": "Essayer la piste d'essai sans compte",
+    "routes": "Parcourir les itinéraires"
   }
 }

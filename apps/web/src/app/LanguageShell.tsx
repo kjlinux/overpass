@@ -31,6 +31,10 @@ const CataloguePage = lazyPage("routes", async () => (await routes()).CatalogueP
 const DetailPage = lazyPage("routes", async () => (await routes()).DetailPage);
 const NewRoutePage = lazyPage("routes", async () => (await routes()).NewRoutePage);
 const EditRoutePage = lazyPage("routes", async () => (await routes()).EditRoutePage);
+const sandbox = () => import("../pages/sandbox");
+const TrackPage = lazyPage("sandbox", async () => (await sandbox()).TrackPage);
+const DemoPage = lazyPage("sandbox", async () => (await sandbox()).DemoPage);
+const LaunchPage = lazyPage("sandbox", async () => (await sandbox()).LaunchPage);
 const ComponentsPage = lazyPage(
   "showcase",
   async () => (await import("../pages/showcase")).ComponentsPage,
@@ -68,6 +72,9 @@ export function LanguageShell() {
         <Route path="/routes/new" component={NewRoutePage} />
         <Route path="/routes/:id/edit" component={EditRoutePage} />
         <Route path="/routes/:id" component={DetailPage} />
+        <Route path="/sandbox" component={TrackPage} />
+        <Route path="/sandbox/demo" component={DemoPage} />
+        <Route path="/sandbox/launch/:provider/:id" component={LaunchPage} />
         <Route default component={NotFound} />
       </Router>
     </ErrorBoundary>

@@ -61,6 +61,7 @@ export const sandboxProviderSchema = z.object({
   docsVersion: z.string(),
   consultedAt: z.string(),
   officialSandboxUrl: z.string().nullable(),
+  example: z.object({ method: z.string(), path: z.string() }).nullable(),
   unofficial: z.literal(true),
   summary: z.string(),
   notes: z.array(z.string()),

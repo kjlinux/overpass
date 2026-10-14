@@ -1,0 +1,149 @@
+{
+  "title": "Test track",
+  "intro": "Call a simulated provider with a test key, choose what should go wrong, then read the request, the response and every webhook. No merchant account, no real money.",
+  "openapi": "Simulator OpenAPI reference",
+  "visitor": {
+    "heading": "A test key is waiting for you",
+    "body": "Sign in to create a key, call the simulator from your code and receive the webhooks on your machine.",
+    "signIn": "Sign in",
+    "demo": "Try the demo without an account"
+  },
+  "provider": {
+    "heading": "Provider",
+    "label": "Simulated provider",
+    "unofficial": "Unofficial",
+    "docs": "Documentation followed",
+    "version": "Version",
+    "consulted": "Consulted on",
+    "countries": "Countries",
+    "choices": "What the simulator decides where the documentation is silent",
+    "officialSandbox": "The provider's official sandbox",
+    "unavailable": "This provider has no simulator yet. Here are the ones that do."
+  },
+  "scenario": {
+    "heading": "Scenario",
+    "success": { "label": "Payment succeeds", "help": "The success webhook, delivered at once." },
+    "insufficient_funds": {
+      "label": "Insufficient funds",
+      "help": "The payment fails, the failure webhook leaves at once."
+    },
+    "timeout": {
+      "label": "Provider timeout",
+      "help": "The payer does not answer in time: see what the provider returns."
+    },
+    "duplicate_webhook": {
+      "label": "Duplicate webhook",
+      "help": "The same event, twice, 5 s apart."
+    },
+    "late_webhook": {
+      "label": "Late webhook",
+      "help": "The webhook leaves 60 s after the payment."
+    }
+  },
+  "keys": {
+    "heading": "Test key",
+    "count": "{{count}} of {{max}}",
+    "empty": "A key identifies your calls and your webhooks. It expires after 30 days.",
+    "create": "Create a test key",
+    "revealTitle": "Copy this key now.",
+    "revealBody": "Overpass keeps only a digest of it: it will never be shown again.",
+    "meta": "Expires on {{date}}, quota of {{quota}} calls a day",
+    "current": "Key in use",
+    "use": "Use",
+    "revoke": "Revoke",
+    "revokeTitle": "Revoke this key?",
+    "revokeBody": "Calls and relays using it are refused at once. Its history stays visible for 7 days.",
+    "revokeConfirm": "Revoke the key",
+    "secret": "Webhook secret",
+    "secretHelp": "Check the webhook signature with this secret, as you would with the provider's."
+  },
+  "target": {
+    "heading": "Where webhooks go",
+    "inbox": {
+      "label": "Built-in receiver",
+      "help": "Read every webhook here, nothing to install."
+    },
+    "relay": {
+      "label": "Local relay on my machine",
+      "help": "For your development server: no public URL, no tunnel."
+    },
+    "url": { "label": "My public URL", "help": "A private or local address is refused." },
+    "terminal": "Terminal, your key is already in",
+    "terminalPrefix": "Terminal: replace the key prefix with your full key",
+    "relayHelp": "The command opens an outgoing connection to Overpass and replays each webhook on your server, body and headers untouched.",
+    "urlLabel": "URL that receives the webhooks",
+    "urlHelp": "Overpass checks it again before each delivery and follows no redirect.",
+    "save": "Save the URL",
+    "inboxHelp": "Webhooks show under Deliveries, with their body and headers."
+  },
+  "launch": {
+    "heading": "Launch",
+    "provider": "Provider",
+    "scenario": "Scenario",
+    "key": "Key",
+    "target": "Webhooks",
+    "button": "Run the simulated payment",
+    "note": "{{method}} {{path}}, the documentation's example, with your test key.",
+    "needKey": "Create a test key first: the simulated payment uses it."
+  },
+  "inspector": {
+    "heading": "Inspector",
+    "label": "Content of the call",
+    "request": "Request",
+    "response": "Response",
+    "headers": "Headers",
+    "last": "Last call, {{time}}",
+    "emptyTitle": "No call yet",
+    "emptyBody": "Run a simulated payment, or call the simulator from your code with this key."
+  },
+  "deliveries": {
+    "heading": "Deliveries",
+    "caption": "Body and headers as your server receives them",
+    "none": "No webhook for this call: the provider documents none for this case. Read the resource to see its state.",
+    "replay": "Replay",
+    "replayed": "Delivery replayed: it leaves in a moment.",
+    "event": "Event",
+    "same": "Same id as the previous delivery: your code should ignore it.",
+    "body": "Body and headers",
+    "trip": "Webhook trip",
+    "stops": {
+      "overpass": "Overpass",
+      "relay": "Local relay",
+      "internet": "Internet",
+      "server": "Your server",
+      "url": "Your URL",
+      "inbox": "Built-in receiver"
+    },
+    "state": {
+      "leaves": "leaves at {{time}}",
+      "sent": "sent at {{time}}",
+      "waiting": "waiting",
+      "relayWait": "waits for your relay",
+      "passed": "passed on",
+      "received": "received, {{status}} in {{duration}} ms",
+      "notYet": "not received yet",
+      "failed": "failed: {{reason}}",
+      "noAnswer": "no answer"
+    }
+  },
+  "demo": {
+    "title": "Test track demo",
+    "intro": "A simulated Wave payment, no account needed: pick a scenario, run it, and watch the webhook arrive.",
+    "scenarios": "Demo scenario",
+    "button": "Run the demo",
+    "waiting": "The webhook is on its way.",
+    "done": "Webhook received.",
+    "more": "For your own calls and the local relay, create a test key.",
+    "failed": "The demo could not start. Try again in a moment."
+  },
+  "launchPage": {
+    "title": "Simulated payment",
+    "body": "This page stands in for the {{provider}} payment page during your tests. Your key's scenario decides the outcome: there is nothing to pay here.",
+    "session": "Session",
+    "back": "Back to the test track"
+  },
+  "errors": {
+    "load": "The test track could not load your keys. Try again in a moment.",
+    "action": "The action did not go through. Try again in a moment."
+  }
+}

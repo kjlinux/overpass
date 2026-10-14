@@ -150,6 +150,7 @@ describe("GET /v1/sandbox/providers", () => {
         summary: "Test provider",
         notes: ["Note en"],
         officialSandboxUrl: null,
+        example: { method: "POST", path: "/payments" },
       }),
     ]);
   });

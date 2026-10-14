@@ -53,7 +53,7 @@
     "logFrom": "il y a 90 jours",
     "logTo": "aujourd'hui",
     "test": "Tester sur la piste d'essai",
-    "testSoon": "La piste d'essai de {{service}} arrive avec le prochain module.",
+    "testSoon": "Le simulateur de {{service}} n'est pas encore disponible sur la piste d'essai.",
     "testNone": "Pas de piste d'essai pour {{service}} : sa documentation technique n'est pas publique.",
     "verify": "Ça marche chez moi",
     "verifyNote": "Confirme que la fiche fonctionne aujourd'hui, avec votre pays et votre environnement.",

@@ -2,6 +2,8 @@
   "app": {
     "name": "Overpass",
     "tagline": "The exchange for verified African integrations.",
-    "intro": "Developers share what the official documentation does not say: the code that works, the known traps and dated verifications."
+    "intro": "Developers share what the official documentation does not say: the code that works, the known traps and dated verifications.",
+    "demo": "Try the test track without an account",
+    "routes": "Browse the itineraries"
   }
 }

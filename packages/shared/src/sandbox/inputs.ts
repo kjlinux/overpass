@@ -1,4 +1,7 @@
 import { scenarios } from "@overpass/simulator";
+
+export { scenarios } from "@overpass/simulator";
+export type { Scenario } from "@overpass/simulator";
 import { z } from "zod";
 import { codeOr } from "../accounts/fields.js";
 import { idSchema, serviceSlugSchema } from "../routes/fields.js";
