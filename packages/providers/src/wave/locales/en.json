@@ -1,0 +1,13 @@
+{
+  "summary": "Unofficial simulator of the Wave Checkout API: create, read, search, refund and expire sessions, with signed webhooks.",
+  "notes": [
+    "Wave documents no test environment or test key: send an Overpass test key in the Authorization: Bearer header.",
+    "The payment is simulated right after creation: the response shows the open session, the next read shows the scenario's result.",
+    "Insufficient funds: the checkout.session.payment_failed webhook follows the documented example, with \"failed\" statuses.",
+    "Timeout: the session expires at once, with no webhook, since Wave documents no expiry webhook.",
+    "Webhooks are signed with Wave-Signature and your test wave_sn_WHS_ secret. API request signing is not simulated.",
+    "Undocumented bodies: validation errors are 400, an exceeded quota is 429 and a conflict is 409, the last two without a body.",
+    "Retries: five attempts over about 37 minutes, instead of the 3 days Wave announces.",
+    "wave_launch_url leads to an Overpass page, never to Wave."
+  ]
+}

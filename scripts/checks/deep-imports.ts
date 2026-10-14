@@ -3,7 +3,7 @@ import { posix } from "node:path";
 const boundaryPatterns = [
   /^(apps\/api\/src\/modules\/[^/]+)\//,
   /^(apps\/web\/src\/features\/[^/]+)\//,
-  /^(packages\/providers\/src\/[^/]+)\//,
+  /^(packages\/providers\/src\/[^/.]+)\//,
 ];
 const specifierPattern = /(?:\bfrom\s*|\bimport\s*\(?\s*)["']([^"']+)["']/g;
 

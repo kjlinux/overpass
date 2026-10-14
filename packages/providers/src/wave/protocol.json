@@ -1,0 +1,11 @@
+{
+  "source": "Quoted from https://docs.wave.com/checkout and https://docs.wave.com/webhook, consulted 2026-10-14. Protocol data sent to the developer's code, not interface text.",
+  "missingAuth": "Your request should include an HTTP auth header.",
+  "invalidAuth": "Your HTTP auth header can't be processed.",
+  "unknownKey": "The key you provided doesn't exist in our system.",
+  "sessionNotFound": "You requested a checkout session by ID that we can't match to anything in our system. You should double-check that the ID corresponds to one that you've received in a response.",
+  "refundFailed": "You tried to refund a checkout but the transaction couldn't be made. It's possible that the payment wasn't in a success state beforehand, the recipient account was blocked, or your wallet didn't have sufficient funds for the transaction.",
+  "requestInvalid": "Request invalid",
+  "fieldRequired": "field required",
+  "insufficientBalance": "Insufficient balance"
+}
