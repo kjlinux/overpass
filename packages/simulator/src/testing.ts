@@ -62,8 +62,13 @@ export const fakeProvider: ProviderAdapter<FakeOutcome> = {
     render(event, { secret, now }) {
       const body = JSON.stringify({ id: event.id, type: event.type, data: event.payload });
       const stamp = Math.floor(now.getTime() / 1000).toString();
-      const signature = createHmac("sha256", secret).update(stamp + body).digest("hex");
-      return { body, headers: { "content-type": "application/json", "x-fake-signature": signature } };
+      const signature = createHmac("sha256", secret)
+        .update(stamp + body)
+        .digest("hex");
+      return {
+        body,
+        headers: { "content-type": "application/json", "x-fake-signature": signature },
+      };
     },
   },
 };

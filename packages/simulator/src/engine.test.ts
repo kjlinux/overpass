@@ -44,7 +44,11 @@ describe("createSimulator", () => {
 describe("handle", () => {
   it("returns nothing for an unknown provider", async () => {
     const simulator = createSimulator([fakeProvider]);
-    const result = await simulator.handle("nope", request({ method: "GET", path: "/" }), base("success"));
+    const result = await simulator.handle(
+      "nope",
+      request({ method: "GET", path: "/" }),
+      base("success"),
+    );
     expect(result).toBeUndefined();
   });
 
@@ -55,13 +59,25 @@ describe("handle", () => {
   });
 
   it("passes the scenario outcome to the endpoint", async () => {
-    const result = await run("insufficient_funds", { method: "POST", path: "/payments", body: { amount: 500 } });
+    const result = await run("insufficient_funds", {
+      method: "POST",
+      path: "/payments",
+      body: { amount: 500 },
+    });
     expect(result?.response.status).toBe(201);
-    expect(result?.response.body).toMatchObject({ status: "failed", reason: "no-money", amount: 500 });
+    expect(result?.response.body).toMatchObject({
+      status: "failed",
+      reason: "no-money",
+      amount: 500,
+    });
   });
 
   it("schedules the provider events with the scenario delivery plan", async () => {
-    const result = await run("duplicate_webhook", { method: "POST", path: "/payments", body: { amount: 1 } });
+    const result = await run("duplicate_webhook", {
+      method: "POST",
+      path: "/payments",
+      body: { amount: 1 },
+    });
     expect(result?.webhooks.map((entry) => [entry.event.type, entry.delayMs])).toEqual([
       ["payment.paid", 0],
       ["payment.paid", 5000],
@@ -76,9 +92,17 @@ describe("handle", () => {
   it("gives endpoints the path parameters and the shared store", async () => {
     const simulator = createSimulator([fakeProvider]);
     const context = base("success");
-    const created = await simulator.handle("fake", request({ method: "POST", path: "/payments", body: { amount: 7 } }), context);
+    const created = await simulator.handle(
+      "fake",
+      request({ method: "POST", path: "/payments", body: { amount: 7 } }),
+      context,
+    );
     const id = (created?.response.body as { id: string }).id;
-    const read = await simulator.handle("fake", request({ method: "GET", path: `/payments/${id}` }), context);
+    const read = await simulator.handle(
+      "fake",
+      request({ method: "GET", path: `/payments/${id}` }),
+      context,
+    );
     expect(read?.response.body).toMatchObject({ id, amount: 7, status: "paid" });
   });
 });
@@ -87,13 +111,20 @@ describe("provider hooks", () => {
   const simulator = createSimulator([fakeProvider]);
 
   it("reads the test key where the provider expects its credential", () => {
-    const presented = request({ method: "GET", path: "/", headers: { "x-fake-key": "ovp_test_1" } });
+    const presented = request({
+      method: "GET",
+      path: "/",
+      headers: { "x-fake-key": "ovp_test_1" },
+    });
     expect(simulator.credential("fake", presented)).toBe("ovp_test_1");
     expect(simulator.credential("nope", presented)).toBeUndefined();
   });
 
   it("answers refusals in the provider format", () => {
-    expect(simulator.refusal("fake", "unauthorized")).toEqual({ status: 401, body: { error: "unauthorized" } });
+    expect(simulator.refusal("fake", "unauthorized")).toEqual({
+      status: 401,
+      body: { error: "unauthorized" },
+    });
     expect(simulator.refusal("fake", "tooManyRequests").status).toBe(429);
   });
 
@@ -101,9 +132,15 @@ describe("provider hooks", () => {
     const event = { id: "evt_1", type: "payment.paid", payload: { id: "p1" } };
     const rendered = simulator.renderWebhook("fake", event, { secret: "s3cret", now });
     const stamp = (now.getTime() / 1000).toString();
-    const expected = createHmac("sha256", "s3cret").update(stamp + rendered.body).digest("hex");
+    const expected = createHmac("sha256", "s3cret")
+      .update(stamp + rendered.body)
+      .digest("hex");
     expect(rendered.headers["x-fake-signature"]).toBe(expected);
-    expect(JSON.parse(rendered.body)).toEqual({ id: "evt_1", type: "payment.paid", data: { id: "p1" } });
+    expect(JSON.parse(rendered.body)).toEqual({
+      id: "evt_1",
+      type: "payment.paid",
+      data: { id: "p1" },
+    });
   });
 
   it("refuses to render for an unknown provider", () => {
