@@ -1,16 +1,5 @@
 import { defineConfig, devices } from "@playwright/test";
-import { outbox } from "./e2e/paths.js";
-
-const databaseUrl =
-  process.env["E2E_DATABASE_URL"] ?? "postgres://overpass:overpass@127.0.0.1:5432/overpass";
-
-const apiEnv = {
-  DATABASE_URL: databaseUrl,
-  SESSION_SECRET: "e2e-only-secret-with-more-than-32-characters",
-  WEB_ORIGIN: "http://127.0.0.1:5173",
-  LOG_LEVEL: "warn",
-  MAIL_OUTBOX_DIR: outbox,
-};
+import { apiEnv } from "./e2e/paths.js";
 
 export default defineConfig({
   testDir: "e2e",
