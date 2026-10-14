@@ -22,7 +22,7 @@ export const wave: ProviderAdapter<WaveOutcome> = {
   identity: {
     id: "wave",
     name: "Wave",
-    countries: ["SN", "CI", "ML", "BF", "UG"],
+    countries: ["SN", "CI"],
     docsUrl: "https://docs.wave.com/checkout",
     docsVersion: "Changelog 2024-03-29",
     consultedAt: "2026-10-14",
