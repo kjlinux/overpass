@@ -20,7 +20,8 @@
     "own_route": "Vous êtes l'auteur de cette fiche : un autre développeur doit la vérifier.",
     "check_too_soon": "Vous avez déjà vérifié cette fiche ces 30 derniers jours.",
     "translation_exists": "Cette fiche existe déjà dans cette langue.",
-    "pothole_exists": "Vous avez déjà signalé un nid-de-poule non résolu sur cette fiche."
+    "pothole_exists": "Vous avez déjà signalé un nid-de-poule non résolu sur cette fiche.",
+    "sandbox_key_limit": "Vous avez déjà 5 clés de test actives. Révoquez-en une pour en créer une autre."
   },
   "fields": {
     "required": "Ce champ est obligatoire.",
@@ -52,6 +53,12 @@
     "query_invalid": "La recherche ne doit pas dépasser 200 caractères.",
     "cursor_invalid": "Ce lien de page n'est plus valide. Recommencez la recherche.",
     "limit_invalid": "Demandez entre 1 et 50 fiches par page.",
-    "nothing_to_update": "Modifiez au moins un champ avant d'enregistrer."
+    "nothing_to_update": "Modifiez au moins un champ avant d'enregistrer.",
+    "scenario_invalid": "Choisissez un des scénarios proposés.",
+    "target_invalid": "Choisissez où envoyer les webhooks : récepteur intégré, URL ou relais local.",
+    "webhook_url_invalid": "Saisissez une URL http ou https complète, par exemple https://exemple.com/webhook.",
+    "webhook_url_required": "Saisissez l'URL qui recevra les webhooks.",
+    "webhook_url_private": "Cette URL vise une adresse privée ou locale. Utilisez le relais local pour votre poste.",
+    "provider_not_simulated": "Cet opérateur n'a pas de simulateur."
   }
 }

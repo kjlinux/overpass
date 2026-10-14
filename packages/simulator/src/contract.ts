@@ -60,6 +60,8 @@ export type Endpoint<Outcome> = {
 export type RenderedWebhook = { body: string; headers: Readonly<Record<string, string>> };
 
 export type WebhookSpec = {
+  /** Mirrors the documented secret format, such as a provider's key prefix. */
+  secretPrefix?: string;
   render(event: ProviderEvent, options: { secret: string; now: Date }): RenderedWebhook;
 };
 

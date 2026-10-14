@@ -20,7 +20,8 @@
     "own_route": "You wrote this itinerary: another developer has to check it.",
     "check_too_soon": "You already checked this itinerary in the last 30 days.",
     "translation_exists": "This itinerary already exists in that language.",
-    "pothole_exists": "You already reported an unresolved pothole on this itinerary."
+    "pothole_exists": "You already reported an unresolved pothole on this itinerary.",
+    "sandbox_key_limit": "You already have 5 active test keys. Revoke one to create another."
   },
   "fields": {
     "required": "This field is required.",
@@ -52,6 +53,12 @@
     "query_invalid": "The search must not exceed 200 characters.",
     "cursor_invalid": "This page link is no longer valid. Start the search again.",
     "limit_invalid": "Ask for 1 to 50 itineraries per page.",
-    "nothing_to_update": "Change at least one field before saving."
+    "nothing_to_update": "Change at least one field before saving.",
+    "scenario_invalid": "Choose one of the offered scenarios.",
+    "target_invalid": "Choose where webhooks go: built-in receiver, URL or local relay.",
+    "webhook_url_invalid": "Enter a full http or https URL, for example https://example.com/webhook.",
+    "webhook_url_required": "Enter the URL that will receive the webhooks.",
+    "webhook_url_private": "This URL points to a private or local address. Use the local relay for your machine.",
+    "provider_not_simulated": "This provider has no simulator."
   }
 }

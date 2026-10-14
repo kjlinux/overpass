@@ -29,6 +29,7 @@ describe("migrations", () => {
       "0003_routes",
       "0004_checks",
       "0005_service_countries",
+      "0006_sandbox",
     ]);
     expect(await tables()).toEqual([
       "api_tokens",
@@ -37,6 +38,10 @@ describe("migrations", () => {
       "rate_limit_counters",
       "route_versions",
       "routes",
+      "sandbox_deliveries",
+      "sandbox_events",
+      "sandbox_keys",
+      "sandbox_objects",
       "schema_migrations",
       "service_countries",
       "services",
@@ -52,7 +57,8 @@ describe("migrations", () => {
 
   it("reverts the last migration and can apply it again", async () => {
     await migrateUp(executor, migrationsDirectory);
-    expect(await migrateDown(executor, migrationsDirectory, 5)).toEqual([
+    expect(await migrateDown(executor, migrationsDirectory, 6)).toEqual([
+      "0006_sandbox",
       "0005_service_countries",
       "0004_checks",
       "0003_routes",
@@ -60,7 +66,7 @@ describe("migrations", () => {
       "0001_accounts",
     ]);
     expect(await tables()).toEqual(["schema_migrations"]);
-    expect(await migrateUp(executor, migrationsDirectory)).toHaveLength(5);
+    expect(await migrateUp(executor, migrationsDirectory)).toHaveLength(6);
   });
 
   it("stores identifiers as UUID and dates as timestamptz", async () => {
