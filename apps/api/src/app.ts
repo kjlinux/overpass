@@ -31,6 +31,7 @@ export type SandboxDeps = {
   providers?: readonly ProviderAdapter[];
   resolveHost?: HostResolver;
   bus?: RelayBus;
+  demoProvider?: string;
 };
 
 /** Instances share relay announcements through PostgreSQL; without a URL, one process is enough. */
@@ -92,6 +93,7 @@ async function registerModules(
     webOrigin: config.WEB_ORIGIN,
     now: clock,
     bus: relayBus(app, config, sandbox?.bus),
+    ...(sandbox?.demoProvider === undefined ? {} : { demoProvider: sandbox.demoProvider }),
     ...(sandbox?.resolveHost === undefined ? {} : { resolveHost: sandbox.resolveHost }),
   });
 }

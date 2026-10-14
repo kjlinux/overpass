@@ -98,22 +98,26 @@ function storedRequest(call: GatewayCall, credential: string) {
   };
 }
 
+export type Simulated = { response: SimResponse; eventId?: string };
+
 async function simulate(
   deps: GatewayDeps,
   call: GatewayCall,
   request: SimRequest,
   key: KeyRow,
-): Promise<SimResponse> {
+): Promise<Simulated> {
   const now = deps.now();
   const scenario = pickScenario(call.headers["overpass-scenario"], key.scenario);
   const store = objectStore(deps.db, key.id, key.provider);
   const newId = () => randomBytes(10).toString("hex");
   const context = { scenario, store, now, newId, webOrigin: deps.webOrigin };
   const result = await deps.simulator.handle(call.provider, request, context);
-  if (result === undefined) return deps.simulator.refusal(call.provider, "notFound", request);
+  if (result === undefined) {
+    return { response: deps.simulator.refusal(call.provider, "notFound", request) };
+  }
   const credential = deps.simulator.credential(call.provider, request) ?? "";
   const response = { status: result.response.status, body: result.response.body ?? null };
-  await deps.events.record(
+  const eventId = await deps.events.record(
     {
       keyId: key.id,
       provider: key.provider,
@@ -124,22 +128,40 @@ async function simulate(
     },
     deliveriesFor(key, result.webhooks, now),
   );
-  return result.response;
+  return { response: result.response, eventId };
+}
+
+async function metered(deps: GatewayDeps, key: KeyRow): Promise<boolean> {
+  const usage = await deps.counters.hit(`sandbox:key:${key.id}`, quotaWindowMs);
+  return usage.count <= key.quota;
 }
 
 /** Authenticates, meters, simulates and records one call to a simulated provider. */
 export function createGateway(deps: GatewayDeps) {
   const { simulator } = deps;
-  return async function handle(call: GatewayCall): Promise<SimResponse | undefined> {
-    if (!simulator.has(call.provider)) return undefined;
-    const body = parseBody(call.rawBody, call.headers["content-type"]);
-    const request: SimRequest = { ...call, body };
-    const key = await authenticate(deps, call, request);
-    if (key === undefined) return simulator.refusal(call.provider, "unauthorized", request);
-    const usage = await deps.counters.hit(`sandbox:key:${key.id}`, quotaWindowMs);
-    if (usage.count > key.quota)
-      return simulator.refusal(call.provider, "tooManyRequests", request);
-    return simulate(deps, call, request, key);
+  const requestOf = (call: GatewayCall): SimRequest => ({
+    ...call,
+    body: parseBody(call.rawBody, call.headers["content-type"]),
+  });
+  return {
+    async handle(call: GatewayCall): Promise<SimResponse | undefined> {
+      if (!simulator.has(call.provider)) return undefined;
+      const request = requestOf(call);
+      const key = await authenticate(deps, call, request);
+      if (key === undefined) return simulator.refusal(call.provider, "unauthorized", request);
+      if (!(await metered(deps, key))) {
+        return simulator.refusal(call.provider, "tooManyRequests", request);
+      }
+      return (await simulate(deps, call, request, key)).response;
+    },
+    /** For calls Overpass plays itself for a known key: the trial page and the public demo. */
+    async runAs(key: KeyRow, call: GatewayCall): Promise<Simulated> {
+      const request = requestOf(call);
+      if (!(await metered(deps, key))) {
+        return { response: simulator.refusal(call.provider, "tooManyRequests", request) };
+      }
+      return simulate(deps, call, request, key);
+    },
   };
 }
 

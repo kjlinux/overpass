@@ -63,3 +63,11 @@ export const relayResultInput = z.strictObject({
 });
 
 export type RelayResultInput = z.infer<typeof relayResultInput>;
+
+/** The public demo shows one provider and three scenarios, the ones a newcomer understands at once. */
+export const demoScenarios = ["success", "insufficient_funds", "duplicate_webhook"] as const;
+
+export const sandboxRunInput = z.strictObject({ scenario: scenarioSchema.optional() });
+export const sandboxDemoInput = z.strictObject({
+  scenario: z.enum(demoScenarios, { error: codeOr("scenario_invalid") }),
+});

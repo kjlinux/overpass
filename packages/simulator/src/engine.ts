@@ -1,4 +1,5 @@
 import type {
+  ExampleCall,
   ObjectStore,
   ProviderAdapter,
   ProviderEvent,
@@ -34,6 +35,7 @@ export type Simulator = {
   credential(provider: string, request: SimRequest): string | undefined;
   refusal(provider: string, reason: Refusal, request: SimRequest): SimResponse;
   secretPrefix(provider: string): string;
+  example(provider: string): ExampleCall | undefined;
   renderWebhook(
     provider: string,
     event: ProviderEvent,
@@ -94,6 +96,7 @@ export function createSimulator(
     },
     credential: (provider, request) => registry.get(provider)?.credential(request),
     refusal: (provider, reason, request) => require(provider).errors[reason](request),
+    example: (provider) => registry.get(provider)?.example,
     secretPrefix: (provider) => require(provider).webhooks.secretPrefix ?? "",
     renderWebhook: (provider, event, options) => require(provider).webhooks.render(event, options),
   };

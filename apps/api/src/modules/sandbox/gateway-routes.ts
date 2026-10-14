@@ -34,7 +34,7 @@ export function registerGatewayRoutes(app: FastifyInstance, gateway: Gateway): v
     config: { rateLimit: perAddress },
     handler: async (request, reply) => {
       const params = request.params as { provider: string; "*": string };
-      const answer = await gateway({
+      const answer = await gateway.handle({
         provider: params.provider,
         method: request.method as HttpMethod,
         path: `/${params["*"]}`,

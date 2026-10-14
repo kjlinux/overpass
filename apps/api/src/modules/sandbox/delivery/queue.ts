@@ -1,6 +1,6 @@
 import { and, asc, eq, inArray, isNull, lt, lte, or, sql } from "drizzle-orm";
 import type { Database } from "../../../db/client.js";
-import { sandboxDeliveries, sandboxEvents, sandboxObjects } from "../tables.js";
+import { sandboxDeliveries, sandboxEvents, sandboxKeys, sandboxObjects } from "../tables.js";
 
 export type QueuedDelivery = typeof sandboxDeliveries.$inferSelect;
 export type DeliveryUpdate = Partial<
@@ -20,6 +20,27 @@ export type DeliveryUpdate = Partial<
 
 const historyMs = 7 * 86_400_000;
 const table = sandboxDeliveries;
+
+/** Seven days of history, then events, deliveries, objects and expired demo keys go. */
+export async function purgeHistory(
+  db: Database,
+  now: Date,
+): Promise<{ events: number; objects: number }> {
+  const cutoff = new Date(now.getTime() - historyMs);
+  const events = await db
+    .delete(sandboxEvents)
+    .where(lt(sandboxEvents.createdAt, cutoff))
+    .returning({ id: sandboxEvents.id });
+  const objects = await db
+    .delete(sandboxObjects)
+    .where(lt(sandboxObjects.updatedAt, cutoff))
+    .returning({ id: sandboxObjects.objectId });
+  // Demo keys have no owner to revoke them; they go once their history is gone too.
+  await db
+    .delete(sandboxKeys)
+    .where(and(isNull(sandboxKeys.userId), lt(sandboxKeys.expiresAt, cutoff)));
+  return { events: events.length, objects: objects.length };
+}
 
 /** The delivery queue: a lease per claim, so concurrent workers never send the same row. */
 export function deliveryQueue(db: Database) {
@@ -48,18 +69,7 @@ export function deliveryQueue(db: Database) {
         .set({ ...update, leasedUntil: null })
         .where(eq(table.id, id));
     },
-    async purge(now: Date): Promise<{ events: number; objects: number }> {
-      const cutoff = new Date(now.getTime() - historyMs);
-      const events = await db
-        .delete(sandboxEvents)
-        .where(lt(sandboxEvents.createdAt, cutoff))
-        .returning({ id: sandboxEvents.id });
-      const objects = await db
-        .delete(sandboxObjects)
-        .where(lt(sandboxObjects.updatedAt, cutoff))
-        .returning({ id: sandboxObjects.objectId });
-      return { events: events.length, objects: objects.length };
-    },
+    purge: (now: Date) => purgeHistory(db, now),
   };
 }
 

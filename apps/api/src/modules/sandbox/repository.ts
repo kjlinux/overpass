@@ -1,7 +1,8 @@
-export { eventsPageSize, eventsRepository } from "./repository/events.js";
+export { eventLookup, eventsPageSize, eventsRepository } from "./repository/events.js";
 export type {
   DeliveryInsert,
   DeliveryRow,
+  EventLookup,
   EventRow,
   EventsRepository,
 } from "./repository/events.js";

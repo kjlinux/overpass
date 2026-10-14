@@ -5,6 +5,7 @@ export type {
   EndpointDocs,
   EndpointInput,
   EndpointResult,
+  ExampleCall,
   HttpMethod,
   ObjectStore,
   ProviderAdapter,

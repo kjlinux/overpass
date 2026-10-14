@@ -105,6 +105,9 @@ export type ProviderIdentity = {
 
 export type Refusal = "notFound" | "unauthorized" | "tooManyRequests";
 
+/** The call a trial page plays on the developer's behalf, copied from the provider's own example. */
+export type ExampleCall = { method: HttpMethod; path: string; body?: unknown };
+
 /** The four-part contract: endpoints, outcome per scenario, webhooks, identity. */
 export type ProviderAdapter<Outcome = unknown> = {
   identity: ProviderIdentity;
@@ -113,5 +116,6 @@ export type ProviderAdapter<Outcome = unknown> = {
   webhooks: WebhookSpec;
   credential(request: SimRequest): string | undefined;
   auth?: AuthDoc;
+  example?: ExampleCall;
   errors: Readonly<Record<Refusal, (request: SimRequest) => SimResponse>>;
 };
