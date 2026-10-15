@@ -154,12 +154,12 @@
   },
   "guided": {
     "heading": "Démo guidée",
-    "intro": "Quatre étapes, du jeton au webhook reçu sur votre poste. Copiez chaque commande dans votre terminal, ou jouez l'étape depuis cette page : la réponse s'affiche dans l'inspecteur.",
-    "step": "Étape {{number}} : {{title}}",
+    "intro": "{{count}} étapes, du jeton au webhook reçu sur votre poste. Copiez chaque commande dans votre terminal, ou jouez l'étape depuis cette page : la réponse s'affiche dans l'inspecteur.",
+    "step": "Étape {{number}}",
     "copy": "Commande à copier",
     "play": "Jouer l'étape",
     "result": "Réponse {{status}}",
-    "webhookTitle": "webhook",
-    "webhook": "Lancez le relais local, puis rejouez l'étape 2 : le webhook arrive sur votre serveur, signé X-Signature."
+    "webhookTitle": "Webhook reçu en local",
+    "webhook": "Lancez le relais local, puis rejouez l'étape qui crée le paiement : le webhook arrive sur votre serveur, signé selon le schéma de l'opérateur."
   }
 }

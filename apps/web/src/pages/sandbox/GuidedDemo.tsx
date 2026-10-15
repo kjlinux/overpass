@@ -22,17 +22,29 @@ type Props = {
 type StepProps = {
   number: number;
   title: string;
+  isCode?: boolean;
   summary: string;
   code: string;
   status: number | undefined;
   onPlay?: () => void;
 };
 
-function Step({ number, title, summary, code, status, onPlay }: StepProps): JSX.Element {
+function Step({
+  number,
+  title,
+  isCode = false,
+  summary,
+  code,
+  status,
+  onPlay,
+}: StepProps): JSX.Element {
   const { t } = useTranslation("sandbox");
   return (
     <li class="border-b border-rule py-4">
-      <h3 class="font-semibold">{t("guided.step", { number, title })}</h3>
+      <h3 class="flex flex-wrap items-baseline gap-x-3 font-semibold">
+        <span>{t("guided.step", { number })}</span>
+        <span class={isCode ? "font-code text-caption" : ""}>{title}</span>
+      </h3>
       <p class="mt-1 text-caption text-ink-2">{summary}</p>
       <div class="mt-3">
         <CodeBlock code={code} language={t("guided.copy")} />
@@ -66,19 +78,19 @@ export function GuidedDemo({ provider, item, secret, origin, onPlay }: Props): J
     setVars({ ...vars, ...result.vars });
     setStatuses({ ...statuses, [step]: result.status });
   };
-  const curl = (step: SandboxProvider["steps"][number]) =>
-    curlOf({ origin, provider: provider.id, step, auth: provider.auth, key, vars });
+  const shared = { origin, provider: provider.id, auth: provider.auth, key, vars };
   return (
     <Section id="sandbox-guided" title={t("guided.heading")}>
-      <p>{t("guided.intro")}</p>
+      <p>{t("guided.intro", { count: provider.steps.length + 1 })}</p>
       <ol class="mt-4 border-t border-rule">
         {provider.steps.map((step, index) => (
           <Step
             key={step.id}
             number={index + 1}
-            title={step.id}
+            title={`${step.method} ${step.path}`}
+            isCode
             summary={step.summary ?? ""}
-            code={curl(step)}
+            code={curlOf({ ...shared, step })}
             status={statuses[step.id]}
             onPlay={() => void play(step.id)}
           />

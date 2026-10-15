@@ -154,12 +154,12 @@
   },
   "guided": {
     "heading": "Guided demo",
-    "intro": "Four steps, from the token to the webhook received on your machine. Copy each command into your terminal, or play the step from this page: the response shows in the inspector.",
-    "step": "Step {{number}}: {{title}}",
+    "intro": "{{count}} steps, from the token to the webhook received on your machine. Copy each command into your terminal, or play the step from this page: the response shows in the inspector.",
+    "step": "Step {{number}}",
     "copy": "Command to copy",
     "play": "Play the step",
     "result": "Response {{status}}",
-    "webhookTitle": "webhook",
-    "webhook": "Start the local relay, then play step 2 again: the webhook reaches your server, signed X-Signature."
+    "webhookTitle": "Webhook received locally",
+    "webhook": "Start the local relay, then replay the step that creates the payment: the webhook reaches your server, signed with the provider's scheme."
   }
 }
