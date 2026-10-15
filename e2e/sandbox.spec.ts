@@ -146,3 +146,32 @@ test("a member runs every PI-SPI scenario and plays the guided demo", async ({ b
     timeout: 90_000,
   });
 });
+
+test("a member runs every PayDunya scenario and checks the invoice", async ({ browser }, info) => {
+  test.skip(info.project.name !== "desktop", "the PayDunya scenarios run once, at desktop width");
+  test.setTimeout(300_000);
+  const page = await sharedMember(browser);
+  await page.goto("/fr/sandbox?provider=paydunya");
+  await page.getByRole("button", { name: sandbox.keys.create }).click();
+  for (const scenario of ["success", "insufficient_funds", "duplicate_webhook"] as const) {
+    await run(page, scenario);
+    await expect(trip(page).first()).toContainText(sandbox.deliveries.state.passed, {
+      timeout: 15_000,
+    });
+  }
+  await expect(page.getByText(sandbox.deliveries.same)).toBeVisible({ timeout: 20_000 });
+  await run(page, "timeout");
+  await expect(page.getByText(sandbox.deliveries.none)).toBeVisible({ timeout: 15_000 });
+  const plays = page.getByRole("button", { name: sandbox.guided.play });
+  for (let index = 0; index < 2; index += 1) {
+    await plays.nth(index).click();
+    await expect(page.getByRole("status").filter({ hasText: "Réponse 200" })).toHaveCount(
+      index + 1,
+    );
+  }
+  await expect(page.getByText('"status": "pending"')).toBeVisible();
+  await run(page, "late_webhook");
+  await expect(trip(page).first()).toContainText(sandbox.deliveries.state.passed, {
+    timeout: 90_000,
+  });
+});
