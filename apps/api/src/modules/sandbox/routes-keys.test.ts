@@ -150,7 +150,17 @@ describe("GET /v1/sandbox/providers", () => {
         summary: "Test provider",
         notes: ["Note en"],
         officialSandboxUrl: null,
-        example: { method: "POST", path: "/payments" },
+        warning: null,
+        steps: [
+          { id: "pay", method: "POST", path: "/payments", launch: true, summary: null },
+          {
+            id: "read",
+            method: "GET",
+            path: "/payments/{{paymentId}}",
+            launch: false,
+            summary: null,
+          },
+        ],
       }),
     ]);
   });

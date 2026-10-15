@@ -73,6 +73,11 @@ export function ProviderPanel({ providers, provider, unavailable, onSelect }: Pr
       title={t("provider.heading")}
       aside={<Chip>{t("provider.unofficial")}</Chip>}
     >
+      {provider.warning === null ? null : (
+        <p role="note" class="mb-4 border border-warning bg-warning-surface p-4">
+          {provider.warning}
+        </p>
+      )}
       {unavailable ? (
         <p class="mb-4 border border-rule-strong bg-surface p-4">{t("provider.unavailable")}</p>
       ) : null}

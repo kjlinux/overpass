@@ -40,7 +40,7 @@ describe("POST /v1/sandbox/keys/:id/run", () => {
       payload: { scenario: "insufficient_funds" },
     });
     expect(response.status).toBe(201);
-    const event = response.body.data as unknown as Event;
+    const { event } = response.body.data as unknown as { event: Event };
     expect(event).toMatchObject({
       scenario: "insufficient_funds",
       request: { method: "POST", path: "/payments", body: '{"amount":2500}' },
@@ -56,13 +56,30 @@ describe("POST /v1/sandbox/keys/:id/run", () => {
     expect(event.deliveries.map((delivery) => delivery.eventType)).toEqual(["payment.failed"]);
   });
 
+  it("plays one walkthrough step with what the previous one captured", async () => {
+    const id = await newKey();
+    const url = `/v1/sandbox/keys/${id}/run`;
+    const paid = await call(app, "POST", url, { cookie: awa, payload: { step: "pay" } });
+    const { vars } = paid.body.data as unknown as { vars: Record<string, string> };
+    expect(vars.paymentId).toMatch(/^pay_/);
+    const read = await call(app, "POST", url, { cookie: awa, payload: { step: "read", vars } });
+    const { event } = read.body.data as unknown as { event: Event };
+    expect(event.request).toMatchObject({
+      method: "GET",
+      path: `/payments/${vars.paymentId ?? ""}`,
+    });
+    expect(event.response.status).toBe(200);
+    const unknown = await call(app, "POST", url, { cookie: awa, payload: { step: "nope" } });
+    expect(unknown.status).toBe(404);
+  });
+
   it("uses the key's scenario when none is given", async () => {
     const id = await newKey();
     const response = await call(app, "POST", `/v1/sandbox/keys/${id}/run`, {
       cookie: awa,
       payload: {},
     });
-    expect((response.body.data as unknown as Event).scenario).toBe("success");
+    expect((response.body.data as unknown as { event: Event }).event.scenario).toBe("success");
   });
 
   it("is refused without a session, for another owner, or with an unknown scenario", async () => {
@@ -105,7 +122,7 @@ describe("public demo", () => {
   it("never shows a member's event through the demo route", async () => {
     const id = await newKey();
     const run = await call(app, "POST", `/v1/sandbox/keys/${id}/run`, { cookie: awa, payload: {} });
-    const eventId = (run.body.data as unknown as Event).id;
+    const eventId = (run.body.data as unknown as { event: Event }).event.id;
     expect((await call(app, "GET", `/v1/sandbox/demo/events/${eventId}`)).status).toBe(404);
   });
 

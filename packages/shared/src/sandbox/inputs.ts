@@ -70,7 +70,19 @@ export type RelayResultInput = z.infer<typeof relayResultInput>;
 /** The public demo shows one provider and three scenarios, the ones a newcomer understands at once. */
 export const demoScenarios = ["success", "insufficient_funds", "duplicate_webhook"] as const;
 
-export const sandboxRunInput = z.strictObject({ scenario: scenarioSchema.optional() });
+const stepVars = z
+  .record(z.string().regex(/^\w{1,40}$/), z.string().max(200))
+  .refine((vars) => Object.keys(vars).length <= 20, { error: "bad_request" });
+
+/** One walkthrough step, or every launch step when none is named. */
+export const sandboxRunInput = z.strictObject({
+  scenario: scenarioSchema.optional(),
+  step: z
+    .string()
+    .regex(/^[\w-]{1,40}$/, { error: "bad_request" })
+    .optional(),
+  vars: stepVars.optional(),
+});
 export const sandboxDemoInput = z.strictObject({
   scenario: z.enum(demoScenarios, { error: codeOr("scenario_invalid") }),
 });

@@ -26,8 +26,8 @@ export function registerRunRoutes(
     async (request, reply) => {
       const account = await requireAccount(resolve, request);
       const { id } = parseInput(sandboxIdParams, request.params);
-      const { scenario } = parseInput(sandboxRunInput, request.body);
-      return reply.code(201).send(ok(await runs.runKey(account, id, scenario)));
+      const input = parseInput(sandboxRunInput, request.body);
+      return reply.code(201).send(ok(await runs.runKey(account, id, input)));
     },
   );
   app.post("/v1/sandbox/demo", { config: { rateLimit: limits.demo } }, async (request, reply) => {

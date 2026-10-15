@@ -172,11 +172,11 @@ describe("provider hooks", () => {
     expect(simulator.secretPrefix("fake")).toBe("");
   });
 
-  it("gives the documented example call of a provider, or nothing", () => {
-    const example = { method: "POST" as const, path: "/payments", body: { amount: 1 } };
-    expect(createSimulator([{ ...fakeProvider, example }]).example("fake")).toEqual(example);
-    expect(simulator.example("fake")).toBeUndefined();
-    expect(simulator.example("nope")).toBeUndefined();
+  it("gives the documented walkthrough steps of a provider, or none", () => {
+    const steps = [{ id: "pay", method: "POST" as const, path: "/payments", launch: true }];
+    expect(createSimulator([{ ...fakeProvider, steps }]).steps("fake")).toEqual(steps);
+    expect(simulator.steps("fake")).toEqual([]);
+    expect(simulator.steps("nope")).toEqual([]);
   });
 
   it("refuses to render for an unknown provider", () => {

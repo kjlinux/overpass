@@ -1,4 +1,5 @@
 import type { ZodType } from "zod";
+import type { ExampleStep } from "./steps.js";
 
 /** The five scenarios every simulated provider must answer. */
 export const scenarios = [
@@ -85,6 +86,10 @@ export type ProviderCopy = {
   summary: string;
   notes: readonly string[];
   endpoints?: Readonly<Record<string, string>>;
+  /** What changes in production that the simulator leaves out, shown before anything else. */
+  warning?: string;
+  /** Walkthrough step id to one sentence saying what the step shows. */
+  steps?: Readonly<Record<string, string>>;
 };
 
 /** How a developer presents the test key, as the provider documents its credential. */
@@ -105,9 +110,6 @@ export type ProviderIdentity = {
 
 export type Refusal = "notFound" | "unauthorized" | "tooManyRequests";
 
-/** The call a trial page plays on the developer's behalf, copied from the provider's own example. */
-export type ExampleCall = { method: HttpMethod; path: string; body?: unknown };
-
 /** The four-part contract: endpoints, outcome per scenario, webhooks, identity. */
 export type ProviderAdapter<Outcome = unknown> = {
   identity: ProviderIdentity;
@@ -116,6 +118,7 @@ export type ProviderAdapter<Outcome = unknown> = {
   webhooks: WebhookSpec;
   credential(request: SimRequest): string | undefined;
   auth?: AuthDoc;
-  example?: ExampleCall;
+  /** The documented calls a trial page plays for the developer, in walkthrough order. */
+  steps?: readonly ExampleStep[];
   errors: Readonly<Record<Refusal, (request: SimRequest) => SimResponse>>;
 };

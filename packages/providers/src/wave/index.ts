@@ -37,17 +37,22 @@ export const wave: ProviderAdapter<WaveOutcome> = {
     late_webhook: { payment: "succeeded" },
   },
   auth: { type: "bearer" },
-  example: {
-    method: "POST",
-    path: "/v1/checkout/sessions",
-    body: {
-      amount: "2500",
-      currency: "XOF",
-      success_url: "https://shop.example/payment/ok",
-      error_url: "https://shop.example/payment/error",
-      client_reference: "order-1042",
+  steps: [
+    {
+      id: "session",
+      launch: true,
+      method: "POST",
+      path: "/v1/checkout/sessions",
+      capture: { sessionId: "id" },
+      body: {
+        amount: "2500",
+        currency: "XOF",
+        success_url: "https://shop.example/payment/ok",
+        error_url: "https://shop.example/payment/error",
+        client_reference: "order-1042",
+      },
     },
-  },
+  ],
   credential: (request) => bearer.exec(request.headers.authorization ?? "")?.[1],
   errors: {
     notFound: waveErrors.unknownRoute,

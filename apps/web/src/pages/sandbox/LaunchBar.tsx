@@ -38,7 +38,8 @@ function Recap({
 /** The page's one primary action, preceded by a recap of what it will do. */
 export function LaunchBar({ provider, scenario, item, busy, onRun }: Props): JSX.Element {
   const { t } = useTranslation("sandbox");
-  const example = provider.example;
+  const launch = provider.steps.filter((step) => step.launch);
+  const example = launch[launch.length - 1] ?? null;
   const ready = item !== undefined && example !== null;
   const note =
     item === undefined

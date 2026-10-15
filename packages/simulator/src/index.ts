@@ -5,7 +5,6 @@ export type {
   EndpointDocs,
   EndpointInput,
   EndpointResult,
-  ExampleCall,
   HttpMethod,
   ObjectStore,
   ProviderAdapter,
@@ -24,3 +23,5 @@ export type { CallContext, Simulation, Simulator } from "./engine.js";
 export { matchPath } from "./paths.js";
 export { defaultTiming, scheduleWebhooks } from "./schedule.js";
 export type { DeliveryTiming, ScheduledWebhook } from "./schedule.js";
+export { captureVars, fillStep, launchSteps } from "./steps.js";
+export type { ExampleStep, FilledStep, StepVars } from "./steps.js";

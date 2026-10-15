@@ -1,5 +1,4 @@
 import type {
-  ExampleCall,
   ObjectStore,
   ProviderAdapter,
   ProviderEvent,
@@ -11,6 +10,7 @@ import type {
   SimResponse,
 } from "./contract.js";
 import { matchPath } from "./paths.js";
+import type { ExampleStep } from "./steps.js";
 import { defaultTiming, scheduleWebhooks } from "./schedule.js";
 import type { DeliveryTiming, ScheduledWebhook } from "./schedule.js";
 
@@ -35,7 +35,7 @@ export type Simulator = {
   credential(provider: string, request: SimRequest): string | undefined;
   refusal(provider: string, reason: Refusal, request: SimRequest): SimResponse;
   secretPrefix(provider: string): string;
-  example(provider: string): ExampleCall | undefined;
+  steps(provider: string): readonly ExampleStep[];
   renderWebhook(
     provider: string,
     event: ProviderEvent,
@@ -96,7 +96,7 @@ export function createSimulator(
     },
     credential: (provider, request) => registry.get(provider)?.credential(request),
     refusal: (provider, reason, request) => require(provider).errors[reason](request),
-    example: (provider) => registry.get(provider)?.example,
+    steps: (provider) => registry.get(provider)?.steps ?? [],
     secretPrefix: (provider) => require(provider).webhooks.secretPrefix ?? "",
     renderWebhook: (provider, event, options) => require(provider).webhooks.render(event, options),
   };
