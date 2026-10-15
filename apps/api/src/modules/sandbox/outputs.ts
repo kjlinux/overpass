@@ -7,7 +7,7 @@ import type {
   SandboxProvider,
   SandboxTarget,
 } from "@overpass/shared";
-import type { ExampleStep, ProviderIdentity, Scenario } from "@overpass/simulator";
+import type { AuthDoc, ExampleStep, ProviderIdentity, Scenario } from "@overpass/simulator";
 import type { DeliveryRow, EventRow, KeyRow } from "./repository.js";
 
 type StoredRequest = SandboxEvent["request"];
@@ -62,6 +62,7 @@ export function toProvider(
   identity: ProviderIdentity,
   language: Language,
   steps: readonly ExampleStep[] = [],
+  auth: AuthDoc = { type: "bearer" },
 ): SandboxProvider {
   const copy = identity.copy[language] ?? identity.copy.en ?? Object.values(identity.copy)[0];
   return {
@@ -73,12 +74,15 @@ export function toProvider(
     consultedAt: identity.consultedAt,
     officialSandboxUrl: identity.officialSandboxUrl ?? null,
     warning: copy?.warning ?? null,
+    auth,
     steps: steps.map((step) => ({
       id: step.id,
       method: step.method,
       path: step.path,
       launch: step.launch === true,
       summary: copy?.steps?.[step.id] ?? null,
+      headers: { ...step.headers },
+      body: step.body ?? null,
     })),
     unofficial: true,
     summary: copy?.summary ?? identity.name,

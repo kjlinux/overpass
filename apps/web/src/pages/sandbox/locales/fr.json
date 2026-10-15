@@ -151,5 +151,15 @@
   "errors": {
     "load": "La piste d'essai n'a pas pu charger vos clés. Réessayez dans un instant.",
     "action": "L'action n'a pas abouti. Réessayez dans un instant."
+  },
+  "guided": {
+    "heading": "Démo guidée",
+    "intro": "Quatre étapes, du jeton au webhook reçu sur votre poste. Copiez chaque commande dans votre terminal, ou jouez l'étape depuis cette page : la réponse s'affiche dans l'inspecteur.",
+    "step": "Étape {{number}} : {{title}}",
+    "copy": "Commande à copier",
+    "play": "Jouer l'étape",
+    "result": "Réponse {{status}}",
+    "webhookTitle": "webhook",
+    "webhook": "Lancez le relais local, puis rejouez l'étape 2 : le webhook arrive sur votre serveur, signé X-Signature."
   }
 }

@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../app/useLanguage";
 import { Button, CodeBlock } from "../../components/ui";
 import { Section, clock } from "./parts";
-import { tripOf } from "./trip";
+import { repeatsPrevious, tripOf } from "./trip";
 
 type Props = { event: SandboxEvent | undefined; onReplay?: (id: string) => void };
 
@@ -132,9 +132,7 @@ export function Deliveries({ event, onReplay }: Props): JSX.Element | null {
   const { t } = useTranslation("sandbox");
   if (event === undefined) return null;
   const caption = <span class="text-caption text-ink-2">{t("deliveries.caption")}</span>;
-  const ids = event.deliveries.map((delivery) => eventIdOf(delivery.body));
-  const repeats = (index: number) =>
-    index > 0 && ids[index] !== undefined && ids[index] === ids[index - 1];
+  const bodies = event.deliveries.map((delivery) => delivery.body);
   return (
     <Section id="sandbox-deliveries" title={t("deliveries.heading")} aside={caption}>
       {event.deliveries.length === 0 ? (
@@ -145,7 +143,7 @@ export function Deliveries({ event, onReplay }: Props): JSX.Element | null {
           <DeliveryRow
             key={delivery.id}
             delivery={delivery}
-            same={repeats(index)}
+            same={repeatsPrevious(bodies, index)}
             onReplay={onReplay}
           />
         ))}

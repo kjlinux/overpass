@@ -179,6 +179,12 @@ describe("provider hooks", () => {
     expect(simulator.steps("nope")).toEqual([]);
   });
 
+  it("says how the provider expects the key, bearer by default", () => {
+    const header = { ...fakeProvider, auth: { type: "header" as const, name: "x-api-key" } };
+    expect(createSimulator([header]).auth("fake")).toEqual({ type: "header", name: "x-api-key" });
+    expect(simulator.auth("fake")).toEqual({ type: "bearer" });
+  });
+
   it("refuses to render for an unknown provider", () => {
     const event = { id: "e", type: "t", payload: {} };
     expect(() => simulator.renderWebhook("nope", event, { secret: "s", now })).toThrow(/nope/);

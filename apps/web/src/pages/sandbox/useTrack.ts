@@ -99,6 +99,20 @@ function callActions(ctx: Context) {
       ctx.set.ran();
       await ctx.reloadEvents();
     },
+    async step(step: string, vars: Record<string, string>, scenario: Scenario) {
+      const played = await ctx.act(
+        apiRequest<{ event: SandboxEvent; vars: Record<string, string> }>(
+          "POST",
+          keyPath(ctx, "/run"),
+          { step, vars, scenario },
+        ),
+      );
+      ctx.set.ran();
+      await ctx.reloadEvents();
+      return played === undefined
+        ? undefined
+        : { vars: played.vars, status: played.event.response.status };
+    },
     async replay(deliveryId: string) {
       await ctx.act(apiRequest("POST", `/v1/sandbox/deliveries/${deliveryId}/replay`));
       await ctx.reloadEvents();

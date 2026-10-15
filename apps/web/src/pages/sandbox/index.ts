@@ -9,3 +9,5 @@ export { ProviderPanel } from "./ProviderPanel";
 export { TargetPanel } from "./TargetPanel";
 export { relayCommand } from "./command";
 export { tripOf } from "./trip";
+export { GuidedDemo } from "./GuidedDemo";
+export { curlOf } from "./command";

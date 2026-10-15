@@ -108,7 +108,14 @@ export function createSandboxService(deps: SandboxServiceDeps) {
     providers: (language: Language): SandboxProvider[] =>
       deps.simulator
         .identities()
-        .map((identity) => toProvider(identity, language, deps.simulator.steps(identity.id))),
+        .map((identity) =>
+          toProvider(
+            identity,
+            language,
+            deps.simulator.steps(identity.id),
+            deps.simulator.auth(identity.id),
+          ),
+        ),
     createKey: keyCreation(deps, tools),
     listKeys: async (account: Account): Promise<SandboxKey[]> =>
       (await deps.keys.listActive(account.id, deps.now())).map(tools.output),

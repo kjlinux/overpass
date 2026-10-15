@@ -62,6 +62,10 @@ export const sandboxProviderSchema = z.object({
   consultedAt: z.string(),
   officialSandboxUrl: z.string().nullable(),
   warning: z.string().nullable(),
+  auth: z.union([
+    z.object({ type: z.literal("bearer") }),
+    z.object({ type: z.literal("header"), name: z.string() }),
+  ]),
   steps: z.array(
     z.object({
       id: z.string(),
@@ -69,6 +73,8 @@ export const sandboxProviderSchema = z.object({
       path: z.string(),
       launch: z.boolean(),
       summary: z.string().nullable(),
+      headers: z.record(z.string(), z.string()),
+      body: z.unknown(),
     }),
   ),
   unofficial: z.literal(true),

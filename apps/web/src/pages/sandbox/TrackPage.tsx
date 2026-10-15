@@ -10,11 +10,9 @@ import { FormAlert } from "../../forms";
 import { Layout, localizedPath } from "../../layout";
 import { useSession } from "../../session";
 import { useApi } from "../routes/useApi";
-import { Deliveries } from "./Deliveries";
-import { Inspector } from "./Inspector";
 import { KeysPanel } from "./KeysPanel";
-import { LaunchBar } from "./LaunchBar";
 import { ProviderPanel } from "./ProviderPanel";
+import { Results } from "./Results";
 import { ScenarioPanel } from "./ScenarioPanel";
 import { TargetPanel } from "./TargetPanel";
 import { useTrack } from "./useTrack";
@@ -117,27 +115,6 @@ function KeyTarget({ track }: { track: Track }): JSX.Element | null {
       error={track.error?.fields?.["webhookUrl"]?.message}
       onChange={setTarget}
     />
-  );
-}
-
-function Results(props: {
-  provider: SandboxProvider;
-  track: Track;
-  scenario: Scenario;
-}): JSX.Element {
-  const { provider, track, scenario } = props;
-  return (
-    <div class="pt-6 lg:pl-8">
-      <LaunchBar
-        provider={provider}
-        scenario={scenario}
-        item={track.current}
-        busy={track.busy === "run"}
-        onRun={() => void track.actions.run(scenario)}
-      />
-      <Inspector event={track.event} justRan={track.justRan} />
-      <Deliveries event={track.event} onReplay={(id) => void track.actions.replay(id)} />
-    </div>
   );
 }
 

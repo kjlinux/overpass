@@ -1,4 +1,5 @@
 import type {
+  AuthDoc,
   ObjectStore,
   ProviderAdapter,
   ProviderEvent,
@@ -36,6 +37,7 @@ export type Simulator = {
   refusal(provider: string, reason: Refusal, request: SimRequest): SimResponse;
   secretPrefix(provider: string): string;
   steps(provider: string): readonly ExampleStep[];
+  auth(provider: string): AuthDoc;
   renderWebhook(
     provider: string,
     event: ProviderEvent,
@@ -97,6 +99,7 @@ export function createSimulator(
     credential: (provider, request) => registry.get(provider)?.credential(request),
     refusal: (provider, reason, request) => require(provider).errors[reason](request),
     steps: (provider) => registry.get(provider)?.steps ?? [],
+    auth: (provider) => registry.get(provider)?.auth ?? { type: "bearer" },
     secretPrefix: (provider) => require(provider).webhooks.secretPrefix ?? "",
     renderWebhook: (provider, event, options) => require(provider).webhooks.render(event, options),
   };
