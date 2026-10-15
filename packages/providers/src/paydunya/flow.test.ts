@@ -53,6 +53,22 @@ describe("checkout-invoice/create", () => {
   });
 });
 
+describe("checkout-invoice/create, edge cases", () => {
+  it("accepts an amount sent as a numeric string, as the IPN example writes it", async () => {
+    const body = { invoice: { total_amount: "5000" }, store: { name: "Boutique Test" } };
+    const { result, confirm } = await created("success", body);
+    expect(result.response.status).toBe(200);
+    expect((await confirm()).response.body).toMatchObject({ invoice: { total_amount: 5000 } });
+  });
+
+  it("names the invoice node when the body is not an object", async () => {
+    const { result } = await created("success", null);
+    expect((result.response.body as { response_text: string }).response_text).toMatch(
+      /invoice\.total_amount$/,
+    );
+  });
+});
+
 describe("checkout-invoice/confirm", () => {
   it("returns the paid invoice with the hash of the master key sent", async () => {
     const { confirm } = await created("success");
@@ -110,6 +126,17 @@ describe("IPN", () => {
     expect(form.get("data[invoice][token]")).toBe(token);
     expect(form.get("data[invoice][total_amount]")).toBe("5000");
     expect(form.get("data[status]")).toBe("completed");
+  });
+
+  it("writes booleans of custom_data as 1 and 0, like PHP form encoding", async () => {
+    const body = { ...invoice, custom_data: { gift: true, wrapped: false } };
+    const { result } = await created("success", body);
+    const event = result.webhooks[0]?.event;
+    if (event === undefined) throw new Error("no IPN");
+    const wire = paydunya.webhooks.render(event, { secret: "whsec", now: new Date() });
+    const form = new URLSearchParams(wire.body);
+    expect(form.get("data[custom_data][gift]")).toBe("1");
+    expect(form.get("data[custom_data][wrapped]")).toBe("0");
   });
 
   it("reads the test key from PAYDUNYA-PRIVATE-KEY", () => {
