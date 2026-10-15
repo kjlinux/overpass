@@ -19,7 +19,7 @@ const v4Ranges: [string, number][] = [
   ["240.0.0.0", 4],
 ];
 const v6Ranges: [string, number][] = [
-  ["::", 128],
+  ["::", 96],
   ["::1", 128],
   ["64:ff9b::", 96],
   ["64:ff9b:1::", 48],

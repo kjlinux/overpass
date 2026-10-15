@@ -15,6 +15,9 @@ export const systemResolver: HostResolver = async (host) => {
 
 const localSuffixes = [".localhost", ".local", ".internal", ".home.arpa"];
 
+// Web ports only, so delivery errors cannot be used to scan other services of a public host.
+const webPorts = new Set(["", "80", "443", "8080", "8443"]);
+
 function isLocalName(host: string): boolean {
   const name = host.toLowerCase().replace(/\.$/, "");
   return name === "localhost" || localSuffixes.some((suffix) => name.endsWith(suffix));
@@ -36,6 +39,7 @@ export async function publicAddresses(
   }
   if (parsed.protocol !== "https:" && parsed.protocol !== "http:") return undefined;
   if (parsed.username !== "" || parsed.password !== "") return undefined;
+  if (!webPorts.has(parsed.port)) return undefined;
   const host = parsed.hostname.replace(/^\[|\]$/g, "");
   if (isIP(host) !== 0) return isPublicAddress(host) ? [host] : undefined;
   if (isLocalName(host)) return undefined;

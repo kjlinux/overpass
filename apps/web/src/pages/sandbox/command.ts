@@ -31,6 +31,10 @@ export type CurlInput = {
 const fill = (text: string, vars: Record<string, string>) =>
   text.replace(/\{\{(\w+)\}\}/g, (match, name: string) => vars[name] ?? match);
 
+// Captured values come from responses, so they must stay inside their quotes once pasted.
+const doubleQuoted = (text: string) => `"${text.replace(/[\\"$`]/g, "\\$&")}"`;
+const singleQuoted = (text: string) => `'${text.replaceAll("'", "'\\''")}'`;
+
 function fillDeep(value: unknown, vars: Record<string, string>): unknown {
   if (typeof value === "string") return fill(value, vars);
   if (Array.isArray(value)) return value.map((item) => fillDeep(item, vars));
@@ -48,15 +52,14 @@ export function curlOf({ origin, provider, step, auth, key, vars }: CurlInput): 
     ([name, value]) => `${name}: ${fill(value, vars)}`,
   );
   const needsKey = auth.type === "header" || !("authorization" in step.headers);
-  const lines = [
-    `curl -X ${step.method} "${origin}/v1/sandbox/${provider}${fill(step.path, vars)}"`,
-  ];
-  if (needsKey) lines.push(`-H "${keyHeader}"`);
-  lines.push(...headers.map((header) => `-H "${header}"`));
-  if (typeof step.body === "string") lines.push(`--data '${fill(step.body, vars)}'`);
+  const url = `${origin}/v1/sandbox/${provider}${fill(step.path, vars)}`;
+  const lines = [`curl -X ${step.method} ${doubleQuoted(url)}`];
+  if (needsKey) lines.push(`-H ${doubleQuoted(keyHeader)}`);
+  lines.push(...headers.map((header) => `-H ${doubleQuoted(header)}`));
+  if (typeof step.body === "string") lines.push(`--data ${singleQuoted(fill(step.body, vars))}`);
   else if (step.body !== null && step.body !== undefined) {
     if (!("content-type" in step.headers)) lines.push('-H "content-type: application/json"');
-    lines.push(`--data '${JSON.stringify(fillDeep(step.body, vars))}'`);
+    lines.push(`--data ${singleQuoted(JSON.stringify(fillDeep(step.body, vars)))}`);
   }
   return lines.join(" \\\n  ");
 }
