@@ -5087,8 +5087,15 @@
                     "type": "object",
                     "properties": {
                       "total_amount": {
-                        "type": "number",
-                        "exclusiveMinimum": 0
+                        "anyOf": [
+                          {
+                            "type": "number"
+                          },
+                          {
+                            "type": "string",
+                            "pattern": "^\\d+(\\.\\d+)?$"
+                          }
+                        ]
                       },
                       "description": {
                         "type": "string"

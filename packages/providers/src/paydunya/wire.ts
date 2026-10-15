@@ -8,7 +8,8 @@ function flatten(prefix: string, value: unknown): [string, string][] {
   if (value !== null && typeof value === "object") {
     return Object.entries(value).flatMap(([name, item]) => flatten(`${prefix}[${name}]`, item));
   }
-  const scalar = value as string | number | boolean | bigint | null | undefined;
+  if (typeof value === "boolean") return [[prefix, value ? "1" : "0"]];
+  const scalar = value as string | number | bigint | null | undefined;
   return [[prefix, scalar === null || scalar === undefined ? "" : String(scalar)]];
 }
 

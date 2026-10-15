@@ -24,7 +24,8 @@ const requiredChild: Record<string, string> = { invoice: "total_amount", store: 
 export function checkInvoice(body: unknown): InvoiceInput | string {
   const parsed = invoiceInput.safeParse(body);
   if (parsed.success) return parsed.data;
-  const path = (parsed.error.issues[0]?.path ?? ["invoice"]).map(String);
+  const found = (parsed.error.issues[0]?.path ?? []).map(String);
+  const path = found.length === 0 ? ["invoice"] : found;
   const child = path.length === 1 ? requiredChild[path[0] ?? ""] : undefined;
   return [...path, ...(child === undefined ? [] : [child])].join(".");
 }

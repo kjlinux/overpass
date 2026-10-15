@@ -5,7 +5,16 @@ const record = z.record(z.string(), z.unknown());
 /** Required by the documentation: invoice.total_amount and store.name; the rest is optional. */
 export const invoiceInput = z.object({
   invoice: z.object({
-    total_amount: z.number().positive(),
+    // PHP clients often send amounts as strings, as the documented IPN shows them.
+    total_amount: z
+      .union([
+        z.number(),
+        z
+          .string()
+          .regex(/^\d+(\.\d+)?$/)
+          .transform(Number),
+      ])
+      .pipe(z.number().positive()),
     description: z.string().optional(),
     items: record.optional(),
     taxes: record.optional(),
