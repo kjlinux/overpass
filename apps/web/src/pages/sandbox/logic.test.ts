@@ -128,6 +128,28 @@ describe("curlOf", () => {
     expect(curl).toContain(`--data '{"txId":"ovp-a1"}'`);
   });
 
+  it("keeps hostile captured values inside their quotes when pasted in a shell", () => {
+    const step = {
+      method: "POST",
+      path: "/x/{{id}}",
+      headers: { authorization: "Bearer {{token}}" },
+      body: { note: "{{token}}" },
+    };
+    const auth = { type: "header" as const, name: "x-api-key" };
+    const token = "a\"$(id)`b'c\\";
+    const curl = curlOf({
+      origin,
+      provider: "p",
+      step,
+      auth,
+      key: "k",
+      vars: { token, id: "$HOME" },
+    });
+    expect(curl).toContain('"https://overpass.example/v1/sandbox/p/x/\\$HOME"');
+    expect(curl).toContain('-H "authorization: Bearer a\\"\\$(id)\\`b\'c\\\\"');
+    expect(curl).toContain("--data '{\"note\":\"a\\\"$(id)`b'\\''c\\\\\"}'");
+  });
+
   it("uses the bearer header for bearer providers", () => {
     const step = {
       method: "GET",
