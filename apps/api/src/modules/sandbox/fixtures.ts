@@ -67,6 +67,7 @@ export const testProvider: ProviderAdapter<Outcome> = {
       },
     },
   ],
+  secretHeaders: ["x-fake-master"],
   webhooks: {
     secretPrefix: "fake_whs_",
     render: (event) => ({

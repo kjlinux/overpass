@@ -85,6 +85,7 @@ describe("/v1/sandbox/:provider/*", () => {
     const response = await external("POST", "/v1/sandbox/fake/payments", {
       key,
       payload: { amount: 1000 },
+      headers: { "x-fake-master": "merchant-secret" },
     });
     expect(response.statusCode).toBe(201);
     expect(response.headers["x-fake"]).toBe("1");
@@ -92,6 +93,7 @@ describe("/v1/sandbox/:provider/*", () => {
     const [event] = await events(id);
     expect(event?.scenario).toBe("success");
     expect(event?.request.headers.authorization).toBe("[redacted]");
+    expect(event?.request.headers["x-fake-master"]).toBe("[redacted]");
     expect(event?.request.body).toBe('{"amount":1000}');
     expect(event?.deliveries).toEqual([
       expect.objectContaining({ eventType: "payment.paid", target: "inbox", status: "scheduled" }),
