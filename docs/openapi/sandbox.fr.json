@@ -12,6 +12,14 @@
         "docsUrl": "https://docs.wave.com/checkout",
         "docsVersion": "2024-03-29",
         "consultedAt": "2026-10-14"
+      },
+      {
+        "id": "pi-spi",
+        "name": "PI-SPI",
+        "unofficial": true,
+        "docsUrl": "https://developer.pispi.bceao.int/api-business",
+        "docsVersion": "1.5.0",
+        "consultedAt": "2026-10-14"
       }
     ]
   },
@@ -1056,6 +1064,3981 @@
         }
       }
     },
+    "/v1/sandbox/pi-spi/oauth/token": {
+      "post": {
+        "summary": "Obtenir un jeton d'accès",
+        "tags": [
+          "PI-SPI"
+        ],
+        "security": [
+          {
+            "pi-spi": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Overpass-Scenario",
+            "in": "header",
+            "required": false,
+            "description": "Scénario de cet appel, à la place de celui de la clé",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "success",
+                "insufficient_funds",
+                "timeout",
+                "duplicate_webhook",
+                "late_webhook"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "grant_type": {
+                    "type": "string",
+                    "const": "client_credentials"
+                  },
+                  "client_id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "client_secret": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "scope": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "grant_type",
+                  "client_id",
+                  "client_secret"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "access_token": {
+                      "type": "string"
+                    },
+                    "token_type": {
+                      "type": "string",
+                      "const": "Bearer"
+                    },
+                    "expires_in": {
+                      "type": "number"
+                    },
+                    "scope": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "access_token",
+                    "token_type",
+                    "expires_in",
+                    "scope"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sandbox/pi-spi/piz/v1/demandes-paiements": {
+      "post": {
+        "summary": "Envoyer une demande de paiement",
+        "tags": [
+          "PI-SPI"
+        ],
+        "security": [
+          {
+            "pi-spi": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Overpass-Scenario",
+            "in": "header",
+            "required": false,
+            "description": "Scénario de cet appel, à la place de celui de la clé",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "success",
+                "insufficient_funds",
+                "timeout",
+                "duplicate_webhook",
+                "late_webhook"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "txId": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 35
+                  },
+                  "confirmation": {
+                    "type": "boolean"
+                  },
+                  "payeurAlias": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "payeAlias": {
+                    "type": "string",
+                    "format": "uuid",
+                    "pattern": "^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$"
+                  },
+                  "montant": {
+                    "type": "number",
+                    "minimum": 1
+                  },
+                  "categorie": {
+                    "anyOf": [
+                      {
+                        "type": "string",
+                        "enum": [
+                          "401",
+                          "500",
+                          "521"
+                        ]
+                      },
+                      {
+                        "type": "number",
+                        "const": 500
+                      },
+                      {
+                        "type": "number",
+                        "const": 521
+                      },
+                      {
+                        "type": "number",
+                        "const": 401
+                      }
+                    ]
+                  },
+                  "logoUrl": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 140
+                  },
+                  "motif": {
+                    "type": "string",
+                    "minLength": 2,
+                    "maxLength": 140
+                  },
+                  "refDocNumero": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 35
+                  },
+                  "dateLimitePaiement": {
+                    "type": "string",
+                    "format": "date-time",
+                    "pattern": "^(?:(?:\\d\\d[2468][048]|\\d\\d[13579][26]|\\d\\d0[48]|[02468][048]00|[13579][26]00)-02-29|\\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\\d|30)|(?:02)-(?:0[1-9]|1\\d|2[0-8])))T(?:(?:[01]\\d|2[0-3]):[0-5]\\d:[0-5]\\d(?:\\.\\d+)?(?:Z|([+-](?:[01]\\d|2[0-3]):[0-5]\\d)))$"
+                  }
+                },
+                "required": [
+                  "txId",
+                  "confirmation",
+                  "payeurAlias",
+                  "payeAlias",
+                  "montant",
+                  "categorie"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "txId": {
+                      "type": "string"
+                    },
+                    "payeurAlias": {
+                      "type": "string"
+                    },
+                    "payeAlias": {
+                      "type": "string"
+                    },
+                    "montant": {
+                      "type": "number"
+                    },
+                    "categorie": {
+                      "type": "string"
+                    },
+                    "confirmation": {
+                      "type": "boolean"
+                    },
+                    "statut": {
+                      "type": "string",
+                      "enum": [
+                        "INITIE",
+                        "ANNULE",
+                        "ENVOYE",
+                        "IRREVOCABLE",
+                        "REJETE"
+                      ]
+                    },
+                    "statutRaison": {
+                      "type": "string"
+                    },
+                    "payeurNom": {
+                      "type": "string"
+                    },
+                    "payeurPays": {
+                      "type": "string"
+                    },
+                    "end2endId": {
+                      "type": "string"
+                    },
+                    "dateDemande": {
+                      "type": "string"
+                    },
+                    "dateEnvoi": {
+                      "type": "string"
+                    },
+                    "dateConfirmation": {
+                      "type": "string"
+                    },
+                    "dateIrrevocabilite": {
+                      "type": "string"
+                    },
+                    "dateReponse": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "txId",
+                    "payeurAlias",
+                    "payeAlias",
+                    "montant",
+                    "categorie",
+                    "confirmation",
+                    "statut",
+                    "dateDemande"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Lister les demandes de paiement",
+        "tags": [
+          "PI-SPI"
+        ],
+        "security": [
+          {
+            "pi-spi": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Overpass-Scenario",
+            "in": "header",
+            "required": false,
+            "description": "Scénario de cet appel, à la place de celui de la clé",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "success",
+                "insufficient_funds",
+                "timeout",
+                "duplicate_webhook",
+                "late_webhook"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "txId": {
+                            "type": "string"
+                          },
+                          "payeurAlias": {
+                            "type": "string"
+                          },
+                          "payeAlias": {
+                            "type": "string"
+                          },
+                          "montant": {
+                            "type": "number"
+                          },
+                          "categorie": {
+                            "type": "string"
+                          },
+                          "confirmation": {
+                            "type": "boolean"
+                          },
+                          "statut": {
+                            "type": "string",
+                            "enum": [
+                              "INITIE",
+                              "ANNULE",
+                              "ENVOYE",
+                              "IRREVOCABLE",
+                              "REJETE"
+                            ]
+                          },
+                          "statutRaison": {
+                            "type": "string"
+                          },
+                          "payeurNom": {
+                            "type": "string"
+                          },
+                          "payeurPays": {
+                            "type": "string"
+                          },
+                          "end2endId": {
+                            "type": "string"
+                          },
+                          "dateDemande": {
+                            "type": "string"
+                          },
+                          "dateEnvoi": {
+                            "type": "string"
+                          },
+                          "dateConfirmation": {
+                            "type": "string"
+                          },
+                          "dateIrrevocabilite": {
+                            "type": "string"
+                          },
+                          "dateReponse": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "txId",
+                          "payeurAlias",
+                          "payeAlias",
+                          "montant",
+                          "categorie",
+                          "confirmation",
+                          "statut",
+                          "dateDemande"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "total": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "total"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "meta"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sandbox/pi-spi/piz/v1/demandes-paiements/{txId}": {
+      "get": {
+        "summary": "Lire une demande de paiement",
+        "tags": [
+          "PI-SPI"
+        ],
+        "security": [
+          {
+            "pi-spi": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "txId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Overpass-Scenario",
+            "in": "header",
+            "required": false,
+            "description": "Scénario de cet appel, à la place de celui de la clé",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "success",
+                "insufficient_funds",
+                "timeout",
+                "duplicate_webhook",
+                "late_webhook"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "txId": {
+                      "type": "string"
+                    },
+                    "payeurAlias": {
+                      "type": "string"
+                    },
+                    "payeAlias": {
+                      "type": "string"
+                    },
+                    "montant": {
+                      "type": "number"
+                    },
+                    "categorie": {
+                      "type": "string"
+                    },
+                    "confirmation": {
+                      "type": "boolean"
+                    },
+                    "statut": {
+                      "type": "string",
+                      "enum": [
+                        "INITIE",
+                        "ANNULE",
+                        "ENVOYE",
+                        "IRREVOCABLE",
+                        "REJETE"
+                      ]
+                    },
+                    "statutRaison": {
+                      "type": "string"
+                    },
+                    "payeurNom": {
+                      "type": "string"
+                    },
+                    "payeurPays": {
+                      "type": "string"
+                    },
+                    "end2endId": {
+                      "type": "string"
+                    },
+                    "dateDemande": {
+                      "type": "string"
+                    },
+                    "dateEnvoi": {
+                      "type": "string"
+                    },
+                    "dateConfirmation": {
+                      "type": "string"
+                    },
+                    "dateIrrevocabilite": {
+                      "type": "string"
+                    },
+                    "dateReponse": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "txId",
+                    "payeurAlias",
+                    "payeAlias",
+                    "montant",
+                    "categorie",
+                    "confirmation",
+                    "statut",
+                    "dateDemande"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sandbox/pi-spi/piz/v1/demandes-paiements/{txId}/confirmations": {
+      "put": {
+        "summary": "Confirmer ou annuler une demande",
+        "tags": [
+          "PI-SPI"
+        ],
+        "security": [
+          {
+            "pi-spi": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "txId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Overpass-Scenario",
+            "in": "header",
+            "required": false,
+            "description": "Scénario de cet appel, à la place de celui de la clé",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "success",
+                "insufficient_funds",
+                "timeout",
+                "duplicate_webhook",
+                "late_webhook"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "decision": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "decision"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "txId": {
+                      "type": "string"
+                    },
+                    "payeurAlias": {
+                      "type": "string"
+                    },
+                    "payeAlias": {
+                      "type": "string"
+                    },
+                    "montant": {
+                      "type": "number"
+                    },
+                    "categorie": {
+                      "type": "string"
+                    },
+                    "confirmation": {
+                      "type": "boolean"
+                    },
+                    "statut": {
+                      "type": "string",
+                      "enum": [
+                        "INITIE",
+                        "ANNULE",
+                        "ENVOYE",
+                        "IRREVOCABLE",
+                        "REJETE"
+                      ]
+                    },
+                    "statutRaison": {
+                      "type": "string"
+                    },
+                    "payeurNom": {
+                      "type": "string"
+                    },
+                    "payeurPays": {
+                      "type": "string"
+                    },
+                    "end2endId": {
+                      "type": "string"
+                    },
+                    "dateDemande": {
+                      "type": "string"
+                    },
+                    "dateEnvoi": {
+                      "type": "string"
+                    },
+                    "dateConfirmation": {
+                      "type": "string"
+                    },
+                    "dateIrrevocabilite": {
+                      "type": "string"
+                    },
+                    "dateReponse": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "txId",
+                    "payeurAlias",
+                    "payeAlias",
+                    "montant",
+                    "categorie",
+                    "confirmation",
+                    "statut",
+                    "dateDemande"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sandbox/pi-spi/piz/v1/paiements-recus": {
+      "get": {
+        "summary": "Lister les paiements reçus",
+        "tags": [
+          "PI-SPI"
+        ],
+        "security": [
+          {
+            "pi-spi": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Overpass-Scenario",
+            "in": "header",
+            "required": false,
+            "description": "Scénario de cet appel, à la place de celui de la clé",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "success",
+                "insufficient_funds",
+                "timeout",
+                "duplicate_webhook",
+                "late_webhook"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "txId": {
+                            "type": "string"
+                          },
+                          "payeurAlias": {
+                            "type": "string"
+                          },
+                          "payeAlias": {
+                            "type": "string"
+                          },
+                          "montant": {
+                            "type": "number"
+                          },
+                          "categorie": {
+                            "type": "string"
+                          },
+                          "confirmation": {
+                            "type": "boolean"
+                          },
+                          "statut": {
+                            "type": "string",
+                            "enum": [
+                              "INITIE",
+                              "ANNULE",
+                              "ENVOYE",
+                              "IRREVOCABLE",
+                              "REJETE"
+                            ]
+                          },
+                          "statutRaison": {
+                            "type": "string"
+                          },
+                          "payeurNom": {
+                            "type": "string"
+                          },
+                          "payeurPays": {
+                            "type": "string"
+                          },
+                          "end2endId": {
+                            "type": "string"
+                          },
+                          "dateDemande": {
+                            "type": "string"
+                          },
+                          "dateEnvoi": {
+                            "type": "string"
+                          },
+                          "dateConfirmation": {
+                            "type": "string"
+                          },
+                          "dateIrrevocabilite": {
+                            "type": "string"
+                          },
+                          "dateReponse": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "txId",
+                          "payeurAlias",
+                          "payeAlias",
+                          "montant",
+                          "categorie",
+                          "confirmation",
+                          "statut",
+                          "dateDemande"
+                        ],
+                        "additionalProperties": false
+                      }
+                    },
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "total": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "total"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "required": [
+                    "data",
+                    "meta"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sandbox/pi-spi/piz/v1/paiements-recus/{txId}": {
+      "get": {
+        "summary": "Lire le dernier paiement reçu d'un txId",
+        "tags": [
+          "PI-SPI"
+        ],
+        "security": [
+          {
+            "pi-spi": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "txId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Overpass-Scenario",
+            "in": "header",
+            "required": false,
+            "description": "Scénario de cet appel, à la place de celui de la clé",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "success",
+                "insufficient_funds",
+                "timeout",
+                "duplicate_webhook",
+                "late_webhook"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "txId": {
+                      "type": "string"
+                    },
+                    "payeurAlias": {
+                      "type": "string"
+                    },
+                    "payeAlias": {
+                      "type": "string"
+                    },
+                    "montant": {
+                      "type": "number"
+                    },
+                    "categorie": {
+                      "type": "string"
+                    },
+                    "confirmation": {
+                      "type": "boolean"
+                    },
+                    "statut": {
+                      "type": "string",
+                      "enum": [
+                        "INITIE",
+                        "ANNULE",
+                        "ENVOYE",
+                        "IRREVOCABLE",
+                        "REJETE"
+                      ]
+                    },
+                    "statutRaison": {
+                      "type": "string"
+                    },
+                    "payeurNom": {
+                      "type": "string"
+                    },
+                    "payeurPays": {
+                      "type": "string"
+                    },
+                    "end2endId": {
+                      "type": "string"
+                    },
+                    "dateDemande": {
+                      "type": "string"
+                    },
+                    "dateEnvoi": {
+                      "type": "string"
+                    },
+                    "dateConfirmation": {
+                      "type": "string"
+                    },
+                    "dateIrrevocabilite": {
+                      "type": "string"
+                    },
+                    "dateReponse": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "txId",
+                    "payeurAlias",
+                    "payeAlias",
+                    "montant",
+                    "categorie",
+                    "confirmation",
+                    "statut",
+                    "dateDemande"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sandbox/pi-spi/piz/v1/paiements/{end2endId}": {
+      "get": {
+        "summary": "Vérifier un paiement",
+        "tags": [
+          "PI-SPI"
+        ],
+        "security": [
+          {
+            "pi-spi": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "end2endId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Overpass-Scenario",
+            "in": "header",
+            "required": false,
+            "description": "Scénario de cet appel, à la place de celui de la clé",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "success",
+                "insufficient_funds",
+                "timeout",
+                "duplicate_webhook",
+                "late_webhook"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "txId": {
+                      "type": "string"
+                    },
+                    "payeurAlias": {
+                      "type": "string"
+                    },
+                    "payeAlias": {
+                      "type": "string"
+                    },
+                    "montant": {
+                      "type": "number"
+                    },
+                    "categorie": {
+                      "type": "string"
+                    },
+                    "confirmation": {
+                      "type": "boolean"
+                    },
+                    "statut": {
+                      "type": "string",
+                      "enum": [
+                        "INITIE",
+                        "ANNULE",
+                        "ENVOYE",
+                        "IRREVOCABLE",
+                        "REJETE"
+                      ]
+                    },
+                    "statutRaison": {
+                      "type": "string"
+                    },
+                    "payeurNom": {
+                      "type": "string"
+                    },
+                    "payeurPays": {
+                      "type": "string"
+                    },
+                    "end2endId": {
+                      "type": "string"
+                    },
+                    "dateDemande": {
+                      "type": "string"
+                    },
+                    "dateEnvoi": {
+                      "type": "string"
+                    },
+                    "dateConfirmation": {
+                      "type": "string"
+                    },
+                    "dateIrrevocabilite": {
+                      "type": "string"
+                    },
+                    "dateReponse": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "txId",
+                    "payeurAlias",
+                    "payeAlias",
+                    "montant",
+                    "categorie",
+                    "confirmation",
+                    "statut",
+                    "dateDemande"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sandbox/pi-spi/piz/v1/paiements/{end2endId}/retours": {
+      "put": {
+        "summary": "Retourner les fonds d'un paiement",
+        "tags": [
+          "PI-SPI"
+        ],
+        "security": [
+          {
+            "pi-spi": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "end2endId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Overpass-Scenario",
+            "in": "header",
+            "required": false,
+            "description": "Scénario de cet appel, à la place de celui de la clé",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "success",
+                "insufficient_funds",
+                "timeout",
+                "duplicate_webhook",
+                "late_webhook"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "txId": {
+                      "type": "string"
+                    },
+                    "payeurAlias": {
+                      "type": "string"
+                    },
+                    "payeAlias": {
+                      "type": "string"
+                    },
+                    "montant": {
+                      "type": "number"
+                    },
+                    "categorie": {
+                      "type": "string"
+                    },
+                    "confirmation": {
+                      "type": "boolean"
+                    },
+                    "statut": {
+                      "type": "string",
+                      "enum": [
+                        "INITIE",
+                        "ANNULE",
+                        "ENVOYE",
+                        "IRREVOCABLE",
+                        "REJETE"
+                      ]
+                    },
+                    "statutRaison": {
+                      "type": "string"
+                    },
+                    "payeurNom": {
+                      "type": "string"
+                    },
+                    "payeurPays": {
+                      "type": "string"
+                    },
+                    "end2endId": {
+                      "type": "string"
+                    },
+                    "dateDemande": {
+                      "type": "string"
+                    },
+                    "dateEnvoi": {
+                      "type": "string"
+                    },
+                    "dateConfirmation": {
+                      "type": "string"
+                    },
+                    "dateIrrevocabilite": {
+                      "type": "string"
+                    },
+                    "dateReponse": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "txId",
+                    "payeurAlias",
+                    "payeAlias",
+                    "montant",
+                    "categorie",
+                    "confirmation",
+                    "statut",
+                    "dateDemande"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sandbox/pi-spi/piz/v1/comptes/{numero}/alias": {
+      "post": {
+        "summary": "Créer un alias de compte",
+        "tags": [
+          "PI-SPI"
+        ],
+        "security": [
+          {
+            "pi-spi": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "numero",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Overpass-Scenario",
+            "in": "header",
+            "required": false,
+            "description": "Scénario de cet appel, à la place de celui de la clé",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "success",
+                "insufficient_funds",
+                "timeout",
+                "duplicate_webhook",
+                "late_webhook"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "type": "string",
+                    "enum": [
+                      "MCOD",
+                      "SHID"
+                    ]
+                  }
+                },
+                "required": [
+                  "type"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Lister les alias d'un compte",
+        "tags": [
+          "PI-SPI"
+        ],
+        "security": [
+          {
+            "pi-spi": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "numero",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Overpass-Scenario",
+            "in": "header",
+            "required": false,
+            "description": "Scénario de cet appel, à la place de celui de la clé",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "success",
+                "insufficient_funds",
+                "timeout",
+                "duplicate_webhook",
+                "late_webhook"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sandbox/pi-spi/piz/v1/comptes/{numero}/alias/{cle}": {
+      "delete": {
+        "summary": "Supprimer un alias",
+        "tags": [
+          "PI-SPI"
+        ],
+        "security": [
+          {
+            "pi-spi": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "numero",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "cle",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Overpass-Scenario",
+            "in": "header",
+            "required": false,
+            "description": "Scénario de cet appel, à la place de celui de la clé",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "success",
+                "insufficient_funds",
+                "timeout",
+                "duplicate_webhook",
+                "late_webhook"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sandbox/pi-spi/piz/v1/alias/{cle}": {
+      "get": {
+        "summary": "Retrouver le titulaire d'un alias",
+        "tags": [
+          "PI-SPI"
+        ],
+        "security": [
+          {
+            "pi-spi": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "cle",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Overpass-Scenario",
+            "in": "header",
+            "required": false,
+            "description": "Scénario de cet appel, à la place de celui de la clé",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "success",
+                "insufficient_funds",
+                "timeout",
+                "duplicate_webhook",
+                "late_webhook"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sandbox/pi-spi/piz/v1/webhooks": {
+      "post": {
+        "summary": "Déclarer un webhook",
+        "tags": [
+          "PI-SPI"
+        ],
+        "security": [
+          {
+            "pi-spi": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Overpass-Scenario",
+            "in": "header",
+            "required": false,
+            "description": "Scénario de cet appel, à la place de celui de la clé",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "success",
+                "insufficient_funds",
+                "timeout",
+                "duplicate_webhook",
+                "late_webhook"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "callbackUrl": {
+                    "type": "string",
+                    "format": "uri"
+                  },
+                  "alias": {
+                    "type": "string"
+                  },
+                  "events": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "callbackUrl"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Lister les webhooks déclarés",
+        "tags": [
+          "PI-SPI"
+        ],
+        "security": [
+          {
+            "pi-spi": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Overpass-Scenario",
+            "in": "header",
+            "required": false,
+            "description": "Scénario de cet appel, à la place de celui de la clé",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "success",
+                "insufficient_funds",
+                "timeout",
+                "duplicate_webhook",
+                "late_webhook"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sandbox/pi-spi/piz/v1/webhooks/{id}": {
+      "delete": {
+        "summary": "Supprimer un webhook déclaré",
+        "tags": [
+          "PI-SPI"
+        ],
+        "security": [
+          {
+            "pi-spi": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Overpass-Scenario",
+            "in": "header",
+            "required": false,
+            "description": "Scénario de cet appel, à la place de celui de la clé",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "success",
+                "insufficient_funds",
+                "timeout",
+                "duplicate_webhook",
+                "late_webhook"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "type": {
+                      "type": "string"
+                    },
+                    "title": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "number"
+                    },
+                    "detail": {
+                      "type": "string"
+                    },
+                    "invalid-params": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "reason": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "name",
+                          "reason"
+                        ],
+                        "additionalProperties": false
+                      }
+                    }
+                  },
+                  "required": [
+                    "type",
+                    "title",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/sandbox/listen": {
       "get": {
         "summary": "Recevoir les webhooks de sa clé sur son poste (relais local, flux SSE)",
@@ -1488,6 +5471,279 @@
           }
         }
       }
+    },
+    "pi-spi.PAIEMENT_RECU": {
+      "post": {
+        "summary": "Webhook simulé, signé comme le documente l'opérateur",
+        "tags": [
+          "PI-SPI"
+        ],
+        "parameters": [
+          {
+            "name": "x-signature",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "evCode": {
+                          "type": "string"
+                        },
+                        "evDate": {
+                          "type": "string"
+                        },
+                        "txId": {
+                          "type": "string"
+                        },
+                        "end2endId": {
+                          "type": "string"
+                        },
+                        "montant": {
+                          "type": "number"
+                        },
+                        "client": {
+                          "type": "string"
+                        },
+                        "alias": {
+                          "type": "string"
+                        },
+                        "motif": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "evCode",
+                        "evDate",
+                        "end2endId",
+                        "montant"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "meta": {
+                    "type": "object",
+                    "properties": {
+                      "total": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "total"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "data",
+                  "meta"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "pi-spi.PAIEMENT_REJETE": {
+      "post": {
+        "summary": "Webhook simulé, signé comme le documente l'opérateur",
+        "tags": [
+          "PI-SPI"
+        ],
+        "parameters": [
+          {
+            "name": "x-signature",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "evCode": {
+                          "type": "string"
+                        },
+                        "evDate": {
+                          "type": "string"
+                        },
+                        "txId": {
+                          "type": "string"
+                        },
+                        "end2endId": {
+                          "type": "string"
+                        },
+                        "montant": {
+                          "type": "number"
+                        },
+                        "client": {
+                          "type": "string"
+                        },
+                        "alias": {
+                          "type": "string"
+                        },
+                        "motif": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "evCode",
+                        "evDate",
+                        "end2endId",
+                        "montant"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "meta": {
+                    "type": "object",
+                    "properties": {
+                      "total": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "total"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "data",
+                  "meta"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "pi-spi.RETOUR_ENVOYE": {
+      "post": {
+        "summary": "Webhook simulé, signé comme le documente l'opérateur",
+        "tags": [
+          "PI-SPI"
+        ],
+        "parameters": [
+          {
+            "name": "x-signature",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "data": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "evCode": {
+                          "type": "string"
+                        },
+                        "evDate": {
+                          "type": "string"
+                        },
+                        "txId": {
+                          "type": "string"
+                        },
+                        "end2endId": {
+                          "type": "string"
+                        },
+                        "montant": {
+                          "type": "number"
+                        },
+                        "client": {
+                          "type": "string"
+                        },
+                        "alias": {
+                          "type": "string"
+                        },
+                        "motif": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "evCode",
+                        "evDate",
+                        "end2endId",
+                        "montant"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "meta": {
+                    "type": "object",
+                    "properties": {
+                      "total": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "total"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "data",
+                  "meta"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1495,6 +5751,12 @@
       "wave": {
         "type": "http",
         "scheme": "bearer",
+        "description": "Clé de test Overpass"
+      },
+      "pi-spi": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key",
         "description": "Clé de test Overpass"
       },
       "overpass": {

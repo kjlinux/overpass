@@ -109,6 +109,7 @@ describe("buildSandboxOpenApi", () => {
         unofficial: true,
         docsUrl: "https://docs.wave.com/checkout",
       }),
+      expect.objectContaining({ id: "pi-spi", unofficial: true, docsVersion: "1.5.0" }),
     ]);
   });
 

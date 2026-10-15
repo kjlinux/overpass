@@ -1,0 +1,38 @@
+{
+  "summary": "Simulateur non officiel de l'API Business PI-SPI de la BCEAO : jeton OAuth2, demandes de paiement, paiements reçus, retours de fonds, alias et webhooks signés.",
+  "warning": "En production, l'API Business exige un certificat client mTLS délivré par l'autorité de certification de la BCEAO (PICERT), et le jeton OAuth2 est lié à ce certificat. Ce simulateur accepte les appels sans certificat, comme le sandbox officiel : prévoyez le certificat avant la mise en production.",
+  "notes": [
+    "Ce simulateur complète le sandbox officiel de la BCEAO avec des scénarios d'échec ; il ne le remplace pas.",
+    "Votre clé de test Overpass va dans l'en-tête x-api-key ; le simulateur accepte tout client_id et client_secret sur /oauth/token.",
+    "Le payeur virtuel répond aussitôt : demande acceptée (IRREVOCABLE) ou rejetée avec le motif du scénario, AM04 pour le solde insuffisant, AB03 pour le délai dépassé.",
+    "Les adresses suivent le serveur de la spécification : /piz/v1/... ; le jeton s'obtient sur /oauth/token.",
+    "Les webhooks partent vers la cible choisie sur la piste d'essai ; POST /webhooks enregistre la déclaration telle que documentée, sans changer cette cible.",
+    "La signature X-Signature utilise le secret affiché sur la piste pour votre clé de test.",
+    "Reprises : cinq tentatives sur environ 37 minutes ; la spécification n'en donne pas le calendrier.",
+    "Le code participant des end2endId (CIB001) et le nom du payeur sont fictifs."
+  ],
+  "endpoints": {
+    "POST /oauth/token": "Obtenir un jeton d'accès",
+    "POST /piz/v1/demandes-paiements": "Envoyer une demande de paiement",
+    "GET /piz/v1/demandes-paiements": "Lister les demandes de paiement",
+    "GET /piz/v1/demandes-paiements/:txId": "Lire une demande de paiement",
+    "PUT /piz/v1/demandes-paiements/:txId/confirmations": "Confirmer ou annuler une demande",
+    "GET /piz/v1/paiements-recus": "Lister les paiements reçus",
+    "GET /piz/v1/paiements-recus/:txId": "Lire le dernier paiement reçu d'un txId",
+    "GET /piz/v1/paiements/:end2endId": "Vérifier un paiement",
+    "PUT /piz/v1/paiements/:end2endId/retours": "Retourner les fonds d'un paiement",
+    "POST /piz/v1/comptes/:numero/alias": "Créer un alias de compte",
+    "GET /piz/v1/comptes/:numero/alias": "Lister les alias d'un compte",
+    "DELETE /piz/v1/comptes/:numero/alias/:cle": "Supprimer un alias",
+    "GET /piz/v1/alias/:cle": "Retrouver le titulaire d'un alias",
+    "POST /piz/v1/webhooks": "Déclarer un webhook",
+    "GET /piz/v1/webhooks": "Lister les webhooks déclarés",
+    "DELETE /piz/v1/webhooks/:id": "Supprimer un webhook déclaré"
+  },
+  "steps": {
+    "token": "Obtenir un jeton OAuth2 par client_credentials, avec votre clé de test dans x-api-key.",
+    "request": "Envoyer une demande de paiement de 15 000 XOF avec ce jeton.",
+    "read": "Relire la demande : le payeur virtuel l'a payée selon le scénario.",
+    "webhook": "Recevoir le webhook sur votre poste avec le relais local."
+  }
+}

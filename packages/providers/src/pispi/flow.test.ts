@@ -49,7 +49,7 @@ describe("OAuth2 token", () => {
       method: "POST",
       path: "/oauth/token",
       headers: form,
-      body: { grant_type: "password" },
+      body: { grant_type: "password", client_id: "overpass", client_secret: "test" },
     });
     expect(result.response.status).toBe(400);
     expect(result.response.headers).toMatchObject({ "content-type": "application/problem+json" });
