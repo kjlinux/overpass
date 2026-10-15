@@ -1,3 +1,4 @@
+import { PostgresListener, type ListenClient } from "./listener.js";
 import pg from "pg";
 import type { Notifier } from "../delivery/worker.js";
 import { relayChannel } from "../delivery/worker.js";
@@ -8,10 +9,14 @@ type Handler = (message: RelayMessage) => void;
 /** Carries "this delivery is ready" from any worker to every API instance. */
 export type RelayBus = Notifier & {
   subscribe(handler: Handler): () => void;
+  /** Runs after the listener came back from a loss: notifications sent meanwhile were missed. */
+  onReconnect(handler: () => void): () => void;
   close(): Promise<void>;
 };
 
 type Log = { error(details: unknown, message?: string): void };
+const defaultRetryMs = 1000;
+const defaultMaxRetryMs = 30_000;
 
 function parse(payload: string | undefined): RelayMessage | undefined {
   try {
@@ -43,6 +48,7 @@ export function memoryBus(): RelayBus {
   const local = handlers();
   return {
     subscribe: (handler) => local.subscribe(handler),
+    onReconnect: () => () => undefined,
     notify(channel, payload) {
       if (channel === relayChannel) local.emit(payload);
       return Promise.resolve();
@@ -51,37 +57,37 @@ export function memoryBus(): RelayBus {
   };
 }
 
-const reconnectMs = 1000;
+export type PostgresBusOptions = {
+  createClient?: () => ListenClient;
+  retryMs?: number;
+  maxRetryMs?: number;
+};
 
 /** A dedicated connection that LISTENs, so every instance hears every worker. */
-export function postgresBus(url: string, log: Log): RelayBus {
+export function postgresBus(url: string, log: Log, options: PostgresBusOptions = {}): RelayBus {
   const local = handlers();
-  let client: pg.Client | undefined;
-  let closed = false;
-  const connect = async (): Promise<void> => {
-    const next = new pg.Client({ connectionString: url });
-    next.on("notification", (message) => {
-      local.emit(message.payload);
-    });
-    next.on("error", (error) => {
-      log.error({ err: error }, "relay listener lost its connection");
-      if (!closed) setTimeout(() => void connect().catch(() => undefined), reconnectMs);
-    });
-    await next.connect();
-    await next.query(`listen ${relayChannel}`);
-    client = next;
-  };
-  void connect().catch((error: unknown) => {
-    log.error({ err: error }, "relay listener could not connect");
+  const reconnects = new Set<() => void>();
+  const listener = new PostgresListener({
+    create: options.createClient ?? (() => new pg.Client({ connectionString: url })),
+    channel: relayChannel,
+    retryMs: options.retryMs ?? defaultRetryMs,
+    maxRetryMs: options.maxRetryMs ?? defaultMaxRetryMs,
+    log,
+    onNotification: (payload) => {
+      local.emit(payload);
+    },
+    onReconnect: () => {
+      for (const handler of reconnects) handler();
+    },
   });
+  listener.start();
   return {
     subscribe: (handler) => local.subscribe(handler),
-    async notify(channel, payload) {
-      await client?.query("select pg_notify($1, $2)", [channel, payload]);
+    onReconnect(handler) {
+      reconnects.add(handler);
+      return () => reconnects.delete(handler);
     },
-    async close() {
-      closed = true;
-      await client?.end();
-    },
+    notify: (channel, payload) => listener.query("select pg_notify($1, $2)", [channel, payload]),
+    close: () => listener.close(),
   };
 }

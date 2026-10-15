@@ -70,6 +70,7 @@ export const sandboxDeliveries = pgTable("sandbox_deliveries", {
   lastError: text("last_error"),
   dueAt: stamp("due_at").notNull(),
   leasedUntil: stamp("leased_until"),
+  sentSeq: bigint("sent_seq", { mode: "number" }),
   sentAt: stamp("sent_at"),
   deliveredAt: stamp("delivered_at"),
   createdAt: stamp("created_at").notNull().defaultNow(),

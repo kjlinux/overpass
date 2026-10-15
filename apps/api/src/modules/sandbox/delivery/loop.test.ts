@@ -34,6 +34,16 @@ describe("startWorkerLoop", () => {
     expect(quietLog.error).toHaveBeenCalled();
     expect(worker.runOnce.mock.calls.length).toBeGreaterThan(1);
   });
+
+  it("still delivers when the purge fails, and tries it only once per interval", async () => {
+    const worker = fakeWorker([1]);
+    worker.purge.mockRejectedValue(new Error("purge locked"));
+    const loop = startWorkerLoop(worker, { pollMs: 5, purgeMs: 60_000 }, quietLog);
+    await settle();
+    await loop.stop();
+    expect(worker.runOnce).toHaveBeenCalled();
+    expect(worker.purge).toHaveBeenCalledTimes(1);
+  });
 });
 
 describe("postgresNotifier", () => {

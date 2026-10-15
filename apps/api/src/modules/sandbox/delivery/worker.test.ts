@@ -8,6 +8,7 @@ import { createTestApp, registerAccount } from "../../../testing.js";
 import { testProvider } from "../fixtures.js";
 import type { SendResult, WebhookRequest } from "./http-client.js";
 import { createDeliveryWorker } from "./worker.js";
+import type { WorkerDeps } from "./worker.js";
 
 let app: FastifyInstance;
 let db: Database;
@@ -38,6 +39,7 @@ afterEach(() => close());
 function worker(
   send: (request: WebhookRequest) => Promise<SendResult> = () =>
     Promise.resolve({ status: 200, durationMs: 12 }),
+  extra: Partial<WorkerDeps> = {},
 ) {
   const resolveHost = (host: string) => Promise.resolve(dns[host] ?? []);
   const simulator = createSimulator([testProvider]);
@@ -49,6 +51,7 @@ function worker(
     send,
     notifier,
     now,
+    ...extra,
   });
 }
 
@@ -161,6 +164,30 @@ describe("delivery worker", () => {
       return { status: 200, durationMs: 1 };
     }).runOnce();
     expect(nested).toBe(0);
+  });
+
+  it("settles each row alone: one failing delivery does not stop the others", async () => {
+    const first = await pay({ target: "relay" });
+    const second = await pay({ target: "relay" });
+    const notify = vi.fn().mockRejectedValueOnce(new Error("notify down"));
+    const flaky = { notify: notify.mockResolvedValue(undefined) };
+    const log = { error: vi.fn() };
+    const run = worker(undefined, { notifier: flaky, log });
+    await expect(run.runOnce()).resolves.toBe(2);
+    const rows = [...(await deliveries(first)), ...(await deliveries(second))];
+    expect(rows.map((d) => d.status)).toEqual(["sent", "sent"]);
+    expect(log.error).toHaveBeenCalledTimes(1);
+  });
+
+  it("fails a row that keeps crashing instead of reclaiming it forever", async () => {
+    const keyId = await pay({ target: "url", webhookUrl: "https://hooks.example.com/in" });
+    const send = vi.fn(() => Promise.reject(new Error("boom")));
+    for (let i = 0; i < 7; i++) {
+      await worker(send).runOnce();
+      time += 61_000;
+    }
+    expect(send).toHaveBeenCalledTimes(5);
+    expect((await deliveries(keyId))[0]).toMatchObject({ status: "failed", attempts: 6 });
   });
 
   it("purges sandbox history older than seven days", async () => {

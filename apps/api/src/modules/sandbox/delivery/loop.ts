@@ -35,8 +35,13 @@ export function startWorkerLoop(worker: LoopWorker, options: LoopOptions, log: L
 
   async function tick(): Promise<void> {
     if (Date.now() - lastPurge >= options.purgeMs) {
-      await worker.purge();
+      // Stamped first so a failing purge neither blocks deliveries nor retries every poll.
       lastPurge = Date.now();
+      try {
+        await worker.purge();
+      } catch (error) {
+        log.error({ err: error }, "sandbox history purge failed");
+      }
     }
     while (!state.stopped && (await worker.runOnce()) > 0);
   }

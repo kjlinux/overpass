@@ -1,6 +1,6 @@
 import { and, count, desc, eq, gt, isNull } from "drizzle-orm";
 import type { Database } from "../../../db/client.js";
-import { sandboxKeys } from "../tables.js";
+import { sandboxDeliveries, sandboxKeys } from "../tables.js";
 
 export type KeyRow = typeof sandboxKeys.$inferSelect;
 export type KeyInsert = typeof sandboxKeys.$inferInsert;
@@ -27,6 +27,20 @@ function keyReads(db: Database) {
         .orderBy(desc(sandboxKeys.createdAt)),
     findOwned: (userId: string, id: string, now: Date): Promise<KeyRow | undefined> =>
       first(and(eq(sandboxKeys.id, id), eq(sandboxKeys.userId, userId), active(now))),
+    async findByDelivery(
+      userId: string,
+      deliveryId: string,
+      now: Date,
+    ): Promise<KeyRow | undefined> {
+      const [row] = await db
+        .select({ key: sandboxKeys })
+        .from(sandboxDeliveries)
+        .innerJoin(sandboxKeys, eq(sandboxKeys.id, sandboxDeliveries.keyId))
+        .where(
+          and(eq(sandboxDeliveries.id, deliveryId), eq(sandboxKeys.userId, userId), active(now)),
+        );
+      return row?.key;
+    },
     findActiveByHash: (keyHash: string, now: Date): Promise<KeyRow | undefined> =>
       first(and(eq(sandboxKeys.keyHash, keyHash), active(now))),
   };

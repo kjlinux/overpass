@@ -23,12 +23,12 @@ function relayReads(db: Database) {
       const window =
         afterSeq === undefined
           ? gte(table.sentAt, new Date(now.getTime() - replayWindowMs))
-          : gt(table.seq, afterSeq);
+          : gt(table.sentSeq, afterSeq);
       return db
         .select()
         .from(table)
         .where(and(awaiting(keyId), window))
-        .orderBy(asc(table.seq))
+        .orderBy(asc(table.sentSeq))
         .limit(replayLimit);
     },
     async awaitingFor(keyId: string, id: string): Promise<RelayDelivery | undefined> {
@@ -43,6 +43,7 @@ function relayReads(db: Database) {
 
 function relayWrites(db: Database) {
   return {
+    /** Only a delivery still awaiting its result is written, so concurrent results cannot both win. */
     async record(id: string, result: LocalResult, now: Date): Promise<RelayDelivery | undefined> {
       const [row] = await db
         .update(table)
@@ -53,7 +54,7 @@ function relayWrites(db: Database) {
           lastError: result.error ?? null,
           deliveredAt: now,
         })
-        .where(eq(table.id, id))
+        .where(and(eq(table.id, id), eq(table.target, "relay"), eq(table.status, "sent")))
         .returning();
       return row;
     },

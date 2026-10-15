@@ -21,6 +21,7 @@ const worker = createDeliveryWorker({
   resolveHost: systemResolver,
   notifier: postgresNotifier(database.db),
   now: () => new Date(),
+  log,
 });
 const loop = startWorkerLoop(worker, defaultLoop, log);
 log.info("sandbox webhook worker started");

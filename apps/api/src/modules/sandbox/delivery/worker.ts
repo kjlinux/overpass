@@ -17,6 +17,7 @@ export type WorkerDeps = {
   resolveHost: HostResolver;
   notifier: Notifier;
   now: () => Date;
+  log?: { error(details: unknown, message?: string): void };
   send?: (request: WebhookRequest) => Promise<SendResult>;
 };
 
@@ -89,6 +90,19 @@ async function deliver(delivery: Delivery, row: QueuedDelivery): Promise<void> {
   return queue.finish(row.id, { ...rendered, ...(await toUrl(delivery, row, wire, now)) });
 }
 
+/** A row past its last attempt was reclaimed after crashing; stop it rather than loop. */
+async function settle(delivery: Delivery, row: QueuedDelivery): Promise<void> {
+  try {
+    if (row.attempts > maxAttempts) {
+      await delivery.queue.finish(row.id, { status: "failed", lastError: "delivery_crashed" });
+      return;
+    }
+    await deliver(delivery, row);
+  } catch (error) {
+    delivery.deps.log?.error({ err: error, deliveryId: row.id }, "sandbox delivery failed");
+  }
+}
+
 /** Takes due deliveries from PostgreSQL and sends them where each key asked. */
 export function createDeliveryWorker(deps: WorkerDeps) {
   const delivery: Delivery = {
@@ -99,7 +113,7 @@ export function createDeliveryWorker(deps: WorkerDeps) {
   return {
     async runOnce(): Promise<number> {
       const claimed = await delivery.queue.claim(deps.now(), batchSize, leaseMs);
-      await Promise.all(claimed.map((row) => deliver(delivery, row)));
+      await Promise.all(claimed.map((row) => settle(delivery, row)));
       return claimed.length;
     },
     purge: () => delivery.queue.purge(deps.now()),

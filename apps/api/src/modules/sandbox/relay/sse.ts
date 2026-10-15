@@ -29,7 +29,7 @@ export function writeDelivery(raw: ServerResponse, delivery: RelayDelivery): voi
     headers: delivery.headers as Record<string, string>,
     body: delivery.body,
   };
-  writeEvent(raw, "webhook", data, delivery.seq);
+  writeEvent(raw, "webhook", data, delivery.sentSeq ?? undefined);
 }
 
 export function writeHeartbeat(raw: ServerResponse): void {

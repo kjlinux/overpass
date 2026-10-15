@@ -30,6 +30,7 @@ describe("migrations", () => {
       "0004_checks",
       "0005_service_countries",
       "0006_sandbox",
+      "0007_sent_order",
     ]);
     expect(await tables()).toEqual([
       "api_tokens",
@@ -57,7 +58,8 @@ describe("migrations", () => {
 
   it("reverts the last migration and can apply it again", async () => {
     await migrateUp(executor, migrationsDirectory);
-    expect(await migrateDown(executor, migrationsDirectory, 6)).toEqual([
+    expect(await migrateDown(executor, migrationsDirectory, 7)).toEqual([
+      "0007_sent_order",
       "0006_sandbox",
       "0005_service_countries",
       "0004_checks",
@@ -66,7 +68,7 @@ describe("migrations", () => {
       "0001_accounts",
     ]);
     expect(await tables()).toEqual(["schema_migrations"]);
-    expect(await migrateUp(executor, migrationsDirectory)).toHaveLength(6);
+    expect(await migrateUp(executor, migrationsDirectory)).toHaveLength(7);
   });
 
   it("stores identifiers as UUID and dates as timestamptz", async () => {

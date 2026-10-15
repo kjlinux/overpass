@@ -43,7 +43,14 @@ export type SandboxOptions = {
 function relayParts(options: SandboxOptions, keys: ReturnType<typeof keysRepository>) {
   const relays = relayRepository(options.db);
   const hub = createRelayHub(options.bus ?? memoryBus(), relays);
-  return { keys, relays, hub, resolve: options.resolveAccount, now: options.now };
+  return {
+    keys,
+    relays,
+    hub,
+    resolve: options.resolveAccount,
+    counters: options.counters,
+    now: options.now,
+  };
 }
 
 function buildSandbox(options: SandboxOptions) {
