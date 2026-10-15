@@ -1,0 +1,21 @@
+{
+  "invoiceCreated": "Checkout Invoice Created",
+  "transactionFound": "Transaction Found",
+  "codes": {
+    "invalid": "OVP-400",
+    "unauthorized": "OVP-401",
+    "notFound": "OVP-404",
+    "tooManyRequests": "OVP-429"
+  },
+  "texts": {
+    "invalid": "Overpass simulator: invalid invoice, missing or invalid field ",
+    "unauthorized": "Overpass simulator: missing or unknown PAYDUNYA-PRIVATE-KEY",
+    "notFound": "Overpass simulator: no invoice or endpoint here",
+    "tooManyRequests": "Overpass simulator: too many requests"
+  },
+  "payer": { "name": "Sandbox Payer", "phone": "770000000", "email": "payer@sandbox.example" },
+  "stepMasterKey": "test-master-key",
+  "stepToken": "test-token",
+  "stepDescription": "Commande 1042",
+  "stepStore": "Boutique Overpass"
+}

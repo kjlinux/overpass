@@ -1,0 +1,23 @@
+{
+  "summary": "Simulateur non officiel du paiement avec redirection de PayDunya : création de facture, vérification de l'état du paiement et IPN.",
+  "notes": [
+    "Construit à partir de la seule page publique HTTP/JSON de PayDunya, qui ne porte ni version ni date : la version indiquée est la date de consultation.",
+    "Remplacez https://app.paydunya.com/sandbox-api/v1/ par l'adresse du simulateur : les chemins restent /checkout-invoice/create et /checkout-invoice/confirm/{token}.",
+    "Votre clé de test Overpass va dans l'en-tête PAYDUNYA-PRIVATE-KEY ; PAYDUNYA-MASTER-KEY et PAYDUNYA-TOKEN sont acceptés quelle que soit leur valeur.",
+    "Le hash vaut le SHA-512 de la MasterKey, comme documenté. Dans l'IPN, la MasterKey est le secret affiché sur la piste pour votre clé ; envoyez ce secret dans PAYDUNYA-MASTER-KEY pour que confirm renvoie le même hash.",
+    "L'IPN part en application/x-www-form-urlencoded, champs sous data avec des crochets (data[invoice][token]), comme le lit l'exemple PHP de la documentation ; l'encodage exact n'y est pas décrit.",
+    "Les scénarios donnent les statuts documentés : completed pour le succès, failed pour le solde insuffisant (fail_reason vide, la documentation ne le remplit que pour la carte bancaire), pending sans IPN pour le délai dépassé.",
+    "L'IPN part vers la cible choisie sur la piste d'essai, pas vers actions.callback_url.",
+    "La documentation ne décrit que le code de succès 00 : les refus du simulateur portent des codes OVP-400, OVP-401, OVP-404 et OVP-429 qui ne sont pas ceux de PayDunya.",
+    "receipt_url pointe vers une page du simulateur, pas vers un reçu PDF ; le client par défaut est fictif.",
+    "Paiement et redistribution (direct-pay/credit-account) n'est pas simulé."
+  ],
+  "endpoints": {
+    "POST /sandbox-api/v1/checkout-invoice/create": "Créer une facture et obtenir l'adresse de paiement",
+    "GET /sandbox-api/v1/checkout-invoice/confirm/:token": "Vérifier l'état du paiement d'une facture"
+  },
+  "steps": {
+    "invoice": "Créer une facture de 5 000 FCFA avec votre clé de test.",
+    "confirm": "Vérifier l'état de la facture : le payeur virtuel a agi selon le scénario."
+  }
+}

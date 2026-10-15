@@ -5,7 +5,11 @@ import { providers } from "./index.js";
 describe("providers", () => {
   it("load together in the engine, each id once", () => {
     expect(() => createSimulator(providers)).not.toThrow();
-    expect(providers.map((provider) => provider.identity.id)).toEqual(["wave", "pi-spi"]);
+    expect(providers.map((provider) => provider.identity.id)).toEqual([
+      "wave",
+      "pi-spi",
+      "paydunya",
+    ]);
   });
 
   it.each(providers.map((provider) => [provider.identity.id, provider] as const))(
