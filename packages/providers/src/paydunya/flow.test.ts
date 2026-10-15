@@ -116,5 +116,10 @@ describe("IPN", () => {
     const request = { method: "GET" as const, path: "/", query: {}, rawBody: "", body: undefined };
     expect(paydunya.credential({ ...request, headers: keys })).toBe("ovp_test_k");
     expect(paydunya.errors.unauthorized({ ...request, headers: {} }).status).toBe(401);
+    expect(paydunya.secretHeaders).toEqual([
+      "paydunya-master-key",
+      "paydunya-private-key",
+      "paydunya-token",
+    ]);
   });
 });

@@ -118,6 +118,8 @@ export type ProviderAdapter<Outcome = unknown> = {
   webhooks: WebhookSpec;
   credential(request: SimRequest): string | undefined;
   auth?: AuthDoc;
+  /** Lowercase headers that carry the developer's provider credentials, never stored. */
+  secretHeaders?: readonly string[];
   /** The documented calls a trial page plays for the developer, in walkthrough order. */
   steps?: readonly ExampleStep[];
   errors: Readonly<Record<Refusal, (request: SimRequest) => SimResponse>>;

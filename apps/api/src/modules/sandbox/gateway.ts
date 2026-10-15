@@ -50,11 +50,16 @@ export function parseBody(raw: string, contentType: string | undefined): unknown
   }
 }
 
-function redact(headers: Record<string, string>, credential: string): Record<string, string> {
+type Secrets = { credential: string; headers: readonly string[] };
+
+function redact(headers: Record<string, string>, secrets: Secrets): Record<string, string> {
+  const { credential } = secrets;
   return Object.fromEntries(
     Object.entries(headers).map(([name, value]) => [
       name,
-      secretHeaders.has(name) || (credential !== "" && value.includes(credential))
+      secretHeaders.has(name) ||
+      secrets.headers.includes(name) ||
+      (credential !== "" && value.includes(credential))
         ? "[redacted]"
         : value,
     ]),
@@ -89,11 +94,11 @@ async function authenticate(
   return key?.provider === call.provider ? key : undefined;
 }
 
-function storedRequest(call: GatewayCall, credential: string) {
+function storedRequest(call: GatewayCall, secrets: Secrets) {
   return {
     method: call.method,
     path: call.path,
-    headers: redact(call.headers, credential),
+    headers: redact(call.headers, secrets),
     body: call.rawBody.slice(0, storedBodyLimit),
   };
 }
@@ -128,7 +133,10 @@ async function simulate(
       provider: key.provider,
       scenario,
       createdAt: now,
-      request: storedRequest(call, credential),
+      request: storedRequest(call, {
+        credential,
+        headers: deps.simulator.secretHeaders(call.provider),
+      }),
       response,
     },
     deliveriesFor(key, result.webhooks, now),

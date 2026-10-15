@@ -36,6 +36,7 @@ export type Simulator = {
   credential(provider: string, request: SimRequest): string | undefined;
   refusal(provider: string, reason: Refusal, request: SimRequest): SimResponse;
   secretPrefix(provider: string): string;
+  secretHeaders(provider: string): readonly string[];
   steps(provider: string): readonly ExampleStep[];
   auth(provider: string): AuthDoc;
   renderWebhook(
@@ -101,6 +102,7 @@ export function createSimulator(
     steps: (provider) => registry.get(provider)?.steps ?? [],
     auth: (provider) => registry.get(provider)?.auth ?? { type: "bearer" },
     secretPrefix: (provider) => require(provider).webhooks.secretPrefix ?? "",
+    secretHeaders: (provider) => registry.get(provider)?.secretHeaders ?? [],
     renderWebhook: (provider, event, options) => require(provider).webhooks.render(event, options),
   };
 }

@@ -64,6 +64,9 @@ const redactedHeaders = [
   "req.headers.cookie",
   "req.headers.authorization",
   'req.headers["x-api-key"]',
+  'req.headers["paydunya-master-key"]',
+  'req.headers["paydunya-private-key"]',
+  'req.headers["paydunya-token"]',
 ];
 
 /** Mounts every data module; they share one clock and one set of rate limit counters. */

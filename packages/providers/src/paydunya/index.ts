@@ -35,6 +35,7 @@ export const paydunya: ProviderAdapter<PaydunyaOutcome> = {
     late_webhook: { status: "completed" },
   },
   auth: { type: "header", name: "PAYDUNYA-PRIVATE-KEY" },
+  secretHeaders: ["paydunya-master-key", "paydunya-private-key", "paydunya-token"],
   steps: [
     {
       id: "invoice",

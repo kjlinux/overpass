@@ -20,6 +20,14 @@
         "docsUrl": "https://developer.pispi.bceao.int/api-business",
         "docsVersion": "1.5.0",
         "consultedAt": "2026-10-14"
+      },
+      {
+        "id": "paydunya",
+        "name": "PayDunya",
+        "unofficial": true,
+        "docsUrl": "https://developers.paydunya.com/doc/FR/http_json",
+        "docsVersion": "2026-10-15",
+        "consultedAt": "2026-10-15"
       }
     ]
   },
@@ -5039,6 +5047,389 @@
         }
       }
     },
+    "/v1/sandbox/paydunya/sandbox-api/v1/checkout-invoice/create": {
+      "post": {
+        "summary": "Create an invoice and get the payment address",
+        "tags": [
+          "PayDunya"
+        ],
+        "security": [
+          {
+            "paydunya": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Overpass-Scenario",
+            "in": "header",
+            "required": false,
+            "description": "Scenario of this call, instead of the key's",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "success",
+                "insufficient_funds",
+                "timeout",
+                "duplicate_webhook",
+                "late_webhook"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "invoice": {
+                    "type": "object",
+                    "properties": {
+                      "total_amount": {
+                        "type": "number",
+                        "exclusiveMinimum": 0
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "items": {
+                        "type": "object",
+                        "propertyNames": {
+                          "type": "string"
+                        },
+                        "additionalProperties": {}
+                      },
+                      "taxes": {
+                        "type": "object",
+                        "propertyNames": {
+                          "type": "string"
+                        },
+                        "additionalProperties": {}
+                      },
+                      "customer": {
+                        "type": "object",
+                        "properties": {
+                          "name": {
+                            "type": "string"
+                          },
+                          "email": {
+                            "type": "string"
+                          },
+                          "phone": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "channels": {
+                        "anyOf": [
+                          {
+                            "type": "string"
+                          },
+                          {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "required": [
+                      "total_amount"
+                    ]
+                  },
+                  "store": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "tagline": {
+                        "type": "string"
+                      },
+                      "postal_address": {
+                        "type": "string"
+                      },
+                      "phone": {
+                        "type": "string"
+                      },
+                      "logo_url": {
+                        "type": "string"
+                      },
+                      "website_url": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "name"
+                    ]
+                  },
+                  "custom_data": {
+                    "type": "object",
+                    "propertyNames": {
+                      "type": "string"
+                    },
+                    "additionalProperties": {}
+                  },
+                  "actions": {
+                    "type": "object",
+                    "properties": {
+                      "cancel_url": {
+                        "type": "string"
+                      },
+                      "return_url": {
+                        "type": "string"
+                      },
+                      "callback_url": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "required": [
+                  "invoice",
+                  "store"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response_code": {
+                      "type": "string",
+                      "const": "00"
+                    },
+                    "response_text": {
+                      "type": "string"
+                    },
+                    "description": {
+                      "type": "string"
+                    },
+                    "token": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "response_code",
+                    "response_text",
+                    "description",
+                    "token"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response_code": {
+                      "type": "string"
+                    },
+                    "response_text": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "response_code",
+                    "response_text"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sandbox/paydunya/sandbox-api/v1/checkout-invoice/confirm/{token}": {
+      "get": {
+        "summary": "Check an invoice's payment status",
+        "tags": [
+          "PayDunya"
+        ],
+        "security": [
+          {
+            "paydunya": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Overpass-Scenario",
+            "in": "header",
+            "required": false,
+            "description": "Scenario of this call, instead of the key's",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "success",
+                "insufficient_funds",
+                "timeout",
+                "duplicate_webhook",
+                "late_webhook"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response_code": {
+                      "type": "string",
+                      "const": "00"
+                    },
+                    "response_text": {
+                      "type": "string"
+                    },
+                    "hash": {
+                      "type": "string"
+                    },
+                    "invoice": {
+                      "type": "object",
+                      "properties": {
+                        "items": {
+                          "type": "object",
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "additionalProperties": {}
+                        },
+                        "taxes": {
+                          "type": "object",
+                          "propertyNames": {
+                            "type": "string"
+                          },
+                          "additionalProperties": {}
+                        },
+                        "token": {
+                          "type": "string"
+                        },
+                        "total_amount": {
+                          "type": "number"
+                        },
+                        "description": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "items",
+                        "taxes",
+                        "token",
+                        "total_amount",
+                        "description"
+                      ],
+                      "additionalProperties": false
+                    },
+                    "custom_data": {
+                      "type": "object",
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "additionalProperties": {}
+                    },
+                    "actions": {
+                      "type": "object",
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "additionalProperties": {}
+                    },
+                    "mode": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "pending",
+                        "completed",
+                        "cancelled",
+                        "failed"
+                      ]
+                    },
+                    "fail_reason": {
+                      "type": "string"
+                    },
+                    "customer": {
+                      "type": "object",
+                      "propertyNames": {
+                        "type": "string"
+                      },
+                      "additionalProperties": {}
+                    },
+                    "receipt_url": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "response_code",
+                    "response_text",
+                    "hash",
+                    "invoice",
+                    "custom_data",
+                    "actions",
+                    "mode",
+                    "status",
+                    "fail_reason",
+                    "customer",
+                    "receipt_url"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "response_code": {
+                      "type": "string"
+                    },
+                    "response_text": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "response_code",
+                    "response_text"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/sandbox/listen": {
       "get": {
         "summary": "Receive your key's webhooks on your machine (local relay, SSE stream)",
@@ -5744,6 +6135,256 @@
           }
         }
       }
+    },
+    "paydunya.completed": {
+      "post": {
+        "summary": "Simulated webhook, signed as the provider documents it",
+        "tags": [
+          "PayDunya"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "response_code": {
+                    "type": "string",
+                    "const": "00"
+                  },
+                  "response_text": {
+                    "type": "string"
+                  },
+                  "hash": {
+                    "type": "string"
+                  },
+                  "invoice": {
+                    "type": "object",
+                    "properties": {
+                      "items": {
+                        "type": "object",
+                        "propertyNames": {
+                          "type": "string"
+                        },
+                        "additionalProperties": {}
+                      },
+                      "taxes": {
+                        "type": "object",
+                        "propertyNames": {
+                          "type": "string"
+                        },
+                        "additionalProperties": {}
+                      },
+                      "token": {
+                        "type": "string"
+                      },
+                      "total_amount": {
+                        "type": "number"
+                      },
+                      "description": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "items",
+                      "taxes",
+                      "token",
+                      "total_amount",
+                      "description"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "custom_data": {
+                    "type": "object",
+                    "propertyNames": {
+                      "type": "string"
+                    },
+                    "additionalProperties": {}
+                  },
+                  "actions": {
+                    "type": "object",
+                    "propertyNames": {
+                      "type": "string"
+                    },
+                    "additionalProperties": {}
+                  },
+                  "mode": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "pending",
+                      "completed",
+                      "cancelled",
+                      "failed"
+                    ]
+                  },
+                  "fail_reason": {
+                    "type": "string"
+                  },
+                  "customer": {
+                    "type": "object",
+                    "propertyNames": {
+                      "type": "string"
+                    },
+                    "additionalProperties": {}
+                  },
+                  "receipt_url": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "response_code",
+                  "response_text",
+                  "hash",
+                  "invoice",
+                  "custom_data",
+                  "actions",
+                  "mode",
+                  "status",
+                  "fail_reason",
+                  "customer",
+                  "receipt_url"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "paydunya.failed": {
+      "post": {
+        "summary": "Simulated webhook, signed as the provider documents it",
+        "tags": [
+          "PayDunya"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "response_code": {
+                    "type": "string",
+                    "const": "00"
+                  },
+                  "response_text": {
+                    "type": "string"
+                  },
+                  "hash": {
+                    "type": "string"
+                  },
+                  "invoice": {
+                    "type": "object",
+                    "properties": {
+                      "items": {
+                        "type": "object",
+                        "propertyNames": {
+                          "type": "string"
+                        },
+                        "additionalProperties": {}
+                      },
+                      "taxes": {
+                        "type": "object",
+                        "propertyNames": {
+                          "type": "string"
+                        },
+                        "additionalProperties": {}
+                      },
+                      "token": {
+                        "type": "string"
+                      },
+                      "total_amount": {
+                        "type": "number"
+                      },
+                      "description": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "items",
+                      "taxes",
+                      "token",
+                      "total_amount",
+                      "description"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "custom_data": {
+                    "type": "object",
+                    "propertyNames": {
+                      "type": "string"
+                    },
+                    "additionalProperties": {}
+                  },
+                  "actions": {
+                    "type": "object",
+                    "propertyNames": {
+                      "type": "string"
+                    },
+                    "additionalProperties": {}
+                  },
+                  "mode": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "pending",
+                      "completed",
+                      "cancelled",
+                      "failed"
+                    ]
+                  },
+                  "fail_reason": {
+                    "type": "string"
+                  },
+                  "customer": {
+                    "type": "object",
+                    "propertyNames": {
+                      "type": "string"
+                    },
+                    "additionalProperties": {}
+                  },
+                  "receipt_url": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "response_code",
+                  "response_text",
+                  "hash",
+                  "invoice",
+                  "custom_data",
+                  "actions",
+                  "mode",
+                  "status",
+                  "fail_reason",
+                  "customer",
+                  "receipt_url"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -5757,6 +6398,12 @@
         "type": "apiKey",
         "in": "header",
         "name": "x-api-key",
+        "description": "Overpass test key"
+      },
+      "paydunya": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "PAYDUNYA-PRIVATE-KEY",
         "description": "Overpass test key"
       },
       "overpass": {

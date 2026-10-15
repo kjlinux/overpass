@@ -110,6 +110,11 @@ describe("buildSandboxOpenApi", () => {
         docsUrl: "https://docs.wave.com/checkout",
       }),
       expect.objectContaining({ id: "pi-spi", unofficial: true, docsVersion: "1.5.0" }),
+      expect.objectContaining({
+        id: "paydunya",
+        unofficial: true,
+        docsUrl: "https://developers.paydunya.com/doc/FR/http_json",
+      }),
     ]);
   });
 
