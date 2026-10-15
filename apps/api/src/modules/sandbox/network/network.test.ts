@@ -19,6 +19,7 @@ describe("isPublicAddress", () => {
     "fc00::1",
     "fd12:3456::1",
     "::ffff:127.0.0.1",
+    "::7f00:1",
     "::ffff:7f00:1",
     "::ffff:a9fe:a9fe",
     "64:ff9b::7f00:1",
@@ -62,11 +63,20 @@ describe("publicAddresses", () => {
     "http://2130706433/x",
     "http://0x7f.1/x",
     "ftp://ok.example/x",
+    "https://ok.example:22/x",
+    "http://ok.example:6379/x",
     "https://user:pass@ok.example/x",
     "not a url",
   ])("refuses %s", async (url) => {
     expect(await publicAddresses(url, dns)).toBeUndefined();
   });
+
+  it.each(["http://ok.example/x", "https://ok.example:443/x", "http://ok.example:8080/x"])(
+    "accepts the web port of %s",
+    async (url) => {
+      expect(await publicAddresses(url, dns)).toEqual(["93.184.216.34"]);
+    },
+  );
 
   it("accepts a public IP literal without asking the resolver", async () => {
     expect(await publicAddresses("http://93.184.216.34:8443/x", dns)).toEqual(["93.184.216.34"]);
