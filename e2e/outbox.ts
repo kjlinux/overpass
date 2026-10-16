@@ -21,6 +21,16 @@ async function mailsTo(email: string): Promise<Mail[]> {
   return mails.filter((mail): mail is Mail => mail?.to === email);
 }
 
+/** Waits for a mail to an address whose text contains the expected words. */
+export async function mailMentioning(email: string, words: string): Promise<Mail> {
+  for (let attempt = 0; attempt < 50; attempt++) {
+    const mail = (await mailsTo(email)).find((candidate) => candidate.text.includes(words));
+    if (mail !== undefined) return mail;
+    await pause(100);
+  }
+  throw new Error(`No mail to ${email} mentions ${words}`);
+}
+
 /** Waits for the newest mail sent to an address and returns the link it carries. */
 export async function linkMailedTo(email: string): Promise<string> {
   for (let attempt = 0; attempt < 50; attempt++) {
