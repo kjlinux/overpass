@@ -8,6 +8,7 @@ export const webOrigin = "http://web.test";
 
 const mailers = new WeakMap<FastifyInstance, ReturnType<typeof captureMailer>>();
 export const password = "correct horse battery";
+export const sessionSecret = "test-secret-with-at-least-32-characters!";
 
 /** A full API on an in-process PostgreSQL, with mails captured instead of sent. */
 export async function createTestApp(options: { now?: () => Date; sandbox?: SandboxDeps } = {}) {
@@ -19,7 +20,7 @@ export async function createTestApp(options: { now?: () => Date; sandbox?: Sandb
       LOG_LEVEL: "silent",
       TRUST_PROXY: 0,
       WEB_ORIGIN: webOrigin,
-      SESSION_SECRET: "test-secret-with-at-least-32-characters!",
+      SESSION_SECRET: sessionSecret,
     },
     db: database.db,
     mailer,
