@@ -72,7 +72,8 @@ describe("redactSecrets on generic secrets", () => {
   });
 
   it("hides the body of a private key block", () => {
-    const pem = "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASC\n-----END PRIVATE KEY-----";
+    const pem =
+      "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASC\n-----END PRIVATE KEY-----";
     const { text } = redactSecrets(pem);
     expect(text).not.toContain("MIIEvQIBADANBgkqhkiG9w0BAQEFAASC");
     expect(text).toContain("-----BEGIN PRIVATE KEY-----");
