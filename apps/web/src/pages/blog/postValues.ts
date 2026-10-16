@@ -9,7 +9,8 @@ export const postFormSchema = postCreateInput
     kind: postKindSchema,
     publishAt: z
       .string()
-      .regex(/^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2})?$/, { error: "publish_at_invalid" }),
+      .regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/, { error: "publish_at_invalid" })
+      .optional(),
   });
 
 export type PostFormValues = z.output<typeof postFormSchema>;
@@ -25,8 +26,8 @@ export const emptyPost: Record<keyof PostFormValues, string> = {
 };
 
 /** A datetime-local value is the reader's local time; the API wants an instant. */
-export const toInstant = (local: string): string | undefined =>
-  local === "" ? undefined : new Date(local).toISOString();
+export const toInstant = (local: string | undefined): string | undefined =>
+  local === undefined || local === "" ? undefined : new Date(local).toISOString();
 
 export function toLocalInput(iso: string | null): string {
   if (iso === null) return "";

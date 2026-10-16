@@ -2,8 +2,10 @@ import type { CommentPage, PostDetail, PostSummary } from "@overpass/shared";
 import { LocationProvider } from "preact-iso";
 import { render } from "preact-render-to-string";
 import { beforeAll, describe, expect, it, vi } from "vitest";
+import { validateAll } from "../../forms";
 import { setupTestI18n } from "../../i18n/test-i18n";
 import fr from "./locales/fr.json";
+import { emptyPost, postFormSchema } from "./postValues";
 import { ArticleView, FeedTabs, PostForm, PostList, blogQueryFrom, blogSearch } from "./index";
 
 beforeAll(async () => {
@@ -124,5 +126,13 @@ describe("post form", () => {
     expect(admin).toContain('name="kind"');
     expect(admin).toContain(fr.editor.saveDraft);
     expect(admin).toContain(fr.editor.publish);
+  });
+});
+
+describe("post form values", () => {
+  it("publishes without a date, the field being optional", () => {
+    const values = { ...emptyPost, title: "Encaisser avec Wave", summary: "R", content: "T" };
+    expect(validateAll(postFormSchema, values).ok).toBe(true);
+    expect(validateAll(postFormSchema, { ...values, publishAt: "demain" }).ok).toBe(false);
   });
 });
