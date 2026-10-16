@@ -83,6 +83,29 @@ create table blog_suspensions (
   suspended_at timestamptz not null default now()
 );
 
+-- Counters follow every deletion, including the cascades of a deleted account.
+create function decrement_star_count() returns trigger language plpgsql as $$
+begin
+  update posts set star_count = greatest(star_count - 1, 0) where id = old.post_id;
+  return old;
+end;
+$$;
+
+create trigger post_stars_count after delete on post_stars
+  for each row execute function decrement_star_count();
+
+create function decrement_comment_count() returns trigger language plpgsql as $$
+begin
+  if old.moderation = 'visible' then
+    update posts set comment_count = greatest(comment_count - 1, 0) where id = old.post_id;
+  end if;
+  return old;
+end;
+$$;
+
+create trigger post_comments_count after delete on post_comments
+  for each row execute function decrement_comment_count();
+
 -- A member's posts leave with the account; news stay, without author, as the team's record.
 create function delete_member_posts() returns trigger language plpgsql as $$
 begin

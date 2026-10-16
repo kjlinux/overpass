@@ -29,19 +29,18 @@ function addStar(db: Database, postId: string, userId: string, when: Date) {
   });
 }
 
-function removeStar(db: Database, postId: string, userId: string) {
-  return db.transaction(async (tx) => {
-    const deleted = await rows(
-      tx,
-      sql`delete from post_stars where post_id = ${postId} and user_id = ${userId} returning post_id`,
-    );
-    if (deleted.length === 0) return null;
-    const [row] = await rows<{ n: number }>(
-      tx,
-      sql`update posts set star_count = star_count - 1 where id = ${postId} returning star_count as n`,
-    );
-    return row?.n ?? null;
-  });
+/** The delete trigger moves the counter, so a cascade from a deleted account moves it too. */
+async function removeStar(db: Database, postId: string, userId: string) {
+  const deleted = await rows(
+    db,
+    sql`delete from post_stars where post_id = ${postId} and user_id = ${userId} returning post_id`,
+  );
+  if (deleted.length === 0) return null;
+  const [row] = await rows<{ n: number }>(
+    db,
+    sql`select star_count as n from posts where id = ${postId}`,
+  );
+  return row?.n ?? null;
 }
 
 function insertComment(

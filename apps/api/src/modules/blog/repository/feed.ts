@@ -35,7 +35,8 @@ function followedBranch(filters: FeedFilters, viewerId: string | null, after?: F
 /** Recent posts of everyone else, the most starred first. */
 function topRatedBranch(filters: FeedFilters, viewerId: string | null, after?: FeedCursor): SQL {
   const since = new Date(filters.now.getTime() - blogRules.recentDays * day);
-  const others = viewerId === null ? sql`true` : sql`not (${followedBy(viewerId)})`;
+  const others =
+    viewerId === null ? sql`true` : sql`(p.author_id is null or not (${followedBy(viewerId)}))`;
   const page =
     after?.tier === 1
       ? sql`(p.star_count, p.published_at, p.id) < (${after.stars}, ${at(after.at)}, ${after.id})`

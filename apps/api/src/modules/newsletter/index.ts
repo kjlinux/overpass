@@ -28,8 +28,13 @@ function depsOf(options: NewsletterOptions) {
 /** Built before accounts, so ticking the sign-up box can start the double opt-in. */
 export function newsletterModule(options: NewsletterOptions) {
   const service = createNewsletterService(depsOf(options));
+  /** The profile is already saved; a failed opt-in is logged, never turned into an error. */
   const consent = async (contact: { email: string; language: Language }): Promise<void> => {
-    await service.subscribe(contact);
+    try {
+      await service.subscribe(contact);
+    } catch (error) {
+      options.log.error({ err: error }, "newsletter opt-in after sign-up failed");
+    }
   };
   const register = async (app: FastifyInstance, resolve: AccountResolver): Promise<void> => {
     await app.register(async (scope) => {
