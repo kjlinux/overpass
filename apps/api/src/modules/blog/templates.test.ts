@@ -25,7 +25,9 @@ const drafts = async () => {
   const result: unknown = await db.execute(
     sql`select kind, status, language, category from posts order by category, language`,
   );
-  return (result as { rows: Record<string, string>[] }).rows;
+  return (
+    result as { rows: { kind: string; status: string; language: string; category: string }[] }
+  ).rows;
 };
 
 describe("news templates", () => {
