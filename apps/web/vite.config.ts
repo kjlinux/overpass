@@ -5,7 +5,7 @@ export default defineConfig({
   server: {
     host: "127.0.0.1",
     port: 5173,
-    proxy: { "/v1": "http://127.0.0.1:3000" },
+    proxy: { "/v1": "http://127.0.0.1:3000", "/mcp": "http://127.0.0.1:3100" },
   },
   build: { manifest: true },
 });

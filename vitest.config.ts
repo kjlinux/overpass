@@ -12,13 +12,19 @@ export default defineConfig({
     exclude: ["**/node_modules/**", "**/dist/**", ".references/**", ".claude/**"],
     coverage: {
       provider: "v8",
-      include: ["apps/api/src/**/*.ts", "apps/cli/src/**/*.ts", "packages/*/src/**/*.ts"],
+      include: [
+        "apps/api/src/**/*.ts",
+        "apps/cli/src/**/*.ts",
+        "apps/mcp/src/**/*.ts",
+        "packages/*/src/**/*.ts",
+      ],
       exclude: [
         "**/*.test.{ts,tsx}",
         "**/testing.ts",
         "**/testing-*.ts",
         "**/fixtures.ts",
         "apps/cli/src/cli.ts",
+        "apps/mcp/src/server.ts",
       ],
       reporter: ["text-summary", "html"],
       // The web pages are covered by the end-to-end suite; the API and shared packages here.
