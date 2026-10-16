@@ -126,4 +126,12 @@ describe("thread detail", () => {
     expect(draft.content).toContain("Route::post");
     expect(draft.content).toContain("Idempotency-Key");
   });
+
+  it("keeps code that contains a fence inside one code block", () => {
+    const fence = "`".repeat(3);
+    const codeText = [`${fence}js`, "console.info(1)", fence].join("\n");
+    const draft = threadDraft({ ...thread, codeText });
+    const longer = "`".repeat(4);
+    expect(draft.content).toContain([longer, codeText, longer].join("\n"));
+  });
 });

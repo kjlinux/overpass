@@ -101,4 +101,19 @@ describe("admin review of proposals", () => {
     const queue = await call(app, "GET", "/v1/admin/service-proposals", { cookie: admin });
     expect(queue.body.data).toEqual([]);
   });
+
+  it("leaves no orphan service when two admins accept at the same time", async () => {
+    const id = String((await propose()).body.data?.id);
+    const second = await registerAccount(app, "second-admin@example.com");
+    await promoteAdmin(db, "second-admin@example.com");
+    const answers = await Promise.all([
+      decide(id, { decision: "accept" }),
+      decide(id, { decision: "accept" }, second),
+    ]);
+    expect(answers.map((answer) => answer.status).sort()).toEqual([200, 409]);
+    const services = (await call(app, "GET", "/v1/services")).body.data as unknown as {
+      slug: string;
+    }[];
+    expect(services.filter((service) => service.slug.startsWith("m-pesa"))).toHaveLength(1);
+  });
 });

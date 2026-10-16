@@ -3,7 +3,8 @@ import type { FastifyInstance } from "fastify";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { Database } from "../../db/client.js";
 import { call, publishRoute, testClock } from "../../testing-routes.js";
-import { createTestApp, handleOf, registerAccount } from "../../testing.js";
+import { openThread, replyTo } from "../../testing-discussions.js";
+import { createTestApp, handleOf, password, registerAccount } from "../../testing.js";
 
 let app: FastifyInstance;
 let db: Database;
@@ -100,5 +101,15 @@ describe("points cache", () => {
     await publishRoute(app, author);
     await db.execute(sql`delete from member_points`);
     expect(await pointsOf(author)).toBe(10);
+  });
+
+  it("takes back useful votes when the voter deletes the account", async () => {
+    const threadId = await openThread(app, author);
+    const replyId = await replyTo(app, awa, threadId);
+    await call(app, "POST", `/v1/replies/${replyId}/useful`, { cookie: moussa });
+    expect(await pointsOf(awa)).toBe(1);
+    const deleted = await call(app, "DELETE", "/v1/me", { cookie: moussa, payload: { password } });
+    expect(deleted.status).toBe(200);
+    expect(await pointsOf(awa)).toBe(0);
   });
 });

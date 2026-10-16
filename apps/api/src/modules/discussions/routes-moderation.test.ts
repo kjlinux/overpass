@@ -117,4 +117,15 @@ describe("moderation queue", () => {
     expect((await readThread(app, threadId, admin)).body.data).toMatchObject({ status: "removed" });
     expect((await report(first)).status).toBe(409);
   });
+
+  it("drops from the queue the replies of a removed thread", async () => {
+    const replyId = await replyTo(app, first, threadId);
+    await report(second, `/v1/replies/${replyId}/reports`);
+    await call(app, "POST", `/v1/moderation/thread/${threadId}`, {
+      cookie: admin,
+      payload: { decision: "remove" },
+    });
+    const queue = (await call(app, "GET", "/v1/moderation/reports", { cookie: admin })).body.data;
+    expect(queue).toEqual([]);
+  });
 });

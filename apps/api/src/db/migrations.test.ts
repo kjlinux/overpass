@@ -126,4 +126,19 @@ describe("migrations", () => {
     await executor.query("delete from users");
     expect(await executor.query("select * from user_stacks")).toEqual([]);
   });
+
+  it("fills the points cache from the contributions made before the ranking existed", async () => {
+    await migrateUp(executor, migrationsDirectory);
+    await executor.query(
+      "insert into users (id, email, password_hash, handle, country) values ('00000000-0000-4000-8000-000000000001', 'a@b.co', 'h', 'dev-a', 'CI')",
+    );
+    await executor.query(
+      "insert into routes (author_id, service_id, country, stack, language, title, content) select '00000000-0000-4000-8000-000000000001', id, 'CI', 'laravel', 'fr', 'Une fiche ancienne', 'x' from services where slug = 'wave'",
+    );
+    await migrateDown(executor, migrationsDirectory, 3);
+    await migrateUp(executor, migrationsDirectory);
+    expect(await executor.query("select routes, points from member_points")).toEqual([
+      { routes: 1, points: 10 },
+    ]);
+  });
 });

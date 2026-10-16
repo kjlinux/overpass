@@ -181,3 +181,15 @@ describe("POST /v1/threads/:id/replies", () => {
     expect(unknown.status).toBe(404);
   });
 });
+
+describe("masking near the length limits", () => {
+  it("answers 400 when masking secrets would push the text over its limit", async () => {
+    const content = `${"a".repeat(19_990)} pwd=abc1`;
+    const response = await call(app, "POST", "/v1/threads", {
+      cookie: awa,
+      payload: { ...sampleThread, content },
+    });
+    expect(response.status).toBe(400);
+    expect(JSON.stringify(response.body.error)).toContain("body_too_long");
+  });
+});
