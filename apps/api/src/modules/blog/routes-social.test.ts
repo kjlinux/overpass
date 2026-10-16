@@ -87,11 +87,14 @@ describe("follows", () => {
 describe("account deletion", () => {
   it("removes the member's posts and gives back the points of the stars they gave", async () => {
     await star(app, bob, post.id);
+    const path = `/v1/posts/${post.id}/comments`;
+    await call(app, "POST", path, { cookie: bob, payload: { content: "Merci" } });
     await call(app, "DELETE", "/v1/me", {
       cookie: bob,
       payload: { password: "correct horse battery" },
     });
     expect(await points(ada)).toBe(10);
+    expect(await detail()).toMatchObject({ stars: 0, comments: 0 });
     await call(app, "DELETE", "/v1/me", {
       cookie: ada,
       payload: { password: "correct horse battery" },

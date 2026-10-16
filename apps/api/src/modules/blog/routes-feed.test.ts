@@ -1,10 +1,13 @@
 import type { FastifyInstance } from "fastify";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import type { Database } from "../../db/client.js";
 import { feedSlugs, follow, rss, star, writePost } from "../../testing-blog.js";
+import { promoteAdmin } from "../../testing-discussions.js";
 import { call, testClock } from "../../testing-routes.js";
-import { createTestApp, handleOf, registerAccount } from "../../testing.js";
+import { createTestApp, handleOf, password, registerAccount } from "../../testing.js";
 
 let app: FastifyInstance;
+let db: Database;
 let close: () => Promise<void>;
 let clock: ReturnType<typeof testClock>;
 let ada: string;
@@ -13,7 +16,7 @@ let eve: string;
 
 beforeEach(async () => {
   clock = testClock();
-  ({ app, close } = await createTestApp({ now: clock.now }));
+  ({ app, db, close } = await createTestApp({ now: clock.now }));
   ada = await registerAccount(app, "ada@example.com");
   bob = await registerAccount(app, "bob@example.com", "SN");
   eve = await registerAccount(app, "eve@example.com", "BJ");
@@ -70,6 +73,18 @@ describe("for me feed", () => {
       quiet.slug,
     ]);
     expect(await feedSlugs(app, "?feed=forme")).toEqual([loved.slug, followed.slug, quiet.slug]);
+  });
+
+  it("keeps news whose author left for a reader who follows someone", async () => {
+    await promoteAdmin(db, "eve@example.com");
+    const news = await daily(eve, "Une actualité de l'équipe", {
+      kind: "news",
+      category: "tech-news",
+    });
+    await call(app, "DELETE", "/v1/me", { cookie: eve, payload: { password } });
+    await daily(ada, "Un article de Ada suivie");
+    await follow(app, bob, await handleOf(app, ada));
+    expect(await feedSlugs(app, "?feed=forme", bob)).toContain(news.slug);
   });
 
   it("pages across both parts without repeating a post", async () => {
