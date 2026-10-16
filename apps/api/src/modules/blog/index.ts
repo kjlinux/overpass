@@ -30,3 +30,4 @@ export async function registerBlog(app: FastifyInstance, options: BlogOptions): 
 
 /** The visibility rule of posts, for modules that pick posts for other channels. */
 export { listed as listedPostCondition } from "./repository/sql.js";
+export { seedNewsTemplates } from "./templates.js";

@@ -19,6 +19,7 @@
     "db:down": "docker compose down",
     "db:migrate": "npm run db:migrate -w @overpass/api",
     "db:rollback": "npm run db:rollback -w @overpass/api",
+    "blog:templates": "npm run blog:templates -w @overpass/api --",
     "typecheck": "tsc -b tsconfig.build.json && npm run typecheck --workspaces --if-present && tsc -p scripts && tsc -p e2e",
     "lint": "eslint . --max-warnings 0",
     "format": "prettier --write .",
