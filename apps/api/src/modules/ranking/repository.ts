@@ -9,6 +9,10 @@ async function rows<Row>(db: Database, query: SQL): Promise<Row[]> {
   return (result as { rows: Row[] }).rows;
 }
 
+/** A published, visible post on an active blog earns points, scheduled ones included. */
+const livePost = sql`p.status = 'published' and p.moderation = 'visible'
+  and not exists (select 1 from blog_suspensions b where b.user_id = p.author_id)`;
+
 /** Section 9: points come from the contribution tables; self-acceptance and self-votes earn nothing. */
 function breakdownQuery(userId: string): SQL {
   return sql`select
@@ -19,18 +23,21 @@ function breakdownQuery(userId: string): SQL {
       where r.author_id = ${userId} and r.status = 'visible' and t.status = 'visible'
         and t.author_id is distinct from r.author_id) as accepted,
     (select count(*)::int from reply_votes v join replies r on r.id = v.reply_id
-      where r.author_id = ${userId} and r.status = 'visible' and v.user_id <> ${userId}) as useful`;
+      where r.author_id = ${userId} and r.status = 'visible' and v.user_id <> ${userId}) as useful,
+    (select count(*)::int from posts p where p.author_id = ${userId} and ${livePost}) as articles,
+    (select count(*)::int from post_stars s join posts p on p.id = s.post_id
+      where p.author_id = ${userId} and ${livePost} and s.user_id <> ${userId}) as stars`;
 }
 
 function storeQuery(userId: string, b: PointsBreakdown, points: number, at: Date): SQL {
   return sql`insert into member_points
-      (user_id, routes, checks, potholes, accepted, useful, articles, points, updated_at)
+      (user_id, routes, checks, potholes, accepted, useful, articles, stars, points, updated_at)
     select ${userId}, ${b.routes}, ${b.checks}, ${b.potholes}, ${b.accepted}, ${b.useful},
-      ${b.articles}, ${points}, ${at.toISOString()}
+      ${b.articles}, ${b.stars}, ${points}, ${at.toISOString()}
     where exists (select 1 from users where id = ${userId})
     on conflict (user_id) do update set routes = excluded.routes, checks = excluded.checks,
       potholes = excluded.potholes, accepted = excluded.accepted, useful = excluded.useful,
-      articles = excluded.articles, points = excluded.points, updated_at = excluded.updated_at`;
+      articles = excluded.articles, stars = excluded.stars, points = excluded.points, updated_at = excluded.updated_at`;
 }
 
 function developersQuery(country: string | undefined, limit: number): SQL {
@@ -53,9 +60,9 @@ function countriesQuery(limit: number): SQL {
 export function createRankingRepository(db: Database): RankingRepository {
   return {
     breakdown: async (userId) => {
-      const [counts] = await rows<Omit<PointsBreakdown, "articles">>(db, breakdownQuery(userId));
+      const [counts] = await rows<PointsBreakdown>(db, breakdownQuery(userId));
       if (counts === undefined) throw new Error("points breakdown returned nothing");
-      return { ...counts, articles: 0 };
+      return counts;
     },
     store: async (userId, breakdown, points, at) => {
       await db.execute(storeQuery(userId, breakdown, points, at));
@@ -66,8 +73,10 @@ export function createRankingRepository(db: Database): RankingRepository {
       return entry?.points ?? null;
     },
     voteRecipients: async (userId) => {
-      const query = sql`select distinct r.author_id as id from reply_votes v
-        join replies r on r.id = v.reply_id where v.user_id = ${userId} and r.author_id is not null`;
+      const query = sql`select r.author_id as id from reply_votes v
+          join replies r on r.id = v.reply_id where v.user_id = ${userId} and r.author_id is not null
+        union select p.author_id from post_stars s
+          join posts p on p.id = s.post_id where s.user_id = ${userId} and p.author_id is not null`;
       return (await rows<{ id: string }>(db, query)).map((row) => row.id);
     },
     countries: (limit) => rows<CountryRank>(db, countriesQuery(limit)),

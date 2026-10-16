@@ -17,6 +17,8 @@ import type { Mailer } from "./mail/mailer.js";
 import { itineraries } from "./itineraries.js";
 import { contactDirectory, handleDirectory, registerAccounts } from "./modules/accounts/index.js";
 import type { AccountResolver } from "./modules/accounts/index.js";
+import { registerBlog } from "./modules/blog/index.js";
+import type { ContributionListener } from "./modules/ranking/index.js";
 import { rankingModule } from "./modules/ranking/index.js";
 import { registerRequests } from "./modules/requests/index.js";
 import { serviceCatalogue } from "./modules/routes/index.js";
@@ -82,9 +84,10 @@ async function registerCommunity(
     resolveAccount: AccountResolver;
     webOrigin: string;
     now: () => Date;
+    onContribution: ContributionListener;
   },
 ): Promise<void> {
-  const { db, sender, ...rest } = deps;
+  const { db, sender, onContribution, ...rest } = deps;
   await registerRequests(app, {
     ...rest,
     db,
@@ -94,6 +97,7 @@ async function registerCommunity(
     mailer: sender,
     log: app.log,
   });
+  await registerBlog(app, { ...rest, db, onContribution });
 }
 
 /** Mounts every data module; they share one clock and one set of rate limit counters. */
@@ -119,8 +123,8 @@ async function registerModules(
   });
   await catalogue.register(app, resolveAccount);
   await ranking.register(app);
-  const webOrigin = config.WEB_ORIGIN;
-  await registerCommunity(app, { db, sender, resolveAccount, webOrigin, now: clock });
+  const community = { db, sender, resolveAccount, webOrigin: config.WEB_ORIGIN, now: clock };
+  await registerCommunity(app, { ...community, onContribution: ranking.listener });
   await registerSandbox(app, {
     db,
     counters,

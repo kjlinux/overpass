@@ -104,6 +104,7 @@
     "token_invalid": "Ce lien est incomplet. Copiez-le en entier depuis l'e-mail.",
     "subject_invalid": "L'objet doit compter de 1 à 140 caractères.",
     "intro_too_long": "L'introduction ne doit pas dépasser 5 000 caractères.",
-    "items_invalid": "Choisissez au plus 15 contenus existants."
+    "items_invalid": "Choisissez au plus 15 contenus existants.",
+    "slug_invalid": "Cette adresse d'article n'est pas valide."
   }
 }

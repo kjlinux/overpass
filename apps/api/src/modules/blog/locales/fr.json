@@ -1,0 +1,24 @@
+{
+  "rss": {
+    "title": "Overpass, le blog",
+    "description": "Actualités tech africaines, tutoriels et portraits publiés sur Overpass.",
+    "team": "L'équipe Overpass"
+  },
+  "templates": {
+    "tech-news": {
+      "title": "Gabarit : actualité tech africaine",
+      "summary": "Gabarit à compléter par l'équipe : une actualité, ses faits et ses sources.",
+      "content": "## Ce qui se passe\n\nRésumez le fait en deux phrases : qui, quoi, où, quand.\n\n## Pourquoi c'est important pour les développeurs\n\nExpliquez l'effet concret sur une intégration, un service ou un pays.\n\n## Sources\n\n- Lien vers la source officielle, avec sa date de consultation."
+    },
+    "tutorials": {
+      "title": "Gabarit : tutoriel pas à pas",
+      "summary": "Gabarit à compléter par l'équipe : un objectif, des prérequis et des étapes vérifiées.",
+      "content": "## Objectif\n\nCe que le lecteur saura faire à la fin.\n\n## Prérequis\n\n- Comptes, clés de test et versions nécessaires.\n\n## Étapes\n\n1. Première étape, avec le code à copier.\n2. Étape suivante.\n\n## Vérifier que ça marche\n\nLa réponse ou le webhook attendu.\n\n## Pour aller plus loin\n\n- Lien vers la fiche Overpass correspondante."
+    },
+    "portraits": {
+      "title": "Gabarit : portrait de développeuse ou développeur",
+      "summary": "Gabarit à compléter par l'équipe : une personne, son parcours et ses conseils.",
+      "content": "## Qui est-ce\n\nPrénom, pays, métier, avec son accord écrit pour la publication.\n\n## Son parcours\n\nLes étapes marquantes, en quelques phrases.\n\n## Ce qu'elle ou il construit\n\nUn projet, une intégration, une communauté.\n\n## Son conseil\n\nUne citation relue et validée par la personne."
+    }
+  }
+}

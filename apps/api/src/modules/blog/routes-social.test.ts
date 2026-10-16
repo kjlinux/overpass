@@ -10,9 +10,11 @@ let close: () => Promise<void>;
 let ada: string;
 let bob: string;
 let post: WrittenPost;
+let clock: ReturnType<typeof testClock>;
 
 beforeEach(async () => {
-  ({ app, close } = await createTestApp({ now: testClock().now }));
+  clock = testClock();
+  ({ app, close } = await createTestApp({ now: clock.now }));
   ada = await registerAccount(app, "ada@example.com");
   bob = await registerAccount(app, "bob@example.com", "SN");
   post = await writePost(app, ada);
@@ -52,6 +54,7 @@ describe("comments", () => {
     expect((await call(app, "POST", path, { payload: { content: "Merci" } })).status).toBe(401);
     const created = await call(app, "POST", path, { cookie: bob, payload: { content: " Merci " } });
     expect(created.status).toBe(201);
+    clock.advanceDays(1);
     await call(app, "POST", path, { cookie: ada, payload: { content: "Avec plaisir" } });
     const { body } = await call(app, "GET", path);
     const items = body.data?.items as { content: string; author: string }[];

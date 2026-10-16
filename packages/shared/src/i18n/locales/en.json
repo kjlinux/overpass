@@ -104,6 +104,7 @@
     "token_invalid": "This link is incomplete. Copy it in full from the e-mail.",
     "subject_invalid": "The subject must be 1 to 140 characters long.",
     "intro_too_long": "The introduction must not exceed 5,000 characters.",
-    "items_invalid": "Choose at most 15 existing items."
+    "items_invalid": "Choose at most 15 existing items.",
+    "slug_invalid": "This post address is not valid."
   }
 }
