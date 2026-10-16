@@ -42,12 +42,23 @@ export function sessionCookie(response: LightMyRequestResponse): string {
 }
 
 /** Signs up through the API and the confirmation e-mail, then returns the session cookie. */
-export async function registerAccount(app: FastifyInstance, email: string): Promise<string> {
+export async function registerAccount(
+  app: FastifyInstance,
+  email: string,
+  country = "CI",
+): Promise<string> {
   const headers = { origin: webOrigin };
-  const payload = { email, password, country: "CI" };
+  const payload = { email, password, country };
   await app.inject({ method: "POST", url: "/v1/auth/register", headers, payload });
   const mail = mailers.get(app)?.sent.findLast((message) => message.to === email);
   const token = /#token=([\w.-]+)/.exec(mail?.text ?? "")?.[1] ?? "";
   const confirm = { method: "POST", url: "/v1/auth/confirm", headers, payload: { token } } as const;
   return sessionCookie(await app.inject(confirm));
+}
+
+/** The public handle of the account behind a session cookie. */
+export async function handleOf(app: FastifyInstance, cookie: string): Promise<string> {
+  const headers = { origin: webOrigin, cookie };
+  const me = await app.inject({ method: "GET", url: "/v1/me", headers });
+  return String(me.json<{ data: { handle: string } }>().data.handle);
 }
