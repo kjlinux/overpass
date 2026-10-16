@@ -105,3 +105,35 @@ describe("redactSecrets leaves code without secrets untouched", () => {
     expect(redactSecrets(once)).toEqual({ text: once, found: 0 });
   });
 });
+
+/** Built by concatenation so that secret scanners do not mistake the samples for leaks. */
+const bareSamples = [
+  ["a GitHub token", `ghp_${"A1b2C3d4E5f6G7h8I9j0K1l2M3n4O5p6Q7r8"}`],
+  ["an AWS access key", `AKIA${"IOSFODNN7EXAMPLE"}`],
+  ["an OpenAI style key", `sk-proj-${"Ab12Cd34Ef56Gh78Ij90Kl12"}`],
+  ["a Slack token", `xoxb-${"1234567890-abcdefghij"}`],
+  ["a Google API key", `AIza${"SyA1b2C3d4E5f6G7h8I9j0K1l2M3n4O5p6"}`],
+] as const;
+
+describe("redactSecrets on bare keys pasted alone", () => {
+  it.each(bareSamples)("hides %s", (_name, secret) => {
+    expect(redactSecrets(`Erreur avec ${secret} ce matin`).text).not.toContain(secret.slice(4));
+  });
+});
+
+/** The API masks on its event loop: each rule must stay linear on a 20,000 character body. */
+const slowInputs = [
+  ["whitespace after a private key header", `-----BEGIN PRIVATE KEY-----${" ".repeat(19_900)}`],
+  ["one long word", "a".repeat(20_000)],
+  ["dotted words", "a.".repeat(10_000)],
+  ["a scheme without credentials", `a://${"b".repeat(19_990)}`],
+  ["repeated headers", "authorization:".repeat(1_400)],
+] as const;
+
+describe("redactSecrets stays fast on hostile input", () => {
+  it.each(slowInputs)("handles %s in under 300 ms", (_name, input) => {
+    const start = performance.now();
+    redactSecrets(input);
+    expect(performance.now() - start).toBeLessThan(300);
+  });
+});
