@@ -7,7 +7,7 @@ import type {
 } from "@overpass/shared";
 import { AppError } from "../../../http/app-error.js";
 import type { Account } from "../../accounts/index.js";
-import { requireAdmin } from "./context.js";
+import { readablePost, requireAdmin } from "./context.js";
 import type { BlogDeps } from "./context.js";
 
 const queueSize = 100;
@@ -26,8 +26,16 @@ async function targetOf(deps: BlogDeps, kind: BlogContentKind, id: string): Prom
   return { authorId: post.authorId, moderation: post.moderation, earner: post.authorId };
 }
 
-async function report(deps: BlogDeps, account: Account, kind: BlogContentKind, id: string) {
+/** A member reports only what they can read; anything else is a 404, as for reading. */
+async function reportable(deps: BlogDeps, account: Account, kind: BlogContentKind, id: string) {
   const target = await targetOf(deps, kind, id);
+  const postId = kind === "post" ? id : (await deps.repository.findComment(id))?.postId;
+  await readablePost(deps, postId ?? id, account);
+  return target;
+}
+
+async function report(deps: BlogDeps, account: Account, kind: BlogContentKind, id: string) {
+  const target = await reportable(deps, account, kind, id);
   const eligibility = blogReportEligibility({
     isAuthor: target.authorId === account.id,
     alreadyReported: (await deps.repository.reportedBy(account.id, kind, [id])).has(id),

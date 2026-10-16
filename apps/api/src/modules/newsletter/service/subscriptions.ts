@@ -7,6 +7,7 @@ import { confirmationMail } from "./mail.js";
 import { hashToken, newToken, subscriberOfToken } from "./tokens.js";
 
 const hour = 3_600_000;
+const day = 24 * hour;
 const resendAfterMs = 10 * 60_000;
 const pending = { status: "pending" } as const;
 
@@ -27,17 +28,20 @@ async function mailLink(deps: NewsletterDeps, email: string, language: Language,
   }
 }
 
-/** The answer never says whether the address was already known. */
+/** The answer and its timing never say whether the address was already known. */
 async function subscribe(deps: NewsletterDeps, input: SubscribeInput) {
   const now = deps.now();
   const existing = await deps.repository.subscriberByEmail(input.email);
   if (existing !== null && !shouldMail(existing, now)) return pending;
+  // A per-address daily cap stops a stranger from flooding an inbox or voiding its link.
+  const sent = await deps.counters.hit(`newsletter-confirm:${input.email}`, day);
+  if (sent.count > newsletterRules.confirmationsPerDay) return pending;
   const token = newToken();
   const expiresAt = new Date(now.getTime() + newsletterRules.confirmHours * hour);
   const link = { language: input.language, tokenHash: hashToken(token), expiresAt, at: now };
   if (existing !== null) await deps.repository.refreshSubscriber(existing.id, link);
   else if (!(await deps.repository.insertSubscriber(input.email, link))) return pending;
-  await mailLink(deps, input.email, input.language, token);
+  void mailLink(deps, input.email, input.language, token);
   return pending;
 }
 

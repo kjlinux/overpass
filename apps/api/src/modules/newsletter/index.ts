@@ -1,6 +1,7 @@
 import type { Language } from "@overpass/shared";
 import type { FastifyInstance } from "fastify";
 import type { Database } from "../../db/client.js";
+import { postgresCounters } from "../../limits/index.js";
 import type { Mailer } from "../../mail/mailer.js";
 import type { AccountResolver } from "../accounts/index.js";
 import { createNewsletterRepository } from "./repository.js";
@@ -22,7 +23,7 @@ const silent: NewsletterLog = { error: () => undefined };
 
 function depsOf(options: NewsletterOptions) {
   const { db, ...rest } = options;
-  return { ...rest, repository: createNewsletterRepository(db) };
+  return { ...rest, repository: createNewsletterRepository(db), counters: postgresCounters(db) };
 }
 
 /** Built before accounts, so ticking the sign-up box can start the double opt-in. */

@@ -9,6 +9,7 @@ import type { Config } from "./config.js";
 import type { Database } from "./db/client.js";
 import { registerErrorHandlers } from "./http/errors.js";
 import { registerHealth } from "./http/health.js";
+import { requestSerializer } from "./http/log-request.js";
 import { registerOriginCheck } from "./http/origin.js";
 import { registerSecurityHeaders } from "./http/security-headers.js";
 import { counterStoreFor, postgresCounters } from "./limits/index.js";
@@ -170,7 +171,11 @@ async function registerModules(
 export async function buildApp(deps: AppDeps): Promise<FastifyInstance> {
   const { config, db } = deps;
   const app = Fastify({
-    logger: { level: config.LOG_LEVEL, redact: redactedHeaders },
+    logger: {
+      level: config.LOG_LEVEL,
+      redact: redactedHeaders,
+      serializers: { req: requestSerializer },
+    },
     genReqId: () => randomUUID(),
     requestIdHeader: "x-request-id",
     trustProxy: trustedHops(config.TRUST_PROXY),

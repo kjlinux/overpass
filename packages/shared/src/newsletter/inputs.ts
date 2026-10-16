@@ -8,6 +8,7 @@ export const newsletterRules = {
   weekDays: 7,
   batchSize: 50,
   confirmHours: 48,
+  confirmationsPerDay: 3,
   subjectMaxLength: 140,
   introMaxLength: 5_000,
 } as const;
