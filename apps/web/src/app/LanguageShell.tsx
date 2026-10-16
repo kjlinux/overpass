@@ -20,7 +20,7 @@ const DashboardPage = lazyPage(
   async () => (await import("../pages/dashboard")).DashboardPage,
 );
 const SettingsPage = lazyPage(
-  "settings",
+  ["settings", "mcp"],
   async () => (await import("../pages/settings")).SettingsPage,
 );
 const ProfilePage = lazyPage(

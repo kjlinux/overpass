@@ -21,8 +21,9 @@ export type ApiClientOptions = {
 
 export type Query = Record<string, string | number | undefined>;
 
+/** Concatenation keeps a path prefix of the API address, which new URL(path, base) drops. */
 function urlOf(baseUrl: string, path: string, query: Query): string {
-  const url = new URL(path, baseUrl);
+  const url = new URL(`${baseUrl.replace(/\/+$/, "")}${path}`);
   for (const [key, value] of Object.entries(query)) {
     if (value !== undefined && value !== "") url.searchParams.set(key, String(value));
   }

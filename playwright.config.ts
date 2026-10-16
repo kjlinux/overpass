@@ -23,6 +23,12 @@ export default defineConfig({
       reuseExistingServer: false,
     },
     {
+      command: "npm run dev:mcp",
+      port: 3100,
+      timeout: 120_000,
+      reuseExistingServer: false,
+    },
+    {
       command: "npm run dev -w @overpass/web",
       url: "http://127.0.0.1:5173",
       timeout: 120_000,

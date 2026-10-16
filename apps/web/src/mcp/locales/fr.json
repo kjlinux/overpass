@@ -1,0 +1,20 @@
+{
+  "tabs": "Configuration par éditeur",
+  "editors": {
+    "claudeCode": "Claude Code",
+    "cursor": "Cursor",
+    "vscode": "VS Code"
+  },
+  "captions": {
+    "claudeCode": "Terminal",
+    "cursor": ".cursor/mcp.json",
+    "vscode": ".vscode/mcp.json"
+  },
+  "where": {
+    "claudeCode": "Lancez cette commande dans un terminal, à la racine de votre projet. Vérifiez ensuite avec claude mcp list.",
+    "cursor": "Collez ce contenu dans .cursor/mcp.json à la racine du projet, ou dans ~/.cursor/mcp.json pour tous vos projets, puis activez le serveur dans les réglages MCP de Cursor.",
+    "vscode": "Collez ce contenu dans .vscode/mcp.json à la racine du projet, puis démarrez le serveur depuis la commande MCP: List Servers."
+  },
+  "secret": "Cette configuration contient votre jeton : ne la versionnez pas. Ajoutez le fichier à .gitignore, et révoquez le jeton s'il a fuité.",
+  "placeholder": "ovp_VOTRE_JETON"
+}

@@ -14,8 +14,9 @@ const LeavePage = lazyPage(
 );
 const IssuesPage = lazyPage("newsletter", async () => (await newsletter()).IssuesAdminPage);
 const BlogSegmentPage = lazyPage(["blog", "profile"], async () => (await blog()).BlogSegmentPage);
+const DocsPage = lazyPage(["docs", "mcp"], async () => (await import("../pages/docs")).DocsPage);
 
-/** Blog and newsletter pages; static paths come before the post and member segment. */
+/** Blog, newsletter and documentation; static paths come before the post and member segment. */
 export const contentRoutes = [
   ["/blog", BlogPage],
   ["/blog/write", PostEditorPage],
@@ -27,4 +28,5 @@ export const contentRoutes = [
   ["/newsletter/confirm", ConfirmPage],
   ["/newsletter/unsubscribe", LeavePage],
   ["/admin/newsletter", IssuesPage],
+  ["/docs", DocsPage],
 ] as const;

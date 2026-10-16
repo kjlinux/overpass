@@ -18,7 +18,8 @@ export function registerGetRoute(server: McpServer, ctx: ToolContext): void {
       const route = await ctx.client.get(path, routeDetailSchema.omit({ viewer: true }), {
         lang: language,
       });
-      const fresh = withFreshness(route, ctx.now());
+      const potholes = route.potholes.filter((pothole) => pothole.status !== "resolved");
+      const fresh = withFreshness({ ...route, potholes }, ctx.now());
       return dataResult(ctx, "get_route", [statusLine(ctx.text, fresh)], fresh);
     }),
   );

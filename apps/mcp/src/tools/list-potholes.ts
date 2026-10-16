@@ -1,5 +1,5 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { pageSizeDefault, routeDetailSchema, routePageSchema } from "@overpass/shared";
+import { routeDetailSchema, routePageSchema } from "@overpass/shared";
 import type { RouteDetail } from "@overpass/shared";
 import { format } from "../messages.js";
 import type { ToolContext } from "./context.js";
@@ -17,9 +17,12 @@ function readRoute(ctx: ToolContext, id: string): Promise<RouteDetail> {
   return ctx.client.get(`/v1/routes/${encodeURIComponent(id)}`, routeDetailSchema);
 }
 
+/** All MCP traffic shares the server's IP budget on the API, so a call reads few routes. */
+const maxRoutes = 10;
+
 /** The API has no pothole listing: the routes that carry some are read one by one, capped. */
 async function routesOf(ctx: ToolContext, service: string, country: string) {
-  const query = { service, country, limit: pageSizeDefault };
+  const query = { service, country, limit: maxRoutes };
   const page = await ctx.client.get("/v1/routes", routePageSchema, query);
   const withPotholes = page.items.filter((item) => item.unresolvedPotholes > 0);
   const routes = await Promise.all(withPotholes.map((item) => readRoute(ctx, item.id)));
@@ -43,7 +46,7 @@ async function listPotholes(ctx: ToolContext, { routeId, service, country }: Tar
   const routes = found.routes.map((route) => summarise(ctx, route));
   const lines = routes.map((route) => statusLine(ctx.text, route));
   if (routes.length === 0) lines.push(ctx.text.empty);
-  if (found.truncated) lines.push(format(ctx.text.truncated, { count: pageSizeDefault }));
+  if (found.truncated) lines.push(format(ctx.text.truncated, { count: maxRoutes }));
   return dataResult(ctx, "list_potholes", lines, { routes, truncated: found.truncated });
 }
 

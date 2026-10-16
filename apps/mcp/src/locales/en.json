@@ -17,6 +17,7 @@
     "bad_response": "The Overpass API returned an unexpected response.",
     "not_found": "Nothing was found with this identifier.",
     "potholes_target": "Give either routeId, or both service and country.",
+    "rate_limited": "Too many requests reached Overpass in the last minute. Wait a minute, then try again.",
     "other": "The Overpass API refused the request (code {code})."
   },
   "tools": {

@@ -17,6 +17,7 @@
     "bad_response": "L'API Overpass a renvoyé une réponse inattendue.",
     "not_found": "Rien ne correspond à cet identifiant.",
     "potholes_target": "Donnez soit routeId, soit service et country ensemble.",
+    "rate_limited": "Overpass a reçu trop de requêtes dans la dernière minute. Attendez une minute, puis réessayez.",
     "other": "L'API Overpass a refusé la requête (code {code})."
   },
   "tools": {

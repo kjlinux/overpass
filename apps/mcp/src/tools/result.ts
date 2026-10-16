@@ -19,12 +19,18 @@ export function withFreshness<T extends RouteFacts>(
   return { ...route, freshness: freshnessOf(route, now) };
 }
 
+/** Only a re-serialised date reaches the trusted line, whatever the API sent. */
+function normalisedDate(value: string | null): string | undefined {
+  const time = value === null ? Number.NaN : Date.parse(value);
+  return Number.isNaN(time) ? undefined : new Date(time).toISOString();
+}
+
 /** A trusted line, outside the data block: ids and computed facts only, no member text. */
 export function statusLine(text: Messages, route: RouteFacts & { freshness: Freshness }): string {
   return format(text.status, {
     id: route.id,
     state: route.state,
-    lastCheckAt: route.lastCheckAt ?? text.never,
+    lastCheckAt: normalisedDate(route.lastCheckAt) ?? text.never,
     warning: format(text.freshness[route.freshness], { days: routeRules.freshnessDays }),
   });
 }
@@ -38,9 +44,12 @@ function textResult(text: string, isError = false): CallToolResult {
   return { content: [{ type: "text", text }], ...(isError ? { isError } : {}) };
 }
 
+const plainCode = /^[a-z0-9_]{1,64}$/;
+
 function errorText(text: Messages, code: string): string {
+  if (!plainCode.test(code)) return text.errors.bad_response;
   if (code.endsWith("not_found")) return text.errors.not_found;
-  if (code in text.errors) return text.errors[code as keyof Messages["errors"]];
+  if (Object.hasOwn(text.errors, code)) return text.errors[code as keyof Messages["errors"]];
   return format(text.errors.other, { code });
 }
 

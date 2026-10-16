@@ -58,6 +58,18 @@ describe("api client", () => {
     expect((error as Error).message).not.toContain(token);
   });
 
+  it("keeps a path prefix of the API address", async () => {
+    const fake = fakeFetch(200, { data: null, error: null });
+    const prefixed = createApiClient({
+      baseUrl: "http://api.test/api",
+      token,
+      language: "fr",
+      fetch: fake.fetch,
+    });
+    await prefixed.get("/v1/services", z.null());
+    expect(fake.calls[0]?.url).toBe("http://api.test/api/v1/services");
+  });
+
   it("encodes query parameters and drops empty ones", async () => {
     const fake = fakeFetch(200, { data: null, error: null });
     await client(fake.fetch).get("/v1/routes", z.null(), { service: "wave", country: undefined });
