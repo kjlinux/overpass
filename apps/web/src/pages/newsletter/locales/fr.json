@@ -1,0 +1,69 @@
+{
+  "page": {
+    "title": "Newsletter",
+    "intro": "Un résumé par semaine : les itinéraires vérifiés, les discussions résolues et les articles du blog, dans la langue de votre choix.",
+    "stepsTitle": "Comment ça marche",
+    "steps": {
+      "confirm": "Vous recevez un lien de confirmation par e-mail. Rien n'est envoyé tant que vous ne l'avez pas ouvert.",
+      "weekly": "Un seul numéro par semaine, préparé et relu par l'équipe.",
+      "unsubscribe": "Chaque numéro contient un lien de désinscription en un clic, sans connexion."
+    }
+  },
+  "link": {
+    "back": "Revenir à la newsletter",
+    "missing": "Ce lien est incomplet. Ouvrez-le de nouveau depuis l'e-mail reçu."
+  },
+  "confirm": {
+    "title": "Confirmer l'abonnement",
+    "working": "Confirmation en cours.",
+    "doneTitle": "Abonnement confirmé",
+    "done": "Merci. Le prochain numéro arrivera dans votre boîte de réception.",
+    "invalidTitle": "Lien non valide"
+  },
+  "unsubscribe": {
+    "title": "Se désinscrire",
+    "working": "Désinscription en cours.",
+    "doneTitle": "Désinscription prise en compte",
+    "done": "Vous ne recevrez plus la newsletter. Vous pouvez vous réinscrire à tout moment.",
+    "invalidTitle": "Lien non valide"
+  },
+  "admin": {
+    "title": "Newsletter",
+    "intro": "Préparez le numéro de la semaine, relisez-le, puis envoyez-le par lots.",
+    "adminOnly": "Cette page est réservée aux administrateurs.",
+    "listHeading": "Numéros",
+    "emptyTitle": "Aucun numéro pour l'instant",
+    "emptyText": "Préparez le premier numéro à partir des contenus de la semaine.",
+    "number": "Numéro {{number}}",
+    "delivery": "{{delivered}} envoyés sur {{recipients}} abonnés",
+    "open": "Ouvrir",
+    "prepareHeading": "Préparer",
+    "language": "Langue du numéro",
+    "prepare": "Préparer le numéro de la semaine",
+    "editorHeading": "Numéro en cours",
+    "readOnly": "Ce numéro est parti ou en cours d'envoi : il ne peut plus changer.",
+    "subject": "Objet",
+    "introField": "Introduction",
+    "items": "Contenus",
+    "noItems": "Aucun contenu. Préparez un nouveau brouillon pour en rassembler.",
+    "moveUp": "Monter « {{title}} »",
+    "moveDown": "Descendre « {{title}} »",
+    "remove": "Retirer « {{title}} »",
+    "save": "Enregistrer le brouillon",
+    "saved": "Brouillon enregistré.",
+    "send": "Envoyer",
+    "sendTitle": "Envoyer ce numéro ?",
+    "sendText": "Le numéro part par lots vers tous les abonnés confirmés de cette langue. Il ne pourra plus être modifié.",
+    "close": "Fermer",
+    "kind": {
+      "route": "Itinéraire",
+      "thread": "Discussion",
+      "post": "Article"
+    },
+    "status": {
+      "draft": "Brouillon",
+      "queued": "En cours d'envoi",
+      "sent": "Envoyé"
+    }
+  }
+}

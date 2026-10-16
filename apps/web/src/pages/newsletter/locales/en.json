@@ -1,0 +1,69 @@
+{
+  "page": {
+    "title": "Newsletter",
+    "intro": "One digest a week: verified itineraries, resolved discussions and blog articles, in the language you choose.",
+    "stepsTitle": "How it works",
+    "steps": {
+      "confirm": "You get a confirmation link by email. Nothing is sent until you open it.",
+      "weekly": "One issue a week, prepared and proofread by the team.",
+      "unsubscribe": "Every issue carries a one-click unsubscribe link, no sign-in needed."
+    }
+  },
+  "link": {
+    "back": "Back to the newsletter",
+    "missing": "This link is incomplete. Open it again from the email you received."
+  },
+  "confirm": {
+    "title": "Confirm the subscription",
+    "working": "Confirming.",
+    "doneTitle": "Subscription confirmed",
+    "done": "Thank you. The next issue will reach your inbox.",
+    "invalidTitle": "Invalid link"
+  },
+  "unsubscribe": {
+    "title": "Unsubscribe",
+    "working": "Unsubscribing.",
+    "doneTitle": "You are unsubscribed",
+    "done": "You will no longer receive the newsletter. You can subscribe again at any time.",
+    "invalidTitle": "Invalid link"
+  },
+  "admin": {
+    "title": "Newsletter",
+    "intro": "Prepare the issue of the week, proofread it, then send it in batches.",
+    "adminOnly": "This page is reserved for administrators.",
+    "listHeading": "Issues",
+    "emptyTitle": "No issue yet",
+    "emptyText": "Prepare the first issue from the content of the week.",
+    "number": "Issue {{number}}",
+    "delivery": "{{delivered}} sent out of {{recipients}} subscribers",
+    "open": "Open",
+    "prepareHeading": "Prepare",
+    "language": "Issue language",
+    "prepare": "Prepare this week's issue",
+    "editorHeading": "Current issue",
+    "readOnly": "This issue is sent or being sent: it can no longer change.",
+    "subject": "Subject",
+    "introField": "Introduction",
+    "items": "Content",
+    "noItems": "No content. Prepare a new draft to collect some.",
+    "moveUp": "Move \"{{title}}\" up",
+    "moveDown": "Move \"{{title}}\" down",
+    "remove": "Remove \"{{title}}\"",
+    "save": "Save draft",
+    "saved": "Draft saved.",
+    "send": "Send",
+    "sendTitle": "Send this issue?",
+    "sendText": "The issue goes out in batches to every confirmed subscriber of this language. It can no longer be edited.",
+    "close": "Close",
+    "kind": {
+      "route": "Itinerary",
+      "thread": "Discussion",
+      "post": "Article"
+    },
+    "status": {
+      "draft": "Draft",
+      "queued": "Sending",
+      "sent": "Sent"
+    }
+  }
+}
