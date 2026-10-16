@@ -5,6 +5,8 @@ export type RankingRepository = {
   breakdown(userId: string): Promise<PointsBreakdown>;
   store(userId: string, breakdown: PointsBreakdown, points: number, at: Date): Promise<void>;
   cachedPoints(userId: string): Promise<number | null>;
+  /** Authors of the replies an account marked useful. */
+  voteRecipients(userId: string): Promise<string[]>;
   countries(limit: number): Promise<CountryRank[]>;
   developers(country: string | undefined, limit: number): Promise<DeveloperRank[]>;
 };

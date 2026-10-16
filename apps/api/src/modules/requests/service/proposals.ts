@@ -19,17 +19,29 @@ async function one(deps: RequestsDeps, record: ProposalRecord): Promise<Proposal
   return proposal;
 }
 
+/** The decision is already stored: a lookup failure is logged, never turned into an error. */
 async function tellAuthor(deps: RequestsDeps, record: ProposalRecord): Promise<void> {
-  const contact = record.userId === null ? null : await deps.contacts(record.userId);
-  if (contact === null) return;
-  const link = `${deps.webOrigin}/${contact.language}/dashboard`;
-  const outcome = {
-    name: record.name,
-    accepted: record.status === "accepted",
-    reason: record.reason,
-    link,
-  };
-  deps.notify(outcomeMail(contact.email, contact.language, outcome));
+  try {
+    const contact = record.userId === null ? null : await deps.contacts(record.userId);
+    if (contact === null) return;
+    const link = `${deps.webOrigin}/${contact.language}/dashboard`;
+    const accepted = record.status === "accepted";
+    const outcome = { name: record.name, accepted, reason: record.reason, link };
+    deps.notify(outcomeMail(contact.email, contact.language, outcome));
+  } catch (error) {
+    deps.reportError(error);
+  }
+}
+
+/** Creates the service once the proposal is claimed; a failed creation reopens the proposal. */
+async function withService(deps: RequestsDeps, claimed: ProposalRecord): Promise<ProposalRecord> {
+  try {
+    const service = await deps.catalogue.create(claimed);
+    return (await deps.repository.attachService(claimed.id, service.id)) ?? claimed;
+  } catch (error) {
+    await deps.repository.reopenProposal(claimed.id);
+    throw error;
+  }
 }
 
 async function decide(
@@ -41,17 +53,16 @@ async function decide(
   requireAdmin(account);
   const proposal = await deps.repository.findProposal(id);
   if (proposal === null) throw new AppError("not_found", 404);
-  if (proposal.status !== "pending") throw new AppError("proposal_decided", 409);
   const accepted = input.decision === "accept";
-  const service = accepted ? await deps.catalogue.create(proposal) : null;
-  const decided = await deps.repository.decideProposal(id, {
+  const claimed = await deps.repository.decideProposal(id, {
     status: accepted ? "accepted" : "rejected",
     reason: input.reason ?? null,
-    serviceId: service?.id ?? null,
+    serviceId: null,
     decidedBy: account.id,
     decidedAt: deps.now(),
   });
-  if (decided === null) throw new AppError("proposal_decided", 409);
+  if (claimed === null) throw new AppError("proposal_decided", 409);
+  const decided = accepted ? await withService(deps, claimed) : claimed;
   await tellAuthor(deps, decided);
   return one(deps, decided);
 }

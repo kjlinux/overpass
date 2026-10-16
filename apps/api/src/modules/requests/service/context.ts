@@ -11,6 +11,7 @@ export type RequestsDeps = {
   contacts: ContactDirectory;
   /** Sends in the background: a mail failure never undoes a decision already stored. */
   notify: (message: MailMessage) => void;
+  reportError: (error: unknown) => void;
   webOrigin: string;
   now: () => Date;
 };

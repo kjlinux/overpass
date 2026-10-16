@@ -7,10 +7,15 @@ import type { AccountResolver } from "./directory.js";
 import { createAccountsRepository } from "./repository.js";
 import { registerAccountsRoutes } from "./routes.js";
 import { createAccountsService } from "./service.js";
-import type { ContributionsSource, PointsSource } from "./service.js";
+import type { ContributionsSource, DeletionEffects, PointsSource } from "./service.js";
 
 export type { AuthMode } from "./guard.js";
-export type { AccountsService, ContributionsSource, PointsSource } from "./service.js";
+export type {
+  AccountsService,
+  ContributionsSource,
+  DeletionEffects,
+  PointsSource,
+} from "./service.js";
 export type { Account, AccountResolver, ContactDirectory, HandleDirectory } from "./directory.js";
 export { contactDirectory, handleDirectory, requireAccount } from "./directory.js";
 
@@ -22,6 +27,7 @@ export type AccountsOptions = {
   secureCookies: boolean;
   contributions?: ContributionsSource;
   points?: PointsSource;
+  deletion?: DeletionEffects;
 };
 
 /** Mounts the accounts module in its own encapsulated scope; other modules get the resolver. */
@@ -36,6 +42,7 @@ export async function registerAccounts(
     webOrigin: options.webOrigin,
     ...(options.contributions === undefined ? {} : { contributions: options.contributions }),
     ...(options.points === undefined ? {} : { points: options.points }),
+    ...(options.deletion === undefined ? {} : { deletion: options.deletion }),
     onBackgroundError: (error) => {
       app.log.error({ err: error }, "password reset mail could not be sent");
     },

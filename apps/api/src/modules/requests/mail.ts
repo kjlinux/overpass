@@ -9,7 +9,7 @@ type Outcome = { name: string; accepted: boolean; reason: string | null; link: s
 
 function fill(body: string, values: Record<string, string>): string {
   return Object.entries(values).reduce(
-    (text, [key, value]) => text.replace(`{{${key}}}`, value),
+    (text, [key, value]) => text.replaceAll(`{{${key}}}`, () => value),
     body,
   );
 }

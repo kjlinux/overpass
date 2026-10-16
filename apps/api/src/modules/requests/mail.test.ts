@@ -13,7 +13,12 @@ describe("outcomeMail", () => {
     const reason = "Documentation $& privée.";
     const refused = outcomeMail("a@b.co", "en", { name: "Pay", accepted: false, reason, link });
     expect(refused.text).toContain("Reason: Documentation $& privée.");
-    const silent = outcomeMail("a@b.co", "en", { name: "Pay", accepted: false, reason: null, link });
+    const silent = outcomeMail("a@b.co", "en", {
+      name: "Pay",
+      accepted: false,
+      reason: null,
+      link,
+    });
     expect(silent.text).toContain("Reason: no reason given.");
   });
 });

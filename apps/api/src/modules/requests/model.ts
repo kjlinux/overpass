@@ -22,8 +22,10 @@ export type RequestsRepository = {
   findProposal(id: string): Promise<ProposalRecord | null>;
   proposalsBy(userId: string, limit: number): Promise<ProposalRecord[]>;
   pendingProposals(limit: number): Promise<ProposalRecord[]>;
-  /** Null when another moderator decided first. */
+  /** Claims a pending proposal; null when another moderator decided first. */
   decideProposal(id: string, decision: Decision): Promise<ProposalRecord | null>;
+  attachService(id: string, serviceId: string): Promise<ProposalRecord | null>;
+  reopenProposal(id: string): Promise<void>;
   addVote(serviceId: string, userId: string, at: Date): Promise<void>;
   removeVote(serviceId: string, userId: string): Promise<void>;
   votes(serviceId: string, userId: string | null): Promise<{ votes: number; voted: boolean }>;

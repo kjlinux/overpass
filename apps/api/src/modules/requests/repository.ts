@@ -5,7 +5,13 @@ import { serviceProposals, simulatorVotes } from "./tables.js";
 
 type ProposalPart = Pick<
   RequestsRepository,
-  "insertProposal" | "findProposal" | "proposalsBy" | "pendingProposals" | "decideProposal"
+  | "insertProposal"
+  | "findProposal"
+  | "proposalsBy"
+  | "pendingProposals"
+  | "decideProposal"
+  | "attachService"
+  | "reopenProposal"
 >;
 type VotePart = Pick<RequestsRepository, "addVote" | "removeVote" | "votes" | "mostVoted">;
 
@@ -33,10 +39,33 @@ function proposalQueries(db: Database): ProposalPart {
         .where(eq(serviceProposals.status, "pending"))
         .orderBy(serviceProposals.createdAt)
         .limit(limit),
+    ...decisionQueries(db),
+  };
+}
+
+type DecisionPart = Pick<RequestsRepository, "decideProposal" | "attachService" | "reopenProposal">;
+
+/** The claim only matches a pending proposal, so two moderators never both decide. */
+function decisionQueries(db: Database): DecisionPart {
+  return {
     decideProposal: async (id, decision) => {
       const pending = and(eq(serviceProposals.id, id), eq(serviceProposals.status, "pending"));
       const [row] = await db.update(serviceProposals).set(decision).where(pending).returning();
       return row ?? null;
+    },
+    attachService: async (id, serviceId) => {
+      const where = eq(serviceProposals.id, id);
+      const [row] = await db.update(serviceProposals).set({ serviceId }).where(where).returning();
+      return row ?? null;
+    },
+    reopenProposal: async (id) => {
+      const reopened = {
+        status: "pending" as const,
+        reason: null,
+        decidedBy: null,
+        decidedAt: null,
+      };
+      await db.update(serviceProposals).set(reopened).where(eq(serviceProposals.id, id));
     },
   };
 }

@@ -25,6 +25,7 @@ async function moderationQueue(db: Database, limit: number): Promise<ModerationR
     left join replies rp on q.kind = 'reply' and rp.id = q.id
     left join threads rt on rt.id = rp.thread_id
     where coalesce(t.status, rp.status) is not null and coalesce(t.status, rp.status) <> 'removed'
+      and coalesce(rt.status, 'visible') <> 'removed'
     order by q.reports desc, q.last_report_at desc
     limit ${limit}`);
   const rows = (result as { rows: (ModerationRow & { lastReportAt: string | Date })[] }).rows;

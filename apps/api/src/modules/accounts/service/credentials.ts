@@ -22,7 +22,9 @@ export function credentialService(ctx: ServiceContext) {
 
     deleteAccount: async (user: UserRecord, input: AccountDeleteInput) => {
       await requirePassword(user, input.password);
+      const affected = await ctx.deletion.affected(user.id);
       await ctx.repository.deleteUser(user.id);
+      await ctx.deletion.done(affected);
     },
   };
 }

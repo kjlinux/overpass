@@ -65,6 +65,11 @@ export function createRankingRepository(db: Database): RankingRepository {
       const [entry] = await rows<{ points: number }>(db, query);
       return entry?.points ?? null;
     },
+    voteRecipients: async (userId) => {
+      const query = sql`select distinct r.author_id as id from reply_votes v
+        join replies r on r.id = v.reply_id where v.user_id = ${userId} and r.author_id is not null`;
+      return (await rows<{ id: string }>(db, query)).map((row) => row.id);
+    },
     countries: (limit) => rows<CountryRank>(db, countriesQuery(limit)),
     developers: (country, limit) => rows<DeveloperRank>(db, developersQuery(country, limit)),
   };

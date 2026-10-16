@@ -7,7 +7,12 @@ import { recoveryService } from "./service/recovery.js";
 import { registrationService } from "./service/registration.js";
 import { tokenService } from "./service/tokens.js";
 
-export type { AccountsDeps, ContributionsSource, PointsSource } from "./service/context.js";
+export type {
+  AccountsDeps,
+  ContributionsSource,
+  DeletionEffects,
+  PointsSource,
+} from "./service/context.js";
 
 /** Business rules of the accounts module, independent of HTTP and SQL. */
 export function createAccountsService(deps: AccountsDeps) {

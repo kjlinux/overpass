@@ -104,7 +104,7 @@ async function registerModules(
   const counters = postgresCounters(db);
   const clock = now ?? (() => new Date());
   await app.register(rateLimit, { global: false, store: counterStoreFor(counters) });
-  const ranking = rankingModule(db, clock);
+  const ranking = rankingModule(db, clock, app.log);
   const catalogue = itineraries(db, clock, ranking.listener);
   const sender = mailer ?? createMailer(config, app.log);
   const { resolveAccount } = await registerAccounts(app, {
@@ -115,6 +115,7 @@ async function registerModules(
     secureCookies: config.NODE_ENV === "production",
     contributions: catalogue.contributions,
     points: ranking.points,
+    deletion: ranking.deletion,
   });
   await catalogue.register(app, resolveAccount);
   await ranking.register(app);

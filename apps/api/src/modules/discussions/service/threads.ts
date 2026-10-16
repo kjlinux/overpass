@@ -1,4 +1,4 @@
-import { integrationsTopic, redactSecrets } from "@overpass/shared";
+import { integrationsTopic } from "@overpass/shared";
 import type { Language, ThreadCreateInput, ThreadListQuery, ThreadPage } from "@overpass/shared";
 import { decodeDateCursor, encodeDateCursor } from "../../../http/date-cursor.js";
 import { AppError } from "../../../http/app-error.js";
@@ -7,9 +7,7 @@ import type { NewThread } from "../model.js";
 import { readableThread, summaries } from "./context.js";
 import type { DiscussionsDeps, Reader } from "./context.js";
 import { threadDetail } from "./detail.js";
-
-const masked = (text: string | undefined): string | null =>
-  text === undefined || text.trim() === "" ? null : redactSecrets(text).text;
+import { maskOptional, maskWithin } from "./masking.js";
 
 /** A question asked from a route lands in Integrations with its service and country. */
 async function routeTags(deps: DiscussionsDeps, input: ThreadCreateInput) {
@@ -31,10 +29,10 @@ async function newThread(deps: DiscussionsDeps, account: Account, input: ThreadC
   const thread: NewThread = {
     ...(await routeTags(deps, input)),
     authorId: account.id,
-    title: redactSecrets(input.title).text,
-    content: redactSecrets(input.content).text,
-    errorText: masked(input.errorText),
-    codeText: masked(input.codeText),
+    title: maskWithin("title", input.title),
+    content: maskWithin("content", input.content),
+    errorText: maskOptional("errorText", input.errorText),
+    codeText: maskOptional("codeText", input.codeText),
     language: input.language,
     stack: input.stack ?? null,
     createdAt: at,

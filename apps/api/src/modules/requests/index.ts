@@ -28,6 +28,9 @@ export async function registerRequests(
   const service = createRequestsService({
     ...shared,
     repository: createRequestsRepository(db),
+    reportError: (error) => {
+      log.error({ err: error }, "proposal outcome could not be prepared");
+    },
     notify: (message) => {
       mailer.send(message).catch((error: unknown) => {
         log.error({ err: error }, "proposal outcome mail could not be sent");

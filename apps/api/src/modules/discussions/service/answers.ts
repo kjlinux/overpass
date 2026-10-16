@@ -1,10 +1,11 @@
-import { acceptEligibility, redactSecrets, voteEligibility } from "@overpass/shared";
+import { acceptEligibility, voteEligibility } from "@overpass/shared";
 import type { AcceptInput, ReplyCreateInput } from "@overpass/shared";
 import { AppError } from "../../../http/app-error.js";
 import type { Account } from "../../accounts/index.js";
 import { readableThread } from "./context.js";
 import type { DiscussionsDeps } from "./context.js";
 import { threadDetail, toReply } from "./detail.js";
+import { maskWithin } from "./masking.js";
 
 async function visibleThread(deps: DiscussionsDeps, id: string, account: Account) {
   const thread = await readableThread(deps, id, account);
@@ -19,7 +20,7 @@ async function reply(
   input: ReplyCreateInput,
 ) {
   await visibleThread(deps, threadId, account);
-  const content = redactSecrets(input.content).text;
+  const content = maskWithin("content", input.content);
   const created = await deps.repository.insertReply({
     ...{ threadId, authorId: account.id, content },
     at: deps.now(),

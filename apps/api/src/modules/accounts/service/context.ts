@@ -12,6 +12,12 @@ export type ContributionsSource = (userId: string) => Promise<Contributions>;
 /** The computed points of a user; the ranking module provides its cache. */
 export type PointsSource = (userId: string) => Promise<number>;
 
+/** Accounts whose points depend on a member, recomputed once that member is deleted. */
+export type DeletionEffects = {
+  affected: (userId: string) => Promise<string[]>;
+  done: (userIds: string[]) => Promise<void>;
+};
+
 export type AccountsDeps = {
   repository: AccountsRepository;
   mailer: Mailer;
@@ -19,6 +25,7 @@ export type AccountsDeps = {
   webOrigin: string;
   contributions?: ContributionsSource;
   points?: PointsSource;
+  deletion?: DeletionEffects;
   onBackgroundError?: (error: unknown) => void;
   now?: () => Date;
 };
@@ -26,6 +33,11 @@ export type AccountsDeps = {
 export type ServiceContext = Required<Omit<AccountsDeps, "secret">> & {
   tokens: SignedTokens;
   signups: ReturnType<typeof signupTokens>;
+};
+
+const noEffects: DeletionEffects = {
+  affected: () => Promise.resolve([]),
+  done: () => Promise.resolve(),
 };
 
 const noContributions: ContributionsSource = () =>
@@ -47,6 +59,7 @@ export function createContext(deps: AccountsDeps): ServiceContext {
     webOrigin: deps.webOrigin,
     contributions,
     points: deps.points ?? pointsFromContributions(contributions),
+    deletion: deps.deletion ?? noEffects,
     onBackgroundError: deps.onBackgroundError ?? (() => undefined),
     now: deps.now ?? (() => new Date()),
     tokens: signedTokens(deps.secret),
