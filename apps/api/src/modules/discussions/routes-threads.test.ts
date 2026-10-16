@@ -1,7 +1,13 @@
 import type { FastifyInstance } from "fastify";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { call, publishRoute, testClock } from "../../testing-routes.js";
-import { itemsOf, openThread, readThread, replyTo, sampleThread } from "../../testing-discussions.js";
+import {
+  itemsOf,
+  openThread,
+  readThread,
+  replyTo,
+  sampleThread,
+} from "../../testing-discussions.js";
 import { createTestApp, registerAccount } from "../../testing.js";
 
 let app: FastifyInstance;
@@ -112,7 +118,11 @@ describe("GET /v1/threads", () => {
   it("filters by theme, country, stack and language, latest activity first", async () => {
     const first = await openThread(app, awa);
     clock.advanceDays(1);
-    const second = await openThread(app, moussa, { topic: "cloud", country: "SN", stack: "django" });
+    const second = await openThread(app, moussa, {
+      topic: "cloud",
+      country: "SN",
+      stack: "django",
+    });
     clock.advanceDays(1);
     await replyTo(app, moussa, first);
     const all = itemsOf((await call(app, "GET", "/v1/threads")).body).map((item) => item.id);
@@ -159,10 +169,15 @@ describe("POST /v1/threads/:id/replies", () => {
       payload: { content: "  " },
     });
     expect(empty.status).toBe(400);
-    const unknown = await call(app, "POST", "/v1/threads/00000000-0000-4000-8000-000000000099/replies", {
-      cookie: moussa,
-      payload: { content: "Bonjour" },
-    });
+    const unknown = await call(
+      app,
+      "POST",
+      "/v1/threads/00000000-0000-4000-8000-000000000099/replies",
+      {
+        cookie: moussa,
+        payload: { content: "Bonjour" },
+      },
+    );
     expect(unknown.status).toBe(404);
   });
 });

@@ -2,9 +2,7 @@ import type { CountryRank, DeveloperRank, PointsBreakdown } from "@overpass/shar
 
 /** Storage port of the module; the service never sees SQL. */
 export type RankingRepository = {
-  /** Counts every source of points of one account from the contribution tables. */
   breakdown(userId: string): Promise<PointsBreakdown>;
-  /** Upserts the cache entry, unless the account no longer exists. */
   store(userId: string, breakdown: PointsBreakdown, points: number, at: Date): Promise<void>;
   cachedPoints(userId: string): Promise<number | null>;
   countries(limit: number): Promise<CountryRank[]>;

@@ -22,6 +22,7 @@ export const routeCreateInput = z.strictObject({
   title: titleSchema,
   content: contentSchema.optional(),
   translationOf: idSchema.optional(),
+  sourceThread: idSchema.optional(),
 });
 
 export const routeUpdateInput = z

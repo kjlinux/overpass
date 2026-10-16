@@ -21,7 +21,19 @@
     "check_too_soon": "You already checked this itinerary in the last 30 days.",
     "translation_exists": "This itinerary already exists in that language.",
     "pothole_exists": "You already reported an unresolved pothole on this itinerary.",
-    "sandbox_key_limit": "You already have 5 active test keys. Revoke one to create another."
+    "sandbox_key_limit": "You already have 5 active test keys. Revoke one to create another.",
+    "own_content": "You cannot report your own content.",
+    "already_reported": "You already reported this content. The moderation team will review it.",
+    "own_reply": "You cannot mark your own reply as useful.",
+    "already_voted": "You already marked this reply as useful.",
+    "content_unavailable": "This content is hidden or removed, so this action is no longer possible.",
+    "not_thread_author": "Only the author of the thread can do this.",
+    "thread_not_resolved": "Accept a reply first: only a resolved thread becomes a route.",
+    "already_transformed": "This thread has already been turned into a route.",
+    "admin_only": "This action is reserved to the moderation team.",
+    "already_simulated": "This service already has a simulator.",
+    "proposal_decided": "This proposal has already been reviewed.",
+    "service_exists": "This service is already in the catalogue."
   },
   "fields": {
     "required": "This field is required.",
@@ -60,6 +72,17 @@
     "webhook_url_required": "Enter the URL that will receive the webhooks.",
     "webhook_url_private": "This URL points to a private or local address. Use the local relay for your machine.",
     "provider_not_simulated": "This provider has no simulator.",
-    "result_invalid": "The relay sent an unreadable delivery result."
+    "result_invalid": "The relay sent an unreadable delivery result.",
+    "topic_invalid": "Choose a theme from the list.",
+    "body_required": "Write your message.",
+    "body_too_long": "The message must not exceed 20,000 characters.",
+    "error_text_too_long": "The error message must not exceed 4,000 characters.",
+    "code_text_too_long": "The code must not exceed 20,000 characters.",
+    "decision_invalid": "Choose one of the proposed decisions.",
+    "kind_invalid": "This kind of content does not exist.",
+    "service_name_invalid": "The service name must have 2 to 60 characters.",
+    "docs_url_invalid": "Enter the full https address of the public documentation.",
+    "category_invalid": "Choose a category: payment, SMS or USSD.",
+    "reason_invalid": "The reason must not exceed 500 characters."
   }
 }

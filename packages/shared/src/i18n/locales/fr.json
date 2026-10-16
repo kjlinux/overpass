@@ -21,7 +21,19 @@
     "check_too_soon": "Vous avez déjà vérifié cette fiche ces 30 derniers jours.",
     "translation_exists": "Cette fiche existe déjà dans cette langue.",
     "pothole_exists": "Vous avez déjà signalé un nid-de-poule non résolu sur cette fiche.",
-    "sandbox_key_limit": "Vous avez déjà 5 clés de test actives. Révoquez-en une pour en créer une autre."
+    "sandbox_key_limit": "Vous avez déjà 5 clés de test actives. Révoquez-en une pour en créer une autre.",
+    "own_content": "Vous ne pouvez pas signaler votre propre contenu.",
+    "already_reported": "Vous avez déjà signalé ce contenu. L'équipe de modération va le relire.",
+    "own_reply": "Vous ne pouvez pas juger utile votre propre réponse.",
+    "already_voted": "Vous avez déjà jugé cette réponse utile.",
+    "content_unavailable": "Ce contenu est masqué ou retiré, cette action n'est plus possible.",
+    "not_thread_author": "Seul l'auteur du sujet peut faire cela.",
+    "thread_not_resolved": "Acceptez d'abord une réponse : seul un sujet résolu devient une fiche.",
+    "already_transformed": "Ce sujet a déjà été transformé en fiche.",
+    "admin_only": "Cette action est réservée à l'équipe de modération.",
+    "already_simulated": "Ce service a déjà un simulateur.",
+    "proposal_decided": "Cette proposition a déjà été traitée.",
+    "service_exists": "Ce service existe déjà dans le catalogue."
   },
   "fields": {
     "required": "Ce champ est obligatoire.",
@@ -60,6 +72,17 @@
     "webhook_url_required": "Saisissez l'URL qui recevra les webhooks.",
     "webhook_url_private": "Cette URL vise une adresse privée ou locale. Utilisez le relais local pour votre poste.",
     "provider_not_simulated": "Cet opérateur n'a pas de simulateur.",
-    "result_invalid": "Le relais a envoyé un résultat de livraison illisible."
+    "result_invalid": "Le relais a envoyé un résultat de livraison illisible.",
+    "topic_invalid": "Choisissez un thème dans la liste.",
+    "body_required": "Rédigez votre message.",
+    "body_too_long": "Le message ne doit pas dépasser 20 000 caractères.",
+    "error_text_too_long": "Le message d'erreur ne doit pas dépasser 4 000 caractères.",
+    "code_text_too_long": "Le code ne doit pas dépasser 20 000 caractères.",
+    "decision_invalid": "Choisissez une décision proposée.",
+    "kind_invalid": "Ce type de contenu n'existe pas.",
+    "service_name_invalid": "Le nom du service doit compter de 2 à 60 caractères.",
+    "docs_url_invalid": "Saisissez l'adresse https complète de la documentation publique.",
+    "category_invalid": "Choisissez une catégorie : paiement, SMS ou USSD.",
+    "reason_invalid": "Le motif ne doit pas dépasser 500 caractères."
   }
 }

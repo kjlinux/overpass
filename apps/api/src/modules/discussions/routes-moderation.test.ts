@@ -50,7 +50,11 @@ describe("reports", () => {
     await report(second);
     expect(await listed()).toEqual([]);
     const asStranger = (await readThread(app, threadId, first)).body.data;
-    expect(asStranger).toMatchObject({ status: "hidden", content: null, viewer: { reported: true } });
+    expect(asStranger).toMatchObject({
+      status: "hidden",
+      content: null,
+      viewer: { reported: true },
+    });
     const asAuthor = (await readThread(app, threadId, author)).body.data;
     expect(asAuthor).toMatchObject({ status: "hidden", content: expect.any(String) as string });
   });

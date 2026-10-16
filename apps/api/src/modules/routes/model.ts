@@ -44,6 +44,7 @@ export type RouteRow = RouteRecord & {
 
 export type NewRoute = Omit<RouteRecord, "id" | "version" | "translationGroup"> & {
   translationGroup?: string | undefined;
+  sourceThreadId?: string | undefined;
 };
 
 export type RoutePatch = Partial<
@@ -85,7 +86,18 @@ export type RoutesRepository = {
   byAuthor(authorId: string, limit: number): Promise<RouteRow[]>;
   countByAuthor(authorId: string): Promise<number>;
   titles(ids: string[]): Promise<Map<string, string>>;
+  /** The live route written from each thread, keyed by thread id. */
+  fromThreads(threadIds: string[]): Promise<Map<string, string>>;
+  serviceNames(serviceIds: string[]): Promise<Map<string, { slug: string; name: string }>>;
 };
+
+/** Raised when a thread already has its route. */
+export class SourceThreadTaken extends Error {
+  constructor() {
+    super("already_transformed");
+    this.name = "SourceThreadTaken";
+  }
+}
 
 /** Raised when a translation group already holds the language. */
 export class TranslationExists extends Error {

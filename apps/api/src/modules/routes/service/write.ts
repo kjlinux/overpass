@@ -1,8 +1,8 @@
-import { routeTemplate } from "@overpass/shared";
+import { routeTemplate, transformEligibility } from "@overpass/shared";
 import type { RouteCreateInput, RouteUpdateInput } from "@overpass/shared";
 import { AppError } from "../../../http/app-error.js";
 import type { Account } from "../../accounts/index.js";
-import { TranslationExists } from "../model.js";
+import { SourceThreadTaken, TranslationExists } from "../model.js";
 import type { RoutePatch } from "../model.js";
 import { assertCanEdit, serviceIdOf } from "./context.js";
 import type { RoutesDeps } from "./context.js";
@@ -16,6 +16,22 @@ async function translationGroupOf(deps: RoutesDeps, input: RouteCreateInput) {
   return source.translationGroup;
 }
 
+/** A route written from a thread: only its author, once, and after a reply was accepted. */
+async function sourceThreadOf(deps: RoutesDeps, account: Account, input: RouteCreateInput) {
+  if (input.sourceThread === undefined) return undefined;
+  const facts = await deps.threads.facts(input.sourceThread);
+  if (facts === null) throw new AppError("not_found", 404);
+  const eligibility = transformEligibility({
+    isThreadAuthor: facts.authorId === account.id,
+    resolved: facts.resolved,
+    alreadyTransformed: (await deps.repository.fromThreads([input.sourceThread])).size > 0,
+  });
+  if (eligibility === "not_author") throw new AppError("not_thread_author", 403);
+  if (eligibility === "not_resolved") throw new AppError("thread_not_resolved", 409);
+  if (eligibility === "already_transformed") throw new AppError("already_transformed", 409);
+  return input.sourceThread;
+}
+
 async function editableRoute(deps: RoutesDeps, id: string, account: Account) {
   const route = await deps.repository.findLive(id);
   if (route === null) throw new AppError("not_found", 404);
@@ -26,11 +42,12 @@ async function editableRoute(deps: RoutesDeps, id: string, account: Account) {
 async function createRoute(deps: RoutesDeps, account: Account, input: RouteCreateInput) {
   const serviceId = await serviceIdOf(deps.repository, input.service);
   const translationGroup = await translationGroupOf(deps, input);
+  const sourceThreadId = await sourceThreadOf(deps, account, input);
   const at = deps.now();
   const { country, stack, language, title, content } = input;
   try {
     return await deps.repository.insertRoute({
-      ...{ country, stack, language, title, serviceId, translationGroup },
+      ...{ country, stack, language, title, serviceId, translationGroup, sourceThreadId },
       authorId: account.id,
       content: content ?? routeTemplate(language),
       createdAt: at,
@@ -38,6 +55,7 @@ async function createRoute(deps: RoutesDeps, account: Account, input: RouteCreat
     });
   } catch (error) {
     if (error instanceof TranslationExists) throw new AppError("translation_exists", 409);
+    if (error instanceof SourceThreadTaken) throw new AppError("already_transformed", 409);
     throw error;
   }
 }

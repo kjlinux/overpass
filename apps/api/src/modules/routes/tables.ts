@@ -52,6 +52,7 @@ export const routes = pgTable("routes", {
   createdAt: utc("created_at").notNull(),
   updatedAt: utc("updated_at").notNull(),
   deletedAt: utc("deleted_at"),
+  sourceThreadId: uuid("source_thread_id"),
 });
 
 export const routeVersions = pgTable(

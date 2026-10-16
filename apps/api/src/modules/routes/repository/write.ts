@@ -1,16 +1,16 @@
 import { and, eq, isNull, sql } from "drizzle-orm";
 import type { Database } from "../../../db/client.js";
-import { TranslationExists } from "../model.js";
+import { SourceThreadTaken, TranslationExists } from "../model.js";
 import type { NewRoute, RoutePatch } from "../model.js";
 import { routes, routeVersions } from "../tables.js";
 
-/** Maps the partial unique index on (translation_group, language) to TranslationExists. */
+/** Maps the partial unique indexes on translations and source threads to domain errors. */
 function asTranslationExists(error: unknown): unknown {
   for (const candidate of [error, (error as { cause?: unknown } | null)?.cause]) {
     const { code, constraint } = (candidate ?? {}) as { code?: string; constraint?: string };
-    if (code === "23505" && constraint === "routes_translation_language_key") {
-      return new TranslationExists();
-    }
+    if (code !== "23505") continue;
+    if (constraint === "routes_translation_language_key") return new TranslationExists();
+    if (constraint === "routes_source_thread_key") return new SourceThreadTaken();
   }
   return error;
 }
