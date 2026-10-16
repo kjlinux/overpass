@@ -16,6 +16,7 @@ import { createMailer } from "./mail/mailer.js";
 import type { Mailer } from "./mail/mailer.js";
 import { itineraries } from "./itineraries.js";
 import { registerAccounts } from "./modules/accounts/index.js";
+import { rankingModule } from "./modules/ranking/index.js";
 import { registerSandbox } from "./modules/sandbox/index.js";
 import { memoryBus, postgresBus } from "./modules/sandbox/index.js";
 import type { HostResolver, RelayBus } from "./modules/sandbox/index.js";
@@ -77,7 +78,8 @@ async function registerModules(
   const counters = postgresCounters(db);
   const clock = now ?? (() => new Date());
   await app.register(rateLimit, { global: false, store: counterStoreFor(counters) });
-  const catalogue = itineraries(db, clock);
+  const ranking = rankingModule(db, clock);
+  const catalogue = itineraries(db, clock, ranking.listener);
   const { resolveAccount } = await registerAccounts(app, {
     db,
     mailer: mailer ?? createMailer(config, app.log),
@@ -85,8 +87,10 @@ async function registerModules(
     webOrigin: config.WEB_ORIGIN,
     secureCookies: config.NODE_ENV === "production",
     contributions: catalogue.contributions,
+    points: ranking.points,
   });
   await catalogue.register(app, resolveAccount);
+  await ranking.register(app);
   await registerSandbox(app, {
     db,
     counters,

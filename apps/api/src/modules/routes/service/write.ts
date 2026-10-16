@@ -51,8 +51,11 @@ async function patchOf(deps: RoutesDeps, input: RouteUpdateInput): Promise<Route
 
 export function writeService(deps: RoutesDeps) {
   return {
-    create: (account: Account, input: RouteCreateInput): Promise<string> =>
-      createRoute(deps, account, input),
+    create: async (account: Account, input: RouteCreateInput): Promise<string> => {
+      const id = await createRoute(deps, account, input);
+      await deps.onContribution([account.id]);
+      return id;
+    },
 
     update: async (account: Account, id: string, input: RouteUpdateInput): Promise<void> => {
       await editableRoute(deps, id, account);
@@ -63,8 +66,9 @@ export function writeService(deps: RoutesDeps) {
     },
 
     remove: async (account: Account, id: string): Promise<void> => {
-      await editableRoute(deps, id, account);
+      const route = await editableRoute(deps, id, account);
       await deps.repository.softDelete(id, deps.now());
+      await deps.onContribution([route.authorId]);
     },
   };
 }

@@ -2,6 +2,7 @@ import type { FastifyInstance } from "fastify";
 import type { Database } from "../../db/client.js";
 import type { AccountResolver, HandleDirectory } from "../accounts/index.js";
 import type { ChecksReader, RouteDirectory } from "../checks/index.js";
+import type { ContributionListener } from "../ranking/index.js";
 import { createRoutesRepository } from "./repository.js";
 import { registerRoutesRoutes } from "./routes.js";
 import { createRoutesService } from "./service.js";
@@ -11,6 +12,7 @@ export type RoutesOptions = {
   checks: ChecksReader;
   handles: HandleDirectory;
   resolveAccount: AccountResolver;
+  onContribution: ContributionListener;
   now: () => Date;
 };
 
@@ -39,6 +41,7 @@ export async function registerRoutes(app: FastifyInstance, options: RoutesOption
     repository: createRoutesRepository(options.db, options.checks),
     checks: options.checks,
     handles: options.handles,
+    onContribution: options.onContribution,
     now: options.now,
   });
   await app.register((scope) => {

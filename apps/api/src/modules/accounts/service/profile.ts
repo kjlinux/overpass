@@ -1,13 +1,8 @@
-import type { Contributions, ProfileUpdateInput, PublicProfile } from "@overpass/shared";
+import type { ProfileUpdateInput, PublicProfile } from "@overpass/shared";
 import { AppError } from "../../../http/app-error.js";
 import { UniqueViolation } from "../model.js";
 import type { UserPatch, UserRecord } from "../model.js";
 import type { ServiceContext } from "./context.js";
-
-/** Points rule of the specification: published route 10, check 2, confirmed pothole 5. */
-export function pointsFor(contributions: Contributions): number {
-  return contributions.routes * 10 + contributions.checks * 2 + contributions.potholes * 5;
-}
 
 function consentPatch(ctx: ServiceContext, user: UserRecord, newsletter?: boolean): UserPatch {
   if (newsletter === undefined) return {};
@@ -40,7 +35,7 @@ export function profileService(ctx: ServiceContext) {
         country: user.country,
         stacks: user.stacks,
         contributions,
-        points: pointsFor(contributions),
+        points: await ctx.points(user.id),
         memberSince: user.createdAt.toISOString(),
       };
     },

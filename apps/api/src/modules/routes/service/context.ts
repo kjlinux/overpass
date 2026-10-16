@@ -3,12 +3,14 @@ import type { RouteSummary, Service } from "@overpass/shared";
 import { AppError } from "../../../http/app-error.js";
 import type { Account, HandleDirectory } from "../../accounts/index.js";
 import type { ChecksReader } from "../../checks/index.js";
+import type { ContributionListener } from "../../ranking/index.js";
 import type { RouteRecord, RouteRow, RoutesRepository, ServiceRecord } from "../model.js";
 
 export type RoutesDeps = {
   repository: RoutesRepository;
   checks: ChecksReader;
   handles: HandleDirectory;
+  onContribution: ContributionListener;
   now: () => Date;
 };
 
