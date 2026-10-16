@@ -27,8 +27,8 @@ function Contributions({ profile }: { profile: PublicProfile }): JSX.Element {
   );
 }
 
-/** Country, stacks, contributions and points; the e-mail is never part of a public profile. */
-export function ProfileDetails({ profile }: { profile: PublicProfile }): JSX.Element {
+/** Handle, country, points and stacks, shared by the profile and the member's blog. */
+export function ProfileSummary({ profile }: { profile: PublicProfile }): JSX.Element {
   const { t } = useTranslation("profile");
   const language = useLanguage();
   const since = new Intl.DateTimeFormat(language, { dateStyle: "long" }).format(
@@ -60,6 +60,16 @@ export function ProfileDetails({ profile }: { profile: PublicProfile }): JSX.Ele
           </dd>
         </div>
       </dl>
+    </>
+  );
+}
+
+/** Country, stacks, contributions and points; the e-mail is never part of a public profile. */
+export function ProfileDetails({ profile }: { profile: PublicProfile }): JSX.Element {
+  const { t } = useTranslation("profile");
+  return (
+    <>
+      <ProfileSummary profile={profile} />
       <h2 class="mt-12 text-h2 font-semibold">{t("contributions")}</h2>
       <p class="mt-2 text-ink-2">{t("pointsCaption")}</p>
       <div class="mt-6">
