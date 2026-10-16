@@ -108,11 +108,11 @@ describe("redactSecrets leaves code without secrets untouched", () => {
 
 /** Built by concatenation so that secret scanners do not mistake the samples for leaks. */
 const bareSamples = [
-  ["a GitHub token", `ghp_${"A1b2C3d4E5f6G7h8I9j0K1l2M3n4O5p6Q7r8"}`],
-  ["an AWS access key", `AKIA${"IOSFODNN7EXAMPLE"}`],
-  ["an OpenAI style key", `sk-proj-${"Ab12Cd34Ef56Gh78Ij90Kl12"}`],
-  ["a Slack token", `xoxb-${"1234567890-abcdefghij"}`],
-  ["a Google API key", `AIza${"SyA1b2C3d4E5f6G7h8I9j0K1l2M3n4O5p6"}`],
+  ["a GitHub token", ["ghp_", "A1b2C3d4E5f6G7h8I9j0K1l2M3n4O5p6Q7r8"].join("")],
+  ["an AWS access key", ["AKIA", "IOSFODNN7EXAMPLE"].join("")],
+  ["an OpenAI style key", ["sk-proj-", "Ab12Cd34Ef56Gh78Ij90Kl12"].join("")],
+  ["a Slack token", ["xoxb-", "1234567890-abcdefghij"].join("")],
+  ["a Google API key", ["AIza", "SyA1b2C3d4E5f6G7h8I9j0K1l2M3n4O5p6"].join("")],
 ] as const;
 
 describe("redactSecrets on bare keys pasted alone", () => {
