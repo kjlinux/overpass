@@ -74,7 +74,7 @@ function Actions(props: ReplyItemProps): JSX.Element {
 export function ReplyItem(props: ReplyItemProps): JSX.Element {
   const { reply } = props;
   const { t } = useTranslation("discussions");
-  const accepted = reply.accepted ? "border-l-4 border-l-accent pl-4" : "";
+  const accepted = reply.accepted ? "border-l-4 border-l-ink pl-4" : "";
   return (
     <li
       id={`reply-${reply.id}`}
