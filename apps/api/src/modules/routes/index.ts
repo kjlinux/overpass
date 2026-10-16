@@ -5,6 +5,8 @@ import type { ChecksReader, RouteDirectory } from "../checks/index.js";
 import type { RouteLookup, ThreadDirectory } from "../discussions/index.js";
 import type { ContributionListener } from "../ranking/index.js";
 import { createRoutesRepository } from "./repository.js";
+export { serviceCatalogue, slugOf } from "./repository/catalogue.js";
+export type { CatalogueEntry, NewService, ServiceCatalogue } from "./repository/catalogue.js";
 import { registerRoutesRoutes } from "./routes.js";
 import { createRoutesService } from "./service.js";
 

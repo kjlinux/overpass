@@ -36,7 +36,9 @@ const decide = (id: string, payload: object, cookie = admin) =>
 
 describe("POST /v1/service-proposals", () => {
   it("requires a session and a public https documentation", async () => {
-    expect((await call(app, "POST", "/v1/service-proposals", { payload: proposal })).status).toBe(401);
+    expect((await call(app, "POST", "/v1/service-proposals", { payload: proposal })).status).toBe(
+      401,
+    );
     const http = await propose({ ...proposal, docsUrl: "http://intranet.local/doc" });
     expect(http.status).toBe(400);
     expect(JSON.stringify(http.body.error)).toContain("docs_url_invalid");
@@ -59,7 +61,9 @@ describe("POST /v1/service-proposals", () => {
 describe("admin review of proposals", () => {
   it("is reserved to admins", async () => {
     const id = String((await propose()).body.data?.id);
-    expect((await call(app, "GET", "/v1/admin/service-proposals", { cookie: awa })).status).toBe(403);
+    expect((await call(app, "GET", "/v1/admin/service-proposals", { cookie: awa })).status).toBe(
+      403,
+    );
     expect((await decide(id, { decision: "accept" }, awa)).body.error).toMatchObject({
       code: "admin_only",
     });
@@ -75,7 +79,9 @@ describe("admin review of proposals", () => {
       slug: string;
       simulated: boolean;
     }[];
-    expect(services).toContainEqual(expect.objectContaining({ slug: "m-pesa-tanzanie", simulated: false }));
+    expect(services).toContainEqual(
+      expect.objectContaining({ slug: "m-pesa-tanzanie", simulated: false }),
+    );
     const mail = mailer.sent.findLast((message) => message.to === "awa@example.com");
     expect(mail?.text).toContain("M-Pesa Tanzanie");
     expect((await decide(id, { decision: "reject" })).body.error).toMatchObject({
@@ -86,7 +92,10 @@ describe("admin review of proposals", () => {
   it("rejects a proposal with a reason sent to the member", async () => {
     const id = String((await propose()).body.data?.id);
     const rejected = await decide(id, { decision: "reject", reason: "Documentation privée." });
-    expect(rejected.body.data).toMatchObject({ status: "rejected", reason: "Documentation privée." });
+    expect(rejected.body.data).toMatchObject({
+      status: "rejected",
+      reason: "Documentation privée.",
+    });
     const mail = mailer.sent.findLast((message) => message.to === "awa@example.com");
     expect(mail?.text).toContain("Documentation privée.");
     const queue = await call(app, "GET", "/v1/admin/service-proposals", { cookie: admin });

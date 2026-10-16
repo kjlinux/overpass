@@ -15,8 +15,11 @@ import { counterStoreFor, postgresCounters } from "./limits/index.js";
 import { createMailer } from "./mail/mailer.js";
 import type { Mailer } from "./mail/mailer.js";
 import { itineraries } from "./itineraries.js";
-import { registerAccounts } from "./modules/accounts/index.js";
+import { contactDirectory, handleDirectory, registerAccounts } from "./modules/accounts/index.js";
+import type { AccountResolver } from "./modules/accounts/index.js";
 import { rankingModule } from "./modules/ranking/index.js";
+import { registerRequests } from "./modules/requests/index.js";
+import { serviceCatalogue } from "./modules/routes/index.js";
 import { registerSandbox } from "./modules/sandbox/index.js";
 import { memoryBus, postgresBus } from "./modules/sandbox/index.js";
 import type { HostResolver, RelayBus } from "./modules/sandbox/index.js";
@@ -70,6 +73,29 @@ const redactedHeaders = [
   'req.headers["paydunya-token"]',
 ];
 
+/** Service proposals and simulator requests, with outcome mails sent in the background. */
+async function registerCommunity(
+  app: FastifyInstance,
+  deps: {
+    db: Database;
+    sender: Mailer;
+    resolveAccount: AccountResolver;
+    webOrigin: string;
+    now: () => Date;
+  },
+): Promise<void> {
+  const { db, sender, ...rest } = deps;
+  await registerRequests(app, {
+    ...rest,
+    db,
+    catalogue: serviceCatalogue(db),
+    handles: handleDirectory(db),
+    contacts: contactDirectory(db),
+    mailer: sender,
+    log: app.log,
+  });
+}
+
 /** Mounts every data module; they share one clock and one set of rate limit counters. */
 async function registerModules(
   app: FastifyInstance,
@@ -80,9 +106,10 @@ async function registerModules(
   await app.register(rateLimit, { global: false, store: counterStoreFor(counters) });
   const ranking = rankingModule(db, clock);
   const catalogue = itineraries(db, clock, ranking.listener);
+  const sender = mailer ?? createMailer(config, app.log);
   const { resolveAccount } = await registerAccounts(app, {
     db,
-    mailer: mailer ?? createMailer(config, app.log),
+    mailer: sender,
     secret: config.SESSION_SECRET,
     webOrigin: config.WEB_ORIGIN,
     secureCookies: config.NODE_ENV === "production",
@@ -91,6 +118,8 @@ async function registerModules(
   });
   await catalogue.register(app, resolveAccount);
   await ranking.register(app);
+  const webOrigin = config.WEB_ORIGIN;
+  await registerCommunity(app, { db, sender, resolveAccount, webOrigin, now: clock });
   await registerSandbox(app, {
     db,
     counters,

@@ -70,7 +70,11 @@ describe("GET /v1/simulator-requests", () => {
         service: { slug: "orange-money", name: "Orange Money", category: "payment" },
         votes: 2,
       },
-      { rank: 2, service: { slug: "moov-money", name: "Moov Money", category: "payment" }, votes: 1 },
+      {
+        rank: 2,
+        service: { slug: "moov-money", name: "Moov Money", category: "payment" },
+        votes: 1,
+      },
     ]);
   });
 });

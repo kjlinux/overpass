@@ -1,5 +1,5 @@
-import type { Role } from "@overpass/shared";
-import { inArray } from "drizzle-orm";
+import type { Language, Role } from "@overpass/shared";
+import { eq, inArray } from "drizzle-orm";
 import type { FastifyRequest } from "fastify";
 import type { Database } from "../../db/client.js";
 import { AppError } from "../../http/app-error.js";
@@ -37,6 +37,19 @@ export function handleDirectory(db: Database): HandleDirectory {
       .from(users)
       .where(inArray(users.id, unique));
     return new Map(rows.map((row) => [row.id, row.handle]));
+  };
+}
+
+/** Where to write to an account, for modules that notify members by e-mail. */
+export type ContactDirectory = (
+  id: string,
+) => Promise<{ email: string; language: Language } | null>;
+
+export function contactDirectory(db: Database): ContactDirectory {
+  return async (id) => {
+    const columns = { email: users.email, language: users.language };
+    const [row] = await db.select(columns).from(users).where(eq(users.id, id)).limit(1);
+    return row ?? null;
   };
 }
 

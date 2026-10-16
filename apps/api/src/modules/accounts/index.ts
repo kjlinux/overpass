@@ -11,8 +11,8 @@ import type { ContributionsSource, PointsSource } from "./service.js";
 
 export type { AuthMode } from "./guard.js";
 export type { AccountsService, ContributionsSource, PointsSource } from "./service.js";
-export type { Account, AccountResolver, HandleDirectory } from "./directory.js";
-export { handleDirectory, requireAccount } from "./directory.js";
+export type { Account, AccountResolver, ContactDirectory, HandleDirectory } from "./directory.js";
+export { contactDirectory, handleDirectory, requireAccount } from "./directory.js";
 
 export type AccountsOptions = {
   db: Database;
