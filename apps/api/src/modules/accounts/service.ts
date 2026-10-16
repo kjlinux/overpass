@@ -11,6 +11,7 @@ export type {
   AccountsDeps,
   ContributionsSource,
   DeletionEffects,
+  NewsletterConsent,
   PointsSource,
 } from "./service/context.js";
 

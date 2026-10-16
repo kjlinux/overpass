@@ -27,3 +27,6 @@ export async function registerBlog(app: FastifyInstance, options: BlogOptions): 
     return Promise.resolve();
   });
 }
+
+/** The visibility rule of posts, for modules that pick posts for other channels. */
+export { listed as listedPostCondition } from "./repository/sql.js";

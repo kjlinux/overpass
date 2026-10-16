@@ -19,6 +19,7 @@ import { contactDirectory, handleDirectory, registerAccounts } from "./modules/a
 import type { AccountResolver } from "./modules/accounts/index.js";
 import { registerBlog } from "./modules/blog/index.js";
 import type { ContributionListener } from "./modules/ranking/index.js";
+import { newsletterModule } from "./modules/newsletter/index.js";
 import { rankingModule } from "./modules/ranking/index.js";
 import { registerRequests } from "./modules/requests/index.js";
 import { serviceCatalogue } from "./modules/routes/index.js";
@@ -85,9 +86,10 @@ async function registerCommunity(
     webOrigin: string;
     now: () => Date;
     onContribution: ContributionListener;
+    newsletter: ReturnType<typeof newsletterModule>;
   },
 ): Promise<void> {
-  const { db, sender, onContribution, ...rest } = deps;
+  const { db, sender, onContribution, newsletter, ...rest } = deps;
   await registerRequests(app, {
     ...rest,
     db,
@@ -98,6 +100,33 @@ async function registerCommunity(
     log: app.log,
   });
   await registerBlog(app, { ...rest, db, onContribution });
+  await newsletter.register(app, rest.resolveAccount);
+}
+
+/** The sandbox shares the rate limit counters and announces relays across instances. */
+async function registerSimulator(
+  app: FastifyInstance,
+  deps: Pick<AppDeps, "config"> & {
+    sandbox: SandboxDeps | undefined;
+    db: Database;
+    counters: ReturnType<typeof postgresCounters>;
+    resolveAccount: AccountResolver;
+    now: () => Date;
+  },
+): Promise<void> {
+  const { config, db, counters, sandbox, resolveAccount, now } = deps;
+  await registerSandbox(app, {
+    db,
+    counters,
+    providers: sandbox?.providers ?? providers,
+    resolveAccount,
+    serverSecret: config.SESSION_SECRET,
+    webOrigin: config.WEB_ORIGIN,
+    now,
+    bus: relayBus(app, config, sandbox?.bus),
+    ...(sandbox?.demoProvider === undefined ? {} : { demoProvider: sandbox.demoProvider }),
+    ...(sandbox?.resolveHost === undefined ? {} : { resolveHost: sandbox.resolveHost }),
+  });
 }
 
 /** Mounts every data module; they share one clock and one set of rate limit counters. */
@@ -111,6 +140,14 @@ async function registerModules(
   const ranking = rankingModule(db, clock, app.log);
   const catalogue = itineraries(db, clock, ranking.listener);
   const sender = mailer ?? createMailer(config, app.log);
+  const newsletter = newsletterModule({
+    db,
+    mailer: sender,
+    secret: config.SESSION_SECRET,
+    webOrigin: config.WEB_ORIGIN,
+    now: clock,
+    log: app.log,
+  });
   const { resolveAccount } = await registerAccounts(app, {
     db,
     mailer: sender,
@@ -120,23 +157,13 @@ async function registerModules(
     contributions: catalogue.contributions,
     points: ranking.points,
     deletion: ranking.deletion,
+    newsletterConsent: newsletter.consent,
   });
   await catalogue.register(app, resolveAccount);
   await ranking.register(app);
   const community = { db, sender, resolveAccount, webOrigin: config.WEB_ORIGIN, now: clock };
-  await registerCommunity(app, { ...community, onContribution: ranking.listener });
-  await registerSandbox(app, {
-    db,
-    counters,
-    providers: sandbox?.providers ?? providers,
-    resolveAccount,
-    serverSecret: config.SESSION_SECRET,
-    webOrigin: config.WEB_ORIGIN,
-    now: clock,
-    bus: relayBus(app, config, sandbox?.bus),
-    ...(sandbox?.demoProvider === undefined ? {} : { demoProvider: sandbox.demoProvider }),
-    ...(sandbox?.resolveHost === undefined ? {} : { resolveHost: sandbox.resolveHost }),
-  });
+  await registerCommunity(app, { ...community, onContribution: ranking.listener, newsletter });
+  await registerSimulator(app, { config, db, counters, sandbox, resolveAccount, now: clock });
 }
 
 /** Builds the stateless API instance without starting it; modules need a database. */

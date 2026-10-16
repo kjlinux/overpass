@@ -1,0 +1,22 @@
+{
+  "confirmMail": {
+    "subject": "Confirm your subscription to the Overpass newsletter",
+    "body": "Hello,\n\nTo receive the weekly Overpass newsletter, confirm your address by opening this link within 48 hours:\n\n{{link}}\n\nIf you did not ask for anything, ignore this message: you will receive nothing.\n\nThe Overpass team"
+  },
+  "draft": {
+    "subject": "Overpass, the week of {{date}}",
+    "intro": "Hello,\n\nHere are the itineraries, discussions and posts that mattered this week on Overpass."
+  },
+  "issue": {
+    "kinds": {
+      "route": "Itinerary",
+      "thread": "Discussion",
+      "post": "Post"
+    },
+    "read": "Read",
+    "why": "You receive this message because this address is subscribed to the Overpass newsletter.",
+    "unsubscribe": "Unsubscribe in one click",
+    "signature": "The Overpass team",
+    "line": "{{label}}: {{value}}"
+  }
+}

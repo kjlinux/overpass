@@ -1,5 +1,5 @@
 import { pointsFor } from "@overpass/shared";
-import type { Contributions } from "@overpass/shared";
+import type { Contributions, Language } from "@overpass/shared";
 import type { Mailer } from "../../../mail/mailer.js";
 import type { AccountsRepository } from "../model.js";
 import { signedTokens } from "../signed-tokens.js";
@@ -18,6 +18,9 @@ export type DeletionEffects = {
   done: (userIds: string[]) => Promise<void>;
 };
 
+/** Starts the newsletter double opt-in when a member ticks the box. */
+export type NewsletterConsent = (contact: { email: string; language: Language }) => Promise<void>;
+
 export type AccountsDeps = {
   repository: AccountsRepository;
   mailer: Mailer;
@@ -26,6 +29,7 @@ export type AccountsDeps = {
   contributions?: ContributionsSource;
   points?: PointsSource;
   deletion?: DeletionEffects;
+  newsletterConsent?: NewsletterConsent;
   onBackgroundError?: (error: unknown) => void;
   now?: () => Date;
 };
@@ -60,6 +64,7 @@ export function createContext(deps: AccountsDeps): ServiceContext {
     contributions,
     points: deps.points ?? pointsFromContributions(contributions),
     deletion: deps.deletion ?? noEffects,
+    newsletterConsent: deps.newsletterConsent ?? (() => Promise.resolve()),
     onBackgroundError: deps.onBackgroundError ?? (() => undefined),
     now: deps.now ?? (() => new Date()),
     tokens: signedTokens(deps.secret),
