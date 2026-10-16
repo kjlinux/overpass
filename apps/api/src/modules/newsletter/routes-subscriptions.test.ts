@@ -52,6 +52,16 @@ describe("subscribing", () => {
   });
 });
 
+describe("abuse", () => {
+  it("sends at most three confirmation links a day to one address", async () => {
+    for (let attempt = 0; attempt < 5; attempt++) {
+      await subscribe(app, "victim@example.com");
+      clock.advanceDays(0.01);
+    }
+    expect(mailsTo("victim@example.com")).toHaveLength(3);
+  });
+});
+
 describe("confirming", () => {
   it("confirms once with the mailed token", async () => {
     await subscribe(app, "ada@example.com");

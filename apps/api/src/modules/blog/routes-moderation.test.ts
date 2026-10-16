@@ -51,6 +51,11 @@ describe("reports", () => {
     expect(asAuthor.body.data).toMatchObject({ moderation: "hidden" });
   });
 
+  it("refuses a report on a post the reporter cannot read", async () => {
+    const draft = await writePost(app, author, { title: "Un brouillon privé", status: "draft" });
+    expect((await report(first, `/v1/posts/${draft.id}/reports`)).status).toBe(404);
+  });
+
   it("hides a comment at the second report", async () => {
     const path = `/v1/posts/${post.id}/comments`;
     const created = await call(app, "POST", path, { cookie: first, payload: { content: "Spam" } });
