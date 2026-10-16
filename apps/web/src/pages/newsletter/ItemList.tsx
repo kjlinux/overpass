@@ -68,7 +68,7 @@ function ItemRow(props: RowProps): JSX.Element {
 /** The ordered content of an issue; every move is a button so the keyboard can reorder. */
 export function ItemList(props: ItemListProps): JSX.Element {
   const { t } = useTranslation("newsletter");
-  if (props.items.length === 0) return <p class="text-ink-2">{t("admin.noItems")}</p>;
+  if (props.items.length === 0) return <p class="m-0 text-ink-2">{t("admin.noItems")}</p>;
   return (
     <ol class="m-0 list-none border-t border-rule p-0">
       {props.items.map((item, index) => (

@@ -37,15 +37,18 @@ const groups: LinkGroup[] = [
 ];
 
 /** Surface-coloured footer: newsletter first, then three ruled link columns. */
-export function Footer({ language }: { language: Language }): JSX.Element {
+export function Footer(props: { language: Language; newsletter?: boolean }): JSX.Element {
+  const { language, newsletter = true } = props;
   const { t } = useTranslation("layout");
   return (
     <footer class="border-t border-rule bg-surface py-16">
       <div class="mx-auto max-w-frame px-4 md:px-6 lg:px-8">
-        <div class="border-b border-rule pb-8">
-          <SubscribeForm language={language} variant="footer" />
-        </div>
-        <div class="grid pt-8 md:grid-cols-3">
+        {newsletter ? (
+          <div class="border-b border-rule pb-8">
+            <SubscribeForm language={language} variant="footer" />
+          </div>
+        ) : null}
+        <div class={newsletter ? "grid pt-8 md:grid-cols-3" : "grid md:grid-cols-3"}>
           {groups.map((group) => (
             <section
               key={group.key}

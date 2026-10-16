@@ -1,7 +1,12 @@
 {
   "deletedAuthor": "Deleted account",
   "team": "The Overpass team",
-  "feeds": { "label": "Blog feeds", "recent": "Recent", "forme": "For me", "news": "News" },
+  "feeds": {
+    "label": "Blog feeds",
+    "recent": "Recent",
+    "forme": "For me",
+    "news": "News"
+  },
   "categories": {
     "label": "Categories",
     "all": "All",
@@ -9,9 +14,20 @@
     "tutorials": "Tutorials",
     "portraits": "Portraits"
   },
-  "kinds": { "news": "News", "member": "Member post" },
-  "status": { "draft": "Draft", "published": "Published", "scheduled": "Scheduled" },
-  "moderationStatus": { "visible": "Visible", "hidden": "Hidden", "blocked": "Blocked" },
+  "kinds": {
+    "news": "News",
+    "member": "Member post"
+  },
+  "status": {
+    "draft": "Draft",
+    "published": "Published",
+    "scheduled": "Scheduled"
+  },
+  "moderationStatus": {
+    "visible": "Visible",
+    "hidden": "Hidden",
+    "blocked": "Blocked"
+  },
   "list": {
     "title": "Blog",
     "intro": "News from the team and member blogs: tutorials, integration stories and portraits.",
@@ -124,6 +140,7 @@
     "blockConfirm": "Block this content? It disappears from the feed, the blogs, the RSS feed and the newsletter, for its author too.",
     "suspendConfirm": "Suspend {{handle}}'s blog? Their posts disappear and they can no longer publish.",
     "cancel": "Cancel",
-    "open": "Open the post"
+    "open": "Open the post",
+    "emptyText": "Member reports will appear here, the most reported first."
   }
 }

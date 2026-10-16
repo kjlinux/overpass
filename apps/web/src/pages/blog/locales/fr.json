@@ -14,9 +14,20 @@
     "tutorials": "Tutoriels",
     "portraits": "Portraits"
   },
-  "kinds": { "news": "Actualité", "member": "Article de membre" },
-  "status": { "draft": "Brouillon", "published": "Publié", "scheduled": "Programmé" },
-  "moderationStatus": { "visible": "Visible", "hidden": "Masqué", "blocked": "Bloqué" },
+  "kinds": {
+    "news": "Actualité",
+    "member": "Article de membre"
+  },
+  "status": {
+    "draft": "Brouillon",
+    "published": "Publié",
+    "scheduled": "Programmé"
+  },
+  "moderationStatus": {
+    "visible": "Visible",
+    "hidden": "Masqué",
+    "blocked": "Bloqué"
+  },
   "list": {
     "title": "Blog",
     "intro": "Les actualités de l'équipe et les blogs des membres : tutoriels, retours d'intégration et portraits.",
@@ -129,6 +140,7 @@
     "blockConfirm": "Bloquer ce contenu ? Il disparaît du fil, des blogs, du flux RSS et de la newsletter, y compris pour son auteur.",
     "suspendConfirm": "Suspendre le blog de {{handle}} ? Ses articles disparaissent et il ne peut plus publier.",
     "cancel": "Annuler",
-    "open": "Ouvrir l'article"
+    "open": "Ouvrir l'article",
+    "emptyText": "Les signalements des membres apparaîtront ici, les plus signalés en premier."
   }
 }

@@ -44,14 +44,15 @@ function BlogHeader({ handle }: { handle: string }): JSX.Element | null {
   const { t } = useTranslation("blog");
   const { me } = useSession();
   const { state, refresh } = useApi<Blog>(`/v1/blogs/${handle}`);
-  if (state.status !== "ready") return null;
+  if (state.status === "error") return <FormAlert error={state.error} />;
+  if (state.status !== "ready") return <Skeleton lines={1} />;
   const blog = state.data;
   return (
     <div class="mt-6 flex flex-wrap items-center gap-4 border-b border-rule pb-6">
       <p class="m-0 text-ink-2">{t("blog.followers", { count: blog.followers })}</p>
       {me != null && !blog.viewer.isOwner ? <FollowButton blog={blog} onChange={refresh} /> : null}
       {blog.suspended ? (
-        <p class="m-0 border border-warning bg-warning-surface p-3">{t("blog.suspended")}</p>
+        <p class="m-0 border border-warning bg-warning-surface p-4">{t("blog.suspended")}</p>
       ) : null}
     </div>
   );

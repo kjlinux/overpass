@@ -21,6 +21,10 @@ function CommentItem(props: { item: PostComment; signedIn: boolean; actions: Com
   const language = useLanguage();
   const { item } = props;
   const canReport = props.signedIn && !item.viewer.isAuthor && item.moderation === "visible";
+  const [error, setError] = useState<ApiError | undefined>(undefined);
+  const report = () => {
+    void props.actions.report("comment", item.id).then(setError);
+  };
   return (
     <li class="flex flex-col gap-2 border-b border-rule py-4">
       <p class="m-0 text-caption text-ink-2">
@@ -33,15 +37,12 @@ function CommentItem(props: { item: PostComment; signedIn: boolean; actions: Com
       ) : (
         <Markdown source={item.content} />
       )}
+      <FormAlert error={error} />
       {item.viewer.reported ? (
         <p class="m-0 text-caption text-ink-2">{t("comments.reported")}</p>
       ) : null}
       {canReport && !item.viewer.reported ? (
-        <Button
-          variant="ghost"
-          class="self-start"
-          onClick={() => void props.actions.report("comment", item.id)}
-        >
+        <Button variant="ghost" class="self-start" onClick={report}>
           {t("comments.report")}
         </Button>
       ) : null}
@@ -91,7 +92,15 @@ function CommentForm({ signedIn, actions }: { signedIn: boolean; actions: Commen
 }
 
 /** Oldest first, then the form, so a reply reads as the continuation of the thread. */
-export function Comments(props: { page: CommentPage; signedIn: boolean; actions: CommentActions }) {
+export type CommentsProps = {
+  page: CommentPage;
+  signedIn: boolean;
+  actions: CommentActions;
+  onMore?: () => void;
+  loadingMore?: boolean;
+};
+
+export function Comments(props: CommentsProps) {
   const { t } = useTranslation("blog");
   return (
     <section aria-labelledby="comments-heading" class="flex flex-col gap-6">
@@ -111,6 +120,11 @@ export function Comments(props: { page: CommentPage; signedIn: boolean; actions:
             />
           ))}
         </ul>
+      )}
+      {props.page.nextCursor === null || props.onMore === undefined ? null : (
+        <Button class="self-start" onClick={props.onMore} loading={props.loadingMore ?? false}>
+          {t("comments.more")}
+        </Button>
       )}
       <CommentForm signedIn={props.signedIn} actions={props.actions} />
     </section>

@@ -1,5 +1,6 @@
 import type { ApiError, CommentPage, PostDetail } from "@overpass/shared";
 import type { JSX } from "preact";
+import { useState } from "preact/hooks";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../app/useLanguage";
 import { Button, Skeleton } from "../../components/ui";
@@ -34,18 +35,35 @@ function useActions(post: PostDetail, reload: () => Promise<void>): ArticleActio
 function Loaded(props: { post: PostDetail; reload: () => Promise<void> }) {
   const { me } = useSession();
   const language = useLanguage();
-  const comments = useApi<CommentPage>(`/v1/posts/${props.post.id}/comments`);
+  const path = `/v1/posts/${props.post.id}/comments`;
+  const comments = useApi<CommentPage>(path);
+  const [extra, setExtra] = useState<CommentPage | null>(null);
+  const [loadingMore, setLoadingMore] = useState(false);
   const reload = async () => {
+    setExtra(null);
     await Promise.all([props.reload(), comments.refresh()]);
   };
   const actions = useActions(props.post, reload);
-  const page = comments.state.status === "ready" ? comments.state.data : noComments;
+  const page = extra ?? (comments.state.status === "ready" ? comments.state.data : noComments);
+  const more = async () => {
+    if (page.nextCursor === null) return;
+    setLoadingMore(true);
+    const next = await apiRequest<CommentPage>(
+      "GET",
+      `${path}?cursor=${encodeURIComponent(page.nextCursor)}`,
+    );
+    setLoadingMore(false);
+    if (next.error === null)
+      setExtra({ items: [...page.items, ...next.data.items], nextCursor: next.data.nextCursor });
+  };
   return (
     <ArticleView
       post={props.post}
       comments={page}
       signedIn={me != null}
       actions={actions}
+      onMoreComments={() => void more()}
+      loadingMoreComments={loadingMore}
       newsletter={<SubscribeForm language={language} variant="compact" />}
     />
   );
@@ -57,7 +75,7 @@ export function ArticlePage({ slug }: { slug: string }): JSX.Element {
   const { state, reload, refresh } = useApi<PostDetail>(`/v1/posts/${slug}?lang=${language}`);
   if (state.status === "notFound") return <ErrorPage kind="notFound" language={language} />;
   return (
-    <Layout language={language}>
+    <Layout language={language} footerNewsletter={false}>
       {state.status === "loading" ? (
         <div class="mx-auto max-w-prose py-12">
           <Skeleton lines={8} />

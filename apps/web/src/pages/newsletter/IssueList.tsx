@@ -1,3 +1,4 @@
+import { languageNames } from "@overpass/shared";
 import type { Issue } from "@overpass/shared";
 import { Mail } from "lucide-preact";
 import type { JSX } from "preact";
@@ -16,7 +17,7 @@ function IssueRow({ issue, onOpen }: { issue: Issue; onOpen: () => void }): JSX.
             {t("admin.number", { number: issue.number })}
           </span>
           <Chip selected={issue.status === "draft"}>{t(`admin.status.${issue.status}`)}</Chip>
-          <Chip>{issue.language.toUpperCase()}</Chip>
+          <Chip>{languageNames[issue.language]}</Chip>
         </div>
         <p class="m-0 [overflow-wrap:anywhere]">{issue.subject}</p>
         {issue.status === "draft" ? null : (

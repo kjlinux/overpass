@@ -13,7 +13,7 @@ function Featured({ post }: { post: PostSummary }): JSX.Element {
   return (
     <article class="flex flex-col gap-3 border-b border-rule pb-8">
       <p class="m-0 text-caption font-semibold text-ink-2">{t("list.featured")}</p>
-      <h2 class="m-0 text-h1 font-semibold [overflow-wrap:anywhere]">
+      <h2 class="m-0 text-h2 font-semibold [overflow-wrap:anywhere]">
         <a href={localizedPath(language, `/blog/${post.slug}`)}>{post.title}</a>
       </h2>
       <p class="m-0 max-w-prose text-body">{post.summary}</p>

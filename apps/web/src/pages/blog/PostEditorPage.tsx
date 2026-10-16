@@ -13,8 +13,11 @@ import { PostForm } from "./PostForm";
 import { toInstant, toLocalInput } from "./postValues";
 import type { PostFormValues } from "./postValues";
 
-const otherLanguage = (language: Language): Language =>
-  supportedLanguages.find((code) => code !== language) ?? language;
+/** Every language still missing from the translation group the reader knows of. */
+const missingLanguages = (post: PostDetail): Language[] =>
+  supportedLanguages.filter(
+    (code) => code !== post.language && code !== post.translation?.language,
+  );
 
 /** Saving opens the post, where the author sees it exactly as readers will. */
 function useSave(existing: PostDetail | null, translationOf: string | null) {
@@ -43,16 +46,18 @@ function useSave(existing: PostDetail | null, translationOf: string | null) {
   };
 }
 
-function TranslateLink({ post }: { post: PostDetail }): JSX.Element | null {
+function TranslateLinks({ post }: { post: PostDetail }): JSX.Element {
   const { t } = useTranslation("blog");
   const language = useLanguage();
-  if (post.translation !== null) return null;
-  const target = otherLanguage(post.language);
-  const href = `${localizedPath(language, "/blog/write")}?translationOf=${post.id}&language=${target}&kind=${post.kind}`;
+  const base = `${localizedPath(language, "/blog/write")}?translationOf=${post.id}&kind=${post.kind}`;
   return (
-    <ButtonLink href={href}>
-      {t("editor.translate", { language: languageNames[target] })}
-    </ButtonLink>
+    <div class="flex flex-wrap gap-2">
+      {missingLanguages(post).map((target) => (
+        <ButtonLink key={target} href={`${base}&language=${target}`}>
+          {t("editor.translate", { language: languageNames[target] })}
+        </ButtonLink>
+      ))}
+    </div>
   );
 }
 
@@ -80,7 +85,7 @@ function Editor({ me, post }: { me: Me; post: PostDetail | null }): JSX.Element 
     <section class="py-12 md:py-16">
       <div class="flex flex-wrap items-end justify-between gap-4 border-b border-rule pb-6">
         <h1 class="text-h1 font-semibold">{title}</h1>
-        {post === null ? null : <TranslateLink post={post} />}
+        {post === null ? null : <TranslateLinks post={post} />}
       </div>
       <div class="mt-8">
         <PostForm

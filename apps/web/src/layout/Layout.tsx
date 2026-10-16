@@ -4,10 +4,15 @@ import { useTranslation } from "react-i18next";
 import { Footer } from "./Footer";
 import { Header } from "./Header";
 
-export type LayoutProps = { language: Language; children: ComponentChildren };
+/** Pages that already show the subscribe form drop it from the footer. */
+export type LayoutProps = {
+  language: Language;
+  children: ComponentChildren;
+  footerNewsletter?: boolean;
+};
 
 /** Skip link, masthead, the ruled main column and the footer. */
-export function Layout({ language, children }: LayoutProps): JSX.Element {
+export function Layout({ language, children, footerNewsletter = true }: LayoutProps): JSX.Element {
   const { t } = useTranslation("layout");
   return (
     <div class="flex min-h-screen flex-col">
@@ -25,7 +30,7 @@ export function Layout({ language, children }: LayoutProps): JSX.Element {
       >
         {children}
       </main>
-      <Footer language={language} />
+      <Footer language={language} newsletter={footerNewsletter} />
     </div>
   );
 }

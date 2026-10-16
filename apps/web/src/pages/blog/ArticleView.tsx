@@ -22,6 +22,8 @@ export type ArticleViewProps = {
   signedIn: boolean;
   actions: ArticleActionsSet;
   newsletter?: ComponentChildren;
+  onMoreComments?: () => void;
+  loadingMoreComments?: boolean;
 };
 
 function Notice({ post }: { post: PostDetail }): JSX.Element | null {
@@ -33,7 +35,7 @@ function Notice({ post }: { post: PostDetail }): JSX.Element | null {
         ? "article.draft"
         : null;
   if (key === null) return null;
-  return <p class="m-0 border border-warning bg-warning-surface p-3">{t(key)}</p>;
+  return <p class="m-0 border border-warning bg-warning-surface p-4">{t(key)}</p>;
 }
 
 function Byline({ post }: { post: PostDetail }): JSX.Element {
@@ -84,18 +86,11 @@ function Related({ posts }: { posts: PostSummary[] }): JSX.Element | null {
   );
 }
 
-/** One narrow column: title, byline, text, actions, comments, related posts, newsletter. */
-export function ArticleView({
-  post,
-  comments,
-  signedIn,
-  actions,
-  newsletter,
-}: ArticleViewProps): JSX.Element {
+function ArticleHeader({ post }: { post: PostDetail }): JSX.Element {
   const { t } = useTranslation("blog");
   const language = useLanguage();
   return (
-    <article class="mx-auto flex max-w-prose flex-col gap-6 py-12 md:py-16">
+    <>
       <a href={localizedPath(language, "/blog")} class="self-start text-caption">
         {t("article.back")}
       </a>
@@ -106,6 +101,18 @@ export function ArticleView({
       <h1 class="m-0 text-h1 font-semibold [overflow-wrap:anywhere]">{post.title}</h1>
       <p class="m-0 text-h3 text-ink-2">{post.summary}</p>
       <Byline post={post} />
+    </>
+  );
+}
+
+/** One narrow column: title, byline, text, actions, comments, related posts, newsletter. */
+export function ArticleView(props: ArticleViewProps): JSX.Element {
+  const { post, comments, signedIn, actions, newsletter } = props;
+  const { t } = useTranslation("blog");
+  const more = props.onMoreComments === undefined ? {} : { onMore: props.onMoreComments };
+  return (
+    <article class="mx-auto flex max-w-prose flex-col gap-6 py-12 md:py-16">
+      <ArticleHeader post={post} />
       <ArticleActions
         post={post}
         signedIn={signedIn}
@@ -114,7 +121,13 @@ export function ArticleView({
         report={() => actions.report("post", post.id)}
       />
       <Markdown source={post.content} />
-      <Comments page={comments} signedIn={signedIn} actions={actions} />
+      <Comments
+        page={comments}
+        signedIn={signedIn}
+        actions={actions}
+        {...more}
+        loadingMore={props.loadingMoreComments ?? false}
+      />
       <Related posts={post.related} />
       {newsletter === undefined ? null : (
         <section aria-label={t("article.newsletter")} class="border-t border-rule pt-8">

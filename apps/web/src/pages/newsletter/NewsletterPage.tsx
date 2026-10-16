@@ -11,7 +11,7 @@ export function NewsletterPage(): JSX.Element {
   const { t } = useTranslation("newsletter");
   const language = useLanguage();
   return (
-    <Layout language={language}>
+    <Layout language={language} footerNewsletter={false}>
       <section class="max-w-prose py-12 md:py-16">
         <h1 class="text-h1 font-semibold">{t("page.title")}</h1>
         <p class="mt-2 text-ink-2">{t("page.intro")}</p>

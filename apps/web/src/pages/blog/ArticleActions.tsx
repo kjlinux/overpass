@@ -9,24 +9,28 @@ import { Button, ButtonLink, ConfirmDialog, cx } from "../../components/ui";
 import { FormAlert } from "../../forms";
 import { localizedPath } from "../../layout";
 
+type Call = () => Promise<ApiError | undefined>;
+
 export type ArticleActionsProps = {
   post: PostDetail;
   signedIn: boolean;
-  star: () => Promise<ApiError | undefined>;
-  unstar: () => Promise<ApiError | undefined>;
-  report: () => Promise<ApiError | undefined>;
+  star: Call;
+  unstar: Call;
+  report: Call;
 };
 
-function StarButton(props: ArticleActionsProps): JSX.Element {
+type Run = (call: Call) => void;
+
+function StarButton({ post, signedIn, star, unstar, run }: ArticleActionsProps & { run: Run }) {
   const { t } = useTranslation("blog");
   const language = useLanguage();
   const { url } = useLocation();
-  const { post } = props;
   const label = t("list.stars", { count: post.stars });
-  if (!props.signedIn) {
+  if (!signedIn) {
     const href = `${localizedPath(language, "/sign-in")}?next=${encodeURIComponent(url)}`;
+    const name = `${label}, ${t("article.signInToStar")}`;
     return (
-      <ButtonLink href={href} aria-label={t("article.signInToStar")}>
+      <ButtonLink href={href} aria-label={name}>
         {label}
       </ButtonLink>
     );
@@ -37,25 +41,22 @@ function StarButton(props: ArticleActionsProps): JSX.Element {
       aria-pressed={starred}
       aria-label={`${t(starred ? "article.unstar" : "article.star")} (${label})`}
       disabled={post.viewer.isAuthor}
-      onClick={() => void (starred ? props.unstar() : props.star())}
+      onClick={() => {
+        run(starred ? unstar : star);
+      }}
     >
-      <Star class={cx("h-4 w-4", starred && "fill-current")} aria-hidden="true" />
+      <Star class={cx("h-5 w-5", starred && "fill-current")} aria-hidden="true" />
       {label}
     </Button>
   );
 }
 
-function ReportButton(props: ArticleActionsProps): JSX.Element | null {
+function ReportButton({ post, signedIn, report, run }: ArticleActionsProps & { run: Run }) {
   const { t } = useTranslation("blog");
   const [open, setOpen] = useState(false);
-  const [error, setError] = useState<ApiError | undefined>(undefined);
-  const { viewer } = props.post;
-  if (!props.signedIn || viewer.isAuthor) return null;
-  if (viewer.reported) return <p class="m-0 text-caption text-ink-2">{t("article.reported")}</p>;
-  const confirm = async () => {
-    setOpen(false);
-    setError(await props.report());
-  };
+  if (!signedIn || post.viewer.isAuthor) return null;
+  if (post.viewer.reported)
+    return <p class="m-0 text-caption text-ink-2">{t("article.reported")}</p>;
   return (
     <>
       <Button
@@ -66,13 +67,15 @@ function ReportButton(props: ArticleActionsProps): JSX.Element | null {
       >
         {t("article.report")}
       </Button>
-      <FormAlert error={error} />
       <ConfirmDialog
         open={open}
         title={t("article.report")}
         description={t("article.reportConfirm")}
         confirmLabel={t("article.report")}
-        onConfirm={() => void confirm()}
+        onConfirm={() => {
+          setOpen(false);
+          run(report);
+        }}
         onCancel={() => {
           setOpen(false);
         }}
@@ -81,21 +84,28 @@ function ReportButton(props: ArticleActionsProps): JSX.Element | null {
   );
 }
 
-/** Star, report and edit, in one wrapping row under the title. */
+/** Star, report and edit in one wrapping row; a failure is written above it, never dropped. */
 export function ArticleActions(props: ArticleActionsProps): JSX.Element {
   const { t } = useTranslation("blog");
   const language = useLanguage();
+  const [error, setError] = useState<ApiError | undefined>(undefined);
+  const run: Run = (call) => {
+    void call().then(setError);
+  };
   const { post } = props;
   const editable = post.viewer.isAuthor || (post.kind === "news" && post.viewer.isAdmin);
   return (
-    <div class="flex flex-wrap items-center gap-2 border-y border-rule py-3">
-      <StarButton {...props} />
-      <ReportButton {...props} />
-      {editable ? (
-        <ButtonLink variant="ghost" href={localizedPath(language, `/blog/write/${post.id}`)}>
-          {t("article.edit")}
-        </ButtonLink>
-      ) : null}
+    <div class="flex flex-col gap-3">
+      <FormAlert error={error} />
+      <div class="flex flex-wrap items-center gap-2 border-y border-rule py-3">
+        <StarButton {...props} run={run} />
+        <ReportButton {...props} run={run} />
+        {editable ? (
+          <ButtonLink variant="ghost" href={localizedPath(language, `/blog/write/${post.id}`)}>
+            {t("article.edit")}
+          </ButtonLink>
+        ) : null}
+      </div>
     </div>
   );
 }

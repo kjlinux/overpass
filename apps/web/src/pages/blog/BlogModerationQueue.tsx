@@ -3,7 +3,8 @@ import type { JSX } from "preact";
 import { useState } from "preact/hooks";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../app/useLanguage";
-import { Button, Chip, ConfirmDialog, Skeleton } from "../../components/ui";
+import { ShieldCheck } from "lucide-preact";
+import { Button, Chip, ConfirmDialog, EmptyState, Skeleton } from "../../components/ui";
 import { FormAlert } from "../../forms";
 import { localizedPath } from "../../layout";
 import { apiRequest } from "../../session";
@@ -26,30 +27,25 @@ function RowActions({ item, act, ask }: RowProps): JSX.Element {
       {label}
     </Button>
   );
+  const hide = () => {
+    act("hide");
+  };
+  const block = () => {
+    ask({ kind: "block", item });
+  };
+  const restore = () => {
+    act("restore");
+  };
   return (
     <div class="flex flex-wrap gap-2">
-      {button(t("moderation.hide"), () => {
-        act("hide");
-      })}
-      {button(t("moderation.block"), () => {
-        ask({ kind: "block", item });
-      })}
-      {button(
-        t("moderation.restore"),
-        () => {
-          act("restore");
-        },
-        true,
-      )}
+      {item.moderation === "visible" ? button(t("moderation.hide"), hide) : null}
+      {button(t("moderation.block"), block)}
       {author === null
         ? null
-        : button(
-            t("moderation.suspend"),
-            () => {
-              ask({ kind: "suspend", handle: author });
-            },
-            true,
-          )}
+        : button(t("moderation.suspend"), () => {
+            ask({ kind: "suspend", handle: author });
+          })}
+      {item.moderation === "visible" ? null : button(t("moderation.restore"), restore, true)}
     </div>
   );
 }
@@ -114,9 +110,42 @@ function PendingDialog({ pending, onConfirm, onCancel }: DialogProps): JSX.Eleme
   );
 }
 
+type ListProps = {
+  items: BlogModerationItem[];
+  act: (item: BlogModerationItem, action: ModerationAction) => void;
+  ask: (pending: Pending) => void;
+};
+
+function QueueList({ items, act, ask }: ListProps): JSX.Element {
+  const { t } = useTranslation("blog");
+  return (
+    <>
+      {items.length === 0 ? (
+        <EmptyState
+          icon={ShieldCheck}
+          title={t("moderation.empty")}
+          description={t("moderation.emptyText")}
+        />
+      ) : (
+        <ul class="m-0 list-none border-t border-rule p-0">
+          {items.map((item) => (
+            <Row
+              key={`${item.kind}:${item.id}`}
+              item={item}
+              act={(action) => {
+                act(item, action);
+              }}
+              ask={ask}
+            />
+          ))}
+        </ul>
+      )}
+    </>
+  );
+}
+
 /** Reported posts and comments; blocking and suspending ask for confirmation first. */
 export function BlogModerationQueue(): JSX.Element {
-  const { t } = useTranslation("blog");
   const { state, error, act, suspend } = useQueue();
   const [pending, setPending] = useState<Pending>(null);
   const confirm = () => {
@@ -129,22 +158,7 @@ export function BlogModerationQueue(): JSX.Element {
   return (
     <div class="flex flex-col gap-4">
       <FormAlert error={error} />
-      {state.data.length === 0 ? (
-        <p class="m-0 text-ink-2">{t("moderation.empty")}</p>
-      ) : (
-        <ul class="m-0 list-none border-t border-rule p-0">
-          {state.data.map((item) => (
-            <Row
-              key={`${item.kind}:${item.id}`}
-              item={item}
-              act={(action) => {
-                act(item, action);
-              }}
-              ask={setPending}
-            />
-          ))}
-        </ul>
-      )}
+      <QueueList items={state.data} act={act} ask={setPending} />
       <PendingDialog
         pending={pending}
         onConfirm={confirm}
