@@ -18,6 +18,7 @@ create table posts (
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
   constraint posts_published_dated check (status = 'draft' or published_at is not null),
+  constraint posts_member_authored check (kind = 'news' or author_id is not null),
   constraint posts_slug_per_language unique (language, slug),
   constraint posts_one_per_language unique (translation_group, language)
 );
@@ -81,3 +82,14 @@ create table blog_suspensions (
   suspended_by uuid references users (id) on delete set null,
   suspended_at timestamptz not null default now()
 );
+
+-- A member's posts leave with the account; news stay, without author, as the team's record.
+create function delete_member_posts() returns trigger language plpgsql as $$
+begin
+  delete from posts where author_id = old.id and kind = 'member';
+  return old;
+end;
+$$;
+
+create trigger users_delete_member_posts before delete on users
+  for each row execute function delete_member_posts();

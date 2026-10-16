@@ -100,6 +100,28 @@ describe("blog migration", () => {
     }
   });
 
+  it("deletes the posts of a deleted member but keeps the news without author", async () => {
+    await insertPost("fr", "article-de-membre");
+    await executor.query(
+      `insert into posts (kind, author_id, language, slug, category, title, summary, content)
+       values ('news', $1, 'fr', 'actualite', 'tech-news', 'Une actualité de test', 'R', 'T')`,
+      [ada],
+    );
+    await executor.query("delete from users where id = $1", [ada]);
+    expect(await executor.query("select kind, author_id from posts")).toEqual([
+      { kind: "news", author_id: null },
+    ]);
+  });
+
+  it("refuses a member post without author", async () => {
+    expect(
+      await rejects(
+        `insert into posts (kind, language, slug, category, title, summary, content)
+         values ('member', 'fr', 'orphelin', 'tutorials', 'Un article de test', 'R', 'T')`,
+      ),
+    ).toBe(true);
+  });
+
   it("adds the stars received to the points cache", async () => {
     const columns = await executor.query<{ column_name: string }>(
       "select column_name from information_schema.columns where table_name = 'member_points' and column_name = 'stars'",
