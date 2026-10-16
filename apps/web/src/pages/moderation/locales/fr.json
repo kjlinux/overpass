@@ -39,5 +39,8 @@
     "cancel": "Annuler",
     "emptyTitle": "Aucune proposition en attente",
     "emptyText": "Les services proposés par les membres apparaîtront ici."
+  },
+  "blog": {
+    "heading": "Blog : articles et commentaires signalés"
   }
 }

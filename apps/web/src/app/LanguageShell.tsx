@@ -3,6 +3,7 @@ import { Route, Router, useRoute } from "preact-iso";
 import { useTranslation } from "react-i18next";
 import { ErrorBoundary, ErrorPage } from "../pages/errors";
 import { rememberLanguage, toLanguage } from "./language";
+import { contentRoutes } from "./contentRoutes";
 import { lazyPage } from "./lazyPage";
 import { RootRedirect } from "./RootRedirect";
 
@@ -49,7 +50,7 @@ const ServicePage = lazyPage("requests", async () => (await requests()).ServiceP
 const ProposePage = lazyPage("requests", async () => (await requests()).ProposePage);
 const RequestsPage = lazyPage("requests", async () => (await requests()).SimulatorRequestsPage);
 const ModerationPage = lazyPage(
-  "moderation",
+  ["moderation", "blog"],
   async () => (await import("../pages/moderation")).ModerationPage,
 );
 
@@ -100,7 +101,7 @@ export function LanguageShell() {
         <Route path="/sandbox" component={TrackPage} />
         <Route path="/sandbox/demo" component={DemoPage} />
         <Route path="/sandbox/launch/:provider/:id" component={LaunchPage} />
-        {communityRoutes.map(([path, page]) => (
+        {[...communityRoutes, ...contentRoutes].map(([path, page]) => (
           <Route key={path} path={path} component={page} />
         ))}
         <Route default component={NotFound} />

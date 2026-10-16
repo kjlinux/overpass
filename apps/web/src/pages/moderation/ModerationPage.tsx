@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../app/useLanguage";
 import { Layout } from "../../layout";
 import { RequireSession } from "../../session";
+import { BlogModerationQueue } from "../blog";
 import { ProposalsQueue } from "./ProposalsQueue";
 import { ReportsQueue } from "./ReportsQueue";
 
@@ -38,6 +39,12 @@ function Queues({ me }: { me: Me }): JSX.Element {
           <ProposalsQueue />
         </section>
       </div>
+      <section aria-labelledby="blog-reports-heading" class="border-t border-rule py-8">
+        <h2 id="blog-reports-heading" class="mb-4 text-h2 font-semibold">
+          {t("blog.heading")}
+        </h2>
+        <BlogModerationQueue />
+      </section>
     </section>
   );
 }

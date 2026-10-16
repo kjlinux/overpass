@@ -22,7 +22,9 @@
     "email": "Adresse e-mail",
     "language": "Langue de la newsletter",
     "subscribe": "S'abonner",
-    "inactive": "Inscription inactive pour l'instant : la newsletter arrive avec le module communauté."
+    "note": "Double confirmation : un lien vous arrive par e-mail, l'abonnement ne démarre qu'après votre clic. Chaque numéro contient un lien de désinscription en un clic.",
+    "sent": "C'est noté. Si cette adresse peut recevoir le résumé, un lien de confirmation vient de partir : ouvrez-le pour valider l'abonnement.",
+    "another": "Inscrire une autre adresse"
   },
   "groups": {
     "product": "Produit",
@@ -44,5 +46,7 @@
     "propose": "Proposer un service"
   },
   "legalLine": "Overpass par Ghostapi, Côte d'Ivoire. Code sous licence libre.",
-  "moderation": "Modération"
+  "moderation": "Modération",
+  "myBlog": "Mon blog",
+  "newsletterAdmin": "Newsletter (équipe)"
 }

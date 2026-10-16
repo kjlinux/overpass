@@ -22,7 +22,9 @@
     "email": "Email address",
     "language": "Newsletter language",
     "subscribe": "Subscribe",
-    "inactive": "Sign-up is inactive for now: the newsletter ships with the community module."
+    "note": "Double opt-in: a link arrives by email and the subscription starts only after you click it. Every issue carries a one-click unsubscribe link.",
+    "sent": "Noted. If this address can receive the digest, a confirmation link is on its way: open it to confirm the subscription.",
+    "another": "Subscribe another address"
   },
   "groups": {
     "product": "Product",
@@ -44,5 +46,7 @@
     "propose": "Propose a service"
   },
   "legalLine": "Overpass by Ghostapi, Côte d'Ivoire. Code under a free licence.",
-  "moderation": "Moderation"
+  "moderation": "Moderation",
+  "myBlog": "My blog",
+  "newsletterAdmin": "Newsletter (team)"
 }
