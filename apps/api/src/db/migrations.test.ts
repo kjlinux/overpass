@@ -35,11 +35,23 @@ describe("migrations", () => {
       "0009_ranking",
       "0010_requests",
       "0011_route_source_thread",
+      "0012_blog",
+      "0013_star_points",
+      "0014_newsletter",
     ]);
     expect(await tables()).toEqual([
       "api_tokens",
+      "blog_suspensions",
       "checks",
+      "follows",
       "member_points",
+      "newsletter_deliveries",
+      "newsletter_issues",
+      "newsletter_subscribers",
+      "post_comments",
+      "post_reports",
+      "post_stars",
+      "posts",
       "potholes",
       "rate_limit_counters",
       "replies",
@@ -70,7 +82,10 @@ describe("migrations", () => {
 
   it("reverts the last migration and can apply it again", async () => {
     await migrateUp(executor, migrationsDirectory);
-    expect(await migrateDown(executor, migrationsDirectory, 11)).toEqual([
+    expect(await migrateDown(executor, migrationsDirectory, 14)).toEqual([
+      "0014_newsletter",
+      "0013_star_points",
+      "0012_blog",
       "0011_route_source_thread",
       "0010_requests",
       "0009_ranking",
@@ -84,7 +99,7 @@ describe("migrations", () => {
       "0001_accounts",
     ]);
     expect(await tables()).toEqual(["schema_migrations"]);
-    expect(await migrateUp(executor, migrationsDirectory)).toHaveLength(11);
+    expect(await migrateUp(executor, migrationsDirectory)).toHaveLength(14);
   });
 
   it("seeds the six translated discussion themes in their order", async () => {
@@ -135,7 +150,7 @@ describe("migrations", () => {
     await executor.query(
       "insert into routes (author_id, service_id, country, stack, language, title, content) select '00000000-0000-4000-8000-000000000001', id, 'CI', 'laravel', 'fr', 'Une fiche ancienne', 'x' from services where slug = 'wave'",
     );
-    await migrateDown(executor, migrationsDirectory, 3);
+    await migrateDown(executor, migrationsDirectory, 6);
     await migrateUp(executor, migrationsDirectory);
     expect(await executor.query("select routes, points from member_points")).toEqual([
       { routes: 1, points: 10 },
