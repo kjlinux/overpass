@@ -5,8 +5,8 @@ import type { Database } from "../../db/client.js";
 import type { RankingRepository } from "./model.js";
 
 async function rows<Row>(db: Database, query: SQL): Promise<Row[]> {
-  const result = await db.execute(query);
-  return (result as unknown as { rows: Row[] }).rows;
+  const result: unknown = await db.execute(query);
+  return (result as { rows: Row[] }).rows;
 }
 
 /** Section 9: points come from the contribution tables; self-acceptance and self-votes earn nothing. */

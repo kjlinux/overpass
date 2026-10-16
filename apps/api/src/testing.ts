@@ -60,5 +60,5 @@ export async function registerAccount(
 export async function handleOf(app: FastifyInstance, cookie: string): Promise<string> {
   const headers = { origin: webOrigin, cookie };
   const me = await app.inject({ method: "GET", url: "/v1/me", headers });
-  return String(me.json<{ data: { handle: string } }>().data.handle);
+  return me.json<{ data: { handle: string } }>().data.handle;
 }
