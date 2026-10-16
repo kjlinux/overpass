@@ -593,6 +593,8 @@ Le code est gelé le 24 octobre, ce qui laisse une journée de marge avant la cl
 - Opérateurs simulés : tranché le 12 octobre, revu le 14 octobre : Wave, PI-SPI puis PayDunya ; CinetPay reporté, sa documentation étant hors ligne (section 4).
 - Langue des commentaires de code : anglais par défaut dans ce document.
 - Lecture retenue pour les commentaires : 20 % est un plafond, pas un quota à atteindre.
+- Newsletter (16 octobre 2026, à valider) : les liens de confirmation et de désinscription ouvrent une page qui appelle `POST /v1/newsletter/confirm` et `POST /v1/newsletter/unsubscribe`, au lieu des `GET` de la section 10, pour que les antivirus de messagerie qui suivent les liens ne confirment ni ne désinscrivent à la place du lecteur ; chaque numéro porte aussi les en-têtes `List-Unsubscribe` et `List-Unsubscribe-Post` (RFC 8058). Une table `newsletter_deliveries` (file d'envoi par lots) s'ajoute à la section 9.
+- Blog (16 octobre 2026) : les routes de la section 10 sont complétées par les commentaires, les étoiles, les abonnements, les signalements, la modération et `GET /v1/blogs/:handle` ; les tables `post_reports` et `blog_suspensions` s'ajoutent à celles de la mise à jour du 13 octobre.
 
 **Sources**
 
