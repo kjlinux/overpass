@@ -6,6 +6,7 @@ export const pointRules = {
   accepted: 5,
   useful: 1,
   articles: 10,
+  stars: 1,
 } as const;
 
 export type PointSource = keyof typeof pointRules;

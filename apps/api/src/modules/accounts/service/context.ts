@@ -47,7 +47,7 @@ const noContributions: ContributionsSource = () =>
 function pointsFromContributions(contributions: ContributionsSource): PointsSource {
   return async (userId) => {
     const counted = await contributions(userId);
-    return pointsFor({ ...counted, accepted: 0, useful: 0, articles: 0 });
+    return pointsFor({ ...counted, accepted: 0, useful: 0, articles: 0, stars: 0 });
   };
 }
 

@@ -111,9 +111,9 @@ describe("canReadPost", () => {
 
   it("shows listed posts to everyone and the rest to admins", () => {
     expect(canReadPost({ listed: true, moderation: "visible" }, reader)).toBe(true);
-    expect(canReadPost({ listed: false, moderation: "blocked" }, { ...reader, isAdmin: true })).toBe(
-      true,
-    );
+    expect(
+      canReadPost({ listed: false, moderation: "blocked" }, { ...reader, isAdmin: true }),
+    ).toBe(true);
     expect(canReadPost({ listed: false, moderation: "visible" }, reader)).toBe(false);
   });
 
@@ -126,7 +126,9 @@ describe("canReadPost", () => {
 
 describe("slugFor", () => {
   it("builds a readable ascii slug from a French title", () => {
-    expect(slugFor("Écrire une API à Abidjan : le guide")).toBe("ecrire-une-api-a-abidjan-le-guide");
+    expect(slugFor("Écrire une API à Abidjan : le guide")).toBe(
+      "ecrire-une-api-a-abidjan-le-guide",
+    );
   });
 
   it("bounds the length and never returns an empty slug", () => {

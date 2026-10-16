@@ -39,7 +39,12 @@ describe("newsletterTokenInput", () => {
 });
 
 describe("issueCreateInput", () => {
-  const issue = { language: "fr", subject: "Overpass, semaine 42", intro: "Bonjour.", items: [item] };
+  const issue = {
+    language: "fr",
+    subject: "Overpass, semaine 42",
+    intro: "Bonjour.",
+    items: [item],
+  };
 
   it("accepts a reviewed issue made of references", () => {
     expect(issueCreateInput.parse(issue).items).toEqual([item]);
@@ -48,7 +53,9 @@ describe("issueCreateInput", () => {
   it("refuses an empty subject, an unknown kind and too many items", () => {
     const tooMany = Array.from({ length: newsletterRules.maxItems + 1 }, () => item);
     expect(
-      codes(issueCreateInput.safeParse({ ...issue, subject: " ", items: [{ kind: "x", id: "1" }] })),
+      codes(
+        issueCreateInput.safeParse({ ...issue, subject: " ", items: [{ kind: "x", id: "1" }] }),
+      ),
     ).toEqual({ subject: "subject_invalid", items: "items_invalid" });
     expect(codes(issueCreateInput.safeParse({ ...issue, items: tooMany }))).toEqual({
       items: "items_invalid",

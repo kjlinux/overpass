@@ -16,3 +16,5 @@ export * from "./discussions/index.js";
 export * from "./ranking/index.js";
 export * from "./redact/index.js";
 export * from "./requests/index.js";
+export * from "./blog/index.js";
+export * from "./newsletter/index.js";

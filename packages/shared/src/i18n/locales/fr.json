@@ -33,7 +33,16 @@
     "admin_only": "Cette action est réservée à l'équipe de modération.",
     "already_simulated": "Ce service a déjà un simulateur.",
     "proposal_decided": "Cette proposition a déjà été traitée.",
-    "service_exists": "Ce service existe déjà dans le catalogue."
+    "service_exists": "Ce service existe déjà dans le catalogue.",
+    "own_post": "Vous ne pouvez pas donner d'étoile à votre propre article.",
+    "already_starred": "Vous avez déjà donné une étoile à cet article.",
+    "blog_suspended": "Ce blog est suspendu par l'équipe de modération.",
+    "own_blog": "Vous ne pouvez pas suivre votre propre blog.",
+    "post_translation_exists": "Cet article existe déjà dans cette langue.",
+    "translation_invalid": "Liez la traduction à un article de même sorte, dans l'autre langue, que vous pouvez modifier.",
+    "newsletter_link_invalid": "Ce lien n'est plus valide. Inscrivez-vous de nouveau pour en recevoir un autre.",
+    "issue_not_draft": "Ce numéro est déjà parti ou en cours d'envoi, il ne peut plus changer.",
+    "issue_empty": "Ajoutez au moins une fiche, une discussion ou un article avant l'envoi."
   },
   "fields": {
     "required": "Ce champ est obligatoire.",
@@ -83,6 +92,18 @@
     "service_name_invalid": "Le nom du service doit compter de 2 à 60 caractères.",
     "docs_url_invalid": "Saisissez l'adresse https complète de la documentation publique.",
     "category_invalid": "Choisissez une catégorie : paiement, SMS ou USSD.",
-    "reason_invalid": "Le motif ne doit pas dépasser 500 caractères."
+    "reason_invalid": "Le motif ne doit pas dépasser 500 caractères.",
+    "post_category_invalid": "Choisissez une catégorie : actualité tech africaine, tutoriels ou portraits.",
+    "post_status_invalid": "Choisissez brouillon ou publié.",
+    "summary_invalid": "Le résumé doit compter de 1 à 300 caractères.",
+    "comment_too_long": "Le commentaire ne doit pas dépasser 5 000 caractères.",
+    "publish_at_invalid": "Saisissez une date et une heure de publication valides.",
+    "feed_invalid": "Choisissez un fil : récents, pour moi ou actualités.",
+    "action_invalid": "Choisissez masquer, bloquer ou rétablir.",
+    "suspended_invalid": "Indiquez si le blog est suspendu.",
+    "token_invalid": "Ce lien est incomplet. Copiez-le en entier depuis l'e-mail.",
+    "subject_invalid": "L'objet doit compter de 1 à 140 caractères.",
+    "intro_too_long": "L'introduction ne doit pas dépasser 5 000 caractères.",
+    "items_invalid": "Choisissez au plus 15 contenus existants."
   }
 }

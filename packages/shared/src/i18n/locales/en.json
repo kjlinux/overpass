@@ -33,7 +33,16 @@
     "admin_only": "This action is reserved to the moderation team.",
     "already_simulated": "This service already has a simulator.",
     "proposal_decided": "This proposal has already been reviewed.",
-    "service_exists": "This service is already in the catalogue."
+    "service_exists": "This service is already in the catalogue.",
+    "own_post": "You cannot star your own post.",
+    "already_starred": "You have already starred this post.",
+    "blog_suspended": "This blog is suspended by the moderation team.",
+    "own_blog": "You cannot follow your own blog.",
+    "post_translation_exists": "This post already exists in this language.",
+    "translation_invalid": "Link the translation to a post of the same kind, in the other language, that you can edit.",
+    "newsletter_link_invalid": "This link is no longer valid. Subscribe again to receive a new one.",
+    "issue_not_draft": "This issue has already gone out or is being sent, it can no longer change.",
+    "issue_empty": "Add at least one itinerary, discussion or post before sending."
   },
   "fields": {
     "required": "This field is required.",
@@ -83,6 +92,18 @@
     "service_name_invalid": "The service name must have 2 to 60 characters.",
     "docs_url_invalid": "Enter the full https address of the public documentation.",
     "category_invalid": "Choose a category: payment, SMS or USSD.",
-    "reason_invalid": "The reason must not exceed 500 characters."
+    "reason_invalid": "The reason must not exceed 500 characters.",
+    "post_category_invalid": "Choose a category: African tech news, tutorials or portraits.",
+    "post_status_invalid": "Choose draft or published.",
+    "summary_invalid": "The summary must be 1 to 300 characters long.",
+    "comment_too_long": "The comment must not exceed 5,000 characters.",
+    "publish_at_invalid": "Enter a valid publication date and time.",
+    "feed_invalid": "Choose a feed: recent, for me or news.",
+    "action_invalid": "Choose hide, block or restore.",
+    "suspended_invalid": "State whether the blog is suspended.",
+    "token_invalid": "This link is incomplete. Copy it in full from the e-mail.",
+    "subject_invalid": "The subject must be 1 to 140 characters long.",
+    "intro_too_long": "The introduction must not exceed 5,000 characters.",
+    "items_invalid": "Choose at most 15 existing items."
   }
 }

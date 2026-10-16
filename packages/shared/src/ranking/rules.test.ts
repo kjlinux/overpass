@@ -22,7 +22,15 @@ describe("pointsFor", () => {
   });
 
   it("adds every source", () => {
-    const all = { routes: 2, checks: 3, potholes: 1, accepted: 2, useful: 4, articles: 1, stars: 3 };
+    const all = {
+      routes: 2,
+      checks: 3,
+      potholes: 1,
+      accepted: 2,
+      useful: 4,
+      articles: 1,
+      stars: 3,
+    };
     expect(pointsFor(all)).toBe(20 + 6 + 5 + 10 + 4 + 10 + 3);
   });
 });
