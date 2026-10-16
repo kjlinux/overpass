@@ -73,7 +73,9 @@
     "notFoundTitle": "Itinerary not found",
     "notFoundText": "Its author may have deleted it.",
     "back": "Back to itineraries",
-    "actions": "State and actions"
+    "actions": "State and actions",
+    "notWorking": "It does not work for me",
+    "notWorkingNote": "Opens a question already tied to this route, its service and its country."
   },
   "potholes": {
     "heading": "Potholes",
@@ -129,7 +131,8 @@
     "submitCreate": "Publish the itinerary",
     "submitEdit": "Save a new version",
     "cancel": "Cancel",
-    "languageLocked": "A version keeps its language: to write another language, translate the sheet from its page."
+    "languageLocked": "A version keeps its language: to write another language, translate the sheet from its page.",
+    "titleFromThread": "Turn the thread into a route"
   },
   "coverage": {
     "heading": "Countries covered by {{service}}",
@@ -138,5 +141,14 @@
     "community": "Confirmed by members, through a sheet on a clear road:",
     "route": "see the sheet",
     "none": "No confirmed country yet. Publish a sheet and get it checked to complete the map."
+  },
+  "questions": {
+    "heading": "Questions about this route",
+    "open": "Open questions",
+    "resolved": "Resolved questions",
+    "noneOpen": "No open question.",
+    "noneResolved": "No resolved question yet.",
+    "meta_one": "{{count}} reply, active on {{date}}",
+    "meta_other": "{{count}} replies, active on {{date}}"
   }
 }

@@ -18,6 +18,7 @@ import { CoverageSection } from "./CoverageSection";
 import { ReportDialog, VerifyDialog } from "./dialogs";
 import { RouteActions } from "./RouteActions";
 import { RouteHead } from "./RouteHead";
+import { RouteQuestions } from "./RouteQuestions";
 import { StateBlock } from "./StateBlock";
 
 export type RouteViewActions = {
@@ -102,6 +103,7 @@ function Body(props: BodyProps): JSX.Element {
         class="max-w-prose border-t border-ink py-8 lg:hidden"
       />
       <CheckList route={route} />
+      <RouteQuestions routeId={route.id} />
       {props.service === undefined ? null : <CoverageSection service={props.service} />}
     </div>
   );

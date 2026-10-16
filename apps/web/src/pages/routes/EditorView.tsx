@@ -20,6 +20,7 @@ export type EditorViewProps = {
   onSaved: (id: string) => void;
   routeId?: string;
   translationOf?: string;
+  sourceThread?: string;
 };
 
 const asLanguage = (value: string) => supportedLanguages.find((code) => code === value);
@@ -56,7 +57,8 @@ function send(props: EditorViewProps, data: Draft) {
   }
   const translation =
     props.translationOf === undefined ? {} : { translationOf: props.translationOf };
-  return apiRequest<RouteDetail>("POST", "/v1/routes", { ...data, ...translation });
+  const thread = props.sourceThread === undefined ? {} : { sourceThread: props.sourceThread };
+  return apiRequest<RouteDetail>("POST", "/v1/routes", { ...data, ...translation, ...thread });
 }
 
 function ContentField({ binding }: { binding: FieldBinding }): JSX.Element {

@@ -1,5 +1,5 @@
 import { supportedLanguages } from "@overpass/shared";
-import type { RouteDetail, Service } from "@overpass/shared";
+import type { RouteDetail, Service, ThreadDetail } from "@overpass/shared";
 import type { JSX } from "preact";
 import { useLocation, useRoute } from "preact-iso";
 import { useTranslation } from "react-i18next";
@@ -8,7 +8,7 @@ import { Skeleton } from "../../components/ui";
 import { Layout, localizedPath } from "../../layout";
 import { RequireSession } from "../../session";
 import { ErrorPage } from "../errors";
-import { draftFrom, newDraft } from "./draft";
+import { draftFrom, newDraft, threadDraft } from "./draft";
 import type { Draft } from "./draft";
 import { EditorView } from "./EditorView";
 import type { EditorViewProps } from "./EditorView";
@@ -64,15 +64,32 @@ function EditorShell({ heading, draft, extra }: ShellProps): JSX.Element {
   );
 }
 
-/** A new itinerary, or a translation when ?translationOf= names the source. */
+/** A route written from a resolved thread keeps the link to that thread. */
+function FromThreadPage({ threadId }: { threadId: string }): JSX.Element {
+  const { t } = useTranslation("routes");
+  const language = useLanguage();
+  const { state } = useApi<ThreadDetail>(`/v1/threads/${threadId}`);
+  if (state.status === "notFound") return <ErrorPage kind="notFound" language={language} />;
+  return (
+    <EditorShell
+      heading={t("editor.titleFromThread")}
+      draft={state.status === "ready" ? threadDraft(state.data) : null}
+      extra={{ mode: "create", sourceThread: threadId }}
+    />
+  );
+}
+
+/** A new itinerary, a translation (?translationOf=) or a route from a thread (?fromThread=). */
 export function NewRoutePage(): JSX.Element {
   const { t } = useTranslation("routes");
   const language = useLanguage();
   const { query } = useLocation();
+  const threadId = query["fromThread"];
   const sourceId = query["translationOf"];
   const source = useApi<RouteDetail>(
     sourceId === undefined ? null : `/v1/routes/${sourceId}`,
   ).state;
+  if (threadId !== undefined) return <FromThreadPage threadId={threadId} />;
   if (sourceId === undefined) {
     return (
       <EditorShell

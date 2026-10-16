@@ -5,6 +5,7 @@ export { CodeBlock, InlineCode, copyText } from "./CodeBlock";
 export { ConfirmDialog } from "./ConfirmDialog";
 export { cx } from "./cx";
 export { EmptyState } from "./EmptyState";
+export { Flag } from "./Flag";
 export { Choice, Field, Select, TextInput, Textarea } from "./Field";
 export type { SelectOption } from "./Field";
 export { Notification, NotificationStack } from "./Notification";

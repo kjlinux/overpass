@@ -1,0 +1,37 @@
+{
+  "title": "Classement",
+  "intro": "Les pays et les développeurs qui font avancer les intégrations africaines. Les points sont calculés à partir des contributions, jamais saisis.",
+  "countries": {
+    "heading": "Pays"
+  },
+  "developers": {
+    "heading": "Développeurs",
+    "country": "Pays",
+    "all": "Tous les pays",
+    "filter": "Afficher"
+  },
+  "columns": {
+    "rank": "Rang",
+    "country": "Pays",
+    "developer": "Développeur",
+    "points": "Points",
+    "developers": "Développeurs"
+  },
+  "empty": {
+    "title": "Personne n'a encore de points",
+    "text": "Publiez une fiche, vérifiez-en une ou répondez à une question pour ouvrir le classement.",
+    "action": "Parcourir les itinéraires"
+  },
+  "rules": {
+    "heading": "Comment gagner des points",
+    "intro": "Chaque contribution compte une fois ; un contenu masqué ou retiré ne rapporte rien.",
+    "routes": "Fiche publiée",
+    "checks": "Vérification d'une fiche",
+    "potholes": "Piège confirmé par l'auteur",
+    "accepted": "Réponse acceptée",
+    "useful": "Réponse jugée utile",
+    "articles": "Article publié",
+    "points_one": "{{count}} point",
+    "points_other": "{{count}} points"
+  }
+}

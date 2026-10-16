@@ -17,6 +17,7 @@ const memberLinks: Link[] = [
   { key: "settings", path: "/settings" },
 ];
 const visitorLinks: Link[] = [{ key: "signIn", path: "/sign-in" }];
+const moderationLink: Link = { key: "moderation", path: "/admin/moderation" };
 
 /** The closing action: sign up for a visitor, sign out for a member. */
 function LastAction({ language, inMenu }: Props): JSX.Element {
@@ -47,7 +48,9 @@ function LastAction({ language, inMenu }: Props): JSX.Element {
 export function AccountLinks({ language, inMenu }: Props): JSX.Element {
   const { t } = useTranslation("layout");
   const { me } = useSession();
-  const links = me === null || me === undefined ? visitorLinks : memberLinks;
+  const signedIn = me !== null && me !== undefined;
+  const staff = signedIn && me.role === "admin" ? [moderationLink] : [];
+  const links = signedIn ? [...memberLinks, ...staff] : visitorLinks;
   const href = (link: Link) => localizedPath(language, link.path);
   if (inMenu) {
     return (

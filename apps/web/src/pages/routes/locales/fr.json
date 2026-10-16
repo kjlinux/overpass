@@ -73,7 +73,9 @@
     "notFoundTitle": "Itinéraire introuvable",
     "notFoundText": "Il a peut-être été supprimé par son auteur.",
     "back": "Retour aux itinéraires",
-    "actions": "État et actions"
+    "actions": "État et actions",
+    "notWorking": "Ça ne marche pas chez moi",
+    "notWorkingNote": "Ouvre une question déjà rattachée à cette fiche, à son service et à son pays."
   },
   "potholes": {
     "heading": "Nids-de-poule",
@@ -129,7 +131,8 @@
     "submitCreate": "Publier l'itinéraire",
     "submitEdit": "Enregistrer une nouvelle version",
     "cancel": "Annuler",
-    "languageLocked": "Une version garde sa langue : pour une autre langue, traduisez la fiche depuis sa page."
+    "languageLocked": "Une version garde sa langue : pour une autre langue, traduisez la fiche depuis sa page.",
+    "titleFromThread": "Transformer le sujet en fiche"
   },
   "coverage": {
     "heading": "Pays couverts par {{service}}",
@@ -138,5 +141,14 @@
     "community": "Confirmés par les membres, grâce à une fiche en voie libre :",
     "route": "voir la fiche",
     "none": "Aucun pays confirmé pour l'instant. Publiez une fiche et faites-la vérifier pour compléter la carte."
+  },
+  "questions": {
+    "heading": "Questions sur cette fiche",
+    "open": "Questions ouvertes",
+    "resolved": "Questions résolues",
+    "noneOpen": "Aucune question ouverte.",
+    "noneResolved": "Aucune question résolue pour l'instant.",
+    "meta_one": "{{count}} réponse, active le {{date}}",
+    "meta_other": "{{count}} réponses, active le {{date}}"
   }
 }

@@ -23,6 +23,8 @@ const groups: LinkGroup[] = [
       { key: "discussions", path: "/discussions" },
       { key: "blog", path: "/blog" },
       { key: "ranking", path: "/ranking" },
+      { key: "simulators", path: "/simulator-requests" },
+      { key: "propose", path: "/services/propose" },
     ],
   },
   {

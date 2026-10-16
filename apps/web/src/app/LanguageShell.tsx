@@ -39,6 +39,31 @@ const ComponentsPage = lazyPage(
   "showcase",
   async () => (await import("../pages/showcase")).ComponentsPage,
 );
+const discussions = () => import("../pages/discussions");
+const ThreadsPage = lazyPage("discussions", async () => (await discussions()).ThreadsPage);
+const NewThreadPage = lazyPage("discussions", async () => (await discussions()).NewThreadPage);
+const ThreadPage = lazyPage("discussions", async () => (await discussions()).ThreadPage);
+const RankingPage = lazyPage("ranking", async () => (await import("../pages/ranking")).RankingPage);
+const requests = () => import("../pages/requests");
+const ServicePage = lazyPage("requests", async () => (await requests()).ServicePage);
+const ProposePage = lazyPage("requests", async () => (await requests()).ProposePage);
+const RequestsPage = lazyPage("requests", async () => (await requests()).SimulatorRequestsPage);
+const ModerationPage = lazyPage(
+  "moderation",
+  async () => (await import("../pages/moderation")).ModerationPage,
+);
+
+/** Discussions, ranking, service requests and moderation; the router flattens the array. */
+const communityRoutes = [
+  ["/discussions", ThreadsPage],
+  ["/discussions/new", NewThreadPage],
+  ["/discussions/:id", ThreadPage],
+  ["/ranking", RankingPage],
+  ["/services/propose", ProposePage],
+  ["/services/:slug", ServicePage],
+  ["/simulator-requests", RequestsPage],
+  ["/admin/moderation", ModerationPage],
+] as const;
 
 /** Applies the language of the URL prefix and routes the rest of the path. */
 export function LanguageShell() {
@@ -75,6 +100,9 @@ export function LanguageShell() {
         <Route path="/sandbox" component={TrackPage} />
         <Route path="/sandbox/demo" component={DemoPage} />
         <Route path="/sandbox/launch/:provider/:id" component={LaunchPage} />
+        {communityRoutes.map(([path, page]) => (
+          <Route key={path} path={path} component={page} />
+        ))}
         <Route default component={NotFound} />
       </Router>
     </ErrorBoundary>

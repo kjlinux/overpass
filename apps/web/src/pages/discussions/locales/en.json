@@ -1,0 +1,93 @@
+{
+  "deletedAuthor": "Deleted account",
+  "state": {
+    "open": "Open",
+    "resolved": "Resolved"
+  },
+  "list": {
+    "title": "Discussions",
+    "intro": "Integrations, cloud, tools, career, projects and events: ask your question, developers across the continent answer it.",
+    "new": "New thread",
+    "resultsHeading": "Threads",
+    "replies_one": "{{count}} reply",
+    "replies_other": "{{count}} replies",
+    "activity": "Active on {{date}}",
+    "more": "Show the next threads",
+    "emptyTitle": "No thread matches",
+    "emptyText": "Remove a filter, or open the first thread on this question."
+  },
+  "filters": {
+    "heading": "Filters",
+    "topic": "Theme",
+    "country": "Country",
+    "stack": "Stack",
+    "language": "Language",
+    "state": "State",
+    "any": "All",
+    "submit": "Filter",
+    "reset": "Clear the filters"
+  },
+  "form": {
+    "heading": "New thread",
+    "headingRoute": "It does not work for me",
+    "intro": "Describe what you tried and what you get. Keys, tokens and passwords pasted by mistake are masked before publishing.",
+    "fromRoute": "Question about a {{service}} route:",
+    "title": "Title",
+    "titleHelp": "One sentence of 8 to 140 characters, such as the main error message.",
+    "content": "Message",
+    "contentHelp": "Markdown accepted: lists, links, code between backticks.",
+    "errorText": "Error message (optional)",
+    "errorHelp": "Paste the response or the message as received.",
+    "codeText": "Code (optional)",
+    "codeHelp": "The call or function at fault, without your real keys.",
+    "topic": "Theme",
+    "language": "Language of the thread",
+    "country": "Country (optional)",
+    "stack": "Stack (optional)",
+    "preview": "What will be published",
+    "masked_one": "{{count}} secret masked before publishing.",
+    "masked_other": "{{count}} secrets masked before publishing.",
+    "noSecret": "No key or token detected.",
+    "errorCaption": "error",
+    "codeCaption": "code",
+    "submit": "Publish the thread"
+  },
+  "facts": {
+    "topic": "Theme",
+    "author": "Author",
+    "date": "Opened on",
+    "language": "Language",
+    "country": "Country",
+    "stack": "Stack"
+  },
+  "detail": {
+    "trail": "Breadcrumb",
+    "actions": "Thread actions",
+    "aboutRoute": "Question about the {{service}} route:",
+    "transform": "Turn into a route",
+    "transformNote": "The editor opens with the question and the accepted reply; the route keeps the link to this thread.",
+    "seeRoute": "See the route written from this thread",
+    "report": "Report this thread",
+    "reported": "You reported this thread. The moderation team will review it.",
+    "replies_one": "{{count}} reply",
+    "replies_other": "{{count}} replies"
+  },
+  "reply": {
+    "accepted": "Accepted reply",
+    "useful_one": "Useful, {{count}} vote",
+    "useful_other": "Useful, {{count}} votes",
+    "voted_one": "You found it useful, {{count}} vote",
+    "voted_other": "You found it useful, {{count}} votes",
+    "accept": "Accept this reply",
+    "report": "Report",
+    "label": "Your reply",
+    "help": "Markdown accepted. Pasted secrets are masked before publishing.",
+    "submit": "Reply",
+    "signIn": "Sign in to reply"
+  },
+  "hidden": {
+    "thread": "This thread is hidden after two reports, until the moderation team decides.",
+    "reply": "This reply is hidden after two reports, until the moderation team decides.",
+    "removed": "This content was removed by the moderation team."
+  }
+}

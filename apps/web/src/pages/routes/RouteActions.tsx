@@ -99,6 +99,18 @@ export function RouteActions({ route, onVerify, onRemove }: RouteActionsProps): 
     <div class="flex flex-col gap-4">
       <TestAction route={route} />
       <VerifyAction route={route} onVerify={onVerify} />
+      <div class="flex flex-col gap-2">
+        <ButtonLink
+          class="w-full"
+          aria-describedby="ask-note"
+          href={localizedPath(language, `/discussions/new?route=${route.id}`)}
+        >
+          {t("detail.notWorking")}
+        </ButtonLink>
+        <p id="ask-note" class="text-caption text-ink-2">
+          {t("detail.notWorkingNote")}
+        </p>
+      </div>
       {route.viewer.isAuthor ? (
         <div class="flex flex-wrap gap-2 border-t border-rule pt-4">
           <ButtonLink variant="ghost" href={localizedPath(language, `/routes/${route.id}/edit`)}>

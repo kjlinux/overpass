@@ -39,7 +39,10 @@
     "ranking": "Ranking",
     "about": "About",
     "legal": "Legal notice",
-    "privacy": "Privacy"
+    "privacy": "Privacy",
+    "simulators": "Requested simulators",
+    "propose": "Propose a service"
   },
-  "legalLine": "Overpass by Ghostapi, Côte d'Ivoire. Code under a free licence."
+  "legalLine": "Overpass by Ghostapi, Côte d'Ivoire. Code under a free licence.",
+  "moderation": "Moderation"
 }
