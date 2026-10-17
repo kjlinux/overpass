@@ -1,0 +1,62 @@
+{
+  "title": "Test Track",
+  "subtitle": "Mobile Money Payment Simulator",
+  "intro": "Test your Wave and CinetPay integrations under real conditions without a merchant account or certificate.",
+  "quickDemo": "Interactive Demonstration",
+  "provider": "Provider",
+  "scenario": "Scenario to simulate",
+  "apiKey": {
+    "title": "Sandbox Test Key",
+    "generate": "Generate a test key",
+    "active": "Active key",
+    "quota": "Remaining quota: {{remaining}} requests",
+    "expires": "Expires on: {{date}}",
+    "anonymousNotice": "You are using guest mode (simulation without persistence). Sign in or generate a key to preserve your webhook event log."
+  },
+  "scenarios": {
+    "payment_success": "Payment succeeded",
+    "payment_success_desc": "Transaction succeeds and triggers a signed webhook.",
+    "insufficient_funds": "Insufficient funds",
+    "insufficient_funds_desc": "Payer wallet has insufficient balance; failure or cancellation webhook sent.",
+    "operator_timeout": "Operator timeout",
+    "operator_timeout_desc": "Operator does not reply within deadline (HTTP 504 Gateway Timeout).",
+    "duplicate_webhook": "Duplicate webhook received",
+    "duplicate_webhook_desc": "Identical webhook is sent twice to test your server idempotency.",
+    "delayed_webhook": "Delayed webhook received",
+    "delayed_webhook_desc": "Simulates network latency prior to webhook delivery."
+  },
+  "form": {
+    "amount": "Amount",
+    "currency": "Currency",
+    "webhookUrl": "Webhook URL (optional)",
+    "webhookUrlHint": "To test delivery to your public test endpoint. Private and local addresses are blocked (SSRF).",
+    "webhookPlaceholder": "https://my-server.com/api/webhook",
+    "secret": "Shared HMAC secret (optional)",
+    "secretPlaceholder": "secret_test_xyz",
+    "simulate": "Run simulation",
+    "simulating": "Simulating..."
+  },
+  "results": {
+    "title": "Exchange Inspector",
+    "request": "Request sent",
+    "response": "Response received",
+    "webhooks": "Generated webhooks ({{count}})",
+    "webhookItem": "Webhook #{{index}}",
+    "noWebhooks": "No webhooks generated for this scenario.",
+    "signatureHeader": "Signature header",
+    "deliveryStatus": "Delivery status: {{status}}",
+    "delay": "Simulated delay: {{delay}} ms",
+    "duplicate": "Simulated duplicate (idempotency)",
+    "rawPayload": "Raw payload (JSON)",
+    "copy": "Copy",
+    "copied": "Copied!"
+  },
+  "history": {
+    "title": "Simulation History",
+    "empty": "No simulations recorded for this key yet.",
+    "colScenario": "Scenario",
+    "colStatus": "HTTP Status",
+    "colWebhooks": "Webhooks",
+    "colDate": "Date"
+  }
+}

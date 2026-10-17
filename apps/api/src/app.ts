@@ -14,6 +14,7 @@ import { createMailer } from "./mail/mailer.js";
 import type { Mailer } from "./mail/mailer.js";
 import { itineraries } from "./itineraries.js";
 import { registerAccounts } from "./modules/accounts/index.js";
+import { registerSandbox } from "./modules/sandbox/index.js";
 
 export type AppConfig = Pick<
   Config,
@@ -59,6 +60,7 @@ export async function buildApp({ config, db, mailer, now }: AppDeps): Promise<Fa
       contributions: catalogue.contributions,
     });
     await catalogue.register(app, resolveAccount);
+    await registerSandbox(app, { db, resolveAccount });
   }
   return app;
 }

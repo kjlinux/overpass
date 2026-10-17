@@ -20,7 +20,11 @@
     "own_route": "You wrote this itinerary: another developer has to check it.",
     "check_too_soon": "You already checked this itinerary in the last 30 days.",
     "translation_exists": "This itinerary already exists in that language.",
-    "pothole_exists": "You already reported an unresolved pothole on this itinerary."
+    "pothole_exists": "You already reported an unresolved pothole on this itinerary.",
+    "sandbox_key_invalid": "This test key is invalid or expired.",
+    "sandbox_quota_exhausted": "The request quota for this test key has been exhausted.",
+    "sandbox_ssrf_blocked": "The webhook address targets a private or local network and was refused.",
+    "provider_not_found": "This simulated provider was not found."
   },
   "fields": {
     "required": "This field is required.",

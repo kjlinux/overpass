@@ -35,6 +35,7 @@ const ComponentsPage = lazyPage(
   "showcase",
   async () => (await import("../pages/showcase")).ComponentsPage,
 );
+const SandboxPage = lazyPage("sandbox", async () => (await import("../pages/sandbox")).SandboxPage);
 
 /** Applies the language of the URL prefix and routes the rest of the path. */
 export function LanguageShell() {
@@ -55,6 +56,7 @@ export function LanguageShell() {
       <Router>
         <Route path="/" component={HomePage} />
         <Route path="/components" component={ComponentsPage} />
+        <Route path="/sandbox" component={SandboxPage} />
         <Route path="/sign-up" component={SignUpPage} />
         <Route path="/sign-up/confirm" component={ConfirmPage} />
         <Route path="/sign-up/stacks" component={StacksPage} />

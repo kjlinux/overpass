@@ -20,7 +20,11 @@
     "own_route": "Vous êtes l'auteur de cette fiche : un autre développeur doit la vérifier.",
     "check_too_soon": "Vous avez déjà vérifié cette fiche ces 30 derniers jours.",
     "translation_exists": "Cette fiche existe déjà dans cette langue.",
-    "pothole_exists": "Vous avez déjà signalé un nid-de-poule non résolu sur cette fiche."
+    "pothole_exists": "Vous avez déjà signalé un nid-de-poule non résolu sur cette fiche.",
+    "sandbox_key_invalid": "Cette clé de test est invalide ou expirée.",
+    "sandbox_quota_exhausted": "Le quota de requêtes de cette clé de test est épuisé.",
+    "sandbox_ssrf_blocked": "L'adresse de webhook cible un réseau privé ou local et a été refusée.",
+    "provider_not_found": "Cet opérateur simulé est introuvable."
   },
   "fields": {
     "required": "Ce champ est obligatoire.",

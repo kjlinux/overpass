@@ -1,0 +1,62 @@
+{
+  "title": "Piste d'essai",
+  "subtitle": "Simulateur de paiements Mobile Money",
+  "intro": "Testez vos flux de paiement Wave et CinetPay en conditions réelles sans compte marchand ni certificat.",
+  "quickDemo": "Démonstration interactive",
+  "provider": "Opérateur",
+  "scenario": "Scénario à simuler",
+  "apiKey": {
+    "title": "Clé de test Sandbox",
+    "generate": "Générer une clé de test",
+    "active": "Clé active",
+    "quota": "Quota restant : {{remaining}} requêtes",
+    "expires": "Expire le : {{date}}",
+    "anonymousNotice": "Vous utilisez le mode visiteur (simulation sans persistance). Connectez-vous ou générez une clé pour conserver votre historique de webhooks."
+  },
+  "scenarios": {
+    "payment_success": "Paiement réussi",
+    "payment_success_desc": "La transaction aboutit et déclenche un webhook signé.",
+    "insufficient_funds": "Solde insuffisant",
+    "insufficient_funds_desc": "Le compte du payeur est à sec ; notification d'échec ou d'annulation.",
+    "operator_timeout": "Délai opérateur dépassé",
+    "operator_timeout_desc": "L'opérateur ne répond pas dans le délai imparti (HTTP 504 Gateway Timeout).",
+    "duplicate_webhook": "Webhook reçu en double",
+    "duplicate_webhook_desc": "Le même webhook est envoyé deux fois pour valider l'idempotence de votre serveur.",
+    "delayed_webhook": "Webhook reçu en retard",
+    "delayed_webhook_desc": "Simule une latence réseau avant la délivrance du webhook."
+  },
+  "form": {
+    "amount": "Montant",
+    "currency": "Devise",
+    "webhookUrl": "URL de webhook (optionnelle)",
+    "webhookUrlHint": "Pour tester la réception sur votre serveur public. Les adresses privées et locales sont rejetées (SSRF).",
+    "webhookPlaceholder": "https://mon-serveur.com/api/webhook",
+    "secret": "Secret partagé HMAC (optionnel)",
+    "secretPlaceholder": "secret_test_xyz",
+    "simulate": "Lancer la simulation",
+    "simulating": "Simulation en cours..."
+  },
+  "results": {
+    "title": "Inspecteur d'échange",
+    "request": "Requête émise",
+    "response": "Réponse reçue",
+    "webhooks": "Webhooks générés ({{count}})",
+    "webhookItem": "Webhook #{{index}}",
+    "noWebhooks": "Aucun webhook généré pour ce scénario.",
+    "signatureHeader": "En-tête de signature",
+    "deliveryStatus": "Statut de livraison : {{status}}",
+    "delay": "Délai simulé : {{delay}} ms",
+    "duplicate": "Doublon simulé (idempotence)",
+    "rawPayload": "Données brutes (JSON)",
+    "copy": "Copier",
+    "copied": "Copié !"
+  },
+  "history": {
+    "title": "Historique des simulations",
+    "empty": "Aucune simulation enregistrée sur cette clé.",
+    "colScenario": "Scénario",
+    "colStatus": "Statut HTTP",
+    "colWebhooks": "Webhooks",
+    "colDate": "Date"
+  }
+}

@@ -7,8 +7,8 @@ import { Button, ButtonLink } from "../../components/ui";
 import { localizedPath } from "../../layout";
 import { formatDate } from "./format";
 
-/** The sandbox module has not shipped yet; flip this when its page exists. */
-const testTrackReady: boolean = false;
+/** The sandbox module has shipped. */
+const testTrackReady: boolean = true;
 
 const blocked =
   "aria-disabled:cursor-not-allowed aria-disabled:border-rule aria-disabled:bg-surface aria-disabled:text-ink-2";

@@ -3,7 +3,6 @@ import i18next from "i18next";
 
 export type ApiMethod = "GET" | "POST" | "PATCH" | "PUT" | "DELETE";
 
-/** Code used when the API could not be reached at all. */
 export const networkErrorCode = "network";
 
 function networkFailure(): Envelope<never> {
@@ -15,6 +14,7 @@ export async function apiRequest<T>(
   method: ApiMethod,
   path: string,
   body?: object,
+  customHeaders?: Record<string, string>,
 ): Promise<Envelope<T>> {
   try {
     const response = await fetch(path, {
@@ -24,6 +24,7 @@ export async function apiRequest<T>(
         accept: "application/json",
         "accept-language": i18next.language,
         ...(body === undefined ? {} : { "content-type": "application/json" }),
+        ...customHeaders,
       },
       ...(body === undefined ? {} : { body: JSON.stringify(body) }),
     });
