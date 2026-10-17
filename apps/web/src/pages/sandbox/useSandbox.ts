@@ -2,7 +2,7 @@ import type { SandboxEventOutput, SandboxKeyOutput, SandboxScenario } from "@ove
 import { useCallback, useState } from "preact/hooks";
 import { apiRequest } from "../../session/api";
 import { providers } from "./types";
-import type { ProviderOption, SimulationResult } from "./types";
+import type { ProviderId, ProviderOption, SimulationResult } from "./types";
 
 const defaultProvider: ProviderOption = providers[0] ?? {
   id: "wave",
@@ -24,6 +24,26 @@ function buildSimulationBody(provider: ProviderOption, amount: string, currency:
       description: "Test simulation Overpass",
     };
   }
+  if (provider.id === "pispi") {
+    return {
+      amount,
+      currency,
+      debtor_account: "+2250700000001",
+      creditor_account: "+2250700000002",
+      narrative: "Instant transfer PI-SPI",
+    };
+  }
+  if (provider.id === "paydunya") {
+    return {
+      invoice: {
+        total_amount: amount,
+        description: "PayDunya Invoice Overpass",
+      },
+      store: {
+        name: "Overpass Demo",
+      },
+    };
+  }
   return {
     amount,
     currency,
@@ -32,8 +52,9 @@ function buildSimulationBody(provider: ProviderOption, amount: string, currency:
   };
 }
 
-function useSandboxFormState(initial: "wave" | "cinetpay") {
-  const [providerId, setProviderId] = useState<"wave" | "cinetpay">(initial);
+function useSandboxFormState(initial: ProviderId) {
+  const [providerId, setProviderId] = useState<ProviderId>(initial);
+
   const [scenario, setScenario] = useState<SandboxScenario>("payment_success");
   const [amount, setAmount] = useState("1000");
   const [currency, setCurrency] = useState("XOF");
@@ -149,7 +170,7 @@ function useSimulationRunner(form: FormState) {
   };
 }
 
-export function useSandbox(initialProvider: "wave" | "cinetpay" = "wave") {
+export function useSandbox(initialProvider: ProviderId = "wave") {
   const form = useSandboxFormState(initialProvider);
   const runner = useSimulationRunner(form);
   return { ...form, ...runner };

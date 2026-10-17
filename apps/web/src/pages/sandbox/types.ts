@@ -1,7 +1,9 @@
 import type { SandboxEventOutput, SandboxKeyOutput, SandboxScenario } from "@overpass/shared";
 
+export type ProviderId = "wave" | "cinetpay" | "pispi" | "paydunya";
+
 export type ProviderOption = {
-  id: "wave" | "cinetpay";
+  id: ProviderId;
   name: string;
   samplePath: string;
   defaultCurrency: string;
@@ -26,6 +28,22 @@ export const providers: ProviderOption[] = [
     defaultAmount: "2500",
     signatureHeader: "x-token",
   },
+  {
+    id: "pispi",
+    name: "PI-SPI (BCEAO)",
+    samplePath: "/v1/instant-transfers",
+    defaultCurrency: "XOF",
+    defaultAmount: "5000",
+    signatureHeader: "pispi-signature",
+  },
+  {
+    id: "paydunya",
+    name: "PayDunya",
+    samplePath: "/api/v1/checkout-invoice/create",
+    defaultCurrency: "XOF",
+    defaultAmount: "2000",
+    signatureHeader: "x-paydunya-signature",
+  },
 ];
 
 export type SimulationResult = {
@@ -48,7 +66,7 @@ export type SimulationResult = {
 };
 
 export type SandboxState = {
-  provider: "wave" | "cinetpay";
+  provider: ProviderId;
   scenario: SandboxScenario;
   amount: string;
   currency: string;

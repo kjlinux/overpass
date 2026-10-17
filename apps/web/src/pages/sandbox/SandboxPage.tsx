@@ -9,6 +9,7 @@ import { SandboxForm } from "./SandboxForm";
 import { SandboxHistory } from "./SandboxHistory";
 import { SandboxKeyCard } from "./SandboxKeyCard";
 import { SandboxResults } from "./SandboxResults";
+import type { ProviderId } from "./types";
 import { useSandbox } from "./useSandbox";
 
 function SandboxHeader(): JSX.Element {
@@ -63,12 +64,14 @@ export function SandboxPage(): JSX.Element {
   const { url } = useLocation();
   const searchParams = new URLSearchParams(url.includes("?") ? url.slice(url.indexOf("?")) : "");
   const serviceParam = searchParams.get("service");
-  const initialProvider = serviceParam === "cinetpay" ? "cinetpay" : "wave";
+  const isKnownProvider = (s: string | null): s is ProviderId =>
+    s === "cinetpay" || s === "wave" || s === "pispi" || s === "paydunya";
+  const initialProvider = isKnownProvider(serviceParam) ? serviceParam : "wave";
 
   const state = useSandbox(initialProvider);
 
   useEffect(() => {
-    if (serviceParam === "cinetpay" || serviceParam === "wave") {
+    if (isKnownProvider(serviceParam)) {
       state.setProviderId(serviceParam);
     }
   }, [serviceParam, state.setProviderId]);

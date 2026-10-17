@@ -3,7 +3,7 @@ import type { JSX } from "preact";
 import { useTranslation } from "react-i18next";
 import { Button, Field, TextInput, cx } from "../../components/ui";
 import { providers } from "./types";
-import type { ProviderOption } from "./types";
+import type { ProviderId, ProviderOption } from "./types";
 
 const scenarioKeys: SandboxScenario[] = [
   "payment_success",
@@ -21,7 +21,7 @@ type Props = {
   webhookUrl: string;
   secret: string;
   loading: boolean;
-  onProviderChange: (id: "wave" | "cinetpay") => void;
+  onProviderChange: (id: ProviderId) => void;
   onScenarioChange: (s: SandboxScenario) => void;
   onAmountChange: (v: string) => void;
   onCurrencyChange: (v: string) => void;
@@ -35,7 +35,7 @@ function ProviderPicker({
   onChange,
 }: {
   selected: string;
-  onChange: (id: "wave" | "cinetpay") => void;
+  onChange: (id: ProviderId) => void;
 }): JSX.Element {
   return (
     <div class="flex gap-2 border-b border-rule pb-3">

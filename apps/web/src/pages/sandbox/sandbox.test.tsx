@@ -59,6 +59,9 @@ describe("SandboxForm", () => {
     );
     expect(html).toContain("Wave");
     expect(html).toContain("CinetPay");
+    expect(html).toContain("PI-SPI (BCEAO)");
+    expect(html).toContain("PayDunya");
+
     expect(html).toContain(fr.scenarios.payment_success);
     expect(html).toContain(fr.scenarios.insufficient_funds);
     expect(html).toContain(fr.scenarios.operator_timeout);
