@@ -36,6 +36,13 @@ const ComponentsPage = lazyPage(
   async () => (await import("../pages/showcase")).ComponentsPage,
 );
 const SandboxPage = lazyPage("sandbox", async () => (await import("../pages/sandbox")).SandboxPage);
+const discussions = () => import("../pages/discussions");
+const DiscussionsPage = lazyPage("discussions", async () => (await discussions()).DiscussionsPage);
+const NewThreadPage = lazyPage("discussions", async () => (await discussions()).NewThreadPage);
+const ThreadDetailPage = lazyPage(
+  "discussions",
+  async () => (await discussions()).ThreadDetailPage,
+);
 
 /** Applies the language of the URL prefix and routes the rest of the path. */
 export function LanguageShell() {
@@ -70,6 +77,9 @@ export function LanguageShell() {
         <Route path="/routes/new" component={NewRoutePage} />
         <Route path="/routes/:id/edit" component={EditRoutePage} />
         <Route path="/routes/:id" component={DetailPage} />
+        <Route path="/discussions" component={DiscussionsPage} />
+        <Route path="/discussions/new" component={NewThreadPage} />
+        <Route path="/discussions/:id" component={ThreadDetailPage} />
         <Route default component={NotFound} />
       </Router>
     </ErrorBoundary>

@@ -1,0 +1,69 @@
+{
+  "title": "Discussions",
+  "subtitle": "Discuss payment gateway integrations, cloud deployment and engineering challenges in Africa.",
+  "newThread": "New topic",
+  "topics": {
+    "all": "All topics",
+    "label": "Topic"
+  },
+  "country": {
+    "all": "All countries",
+    "label": "Country"
+  },
+  "stack": {
+    "all": "All stacks",
+    "label": "Technical stack"
+  },
+  "search": "Search discussions...",
+  "empty": {
+    "title": "No discussions found",
+    "description": "Be the first to ask a question or start a conversation with fellow engineers.",
+    "action": "Start a topic"
+  },
+  "card": {
+    "replies_zero": "0 replies",
+    "replies_one": "{{count}} reply",
+    "replies_other": "{{count}} replies",
+    "accepted": "Solved",
+    "authorBy": "By {{handle}}",
+    "linkedRoute": "Linked guide"
+  },
+  "new": {
+    "title": "Start a new topic",
+    "intro": "Ask a technical question or share implementation feedback with the developer community.",
+    "topic": "Discussion topic",
+    "topicPlaceholder": "Select a topic",
+    "threadTitle": "Topic title",
+    "threadTitlePlaceholder": "e.g. Wave webhook latency in production",
+    "country": "Country (optional)",
+    "countryPlaceholder": "Select a country",
+    "stack": "Technical stack (optional)",
+    "stackPlaceholder": "Select a technology",
+    "routeId": "Linked Overpass guide ID (optional)",
+    "routeIdPlaceholder": "00000000-0000-4000-8000-000000000000",
+    "content": "Detailed description",
+    "contentPlaceholder": "Describe the issue encountered, environment context and logs...",
+    "markdownHelp": "Markdown formatting is supported.",
+    "submit": "Publish topic",
+    "submitting": "Publishing...",
+    "signInRequired": "You must be signed in to start a topic."
+  },
+  "detail": {
+    "back": "Back to discussions",
+    "author": "By {{handle}} on {{date}}",
+    "linkedRoute": "Linked guide: view itinerary",
+    "transformToRoute": "Turn into guide",
+    "repliesTitle": "Replies",
+    "noReplies": "No replies yet. Share your experience!",
+    "acceptedAnswer": "Answer accepted by author",
+    "acceptAction": "Accept as solution",
+    "accepting": "Accepting...",
+    "voteUseful": "Helpful",
+    "voting": "Voting...",
+    "addReplyTitle": "Your reply",
+    "replyPlaceholder": "Share a solution, hints or constructive insights...",
+    "submitReply": "Post reply",
+    "submittingReply": "Posting...",
+    "signInToReply": "Sign in to reply to this discussion."
+  }
+}

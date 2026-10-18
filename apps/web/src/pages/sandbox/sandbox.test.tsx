@@ -118,5 +118,7 @@ describe("SandboxHistory", () => {
     const html = page(<SandboxHistory events={mockEvents} />);
     expect(html).toContain(fr.scenarios.payment_success);
     expect(html).toContain("200");
+    expect(html).toContain("17");
+    expect(html).toContain("oct");
   });
 });

@@ -9,3 +9,4 @@ design-demos/
 .claude/skills/
 test-results/
 playwright-report/
+.data/

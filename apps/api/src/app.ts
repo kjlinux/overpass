@@ -13,7 +13,8 @@ import { counterStoreFor, postgresCounters } from "./limits/index.js";
 import { createMailer } from "./mail/mailer.js";
 import type { Mailer } from "./mail/mailer.js";
 import { itineraries } from "./itineraries.js";
-import { registerAccounts } from "./modules/accounts/index.js";
+import { handleDirectory, registerAccounts } from "./modules/accounts/index.js";
+import { registerCommunity } from "./modules/community/index.js";
 import { registerSandbox } from "./modules/sandbox/index.js";
 
 export type AppConfig = Pick<
@@ -61,6 +62,8 @@ export async function buildApp({ config, db, mailer, now }: AppDeps): Promise<Fa
     });
     await catalogue.register(app, resolveAccount);
     await registerSandbox(app, { db, resolveAccount });
+    registerCommunity(app, { db, resolveAccount, handles: handleDirectory(db) });
   }
+
   return app;
 }

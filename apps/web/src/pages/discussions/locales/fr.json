@@ -1,0 +1,69 @@
+{
+  "title": "Discussions",
+  "subtitle": "Échanger sur l'intégration des passerelles, le déploiement et les défis techniques en Afrique.",
+  "newThread": "Nouveau sujet",
+  "topics": {
+    "all": "Tous les thèmes",
+    "label": "Thème"
+  },
+  "country": {
+    "all": "Tous les pays",
+    "label": "Pays"
+  },
+  "stack": {
+    "all": "Toutes les stacks",
+    "label": "Stack technique"
+  },
+  "search": "Rechercher une discussion...",
+  "empty": {
+    "title": "Aucune discussion trouvée",
+    "description": "Soyez le premier à poser une question ou lancer un échange avec les développeurs.",
+    "action": "Ouvrir un sujet"
+  },
+  "card": {
+    "replies_zero": "0 réponse",
+    "replies_one": "{{count}} réponse",
+    "replies_other": "{{count}} réponses",
+    "accepted": "Résolu",
+    "authorBy": "Par {{handle}}",
+    "linkedRoute": "Fiche liée"
+  },
+  "new": {
+    "title": "Créer un nouveau sujet",
+    "intro": "Posez une question technique ou partagez un retour d'expérience avec la communauté.",
+    "topic": "Thème de discussion",
+    "topicPlaceholder": "Sélectionner un thème",
+    "threadTitle": "Titre du sujet",
+    "threadTitlePlaceholder": "Ex. Délai sur les webhooks Wave en production",
+    "country": "Pays concerné (optionnel)",
+    "countryPlaceholder": "Sélectionner un pays",
+    "stack": "Stack technique (optionnelle)",
+    "stackPlaceholder": "Sélectionner une technologie",
+    "routeId": "Identifiant d'une fiche Overpass liée (optionnel)",
+    "routeIdPlaceholder": "00000000-0000-4000-8000-000000000000",
+    "content": "Description détaillée",
+    "contentPlaceholder": "Détaillez le problème rencontré, le contexte et vos logs...",
+    "markdownHelp": "Le formatage Markdown est supporté.",
+    "submit": "Publier le sujet",
+    "submitting": "Publication en cours...",
+    "signInRequired": "Vous devez être connecté pour ouvrir un sujet."
+  },
+  "detail": {
+    "back": "Retour aux discussions",
+    "author": "Par {{handle}} le {{date}}",
+    "linkedRoute": "Fiche liée : voir l'itinéraire",
+    "transformToRoute": "Transformer en fiche",
+    "repliesTitle": "Réponses",
+    "noReplies": "Aucune réponse pour le moment. Partagez votre expérience !",
+    "acceptedAnswer": "Réponse acceptée par l'auteur",
+    "acceptAction": "Accepter comme solution",
+    "accepting": "Acceptation...",
+    "voteUseful": "Utile",
+    "voting": "Vote...",
+    "addReplyTitle": "Votre réponse",
+    "replyPlaceholder": "Partagez une solution, une piste ou des explications constructives...",
+    "submitReply": "Envoyer la réponse",
+    "submittingReply": "Envoi...",
+    "signInToReply": "Connectez-vous pour répondre à cette discussion."
+  }
+}
