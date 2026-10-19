@@ -2,6 +2,7 @@ import { and, eq, inArray, sql } from "drizzle-orm";
 import type { Database } from "../../../db/client.js";
 import type { CoverageRecord, RoutesRepository, ServiceRecord } from "../model.js";
 import { serviceCountries, services } from "../tables.js";
+import { countedCoverage } from "./visibility.js";
 
 type ServicePart = Pick<RoutesRepository, "services" | "serviceBySlug" | "confirmCoverage">;
 type ServiceRow = Omit<ServiceRecord, "coverage">;
@@ -23,6 +24,7 @@ async function withCoverage(db: Database, rows: ServiceRow[]): Promise<ServiceRe
     .where(
       and(
         eq(serviceCountries.confirmed, true),
+        countedCoverage(),
         inArray(
           serviceCountries.serviceId,
           rows.map((row) => row.id),
@@ -53,7 +55,7 @@ async function confirmCoverage(db: Database, routeId: string, at: Date): Promise
     on conflict (service_id, country) do update
     set confirmed = true, basis = 'community', source = null, consulted_on = null,
         route_id = excluded.route_id, confirmed_at = excluded.confirmed_at
-    where service_countries.confirmed = false`);
+    where service_countries.confirmed = false or not ${countedCoverage()}`);
 }
 
 export function serviceQueries(db: Database): ServicePart {

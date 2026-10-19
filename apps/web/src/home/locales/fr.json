@@ -1,0 +1,89 @@
+{
+  "track": {
+    "title": "La piste d'essai",
+    "body": "La piste d'essai rejoue les cas réels : paiement réussi, solde insuffisant, webhook reçu en double ou en retard, délai dépassé. Sans compte marchand.",
+    "open": "Ouvrir la piste d'essai",
+    "alt": "Piste d'essai : scénarios à gauche, inspecteur avec la réponse JSON d'une session de paiement, puis la livraison du webhook checkout.session.completed.",
+    "caption": "Inspecteur et livraisons, capture de l'application",
+    "cases": "Cas rejoués",
+    "success": {
+      "title": "Paiement réussi",
+      "code": "checkout.session.completed"
+    },
+    "insufficient": {
+      "title": "Solde insuffisant",
+      "code": "checkout.session.payment_failed"
+    },
+    "duplicate": {
+      "title": "Webhook en double",
+      "code": "même événement, deux fois"
+    },
+    "late": {
+      "title": "Webhook en retard",
+      "code": "parti 60 s après le paiement"
+    },
+    "operators": "Opérateurs simulés",
+    "unofficial": "simulateur non officiel, construit depuis la documentation publique",
+    "wave": {
+      "name": "Wave",
+      "kind": "paiement marchand"
+    },
+    "pispi": {
+      "name": "PI-SPI",
+      "kind": "paiement instantané"
+    },
+    "paydunya": {
+      "name": "PayDunya",
+      "kind": "agrégateur"
+    }
+  },
+  "routes": {
+    "title": "Les itinéraires",
+    "body": "Chaque fiche dit si la voie est libre, à vérifier ou signalée cassée, avec la date de la dernière vérification.",
+    "alt": "Fiche d'itinéraire : code PHP de création d'une session Wave, pièges connus, puis un nid-de-poule signalé par un autre développeur.",
+    "caption": "Code, pièges connus et nids-de-poule d'une fiche, capture de l'application",
+    "states": "États d'une fiche",
+    "clear": "Vérifiée récemment par un autre développeur.",
+    "toVerify": "La dernière vérification date, un essai suffit.",
+    "broken": "Des nids-de-poule ouverts, à corriger avant usage.",
+    "browse": "Parcourir les itinéraires"
+  },
+  "mcp": {
+    "title": "Dans votre assistant de code",
+    "body": "Votre assistant de code lit les fiches. Branchez le serveur MCP d'Overpass dans Claude Code, Cursor ou VS Code avec un jeton personnel, et il écrit l'intégration locale qui marche.",
+    "editors": "Éditeurs pris en charge",
+    "claudeCode": "Claude Code",
+    "cursor": "Cursor",
+    "vscode": "VS Code",
+    "caption": ".cursor/mcp.json",
+    "token": "VOTRE_JETON",
+    "note": "Le jeton se crée dans vos paramètres. Les trois configurations sont dans la",
+    "docs": "documentation"
+  },
+  "community": {
+    "title": "Communauté",
+    "intro": "Trois espaces autour des fiches, pour tout ce que la documentation officielle ne dit pas.",
+    "discussions": "Carrière, outils, cloud, IA, projets : tout ce qui occupe un développeur africain.",
+    "blog": "Actualité tech africaine, tutoriels et portraits.",
+    "newsletter": "Newsletter",
+    "newsletterBody": "Le résumé de la semaine : les meilleures fiches, discussions et articles."
+  },
+  "countries": {
+    "title": "Pays couverts",
+    "intro": "D'après les services référencés et les fiches de la communauté.",
+    "loading": "Chargement des pays et des chiffres"
+  },
+  "figures": {
+    "label": "Chiffres",
+    "routes_one": "itinéraire publié",
+    "routes_other": "itinéraires publiés",
+    "checks_one": "vérification datée",
+    "checks_other": "vérifications datées",
+    "countries_one": "pays couvert",
+    "countries_other": "pays couverts"
+  },
+  "signup": {
+    "text": "Partagez ce que vous avez appris en production.",
+    "button": "Créer un compte"
+  }
+}

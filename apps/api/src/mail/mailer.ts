@@ -4,7 +4,14 @@ import { join } from "node:path";
 import nodemailer from "nodemailer";
 import type { Config } from "../config.js";
 
-export type MailMessage = { to: string; subject: string; text: string };
+/** Text is always present; html and headers are optional extras, such as one-click unsubscribe. */
+export type MailMessage = {
+  to: string;
+  subject: string;
+  text: string;
+  html?: string;
+  headers?: Record<string, string>;
+};
 
 export type Mailer = { send(message: MailMessage): Promise<void> };
 

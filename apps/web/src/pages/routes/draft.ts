@@ -1,5 +1,5 @@
 import { routeCreateInput, routeTemplate } from "@overpass/shared";
-import type { Language, RouteDetail } from "@overpass/shared";
+import type { Language, RouteDetail, ThreadDetail } from "@overpass/shared";
 
 export type Draft = {
   title: string;
@@ -10,8 +10,30 @@ export type Draft = {
   content: string;
 };
 
-/** The editor validates the fields it shows; translationOf travels outside the form. */
-export const draftSchema = routeCreateInput.omit({ translationOf: true });
+/** The editor validates the fields it shows; the source route or thread travels outside it. */
+export const draftSchema = routeCreateInput.omit({ translationOf: true, sourceThread: true });
+
+/** A fence longer than any backtick run in the code, so the block never closes early. */
+function fenced(code: string): string {
+  const longest = Math.max(0, ...(code.match(/`+/g) ?? []).map((run) => run.length));
+  const fence = "`".repeat(Math.max(3, longest + 1));
+  return `${fence}\n${code}\n${fence}`;
+}
+
+/** A route seeded by a resolved thread: its question, its code, then the accepted reply. */
+export function threadDraft(thread: ThreadDetail): Draft {
+  const accepted = thread.items.find((reply) => reply.accepted)?.content ?? null;
+  const code = thread.codeText === null ? null : fenced(thread.codeText);
+  const parts = [thread.content, code, accepted].filter((part): part is string => part !== null);
+  return {
+    title: thread.title,
+    service: thread.service?.slug ?? "",
+    country: thread.country ?? "",
+    stack: thread.stack ?? "",
+    language: thread.language,
+    content: parts.join("\n\n---\n\n"),
+  };
+}
 
 export function newDraft(language: Language): Draft {
   return {

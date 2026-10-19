@@ -1,0 +1,11 @@
+{
+  "acceptedMail": {
+    "subject": "Votre proposition de service est acceptée",
+    "body": "Bonjour,\n\nMerci : le service {{name}} rejoint le catalogue d'Overpass. Vous pouvez dès maintenant écrire la première fiche d'intégration.\n\nSuivre vos propositions : {{link}}\n\nL'équipe Overpass"
+  },
+  "rejectedMail": {
+    "subject": "Votre proposition de service n'a pas été retenue",
+    "body": "Bonjour,\n\nMerci pour votre proposition du service {{name}}. L'équipe ne l'a pas retenue pour le moment.\n\nMotif : {{reason}}\n\nSuivre vos propositions : {{link}}\n\nL'équipe Overpass"
+  },
+  "noReason": "aucun motif précisé."
+}

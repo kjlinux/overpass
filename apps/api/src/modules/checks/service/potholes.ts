@@ -26,6 +26,7 @@ export function potholeService(deps: ChecksDeps) {
       const updated = await repository.setPotholeStatus(potholeId, input.status, now());
       if (updated === null) throw new AppError("pothole_exists", 409);
       await confirmCoverageIfClear(deps, pothole.routeId);
+      await deps.onContribution([updated.userId]);
       const reporter = updated.userId ?? "";
       const names = await handles(reporter === "" ? [] : [reporter]);
       return toPothole(updated, names.get(reporter) ?? "");

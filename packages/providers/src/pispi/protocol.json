@@ -1,0 +1,17 @@
+{
+  "source": "Quoted from the PI-SPI API Business specification 1.5.0 (https://developer.pispi.bceao.int/api-business), consulted 2026-10-14, except the simulator fields marked as such. Protocol data sent to the developer's code, not interface text.",
+  "badRequest": "Format du message invalide",
+  "unauthorized": "Autorisations insuffisantes",
+  "notFound": "La ressource n'existe pas dans le système",
+  "paymentNotFound": "Paiement inexistant ou déjà archivé",
+  "tooMany": "Dépassement du quota d'appels API: envoie de trop de requêtes en un temps donné.",
+  "conflict": "La ressource existe déjà.",
+  "alreadyCancelled": "La demande de paiement a déjà été annulée",
+  "alreadyConfirmed": "La demande de paiement a déjà été confirmée",
+  "aliasLimit": "Depassement de limite de création d'alias",
+  "aliasLimitReason": "Vous avez atteint la limite de création d'alias autorisé",
+  "webhookLimit": "Un business peut configurer maximum 20 webhooks",
+  "simulatorInvalidField": "Valeur invalide pour ce champ (texte du simulateur)",
+  "simulatorPayerName": "Client simulé Overpass",
+  "simulatorSecretNote": "Secret visible sur la piste d'essai Overpass, pour la clé de test utilisée (texte du simulateur)"
+}

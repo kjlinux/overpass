@@ -3,12 +3,16 @@ import type { RouteSummary, Service } from "@overpass/shared";
 import { AppError } from "../../../http/app-error.js";
 import type { Account, HandleDirectory } from "../../accounts/index.js";
 import type { ChecksReader } from "../../checks/index.js";
+import type { ThreadDirectory } from "../../discussions/index.js";
+import type { ContributionListener } from "../../ranking/index.js";
 import type { RouteRecord, RouteRow, RoutesRepository, ServiceRecord } from "../model.js";
 
 export type RoutesDeps = {
   repository: RoutesRepository;
   checks: ChecksReader;
   handles: HandleDirectory;
+  threads: ThreadDirectory;
+  onContribution: ContributionListener;
   now: () => Date;
 };
 
@@ -44,6 +48,12 @@ export async function summaries(deps: RoutesDeps, rows: RouteRow[]): Promise<Rou
   const authors = rows.flatMap((row) => (row.authorId === null ? [] : [row.authorId]));
   const names = await deps.handles(authors);
   return rows.map((row) => toSummary(row, names.get(row.authorId ?? "") ?? ""));
+}
+
+/** A hidden itinerary stays readable by its author and the moderation team only. */
+export function mayRead(route: RouteRecord, account: Account | null): boolean {
+  if (route.moderation === "visible") return true;
+  return account !== null && (route.authorId === account.id || account.role === "admin");
 }
 
 /** The author edits and deletes; an admin may too, for moderation. */

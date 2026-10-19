@@ -21,6 +21,8 @@
   --shadow-raised: 0 8px 24px rgb(0 0 0 / 0.12);
   --font-text: "IBM Plex Sans", system-ui, "Segoe UI", Roboto, sans-serif;
   --font-code: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  --text-display: clamp(44px, 7.5vw, 96px);
+  --duration-count: 400ms;
   --duration-fast: 150ms;
   --duration-base: 200ms;
   --duration-slow: 250ms;

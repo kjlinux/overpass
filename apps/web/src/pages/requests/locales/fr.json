@@ -1,0 +1,50 @@
+{
+  "category": {
+    "payment": "Paiement",
+    "sms": "SMS",
+    "ussd": "USSD"
+  },
+  "service": {
+    "unofficial": "Simulateur non officiel",
+    "coverage": "Pays couverts",
+    "noCountry": "Aucun pays confirmé pour l'instant : un pays le devient dès qu'une fiche y atteint la voie libre.",
+    "routes": "Voir les itinéraires de ce service",
+    "simulator": "Simulateur",
+    "simulated": "Ce service a un simulateur non officiel sur la piste d'essai.",
+    "track": "Ouvrir la piste d'essai",
+    "noSimulator": "{{service}} n'a pas encore de simulateur. Les demandes les plus votées passent en premier."
+  },
+  "vote": {
+    "count_one": "{{count}} demande",
+    "count_other": "{{count}} demandes",
+    "ask": "Je veux un simulateur",
+    "withdraw": "Retirer ma demande",
+    "signIn": "Se connecter pour voter",
+    "ranking": "Voir le classement des demandes"
+  },
+  "ranking": {
+    "title": "Simulateurs demandés",
+    "intro": "Les services sans simulateur que les membres attendent le plus, classés par nombre de votes.",
+    "rank": "Rang",
+    "service": "Service",
+    "category": "Catégorie",
+    "votes": "Votes",
+    "emptyTitle": "Aucune demande pour l'instant",
+    "emptyText": "Ouvrez la page d'un service sans simulateur pour voter.",
+    "browse": "Parcourir les itinéraires"
+  },
+  "propose": {
+    "link": "Proposer un service",
+    "title": "Proposer un service",
+    "intro": "Un service manque au catalogue ? Donnez son nom et le lien vers sa documentation publique : l'équipe le relit et vous répond par e-mail.",
+    "name": "Nom du service",
+    "category": "Catégorie",
+    "country": "Pays",
+    "docsUrl": "Lien vers la documentation",
+    "docsHelp": "Une adresse https publique, par exemple https://developer.exemple.com.",
+    "submit": "Envoyer la proposition",
+    "sentTitle": "Proposition envoyée",
+    "sentText": "Merci : {{name}} attend la relecture de l'équipe. Vous recevrez la réponse par e-mail.",
+    "dashboard": "Suivre mes propositions"
+  }
+}

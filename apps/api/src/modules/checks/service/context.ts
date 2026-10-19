@@ -2,12 +2,14 @@ import { freshnessStart, routeState } from "@overpass/shared";
 import type { MyCheck, Pothole, RouteCheck } from "@overpass/shared";
 import { AppError } from "../../../http/app-error.js";
 import type { HandleDirectory } from "../../accounts/index.js";
+import type { ContributionListener } from "../../ranking/index.js";
 import type { CheckRecord, ChecksRepository, PotholeRecord, RouteDirectory } from "../model.js";
 
 export type ChecksDeps = {
   repository: ChecksRepository;
   routes: RouteDirectory;
   handles: HandleDirectory;
+  onContribution: ContributionListener;
   now: () => Date;
 };
 

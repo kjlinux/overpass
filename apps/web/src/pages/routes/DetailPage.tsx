@@ -26,6 +26,8 @@ function useActions(id: string, reload: () => Promise<void>): RouteViewActions {
     report: (input) => then(apiRequest("POST", `/v1/routes/${id}/potholes`, input)),
     setStatus: (potholeId: string, status: PotholeStatus) =>
       then(apiRequest("PATCH", `/v1/potholes/${potholeId}`, { status })),
+    flag: async (input) =>
+      (await apiRequest("POST", `/v1/routes/${id}/reports`, input)).error ?? undefined,
     remove: async () => {
       const { error } = await apiRequest("DELETE", `/v1/routes/${id}`);
       if (error === null) route(localizedPath(language, "/routes"));

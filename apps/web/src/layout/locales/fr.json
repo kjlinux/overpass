@@ -4,6 +4,8 @@
   "mainNavigation": "Navigation principale",
   "menu": "Menu",
   "closeMenu": "Fermer le menu",
+  "themeDark": "Thème sombre",
+  "themeLight": "Thème clair",
   "language": "Langue",
   "signIn": "Connexion",
   "signUp": "S'inscrire",
@@ -15,14 +17,17 @@
     "sandbox": "Piste d'essai",
     "discussions": "Discussions",
     "blog": "Blog",
-    "docs": "Docs"
+    "docs": "Docs",
+    "pricing": "Tarifs"
   },
   "newsletter": {
     "title": "Recevoir le résumé hebdomadaire",
     "email": "Adresse e-mail",
     "language": "Langue de la newsletter",
     "subscribe": "S'abonner",
-    "inactive": "Inscription inactive pour l'instant : la newsletter arrive avec le module communauté."
+    "note": "Double confirmation : un lien vous arrive par e-mail, l'abonnement ne démarre qu'après votre clic. Chaque numéro contient un lien de désinscription en un clic.",
+    "sent": "C'est noté. Si cette adresse peut recevoir le résumé, un lien de confirmation vient de partir : ouvrez-le pour valider l'abonnement.",
+    "another": "Inscrire une autre adresse"
   },
   "groups": {
     "product": "Produit",
@@ -39,7 +44,12 @@
     "ranking": "Classement",
     "about": "À propos",
     "legal": "Mentions légales",
-    "privacy": "Confidentialité"
+    "privacy": "Confidentialité",
+    "simulators": "Simulateurs demandés",
+    "propose": "Proposer un service"
   },
-  "legalLine": "Overpass par Ghostapi, Côte d'Ivoire. Code sous licence libre."
+  "legalLine": "Overpass par Ghostapi, Côte d'Ivoire. Code sous licence MIT.",
+  "moderation": "Administration",
+  "myBlog": "Mon blog",
+  "newsletterAdmin": "Newsletter (équipe)"
 }

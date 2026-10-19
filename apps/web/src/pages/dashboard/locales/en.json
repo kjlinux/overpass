@@ -24,5 +24,17 @@
     "caption": "Computed from your contributions, never entered by hand.",
     "profile": "See my public profile"
   },
-  "sandboxSoon": "The test track comes with the next module."
+  "sandboxSoon": "The test track comes with the next module.",
+  "proposals": {
+    "heading": "My service proposals",
+    "status": {
+      "pending": "Pending",
+      "accepted": "Accepted",
+      "rejected": "Rejected"
+    },
+    "reason": "Reason: {{reason}}",
+    "emptyTitle": "No proposal",
+    "emptyText": "A service is missing from the catalogue? Propose it, the team answers by e-mail.",
+    "action": "Propose a service"
+  }
 }

@@ -27,10 +27,17 @@ function useSettingsTabs(me: Me): Tab[] {
 function Sections({ me }: { me: Me }): JSX.Element {
   const { t } = useTranslation("settings");
   const tabs = useSettingsTabs(me);
+  const linked = location.hash.slice(1);
+  const initial = tabs.some((tab) => tab.id === linked) ? linked : undefined;
   return (
     <section class="py-12 md:py-16">
       <h1 class="mb-8 text-h1 font-semibold">{t("title")}</h1>
-      <Tabs id="settings" label={t("tabs.label")} tabs={tabs} />
+      <Tabs
+        id="settings"
+        label={t("tabs.label")}
+        tabs={tabs}
+        {...(initial === undefined ? {} : { initial })}
+      />
     </section>
   );
 }

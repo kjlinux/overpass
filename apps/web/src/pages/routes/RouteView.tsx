@@ -16,8 +16,11 @@ import { CheckList, PotholeList } from "./CommunityLists";
 import { Contents } from "./Contents";
 import { CoverageSection } from "./CoverageSection";
 import { ReportDialog, VerifyDialog } from "./dialogs";
+import type { FlagSend } from "./FlagRoute";
+import { FlagAction, HiddenNotice } from "./FlagRoute";
 import { RouteActions } from "./RouteActions";
 import { RouteHead } from "./RouteHead";
+import { RouteQuestions } from "./RouteQuestions";
 import { StateBlock } from "./StateBlock";
 
 export type RouteViewActions = {
@@ -25,6 +28,7 @@ export type RouteViewActions = {
   report: (input: PotholeCreateInput) => Promise<ApiError | undefined>;
   setStatus: (id: string, status: PotholeStatus) => Promise<ApiError | undefined>;
   remove: () => Promise<ApiError | undefined>;
+  flag?: FlagSend;
 };
 
 export type RouteViewProps = {
@@ -42,7 +46,7 @@ type Outcome = { notice: string | null; failure: ApiError | undefined };
 
 type RailProps = RouteViewProps & { onOpen: (open: Open) => void; outcome: Outcome };
 
-function Rail({ route, now, onOpen, outcome }: RailProps): JSX.Element {
+function Rail({ route, now, actions, onOpen, outcome }: RailProps): JSX.Element {
   const { t } = useTranslation("routes");
   return (
     <aside
@@ -60,6 +64,7 @@ function Rail({ route, now, onOpen, outcome }: RailProps): JSX.Element {
             onOpen("remove");
           }}
         />
+        {actions.flag === undefined ? null : <FlagAction route={route} onSend={actions.flag} />}
         <p role="status" class="text-success empty:hidden">
           {outcome.notice ?? ""}
         </p>
@@ -102,6 +107,7 @@ function Body(props: BodyProps): JSX.Element {
         class="max-w-prose border-t border-ink py-8 lg:hidden"
       />
       <CheckList route={route} />
+      <RouteQuestions routeId={route.id} />
       {props.service === undefined ? null : <CoverageSection service={props.service} />}
     </div>
   );
@@ -169,6 +175,7 @@ export function RouteView(props: RouteViewProps): JSX.Element {
   return (
     <article>
       <RouteHead route={props.route} />
+      <HiddenNotice route={props.route} />
       <div class="grid lg:grid-cols-[minmax(0,1fr)_320px]">
         <Rail {...props} onOpen={setOpen} outcome={outcome} />
         <Body {...props} onOpen={setOpen} onFailure={onFailure} />

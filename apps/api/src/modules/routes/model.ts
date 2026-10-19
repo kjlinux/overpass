@@ -30,6 +30,7 @@ export type RouteRecord = {
   title: string;
   content: string;
   version: number;
+  moderation: "visible" | "hidden";
   createdAt: Date;
   updatedAt: Date;
 };
@@ -42,8 +43,9 @@ export type RouteRow = RouteRecord & {
   lastCheckAt: Date | null;
 };
 
-export type NewRoute = Omit<RouteRecord, "id" | "version" | "translationGroup"> & {
+export type NewRoute = Omit<RouteRecord, "id" | "version" | "translationGroup" | "moderation"> & {
   translationGroup?: string | undefined;
+  sourceThreadId?: string | undefined;
 };
 
 export type RoutePatch = Partial<
@@ -78,6 +80,10 @@ export type RoutesRepository = {
   updateRoute(id: string, patch: RoutePatch, editorId: string, at: Date): Promise<boolean>;
   softDelete(id: string, at: Date): Promise<void>;
   findLive(id: string): Promise<RouteRecord | null>;
+  /** Live and not hidden: what every reader other than the author and admins may see. */
+  findListed(id: string): Promise<RouteRecord | null>;
+  /** False when this account already reported the route. */
+  insertReport(routeId: string, userId: string, reason: string, at: Date): Promise<boolean>;
   findRow(id: string): Promise<RouteRow | null>;
   translations(group: string): Promise<{ id: string; language: Language }[]>;
   sibling(group: string, language: Language): Promise<string | null>;
@@ -85,7 +91,20 @@ export type RoutesRepository = {
   byAuthor(authorId: string, limit: number): Promise<RouteRow[]>;
   countByAuthor(authorId: string): Promise<number>;
   titles(ids: string[]): Promise<Map<string, string>>;
+  /** The listed route written from each thread, keyed by thread id. */
+  fromThreads(threadIds: string[]): Promise<Map<string, string>>;
+  /** Hidden routes included: a thread keeps its single route whatever the moderation says. */
+  hasRouteFromThread(threadId: string): Promise<boolean>;
+  serviceNames(serviceIds: string[]): Promise<Map<string, { slug: string; name: string }>>;
 };
+
+/** Raised when a thread already has its route. */
+export class SourceThreadTaken extends Error {
+  constructor() {
+    super("already_transformed");
+    this.name = "SourceThreadTaken";
+  }
+}
 
 /** Raised when a translation group already holds the language. */
 export class TranslationExists extends Error {

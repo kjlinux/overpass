@@ -1,0 +1,93 @@
+{
+  "deletedAuthor": "Compte supprimé",
+  "state": {
+    "open": "Ouvert",
+    "resolved": "Résolu"
+  },
+  "list": {
+    "title": "Discussions",
+    "intro": "Intégrations, cloud, outils, carrière, projets et événements : posez votre question, d'autres développeurs du continent y répondent.",
+    "new": "Nouveau sujet",
+    "resultsHeading": "Sujets",
+    "replies_one": "{{count}} réponse",
+    "replies_other": "{{count}} réponses",
+    "activity": "Actif le {{date}}",
+    "more": "Afficher les sujets suivants",
+    "emptyTitle": "Aucun sujet ne correspond",
+    "emptyText": "Retirez un filtre, ou ouvrez le premier sujet sur cette question."
+  },
+  "filters": {
+    "heading": "Filtres",
+    "topic": "Thème",
+    "country": "Pays",
+    "stack": "Stack",
+    "language": "Langue",
+    "state": "État",
+    "any": "Tous",
+    "submit": "Filtrer",
+    "reset": "Effacer les filtres"
+  },
+  "form": {
+    "heading": "Nouveau sujet",
+    "headingRoute": "Ça ne marche pas chez moi",
+    "intro": "Décrivez ce que vous avez essayé et ce que vous obtenez. Les clés, jetons et mots de passe collés par mégarde sont masqués avant publication.",
+    "fromRoute": "Question sur une fiche {{service}} :",
+    "title": "Titre",
+    "titleHelp": "Une phrase de 8 à 140 caractères, par exemple le message d'erreur principal.",
+    "content": "Message",
+    "contentHelp": "Markdown accepté : listes, liens, code entre accents graves.",
+    "errorText": "Message d'erreur (facultatif)",
+    "errorHelp": "Collez la réponse ou le message tels que reçus.",
+    "codeText": "Code (facultatif)",
+    "codeHelp": "L'appel ou la fonction en cause, sans vos vraies clés.",
+    "topic": "Thème",
+    "language": "Langue du sujet",
+    "country": "Pays (facultatif)",
+    "stack": "Stack (facultatif)",
+    "preview": "Ce qui sera publié",
+    "masked_one": "{{count}} secret masqué avant publication.",
+    "masked_other": "{{count}} secrets masqués avant publication.",
+    "noSecret": "Aucune clé ni aucun jeton détecté.",
+    "errorCaption": "erreur",
+    "codeCaption": "code",
+    "submit": "Publier le sujet"
+  },
+  "facts": {
+    "topic": "Thème",
+    "author": "Auteur",
+    "date": "Ouvert le",
+    "language": "Langue",
+    "country": "Pays",
+    "stack": "Stack"
+  },
+  "detail": {
+    "trail": "Fil d'Ariane",
+    "actions": "Actions sur le sujet",
+    "aboutRoute": "Question sur la fiche {{service}} :",
+    "transform": "Transformer en fiche",
+    "transformNote": "L'éditeur s'ouvre avec la question et la réponse acceptée ; la fiche gardera le lien vers ce sujet.",
+    "seeRoute": "Voir la fiche tirée de ce sujet",
+    "report": "Signaler ce sujet",
+    "reported": "Vous avez signalé ce sujet. L'équipe de modération va le relire.",
+    "replies_one": "{{count}} réponse",
+    "replies_other": "{{count}} réponses"
+  },
+  "reply": {
+    "accepted": "Réponse acceptée",
+    "useful_one": "Utile, {{count}} vote",
+    "useful_other": "Utile, {{count}} votes",
+    "voted_one": "Vous l'avez jugée utile, {{count}} vote",
+    "voted_other": "Vous l'avez jugée utile, {{count}} votes",
+    "accept": "Accepter cette réponse",
+    "report": "Signaler",
+    "label": "Votre réponse",
+    "help": "Markdown accepté. Les secrets collés sont masqués avant publication.",
+    "submit": "Répondre",
+    "signIn": "Se connecter pour répondre"
+  },
+  "hidden": {
+    "thread": "Ce sujet est masqué après deux signalements, en attendant la décision de l'équipe de modération.",
+    "reply": "Cette réponse est masquée après deux signalements, en attendant la décision de l'équipe de modération.",
+    "removed": "Ce contenu a été retiré par l'équipe de modération."
+  }
+}

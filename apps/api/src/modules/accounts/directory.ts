@@ -1,5 +1,5 @@
-import type { Role } from "@overpass/shared";
-import { inArray } from "drizzle-orm";
+import type { Language, Role } from "@overpass/shared";
+import { eq, inArray } from "drizzle-orm";
 import type { FastifyRequest } from "fastify";
 import type { Database } from "../../db/client.js";
 import { AppError } from "../../http/app-error.js";
@@ -16,6 +16,9 @@ export type AccountResolver = (request: FastifyRequest) => Promise<Account | nul
 /** Public handles of a set of accounts; deleted accounts are simply absent. */
 export type HandleDirectory = (ids: string[]) => Promise<Map<string, string>>;
 
+/** Requests made with the session of a suspended account, read as anonymous on public pages. */
+const suspendedRequests = new WeakSet<FastifyRequest>();
+
 export function accountResolver(
   service: AccountsService,
   cookies: SessionCookies,
@@ -24,6 +27,10 @@ export function accountResolver(
     const session = cookies.read(request);
     const user = session === undefined ? null : await service.authenticateSession(session);
     if (user === null) return null;
+    if (user.suspendedAt !== null) {
+      suspendedRequests.add(request);
+      return null;
+    }
     return { id: user.id, handle: user.handle, country: user.country, role: user.role };
   };
 }
@@ -40,12 +47,28 @@ export function handleDirectory(db: Database): HandleDirectory {
   };
 }
 
+/** Where to write to an account, for modules that notify members by e-mail. */
+export type ContactDirectory = (
+  id: string,
+) => Promise<{ email: string; language: Language } | null>;
+
+export function contactDirectory(db: Database): ContactDirectory {
+  return async (id) => {
+    const columns = { email: users.email, language: users.language };
+    const [row] = await db.select(columns).from(users).where(eq(users.id, id)).limit(1);
+    return row ?? null;
+  };
+}
+
 /** The signed-in account, or a 401 for an anonymous request. */
 export async function requireAccount(
   resolve: AccountResolver,
   request: FastifyRequest,
 ): Promise<Account> {
   const account = await resolve(request);
+  if (account === null && suspendedRequests.has(request)) {
+    throw new AppError("account_suspended", 403);
+  }
   if (account === null) throw new AppError("unauthorized", 401);
   return account;
 }

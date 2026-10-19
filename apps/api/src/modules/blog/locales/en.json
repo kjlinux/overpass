@@ -1,0 +1,24 @@
+{
+  "rss": {
+    "title": "Overpass, the blog",
+    "description": "African tech news, tutorials and portraits published on Overpass.",
+    "team": "The Overpass team"
+  },
+  "templates": {
+    "tech-news": {
+      "title": "Template: African tech news",
+      "summary": "Template for the team to fill in: one piece of news, its facts and its sources.",
+      "content": "## What is happening\n\nSum up the fact in two sentences: who, what, where, when.\n\n## Why it matters to developers\n\nExplain the concrete effect on an integration, a service or a country.\n\n## Sources\n\n- Link to the official source, with the date it was read."
+    },
+    "tutorials": {
+      "title": "Template: step by step tutorial",
+      "summary": "Template for the team to fill in: a goal, prerequisites and checked steps.",
+      "content": "## Goal\n\nWhat the reader will be able to do at the end.\n\n## Prerequisites\n\n- Accounts, test keys and versions needed.\n\n## Steps\n\n1. First step, with the code to copy.\n2. Next step.\n\n## Check that it works\n\nThe expected response or webhook.\n\n## Going further\n\n- Link to the matching Overpass itinerary."
+    },
+    "portraits": {
+      "title": "Template: developer portrait",
+      "summary": "Template for the team to fill in: a person, their path and their advice.",
+      "content": "## Who they are\n\nFirst name, country, job, with their written consent to publish.\n\n## Their path\n\nThe key steps, in a few sentences.\n\n## What they build\n\nA project, an integration, a community.\n\n## Their advice\n\nA quote reviewed and approved by the person."
+    }
+  }
+}

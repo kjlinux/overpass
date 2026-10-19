@@ -3,7 +3,7 @@ import { char, integer, pgTable, primaryKey, text, timestamp, uuid } from "drizz
 
 const utc = (name: string) => timestamp(name, { withTimezone: true });
 
-/** Mirror of migrations/0001_accounts; the SQL files stay the source of truth. */
+/** Mirror of migrations/0001_accounts and 0015_admin; the SQL files stay the source of truth. */
 export const users = pgTable("users", {
   id: uuid("id").primaryKey().defaultRandom(),
   email: text("email").notNull(),
@@ -16,6 +16,8 @@ export const users = pgTable("users", {
   newsletterConsentAt: utc("newsletter_consent_at"),
   createdAt: utc("created_at").notNull().defaultNow(),
   updatedAt: utc("updated_at").notNull().defaultNow(),
+  suspendedAt: utc("suspended_at"),
+  suspendedReason: text("suspended_reason"),
 });
 
 export const userStacks = pgTable(

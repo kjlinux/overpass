@@ -1,0 +1,12 @@
+{
+  "openapi": {
+    "title": "Overpass simulator API",
+    "description": "Providers simulated from their public documentation, with no link to the real providers: every provider is unofficial. Authenticate with an Overpass test key where the provider expects its credential. The Overpass-Scenario header picks the scenario of one call.",
+    "listen": "Receive your key's webhooks on your machine (local relay, SSE stream)",
+    "listenDescription": "Opens an outgoing connection that carries each webhook with its raw body and headers. After a disconnection, send Last-Event-ID to receive the webhooks you missed.",
+    "result": "Report what the local server answered",
+    "keyScheme": "Overpass test key",
+    "scenarioHeader": "Scenario of this call, instead of the key's",
+    "webhook": "Simulated webhook, signed as the provider documents it"
+  }
+}

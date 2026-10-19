@@ -24,3 +24,15 @@ export function connectDatabase(url: string): DatabaseConnection {
   };
   return { db: drizzle(pool), executor, close: () => pool.end() };
 }
+
+/** Work run in one transaction, given the repository and the database bound to it. */
+export type Atomic<Repo> = <T>(work: (scoped: Repo, tx: Database) => Promise<T>) => Promise<T>;
+
+/** Lets a service group several writes, so a failure in any of them undoes them all. */
+export function atomic<Repo>(db: Database, build: (db: Database) => Repo): Atomic<Repo> {
+  return (work) =>
+    db.transaction((tx) => {
+      const scoped = tx as unknown as Database;
+      return work(build(scoped), scoped);
+    });
+}

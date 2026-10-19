@@ -1,0 +1,21 @@
+{
+  "name": "overpass-cli",
+  "version": "0.1.0",
+  "description": "Replays Overpass sandbox webhooks on your local server, without a tunnel or a public URL.",
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "overpass": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  }
+}

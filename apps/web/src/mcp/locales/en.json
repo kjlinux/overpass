@@ -1,0 +1,20 @@
+{
+  "tabs": "Configuration by editor",
+  "editors": {
+    "claudeCode": "Claude Code",
+    "cursor": "Cursor",
+    "vscode": "VS Code"
+  },
+  "captions": {
+    "claudeCode": "Terminal",
+    "cursor": ".cursor/mcp.json",
+    "vscode": ".vscode/mcp.json"
+  },
+  "where": {
+    "claudeCode": "Run this command in a terminal, at the root of your project. Then check it with claude mcp list.",
+    "cursor": "Paste this into .cursor/mcp.json at the root of the project, or into ~/.cursor/mcp.json for all your projects, then enable the server in Cursor's MCP settings.",
+    "vscode": "Paste this into .vscode/mcp.json at the root of the project, then start the server from the MCP: List Servers command."
+  },
+  "secret": "This configuration holds your token: do not commit it. Add the file to .gitignore, and revoke the token if it leaks.",
+  "placeholder": "ovp_YOUR_TOKEN"
+}

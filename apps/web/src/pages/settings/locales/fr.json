@@ -43,6 +43,8 @@
     "submit": "Créer le jeton",
     "createdTitle": "Copiez ce jeton maintenant",
     "createdText": "Il ne sera plus jamais affiché. Overpass n'en garde qu'une empreinte.",
+    "configTitle": "Configurer votre éditeur",
+    "configText": "Le jeton est déjà inséré. Copiez la configuration de votre éditeur avant de fermer ce panneau.",
     "dismiss": "J'ai copié le jeton",
     "list": "Jetons actifs",
     "created": "Créé le",

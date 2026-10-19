@@ -24,5 +24,17 @@
     "caption": "Calculés à partir de vos contributions, jamais saisis.",
     "profile": "Voir mon profil public"
   },
-  "sandboxSoon": "La piste d'essai arrive avec le prochain module."
+  "sandboxSoon": "La piste d'essai arrive avec le prochain module.",
+  "proposals": {
+    "heading": "Mes propositions de service",
+    "status": {
+      "pending": "En attente",
+      "accepted": "Acceptée",
+      "rejected": "Refusée"
+    },
+    "reason": "Motif : {{reason}}",
+    "emptyTitle": "Aucune proposition",
+    "emptyText": "Un service manque au catalogue ? Proposez-le, l'équipe vous répond par e-mail.",
+    "action": "Proposer un service"
+  }
 }

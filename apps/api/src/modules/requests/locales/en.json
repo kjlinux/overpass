@@ -1,0 +1,11 @@
+{
+  "acceptedMail": {
+    "subject": "Your service proposal was accepted",
+    "body": "Hello,\n\nThank you: {{name}} joins the Overpass catalogue. You can now write its first integration route.\n\nFollow your proposals: {{link}}\n\nThe Overpass team"
+  },
+  "rejectedMail": {
+    "subject": "Your service proposal was not accepted",
+    "body": "Hello,\n\nThank you for proposing {{name}}. The team did not accept it for now.\n\nReason: {{reason}}\n\nFollow your proposals: {{link}}\n\nThe Overpass team"
+  },
+  "noReason": "no reason given."
+}

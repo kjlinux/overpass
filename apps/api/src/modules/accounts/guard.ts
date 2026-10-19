@@ -1,6 +1,7 @@
 import type { FastifyInstance, FastifyRequest } from "fastify";
 import { AppError } from "../../http/app-error.js";
 import type { SessionCookies } from "./cookies.js";
+import { refuseSuspended } from "./service/auth.js";
 import type { UserRecord } from "./model.js";
 import type { AccountsService } from "./service.js";
 
@@ -27,7 +28,7 @@ export function authGuard(app: FastifyInstance, service: AccountsService, cookie
       (session === undefined ? null : await service.authenticateSession(session)) ??
       (bearer === undefined ? null : await service.authenticateToken(bearer));
     if (account === null) throw new AppError("unauthorized", 401);
-    request.account = account;
+    request.account = refuseSuspended(account);
   };
 }
 

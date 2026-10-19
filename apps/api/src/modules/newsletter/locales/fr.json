@@ -1,0 +1,22 @@
+{
+  "confirmMail": {
+    "subject": "Confirmez votre inscription à la newsletter d'Overpass",
+    "body": "Bonjour,\n\nPour recevoir la newsletter hebdomadaire d'Overpass, confirmez votre adresse en ouvrant ce lien dans les 48 heures :\n\n{{link}}\n\nSi vous n'avez rien demandé, ignorez ce message : vous ne recevrez rien.\n\nL'équipe Overpass"
+  },
+  "draft": {
+    "subject": "Overpass, la semaine du {{date}}",
+    "intro": "Bonjour,\n\nVoici les fiches, discussions et articles qui ont compté cette semaine sur Overpass."
+  },
+  "issue": {
+    "kinds": {
+      "route": "Fiche",
+      "thread": "Discussion",
+      "post": "Article"
+    },
+    "read": "Lire",
+    "why": "Vous recevez ce message parce que cette adresse est inscrite à la newsletter d'Overpass.",
+    "unsubscribe": "Se désinscrire en un clic",
+    "signature": "L'équipe Overpass",
+    "line": "{{label}} : {{value}}"
+  }
+}

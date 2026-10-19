@@ -1,0 +1,48 @@
+{
+  "title": "Tarifs",
+  "intro": "Overpass est gratuit aujourd'hui. Les offres Équipe et Entreprise arrivent ; leur contenu peut encore évoluer.",
+  "available": "Disponible",
+  "soon": "Bientôt",
+  "payment": {
+    "label": "Paiement en ligne : bientôt.",
+    "text": "Aucun encaissement n'est possible pour l'instant, et aucune carte bancaire n'est demandée."
+  },
+  "plans": {
+    "free": {
+      "name": "Gratuit",
+      "price": "Aucun frais, sans carte bancaire",
+      "summary": "Tout ce qu'Overpass propose aujourd'hui, pour chaque développeur.",
+      "action": "Créer un compte gratuit",
+      "features": {
+        "catalogue": "Le catalogue des fiches d'intégration, à lire, publier et vérifier",
+        "track": "La piste d'essai : clés de test, scénarios rejouables, inspecteur et journal des webhooks",
+        "relay": "Le relais local des webhooks vers votre poste",
+        "mcp": "Le serveur MCP en lecture seule, avec vos jetons personnels",
+        "community": "Les discussions, le blog, la newsletter et le classement"
+      }
+    },
+    "team": {
+      "name": "Équipe",
+      "price": "Tarif à venir",
+      "summary": "Pour une équipe qui intègre les mêmes services.",
+      "features": {
+        "everythingFree": "Tout ce que contient l'offre gratuite",
+        "space": "Un espace d'équipe partagé",
+        "shared": "Des clés de test et des jetons partagés entre les membres"
+      }
+    },
+    "enterprise": {
+      "name": "Entreprise",
+      "price": "Sur devis, à venir",
+      "summary": "Pour une organisation qui veut être accompagnée.",
+      "features": {
+        "everythingTeam": "Tout ce que contient l'offre Équipe",
+        "support": "Un support assuré par l'équipe Overpass"
+      }
+    }
+  },
+  "follow": {
+    "text": "Pour savoir quand les offres Équipe et Entreprise ouvrent :",
+    "link": "s'abonner à la newsletter"
+  }
+}

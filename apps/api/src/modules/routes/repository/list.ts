@@ -5,6 +5,7 @@ import type { ChecksReader } from "../../checks/index.js";
 import type { ListedRow, ListFilters } from "../model.js";
 import { routes, services } from "../tables.js";
 import { rowSelection } from "./select.js";
+import { listedRoute } from "./visibility.js";
 
 const searchColumn = sql`"routes"."search"`;
 
@@ -41,7 +42,7 @@ export async function listRoutes(
   const query = filters.q === undefined ? undefined : textQuery(filters.q);
   const rank = query === undefined ? undefined : sql<number>`ts_rank(${searchColumn}, ${query})`;
   const conditions = [
-    sql`${routes.deletedAt} is null`,
+    listedRoute(),
     ...filterConditions(checks, filters),
     query === undefined ? undefined : sql`${searchColumn} @@ ${query}`,
     afterCursor(filters, rank),

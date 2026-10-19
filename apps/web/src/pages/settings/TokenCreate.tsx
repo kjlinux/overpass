@@ -5,21 +5,34 @@ import { useState } from "preact/hooks";
 import { useTranslation } from "react-i18next";
 import { Button, CodeBlock } from "../../components/ui";
 import { FormAlert, SelectField, TextField, useForm, useSubmit } from "../../forms";
+import { McpConfigTabs } from "../../mcp";
 import { apiRequest } from "../../session";
 
 const blank = { name: "", usage: "mcp" };
 
 /** The clear token lives only in this component's state, then is forgotten. */
-function CreatedPanel({ token, onDone }: { token: CreatedToken; onDone: () => void }): JSX.Element {
+export function CreatedPanel({
+  token,
+  onDone,
+}: {
+  token: CreatedToken;
+  onDone: () => void;
+}): JSX.Element {
   const { t } = useTranslation("settings");
   return (
-    <div
-      role="status"
-      class="flex flex-col gap-4 border border-l-4 border-rule-strong border-l-warning p-4"
-    >
-      <h3 class="text-h3 font-semibold">{t("tokens.createdTitle")}</h3>
-      <p>{t("tokens.createdText")}</p>
+    <div class="flex flex-col gap-4 border border-l-4 border-rule-strong border-l-warning p-4">
+      <div role="status" class="flex flex-col gap-4">
+        <h3 class="text-h3 font-semibold">{t("tokens.createdTitle")}</h3>
+        <p>{t("tokens.createdText")}</p>
+      </div>
       <CodeBlock code={token.token} />
+      {token.usage === "mcp" && (
+        <>
+          <h4 class="mt-2 font-semibold">{t("tokens.configTitle")}</h4>
+          <p>{t("tokens.configText")}</p>
+          <McpConfigTabs token={token.token} />
+        </>
+      )}
       <Button class="self-start" onClick={onDone}>
         {t("tokens.dismiss")}
       </Button>

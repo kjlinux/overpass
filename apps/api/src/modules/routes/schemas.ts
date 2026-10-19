@@ -4,6 +4,7 @@ export {
   routeCreateInput,
   routeListQuery,
   routeReadQuery,
+  routeReportInput,
   routeUpdateInput,
 } from "@overpass/shared";
 

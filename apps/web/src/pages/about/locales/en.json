@@ -1,0 +1,43 @@
+{
+  "title": "About",
+  "intro": "Overpass is the exchange for verified African integrations: developers share there what the official documentation does not say.",
+  "placeholder": "To be completed by the team",
+  "product": {
+    "heading": "The product",
+    "routes": {
+      "name": "Itineraries.",
+      "text": "Integration sheets sorted by service, country and stack, with the code that works, the known potholes and dated checks by other developers."
+    },
+    "track": {
+      "name": "The test track.",
+      "text": "A simulator that replays the real cases of a mobile money payment, to test an integration without a merchant account."
+    },
+    "mcp": {
+      "name": "The MCP server.",
+      "text": "It serves the sheets to coding assistants, so that the developer's AI writes the right local integration."
+    },
+    "community": "Around this core, discussions, the blog and the newsletter keep the community alive.",
+    "action": "Try the demo"
+  },
+  "team": {
+    "heading": "The team",
+    "text": "Overpass is built by Ghostapi, a team of two developers in Côte d'Ivoire.",
+    "members": {
+      "jude": "Jude Koffi",
+      "bradi": "Bradi"
+    }
+  },
+  "contest": {
+    "heading": "The contest",
+    "text": "Overpass answers the theme of the Systalink Challenge, \"Build the African exchange platform, for devs, by devs\", as part of the 2026 African Developers Cup. The project is ranked by the public, the participants and the jury.",
+    "link": "Official page of the African Developers Cup"
+  },
+  "code": {
+    "heading": "Code and licences",
+    "text": "The code is public and relies only on open source components under permissive licences.",
+    "repository": "Public repository",
+    "licence": "Code licence",
+    "components": "Components",
+    "componentsLink": "Licences of every component"
+  }
+}

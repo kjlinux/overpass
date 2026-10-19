@@ -1,0 +1,165 @@
+{
+  "title": "Piste d'essai",
+  "intro": "Appelez un opérateur simulé avec une clé de test, choisissez ce qui doit mal tourner, puis lisez la requête, la réponse et chaque webhook. Aucun compte marchand, aucun argent réel.",
+  "openapi": "Référence OpenAPI du simulateur",
+  "visitor": {
+    "heading": "Une clé de test vous attend",
+    "body": "Connectez-vous pour créer une clé, appeler le simulateur depuis votre code et recevoir les webhooks sur votre poste.",
+    "signIn": "Se connecter",
+    "demo": "Essayer la démo sans compte"
+  },
+  "provider": {
+    "heading": "Opérateur",
+    "label": "Opérateur simulé",
+    "unofficial": "Non officiel",
+    "docs": "Documentation suivie",
+    "version": "Version",
+    "consulted": "Consultée le",
+    "countries": "Pays",
+    "choices": "Ce que le simulateur choisit quand la documentation ne dit rien",
+    "officialSandbox": "Sandbox officiel de l'opérateur",
+    "unavailable": "Le simulateur de cet opérateur n'est pas encore disponible. Voici ceux qui le sont."
+  },
+  "scenario": {
+    "heading": "Scénario",
+    "success": {
+      "label": "Paiement réussi",
+      "help": "Le webhook de succès, livré tout de suite."
+    },
+    "insufficient_funds": {
+      "label": "Solde insuffisant",
+      "help": "Le paiement échoue, le webhook d'échec part tout de suite."
+    },
+    "timeout": {
+      "label": "Délai dépassé côté opérateur",
+      "help": "Le payeur ne répond pas à temps : regardez ce que l'opérateur renvoie."
+    },
+    "duplicate_webhook": {
+      "label": "Webhook reçu en double",
+      "help": "Le même événement, deux fois, à 5 s d'écart."
+    },
+    "late_webhook": {
+      "label": "Webhook reçu en retard",
+      "help": "Le webhook part 60 s après le paiement."
+    }
+  },
+  "keys": {
+    "heading": "Clé de test",
+    "count": "{{count}} sur {{max}}",
+    "empty": "Une clé identifie vos appels et vos webhooks. Elle expire après 30 jours.",
+    "create": "Créer une clé de test",
+    "revealTitle": "Copiez cette clé maintenant.",
+    "revealBody": "Overpass n'en garde qu'une empreinte : elle ne sera plus jamais affichée.",
+    "meta": "Expire le {{date}}, quota de {{quota}} appels par jour",
+    "use": "Utiliser",
+    "revoke": "Révoquer",
+    "revokeTitle": "Révoquer cette clé ?",
+    "revokeBody": "Les appels et le relais qui l'utilisent seront refusés aussitôt. Son historique reste visible 7 jours.",
+    "revokeConfirm": "Révoquer la clé",
+    "secret": "Secret des webhooks",
+    "secretHelp": "Vérifiez la signature des webhooks avec ce secret, comme avec celui de l'opérateur.",
+    "yours": "Votre clé de test"
+  },
+  "target": {
+    "heading": "Où envoyer les webhooks",
+    "inbox": {
+      "label": "Récepteur intégré",
+      "help": "Vous lisez chaque webhook ici, sans rien installer."
+    },
+    "relay": {
+      "label": "Relais local sur mon poste",
+      "help": "Pour votre serveur en développement : ni URL publique, ni tunnel."
+    },
+    "url": {
+      "label": "Mon URL publique",
+      "help": "Une adresse privée ou locale est refusée."
+    },
+    "terminal": "Terminal, votre clé est déjà insérée",
+    "terminalPrefix": "Terminal : remplacez le début de clé par votre clé complète",
+    "relayHelp": "La commande ouvre une connexion sortante vers Overpass et rejoue chaque webhook sur votre serveur, corps et en-têtes intacts.",
+    "urlLabel": "URL qui reçoit les webhooks",
+    "urlHelp": "Overpass la vérifie de nouveau à chaque envoi et ne suit aucune redirection.",
+    "save": "Enregistrer l'URL",
+    "inboxHelp": "Les webhooks apparaissent dans Livraisons, avec leur corps et leurs en-têtes."
+  },
+  "launch": {
+    "heading": "Lancer",
+    "provider": "Opérateur",
+    "scenario": "Scénario",
+    "key": "Clé",
+    "target": "Webhooks",
+    "button": "Lancer le paiement simulé",
+    "note": "{{method}} {{path}}, l'exemple de la documentation, avec votre clé de test.",
+    "needKey": "Créez d'abord une clé de test : le paiement simulé l'utilise."
+  },
+  "inspector": {
+    "heading": "Inspecteur",
+    "label": "Contenu de l'appel",
+    "request": "Requête",
+    "response": "Réponse",
+    "headers": "En-têtes",
+    "last": "Dernier appel, {{time}}",
+    "emptyTitle": "Aucun appel pour l'instant",
+    "emptyBody": "Lancez un paiement simulé, ou appelez le simulateur depuis votre code avec cette clé."
+  },
+  "deliveries": {
+    "heading": "Livraisons",
+    "caption": "Corps et en-têtes tels que votre serveur les reçoit",
+    "none": "Aucun webhook pour cet appel : l'opérateur n'en documente pas pour ce cas. Lisez la ressource pour constater son état.",
+    "replay": "Rejouer",
+    "replayed": "Livraison rejouée : elle part dans un instant.",
+    "event": "Événement",
+    "same": "Même identifiant que la livraison précédente : votre code doit l'ignorer.",
+    "body": "Corps et en-têtes",
+    "trip": "Trajet du webhook",
+    "stops": {
+      "overpass": "Overpass",
+      "relay": "Relais local",
+      "internet": "Internet",
+      "server": "Votre serveur",
+      "url": "Votre URL",
+      "inbox": "Récepteur intégré"
+    },
+    "state": {
+      "leaves": "part à {{time}}",
+      "sent": "envoyé à {{time}}",
+      "waiting": "en attente",
+      "relayWait": "attend la commande overpass-cli",
+      "passed": "transmis",
+      "received": "reçu, {{status}} en {{duration}} ms",
+      "notYet": "pas encore reçu",
+      "failed": "échec : {{reason}}",
+      "noAnswer": "aucune réponse"
+    }
+  },
+  "demo": {
+    "title": "Démo de la piste d'essai",
+    "intro": "Un paiement Wave simulé, sans compte : choisissez un scénario, lancez, et regardez le webhook arriver.",
+    "scenarios": "Scénario de la démo",
+    "button": "Lancer la démo",
+    "waiting": "Le webhook est en route.",
+    "done": "Webhook reçu.",
+    "more": "Pour vos propres appels et le relais local, créez une clé de test.",
+    "failed": "La démo n'a pas pu démarrer. Réessayez dans un instant."
+  },
+  "launchPage": {
+    "title": "Paiement simulé",
+    "body": "Cette page remplace la page de paiement de {{provider}} pendant vos tests. Le scénario de votre clé décide de l'issue : il n'y a rien à payer ici.",
+    "session": "Session",
+    "back": "Retour à la piste d'essai"
+  },
+  "errors": {
+    "load": "La piste d'essai n'a pas pu charger vos clés. Réessayez dans un instant.",
+    "action": "L'action n'a pas abouti. Réessayez dans un instant."
+  },
+  "guided": {
+    "heading": "Démo guidée",
+    "intro": "{{count}} étapes, du jeton au webhook reçu sur votre poste. Copiez chaque commande dans votre terminal, ou jouez l'étape depuis cette page : la réponse s'affiche dans l'inspecteur.",
+    "step": "Étape {{number}}",
+    "copy": "Commande à copier",
+    "play": "Jouer l'étape",
+    "result": "Réponse {{status}}",
+    "webhookTitle": "Webhook reçu en local",
+    "webhook": "Lancez le relais local, puis rejouez l'étape qui crée le paiement : le webhook arrive sur votre serveur, signé selon le schéma de l'opérateur."
+  }
+}

@@ -29,7 +29,11 @@ function Facts({ route }: { route: RouteDetail }): JSX.Element {
   const version = { version: route.version, date: formatDate(route.updatedAt, language) };
   return (
     <dl class="m-0 grid grid-cols-2 border-y border-rule sm:grid-cols-3 lg:grid-cols-6">
-      <Fact label={t("detail.facts.service")}>{route.service.name}</Fact>
+      <Fact label={t("detail.facts.service")}>
+        <a href={localizedPath(language, `/services/${route.service.slug}`)}>
+          {route.service.name}
+        </a>
+      </Fact>
       <Fact label={t("detail.facts.country")}>{countryName(route.country, language)}</Fact>
       <Fact label={t("detail.facts.stack")}>{stackName(route.stack)}</Fact>
       <Fact label={t("detail.facts.language")}>{languageNames[route.language]}</Fact>

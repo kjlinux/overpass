@@ -1,4 +1,4 @@
-import type { Me, MyCheck, RouteSummary } from "@overpass/shared";
+import type { Me, MyCheck, Proposal, RouteSummary } from "@overpass/shared";
 import type { ComponentChildren, JSX } from "preact";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../app/useLanguage";
@@ -8,6 +8,7 @@ import { localizedPath } from "../../layout/nav";
 import { RequireSession, usePublicProfile } from "../../session";
 import { useApi } from "../routes/useApi";
 import { MyChecksList, MyRoutesList } from "./MyLists";
+import { MyProposalsList } from "./MyProposals";
 
 function Column({ heading, children }: { heading: string; children: ComponentChildren }) {
   return (
@@ -37,6 +38,19 @@ function PointsColumn({ handle }: { handle: string }): JSX.Element {
         {t("points.profile")}
       </a>
     </Column>
+  );
+}
+
+function ProposalsSection(): JSX.Element {
+  const { t } = useTranslation("dashboard");
+  const { state } = useApi<Proposal[]>("/v1/me/service-proposals");
+  return (
+    <section aria-labelledby="proposals-heading" class="mt-8 border-t border-rule pt-8">
+      <h2 id="proposals-heading" class="mb-4 text-h2 font-semibold">
+        {t("proposals.heading")}
+      </h2>
+      {state.status === "ready" ? <MyProposalsList proposals={state.data} /> : <Loading />}
+    </section>
   );
 }
 
@@ -100,6 +114,7 @@ function Board({ me }: { me: Me }): JSX.Element {
         <ChecksColumn />
         <PointsColumn handle={me.handle} />
       </div>
+      <ProposalsSection />
     </section>
   );
 }

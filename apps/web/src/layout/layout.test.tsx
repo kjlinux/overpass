@@ -31,10 +31,10 @@ describe("Layout", () => {
     expect(html).toContain('href="/fr/sandbox"');
   });
 
-  it("keeps the newsletter form inactive and the footer links localized", () => {
+  it("offers a working newsletter form and localized footer links", () => {
     const html = renderLayout();
-    expect(html).toContain("<fieldset disabled");
-    expect(html).toContain(fr.newsletter.inactive);
+    expect(html).not.toContain("<fieldset disabled");
+    expect(html).toContain(fr.newsletter.note);
     expect(html).toContain('href="/fr/privacy"');
     expect(html).toContain(fr.legalLine);
   });

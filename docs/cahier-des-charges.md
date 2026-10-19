@@ -103,7 +103,7 @@ Le périmètre tient en dix modules, dont quatre sont indispensables à la soumi
 - Webhook reçu en double
 - Webhook reçu en retard
 
-Opérateurs simulés, dans cet ordre : Wave, CinetPay, PI-SPI (le système de paiement instantané de la BCEAO), puis PayDunya. Ce sont les quatre dont la documentation technique est publique. Orange Money et Moov Money n'ont pas de simulateur, faute de documentation technique publique, mais ils gardent leurs fiches d'intégration.
+Opérateurs simulés, dans cet ordre : Wave, PI-SPI (le système de paiement instantané de la BCEAO), puis PayDunya. CinetPay est reporté (décision du 14 octobre 2026) : docs.cinetpay.com ne répond plus, et sa nouvelle API n'est décrite que par le code de ses SDK, qui n'est pas une documentation publique. Il reviendra quand sa documentation sera de nouveau consultable. Orange Money et Moov Money n'ont pas de simulateur, faute de documentation technique publique, mais ils gardent leurs fiches d'intégration. PayDunya suit sa seule page HTTP/JSON, sans version : les points qu'elle ne précise pas (codes d'erreur, encodage de l'IPN, entrée du hash) sont des choix du simulateur, listés dans ses notes (décision du 15 octobre 2026).
 
 Documentations suivies, consultées le 12 octobre 2026 : [Wave Checkout API](https://docs.wave.com/checkout), [CinetPay](https://docs.cinetpay.com/api/1.0-fr/checkout/initialisation), [PI-SPI](https://developer.pispi.bceao.int), [PayDunya](https://developers.paydunya.com/doc/FR/http_json). La page [Orange Money Web Payment](https://developer.orange.com/apis/om-webpay) réserve l'accès technique aux marchands inscrits.
 
@@ -306,7 +306,7 @@ Le navigateur et l'assistant de code entrent par Caddy. Le serveur MCP ne lit ja
 | API | Fastify, validation par Zod | MIT |
 | Accès aux données | Drizzle ORM, node-postgres | Apache 2.0, MIT |
 | Base de données | PostgreSQL, recherche plein texte native | Licence PostgreSQL |
-| File d'attente | pg-boss, portée par PostgreSQL | MIT |
+| File d'attente | Table `sandbox_deliveries` lue avec `FOR UPDATE SKIP LOCKED`, diffusion par `LISTEN/NOTIFY` | Licence PostgreSQL |
 | Serveur MCP | SDK officiel TypeScript | MIT |
 | Tests | Vitest 5, Playwright | MIT, Apache 2.0 |
 | Proxy et HTTPS | Caddy | Apache 2.0 |
@@ -357,7 +357,7 @@ Trois modules s'ajoutent pour la communauté : `discussions`, `blog` et `newslet
 
 ## 9. Modèle de données
 
-Dix-sept tables suffisent à la première version : chacune appartient à un seul module, sauf les compteurs de limitation de débit, partagés par l'infrastructure de l'API.
+Ces tables suffisent à la première version : chacune appartient à un seul module, sauf les compteurs de limitation de débit, partagés par l'infrastructure de l'API.
 
 | Table | Module | Champs principaux |
 | --- | --- | --- |
@@ -371,6 +371,8 @@ Dix-sept tables suffisent à la première version : chacune appartient à un seu
 | `potholes` | checks | fiche, utilisateur, description, statut (ouvert, confirmé, résolu), date |
 | `sandbox_keys` | sandbox | utilisateur, opérateur, clé hachée, quota, date d'expiration |
 | `sandbox_events` | sandbox | clé, scénario, requête, réponse, webhooks envoyés, date |
+| `sandbox_objects` | sandbox | clé, opérateur, type (session, demande de paiement), identifiant, état, date |
+| `sandbox_deliveries` | sandbox | clé, événement, cible (URL, relais local, récepteur intégré), corps brut, en-têtes, tentatives, prochaine tentative, code de réponse, durée, état |
 | `api_tokens` | accounts | utilisateur, nom, usage (MCP ou API), jeton haché, dernière utilisation, date de révocation |
 | `rate_limit_counters` | infrastructure | clé (route et adresse), nombre de requêtes, fin de la fenêtre |
 
@@ -407,7 +409,7 @@ L'API REST est le seul point d'accès aux données : l'interface, le serveur MCP
 | Comptes | `POST /v1/auth/register`, `POST /v1/auth/login`, `POST /v1/auth/logout`, `POST /v1/auth/forgot`, `POST /v1/auth/reset`, `GET` et `PATCH /v1/me`, `PUT /v1/me/password`, `DELETE /v1/me`, `GET /v1/users/:handle` |
 | Fiches | `GET /v1/services`, `GET /v1/routes`, `GET /v1/routes/:id`, `POST /v1/routes`, `PATCH /v1/routes/:id`, `DELETE /v1/routes/:id`, `GET /v1/me/routes` |
 | Vérifications | `POST /v1/routes/:id/checks`, `POST /v1/routes/:id/potholes`, `PATCH /v1/potholes/:id`, `GET /v1/me/checks` |
-| Piste d'essai | `POST /v1/sandbox/keys`, `GET /v1/sandbox/events`, `POST /v1/sandbox/:provider/*` |
+| Piste d'essai | `POST /v1/sandbox/keys`, `GET /v1/sandbox/events`, `GET /v1/sandbox/listen`, `POST /v1/sandbox/deliveries/:id/replay`, toutes méthodes sur `/v1/sandbox/:provider/*` (réponses au format de l'opérateur, hors enveloppe) |
 | Classement | `GET /v1/ranking/countries`, `GET /v1/ranking/developers` |
 | Jetons | `GET /v1/tokens`, `POST /v1/tokens`, `DELETE /v1/tokens/:id` |
 
@@ -563,7 +565,7 @@ Le code est gelé le 24 octobre, ce qui laisse une journée de marge avant la cl
 7. **23 octobre.** Audit des licences, tests de bout en bout, sécurité, vidéo de 90 secondes.
 8. **24 octobre.** Gel du code et soumission.
 
-**Ordre de coupe en cas de retard.** PayDunya, puis PI-SPI, puis envoi automatique de la newsletter (l'inscription reste), puis serveur MCP, puis classement, puis blog, puis discussions. Le simulateur avec Wave et CinetPay, les fiches et les vérifications ne se coupent pas.
+**Ordre de coupe en cas de retard.** PayDunya, puis PI-SPI, puis envoi automatique de la newsletter (l'inscription reste), puis serveur MCP, puis classement, puis blog, puis discussions. Le simulateur avec Wave et le relais local, les fiches et les vérifications ne se coupent pas.
 
 **Critères d'acceptation**
 
@@ -588,9 +590,11 @@ Le code est gelé le 24 octobre, ce qui laisse une journée de marge avant la cl
 - Pondération des votes du public, des participants et du jury.
 - Stack : tranché le 12 octobre, TypeScript de bout en bout (section 8).
 - Nom : « Overpass API » désigne déjà un service d'OpenStreetMap. Garder le nom avec un qualificatif et un domaine .africa, ou en changer ?
-- Opérateurs simulés : tranché le 12 octobre, Wave, CinetPay, PI-SPI puis PayDunya (section 4).
+- Opérateurs simulés : tranché le 12 octobre, revu le 14 octobre : Wave, PI-SPI puis PayDunya ; CinetPay reporté, sa documentation étant hors ligne (section 4).
 - Langue des commentaires de code : anglais par défaut dans ce document.
 - Lecture retenue pour les commentaires : 20 % est un plafond, pas un quota à atteindre.
+- Newsletter (16 octobre 2026, à valider) : les liens de confirmation et de désinscription ouvrent une page qui appelle `POST /v1/newsletter/confirm` et `POST /v1/newsletter/unsubscribe`, au lieu des `GET` de la section 10, pour que les antivirus de messagerie qui suivent les liens ne confirment ni ne désinscrivent à la place du lecteur ; chaque numéro porte aussi les en-têtes `List-Unsubscribe` et `List-Unsubscribe-Post` (RFC 8058). Une table `newsletter_deliveries` (file d'envoi par lots) s'ajoute à la section 9.
+- Blog (16 octobre 2026) : les routes de la section 10 sont complétées par les commentaires, les étoiles, les abonnements, les signalements, la modération et `GET /v1/blogs/:handle` ; les tables `post_reports` et `blog_suspensions` s'ajoutent à celles de la mise à jour du 13 octobre.
 
 **Sources**
 

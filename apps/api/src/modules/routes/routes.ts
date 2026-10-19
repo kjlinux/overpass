@@ -8,6 +8,7 @@ import {
   routeCreateInput,
   routeListQuery,
   routeReadQuery,
+  routeReportInput,
   routeUpdateInput,
 } from "./schemas.js";
 import type { RoutesService } from "./service.js";
@@ -23,6 +24,7 @@ const limits = {
   create: { max: 20, timeWindow: hour },
   update: { max: 120, timeWindow: hour },
   remove: { max: 20, timeWindow: hour },
+  report: { max: 30, timeWindow: hour },
 };
 
 type Context = { app: FastifyInstance; service: RoutesService; resolve: AccountResolver };
@@ -62,6 +64,16 @@ function writeRoutes({ app, service, resolve }: Context): void {
   });
 }
 
+function reportRoutes({ app, service, resolve }: Context): void {
+  const options = { config: { rateLimit: limits.report } };
+  app.post("/v1/routes/:id/reports", options, async (request, reply) => {
+    const account = await requireAccount(resolve, request);
+    const { id } = parseInput(idParams, request.params);
+    await service.report(account, id, parseInput(routeReportInput, request.body));
+    return reply.code(201).send(ok({ reported: true }));
+  });
+}
+
 /** HTTP surface of the module; handlers only parse, delegate and shape the envelope. */
 export function registerRoutesRoutes(
   app: FastifyInstance,
@@ -73,4 +85,5 @@ export function registerRoutesRoutes(
   });
   readRoutes({ app, service, resolve });
   writeRoutes({ app, service, resolve });
+  reportRoutes({ app, service, resolve });
 }

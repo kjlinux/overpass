@@ -1,0 +1,37 @@
+{
+  "title": "Ranking",
+  "intro": "The countries and developers who move African integrations forward. Points are computed from contributions, never typed.",
+  "countries": {
+    "heading": "Countries"
+  },
+  "developers": {
+    "heading": "Developers",
+    "country": "Country",
+    "all": "All countries",
+    "filter": "Show"
+  },
+  "columns": {
+    "rank": "Rank",
+    "country": "Country",
+    "developer": "Developer",
+    "points": "Points",
+    "developers": "Developers"
+  },
+  "empty": {
+    "title": "Nobody has points yet",
+    "text": "Publish a route, check one or answer a question to open the ranking.",
+    "action": "Browse the itineraries"
+  },
+  "rules": {
+    "heading": "How to earn points",
+    "intro": "Each contribution counts once; hidden or removed content earns nothing.",
+    "routes": "Published route",
+    "checks": "Check of a route",
+    "potholes": "Pothole confirmed by the author",
+    "accepted": "Accepted reply",
+    "useful": "Reply found useful",
+    "articles": "Published article",
+    "points_one": "{{count}} point",
+    "points_other": "{{count}} points"
+  }
+}

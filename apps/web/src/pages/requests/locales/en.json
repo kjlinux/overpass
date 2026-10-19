@@ -1,0 +1,50 @@
+{
+  "category": {
+    "payment": "Payment",
+    "sms": "SMS",
+    "ussd": "USSD"
+  },
+  "service": {
+    "unofficial": "Unofficial simulator",
+    "coverage": "Covered countries",
+    "noCountry": "No confirmed country yet: a country becomes confirmed once a route there reaches a clear road.",
+    "routes": "See the itineraries of this service",
+    "simulator": "Simulator",
+    "simulated": "This service has an unofficial simulator on the test track.",
+    "track": "Open the test track",
+    "noSimulator": "{{service}} has no simulator yet. The most requested ones come first."
+  },
+  "vote": {
+    "count_one": "{{count}} request",
+    "count_other": "{{count}} requests",
+    "ask": "I want a simulator",
+    "withdraw": "Withdraw my request",
+    "signIn": "Sign in to vote",
+    "ranking": "See the ranking of requests"
+  },
+  "ranking": {
+    "title": "Requested simulators",
+    "intro": "The services without a simulator that members wait for the most, ranked by votes.",
+    "rank": "Rank",
+    "service": "Service",
+    "category": "Category",
+    "votes": "Votes",
+    "emptyTitle": "No request yet",
+    "emptyText": "Open the page of a service without a simulator to vote.",
+    "browse": "Browse the itineraries"
+  },
+  "propose": {
+    "link": "Propose a service",
+    "title": "Propose a service",
+    "intro": "A service is missing from the catalogue? Give its name and the link to its public documentation: the team reviews it and answers by e-mail.",
+    "name": "Service name",
+    "category": "Category",
+    "country": "Country",
+    "docsUrl": "Link to the documentation",
+    "docsHelp": "A public https address, for example https://developer.example.com.",
+    "submit": "Send the proposal",
+    "sentTitle": "Proposal sent",
+    "sentText": "Thank you: {{name}} awaits the team's review. You will get the answer by e-mail.",
+    "dashboard": "Follow my proposals"
+  }
+}

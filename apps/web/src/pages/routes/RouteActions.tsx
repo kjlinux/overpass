@@ -1,4 +1,4 @@
-import type { RouteDetail } from "@overpass/shared";
+import type { RouteDetail, SandboxProvider } from "@overpass/shared";
 import type { JSX } from "preact";
 import { useLocation } from "preact-iso";
 import { useTranslation } from "react-i18next";
@@ -6,9 +6,7 @@ import { useLanguage } from "../../app/useLanguage";
 import { Button, ButtonLink } from "../../components/ui";
 import { localizedPath } from "../../layout";
 import { formatDate } from "./format";
-
-/** The sandbox module has not shipped yet; flip this when its page exists. */
-const testTrackReady: boolean = false;
+import { useApi } from "./useApi";
 
 const blocked =
   "aria-disabled:cursor-not-allowed aria-disabled:border-rule aria-disabled:bg-surface aria-disabled:text-ink-2";
@@ -17,8 +15,14 @@ function TestAction({ route }: { route: RouteDetail }): JSX.Element {
   const { t } = useTranslation("routes");
   const language = useLanguage();
   const service = route.service.name;
-  if (testTrackReady && route.service.simulated) {
-    const href = localizedPath(language, `/sandbox?service=${route.service.slug}`);
+  const providers = useApi<SandboxProvider[]>("/v1/sandbox/providers").state;
+  const ready =
+    providers.status === "ready" && providers.data.some((item) => item.id === route.service.slug);
+  if (ready) {
+    const href = localizedPath(
+      language,
+      `/sandbox?provider=${route.service.slug}&scenario=success`,
+    );
     return (
       <ButtonLink variant="primary" class="w-full" href={href}>
         {t("detail.test")}
@@ -95,6 +99,18 @@ export function RouteActions({ route, onVerify, onRemove }: RouteActionsProps): 
     <div class="flex flex-col gap-4">
       <TestAction route={route} />
       <VerifyAction route={route} onVerify={onVerify} />
+      <div class="flex flex-col gap-2">
+        <ButtonLink
+          class="w-full"
+          aria-describedby="ask-note"
+          href={localizedPath(language, `/discussions/new?route=${route.id}`)}
+        >
+          {t("detail.notWorking")}
+        </ButtonLink>
+        <p id="ask-note" class="text-caption text-ink-2">
+          {t("detail.notWorkingNote")}
+        </p>
+      </div>
       {route.viewer.isAuthor ? (
         <div class="flex flex-wrap gap-2 border-t border-rule pt-4">
           <ButtonLink variant="ghost" href={localizedPath(language, `/routes/${route.id}/edit`)}>

@@ -2,6 +2,56 @@
   "app": {
     "name": "Overpass",
     "tagline": "The exchange for verified African integrations.",
-    "intro": "Developers share what the official documentation does not say: the code that works, the known traps and dated verifications."
+    "intro": "The code that works, the known traps and dated checks, shared by the developers who integrated Wave, Orange Money or PI-SPI before you.",
+    "demo": "Try the demo",
+    "routes": "Browse the itineraries"
+  },
+  "scene": {
+    "label": "A webhook leaves Wave or PI-SPI, goes through Overpass and lands on localhost.",
+    "departure": "Departure",
+    "relay": "Relay",
+    "arrival": "Arrival",
+    "caption": "A webhook's journey",
+    "still": "Still image",
+    "live": "Slow loop, paused off screen",
+    "wave": "Wave",
+    "waveSub": "or PI-SPI, simulated",
+    "waveShort": "simulated",
+    "overpass": "Overpass",
+    "overpassSub": "relay",
+    "localhost": "localhost",
+    "localhostSub": ":3000/webhooks",
+    "localhostShort": ":3000",
+    "post": "POST /webhooks",
+    "event": "checkout.session.completed",
+    "emitted": "sent by the operator",
+    "signed": "signed, replayed if refused",
+    "received": "received, 200 OK"
+  },
+  "demo": {
+    "title": "The demo, right here",
+    "intro": "A simulated Wave payment, no account. One click, and watch the webhook arrive.",
+    "run": "Start a simulated payment",
+    "rerun": "Run the simulated payment again",
+    "idle": "The real simulator answers: nothing is charged, nothing leaves Overpass.",
+    "loading": "Loading the demo",
+    "pending": "waiting",
+    "elapsed": "+{{ms}} ms",
+    "stages": {
+      "request": "Request sent",
+      "response": "Response received",
+      "webhook": "Webhook delivered",
+      "webhookFailed": "Webhook not delivered"
+    },
+    "receiver": "to the built-in receiver",
+    "live": {
+      "request": "Request sent.",
+      "response": "Response received, {{status}}. The webhook is on its way.",
+      "webhook": "Webhook delivered to the built-in receiver.",
+      "webhookFailed": "The webhook was not delivered: replay it from the test track.",
+      "failed": "The simulator is not answering. Try again in a moment."
+    },
+    "more": "Test keys, local relay and five scenarios:",
+    "open": "open the test track"
   }
 }

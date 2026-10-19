@@ -26,6 +26,7 @@ export function checkService(deps: ChecksDeps) {
       const created = await repository.insertCheckUnlessRecent(check, since);
       if (created === null) throw new AppError("check_too_soon", 409);
       await confirmCoverageIfClear(deps, routeId);
+      await deps.onContribution([account.id]);
       return toCheck(created, account.handle);
     },
 

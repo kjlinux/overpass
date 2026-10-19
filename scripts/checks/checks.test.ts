@@ -45,6 +45,15 @@ describe("findDeepImports", () => {
     expect(findDeepImports(file, 'import { x } from "../accounts/service.js";')).toHaveLength(1);
   });
 
+  it("treats provider folders as modules, not the files beside them", () => {
+    const adapter = "packages/providers/src/wave/endpoints.ts";
+    expect(findDeepImports(adapter, 'import { x } from "../testing.js";')).toEqual([]);
+    expect(
+      findDeepImports("packages/providers/src/a.test.ts", 'import { x } from "./index.js";'),
+    ).toEqual([]);
+    expect(findDeepImports(adapter, 'import { x } from "../pispi/wire.js";')).toHaveLength(1);
+  });
+
   it("rejects package internals", () => {
     expect(findDeepImports(file, 'import { x } from "@overpass/shared/src/a";')).toHaveLength(1);
   });

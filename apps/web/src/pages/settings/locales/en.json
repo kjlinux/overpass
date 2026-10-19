@@ -43,6 +43,8 @@
     "submit": "Create the token",
     "createdTitle": "Copy this token now",
     "createdText": "It will never be shown again. Overpass only keeps a fingerprint of it.",
+    "configTitle": "Configure your editor",
+    "configText": "The token is already filled in. Copy your editor's configuration before closing this panel.",
     "dismiss": "I copied the token",
     "list": "Active tokens",
     "created": "Created on",

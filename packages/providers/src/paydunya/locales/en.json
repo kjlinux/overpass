@@ -1,0 +1,23 @@
+{
+  "summary": "Unofficial simulator of PayDunya's redirect payment: invoice creation, payment status check and IPN.",
+  "notes": [
+    "Built from PayDunya's public HTTP/JSON page only, which carries no version or date: the version shown is the consultation date.",
+    "Replace https://app.paydunya.com/sandbox-api/v1/ with the simulator's address: paths stay /checkout-invoice/create and /checkout-invoice/confirm/{token}.",
+    "Your Overpass test key goes in the PAYDUNYA-PRIVATE-KEY header; PAYDUNYA-MASTER-KEY and PAYDUNYA-TOKEN are accepted whatever their value.",
+    "The hash is the SHA-512 of the MasterKey, as documented. In the IPN, the MasterKey is the secret shown on the track for your key; send that secret in PAYDUNYA-MASTER-KEY so confirm returns the same hash.",
+    "The IPN is posted as application/x-www-form-urlencoded, fields under data with brackets (data[invoice][token]), as the documentation's PHP example reads them; the exact encoding is not described there.",
+    "Scenarios give the documented statuses: completed for success, failed for insufficient funds (empty fail_reason, the documentation only fills it for card payments), pending with no IPN for the timeout.",
+    "The IPN goes to the target chosen on the test track, not to actions.callback_url.",
+    "The documentation only describes the success code 00: the simulator's refusals carry codes OVP-400, OVP-401, OVP-404 and OVP-429, which are not PayDunya's.",
+    "receipt_url points to a simulator page, not a PDF receipt; the default customer is made up.",
+    "Payment and redistribution (direct-pay/credit-account) is not simulated."
+  ],
+  "endpoints": {
+    "POST /sandbox-api/v1/checkout-invoice/create": "Create an invoice and get the payment address",
+    "GET /sandbox-api/v1/checkout-invoice/confirm/:token": "Check an invoice's payment status"
+  },
+  "steps": {
+    "invoice": "Create a 5,000 FCFA invoice with your test key.",
+    "confirm": "Check the invoice status: the virtual payer acted according to the scenario."
+  }
+}

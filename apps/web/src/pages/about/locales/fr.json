@@ -1,0 +1,43 @@
+{
+  "title": "À propos",
+  "intro": "Overpass est la bourse des intégrations africaines vérifiées : les développeurs y échangent ce que la documentation officielle ne dit pas.",
+  "placeholder": "À compléter par l'équipe",
+  "product": {
+    "heading": "Le produit",
+    "routes": {
+      "name": "Les itinéraires.",
+      "text": "Des fiches d'intégration classées par service, pays et stack, avec le code qui marche, les pièges connus et des vérifications datées par d'autres développeurs."
+    },
+    "track": {
+      "name": "La piste d'essai.",
+      "text": "Un simulateur qui rejoue les cas réels d'un paiement mobile money, pour tester une intégration sans compte marchand."
+    },
+    "mcp": {
+      "name": "Le serveur MCP.",
+      "text": "Il sert les fiches aux assistants de code, pour que l'IA du développeur écrive la bonne intégration locale."
+    },
+    "community": "Autour de ce cœur, les discussions, le blog et la newsletter font vivre la communauté.",
+    "action": "Essayer la démo"
+  },
+  "team": {
+    "heading": "L'équipe",
+    "text": "Overpass est construit par Ghostapi, une équipe de deux développeurs en Côte d'Ivoire.",
+    "members": {
+      "jude": "Jude Koffi",
+      "bradi": "Bradi"
+    }
+  },
+  "contest": {
+    "heading": "Le concours",
+    "text": "Overpass répond au thème du Systalink Challenge, « Construire la plateforme d'échange africaine, pour les devs, par les devs », dans le cadre de la Coupe Afrique des Développeurs 2026. Le projet est classé par le public, les participants et le jury.",
+    "link": "Page officielle de la Coupe Afrique des Développeurs"
+  },
+  "code": {
+    "heading": "Code et licences",
+    "text": "Le code est public et ne s'appuie que sur des composants open source sous licence permissive.",
+    "repository": "Dépôt public",
+    "licence": "Licence du code",
+    "components": "Composants",
+    "componentsLink": "Licences de tous les composants"
+  }
+}

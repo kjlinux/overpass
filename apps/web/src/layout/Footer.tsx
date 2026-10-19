@@ -1,8 +1,7 @@
-import { languageNames, supportedLanguages } from "@overpass/shared";
 import type { Language } from "@overpass/shared";
 import type { JSX } from "preact";
 import { useTranslation } from "react-i18next";
-import { Button, Field, Select, TextInput } from "../components/ui";
+import { SubscribeForm } from "../newsletter";
 import { localizedPath } from "./nav";
 
 type LinkGroup = { key: "product" | "community" | "legal"; links: { key: string; path: string }[] };
@@ -23,6 +22,8 @@ const groups: LinkGroup[] = [
       { key: "discussions", path: "/discussions" },
       { key: "blog", path: "/blog" },
       { key: "ranking", path: "/ranking" },
+      { key: "simulators", path: "/simulator-requests" },
+      { key: "propose", path: "/services/propose" },
     ],
   },
   {
@@ -35,46 +36,19 @@ const groups: LinkGroup[] = [
   },
 ];
 
-/** The newsletter form, inactive until the newsletter module ships. */
-function Newsletter({ language }: { language: Language }): JSX.Element {
-  const { t } = useTranslation("layout");
-  return (
-    <form class="border-b border-rule pb-8" aria-describedby="newsletter-note">
-      <fieldset disabled class="grid gap-3 md:grid-cols-[1fr_auto_auto] md:items-end">
-        <legend class="mb-3 font-semibold">{t("newsletter.title")}</legend>
-        <Field id="newsletter-email" label={t("newsletter.email")}>
-          {(control) => <TextInput {...control} type="email" name="email" autocomplete="email" />}
-        </Field>
-        <Field id="newsletter-language" label={t("newsletter.language")}>
-          {(control) => (
-            <Select
-              {...control}
-              name="language"
-              value={language}
-              options={supportedLanguages.map((code) => ({
-                value: code,
-                label: languageNames[code],
-              }))}
-            />
-          )}
-        </Field>
-        <Button type="submit">{t("newsletter.subscribe")}</Button>
-      </fieldset>
-      <p class="mt-3 text-caption text-ink-2" id="newsletter-note">
-        {t("newsletter.inactive")}
-      </p>
-    </form>
-  );
-}
-
 /** Surface-coloured footer: newsletter first, then three ruled link columns. */
-export function Footer({ language }: { language: Language }): JSX.Element {
+export function Footer(props: { language: Language; newsletter?: boolean }): JSX.Element {
+  const { language, newsletter = true } = props;
   const { t } = useTranslation("layout");
   return (
     <footer class="border-t border-rule bg-surface py-16">
       <div class="mx-auto max-w-frame px-4 md:px-6 lg:px-8">
-        <Newsletter language={language} />
-        <div class="grid pt-8 md:grid-cols-3">
+        {newsletter ? (
+          <div class="border-b border-rule pb-8">
+            <SubscribeForm language={language} variant="footer" />
+          </div>
+        ) : null}
+        <div class={newsletter ? "grid pt-8 md:grid-cols-3" : "grid md:grid-cols-3"}>
           {groups.map((group) => (
             <section
               key={group.key}

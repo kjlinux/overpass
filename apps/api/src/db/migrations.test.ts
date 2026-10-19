@@ -29,17 +29,50 @@ describe("migrations", () => {
       "0003_routes",
       "0004_checks",
       "0005_service_countries",
+      "0006_sandbox",
+      "0007_sent_order",
+      "0008_discussions",
+      "0009_ranking",
+      "0010_requests",
+      "0011_route_source_thread",
+      "0012_blog",
+      "0013_star_points",
+      "0014_newsletter",
+      "0015_admin",
     ]);
     expect(await tables()).toEqual([
       "api_tokens",
+      "blog_suspensions",
       "checks",
+      "follows",
+      "member_points",
+      "moderation_actions",
+      "newsletter_deliveries",
+      "newsletter_issues",
+      "newsletter_subscribers",
+      "post_comments",
+      "post_reports",
+      "post_stars",
+      "posts",
       "potholes",
       "rate_limit_counters",
+      "replies",
+      "reply_votes",
+      "reports",
+      "route_reports",
       "route_versions",
       "routes",
+      "sandbox_deliveries",
+      "sandbox_events",
+      "sandbox_keys",
+      "sandbox_objects",
       "schema_migrations",
       "service_countries",
+      "service_proposals",
       "services",
+      "simulator_votes",
+      "threads",
+      "topics",
       "user_stacks",
       "users",
     ]);
@@ -52,7 +85,17 @@ describe("migrations", () => {
 
   it("reverts the last migration and can apply it again", async () => {
     await migrateUp(executor, migrationsDirectory);
-    expect(await migrateDown(executor, migrationsDirectory, 5)).toEqual([
+    expect(await migrateDown(executor, migrationsDirectory, 15)).toEqual([
+      "0015_admin",
+      "0014_newsletter",
+      "0013_star_points",
+      "0012_blog",
+      "0011_route_source_thread",
+      "0010_requests",
+      "0009_ranking",
+      "0008_discussions",
+      "0007_sent_order",
+      "0006_sandbox",
       "0005_service_countries",
       "0004_checks",
       "0003_routes",
@@ -60,7 +103,24 @@ describe("migrations", () => {
       "0001_accounts",
     ]);
     expect(await tables()).toEqual(["schema_migrations"]);
-    expect(await migrateUp(executor, migrationsDirectory)).toHaveLength(5);
+    expect(await migrateUp(executor, migrationsDirectory)).toHaveLength(15);
+  });
+
+  it("seeds the six translated discussion themes in their order", async () => {
+    await migrateUp(executor, migrationsDirectory);
+    const rows = await executor.query<{ slug: string; fr: string; en: string }>(
+      "select slug, names->>'fr' as fr, names->>'en' as en from topics order by position",
+    );
+    expect(rows.map((row) => row.slug)).toEqual([
+      "integrations",
+      "cloud",
+      "tools-ai",
+      "career",
+      "projects",
+      "events",
+    ]);
+    expect(rows[0]).toMatchObject({ fr: "Intégrations et API", en: "Integrations and APIs" });
+    expect(rows.every((row) => row.fr.length > 0 && row.en.length > 0)).toBe(true);
   });
 
   it("stores identifiers as UUID and dates as timestamptz", async () => {
@@ -84,5 +144,20 @@ describe("migrations", () => {
     );
     await executor.query("delete from users");
     expect(await executor.query("select * from user_stacks")).toEqual([]);
+  });
+
+  it("fills the points cache from the contributions made before the ranking existed", async () => {
+    await migrateUp(executor, migrationsDirectory);
+    await executor.query(
+      "insert into users (id, email, password_hash, handle, country) values ('00000000-0000-4000-8000-000000000001', 'a@b.co', 'h', 'dev-a', 'CI')",
+    );
+    await executor.query(
+      "insert into routes (author_id, service_id, country, stack, language, title, content) select '00000000-0000-4000-8000-000000000001', id, 'CI', 'laravel', 'fr', 'Une fiche ancienne', 'x' from services where slug = 'wave'",
+    );
+    await migrateDown(executor, migrationsDirectory, 7);
+    await migrateUp(executor, migrationsDirectory);
+    expect(await executor.query("select routes, points from member_points")).toEqual([
+      { routes: 1, points: 10 },
+    ]);
   });
 });
