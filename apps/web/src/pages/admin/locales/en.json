@@ -1,0 +1,165 @@
+{
+  "title": "Administration",
+  "intro": "Moderation queue, member accounts, team content and the log of decisions.",
+  "refusedTitle": "Restricted access",
+  "refused": "This page is reserved to the administration team. Your account has no access to it.",
+  "tabsLabel": "Administration sections",
+  "tabs": {
+    "queue": "Queue",
+    "accounts": "Accounts",
+    "content": "Content",
+    "log": "Log"
+  },
+  "more": "Load more",
+  "cancel": "Cancel",
+  "kind": {
+    "route": "Itinerary",
+    "thread": "Thread",
+    "reply": "Reply",
+    "post": "Post",
+    "comment": "Comment"
+  },
+  "kindFilter": {
+    "label": "Content type",
+    "route": "Itineraries",
+    "thread": "Threads",
+    "reply": "Replies",
+    "post": "Posts",
+    "comment": "Comments"
+  },
+  "stateFilter": {
+    "label": "Show",
+    "open": "To review",
+    "hidden": "Hidden"
+  },
+  "status": {
+    "visible": "Visible",
+    "hidden": "Hidden"
+  },
+  "queue": {
+    "heading": "Reported or hidden content",
+    "count_one": "{{count}} report",
+    "count_other": "{{count}} reports",
+    "lastReport": "Last reported on {{date}}",
+    "noReport": "Hidden without a report",
+    "author": "Author: {{author}}",
+    "deletedAuthor": "Deleted account",
+    "reason": "Reason (optional)",
+    "reasonHelp": "Written in the log of decisions, 500 characters at most.",
+    "done": "Decision recorded.",
+    "emptyOpenTitle": "Nothing to review",
+    "emptyOpenText": "Content of this type reported by members will show up here.",
+    "emptyHiddenTitle": "No hidden content",
+    "emptyHiddenText": "Content of this type hidden by moderation will show up here."
+  },
+  "decision": {
+    "hide": "Hide",
+    "restore": "Restore",
+    "remove": "Remove",
+    "block": "Block",
+    "suspendBlog": "Suspend the blog"
+  },
+  "confirm": {
+    "hide": "Hide \"{{title}}\"?",
+    "restore": "Restore \"{{title}}\"?",
+    "remove": "Remove \"{{title}}\"?",
+    "block": "Block \"{{title}}\"?",
+    "suspendBlog": "Suspend the blog of {{author}}?"
+  },
+  "consequence": {
+    "hide": "Readers no longer see it. Its author and the team still do.",
+    "restore": "The content is visible again and its reports are closed.",
+    "remove": "It disappears for every member and no longer earns points for its author.",
+    "block": "The content leaves the reading pages and the queue for good.",
+    "suspendBlog": "No post of this member can be read while the blog is suspended."
+  },
+  "category": {
+    "payment": "Payment",
+    "sms": "SMS",
+    "ussd": "USSD"
+  },
+  "proposals": {
+    "heading": "Proposed services",
+    "docs": "Open the documentation",
+    "accept": "Accept",
+    "reject": "Reject",
+    "reason": "Reason for the refusal (optional)",
+    "reasonHelp": "Sent to the member in the answer e-mail, 500 characters at most.",
+    "confirmReject": "Confirm the refusal",
+    "cancel": "Cancel",
+    "emptyTitle": "No pending proposal",
+    "emptyText": "Services proposed by members will show up here."
+  },
+  "accounts": {
+    "heading": "Member accounts",
+    "search": "Handle or start of the e-mail address",
+    "searchHelp": "Leave empty to see the latest sign-ups.",
+    "submit": "Search",
+    "caption": "Accounts found",
+    "handle": "Handle",
+    "email": "E-mail",
+    "role": "Role",
+    "country": "Country",
+    "createdAt": "Signed up",
+    "state": "State",
+    "actions": "Actions",
+    "roles": {
+      "member": "Member",
+      "admin": "Administration"
+    },
+    "active": "Active",
+    "suspendedSince": "Suspended on {{date}}",
+    "suspend": "Suspend",
+    "reactivate": "Reactivate",
+    "suspendTitle": "Suspend {{handle}}?",
+    "suspendText": "All their sessions and tokens stop. They cannot sign in until the account is reactivated.",
+    "reason": "Reason for the suspension",
+    "reasonHelp": "Between 3 and 500 characters, written in the log of decisions.",
+    "reactivateTitle": "Reactivate {{handle}}?",
+    "reactivateText": "The member can sign in again.",
+    "suspended": "{{handle}} is suspended.",
+    "reactivated": "{{handle}} is reactivated.",
+    "emptyTitle": "No account found",
+    "emptyText": "Check the handle or the start of the e-mail address."
+  },
+  "content": {
+    "heading": "Team content",
+    "editor": "Write a post",
+    "editorText": "Post editor: draft, preview, French and English versions, publication date.",
+    "newsletter": "Newsletter issues",
+    "newsletterText": "Prepare, review and send the issues of the newsletter."
+  },
+  "log": {
+    "heading": "Log of decisions",
+    "caption": "Decisions of the team, newest first",
+    "date": "Date",
+    "actor": "By",
+    "action": "Decision",
+    "target": "Target",
+    "reason": "Reason",
+    "deletedActor": "Deleted account",
+    "noReason": "No reason",
+    "emptyTitle": "Empty log",
+    "emptyText": "Every decision of the team will be written here, with its date and reason.",
+    "actions": {
+      "hide": "Hidden",
+      "block": "Blocked",
+      "remove": "Removed",
+      "restore": "Restored",
+      "suspend": "Suspended",
+      "reactivate": "Reactivated",
+      "accept": "Accepted",
+      "reject": "Rejected"
+    },
+    "targets": {
+      "route": "Itinerary",
+      "thread": "Thread",
+      "reply": "Reply",
+      "post": "Post",
+      "comment": "Comment",
+      "account": "Account",
+      "proposal": "Service proposal",
+      "blog": "Blog"
+    }
+  }
+}

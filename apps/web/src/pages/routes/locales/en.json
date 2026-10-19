@@ -150,5 +150,18 @@
     "noneResolved": "No resolved question yet.",
     "meta_one": "{{count}} reply, active on {{date}}",
     "meta_other": "{{count}} replies, active on {{date}}"
+  },
+  "flag": {
+    "action": "Report this sheet",
+    "title": "Report this sheet",
+    "text": "Tell the moderation team what is wrong: misleading content, spam, a dangerous link or an exposed secret.",
+    "reason": "Reason for the report",
+    "help": "Between 3 and 500 characters.",
+    "submit": "Send the report",
+    "sent": "Thank you, the moderation team will review this sheet."
+  },
+  "hidden": {
+    "title": "Sheet hidden by moderation",
+    "text": "Only its author and the administration team can see it. It no longer appears in the catalogue, the search or the ranking."
   }
 }

@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import type { Page } from "@playwright/test";
+import admin from "../apps/web/src/pages/admin/locales/fr.json" with { type: "json" };
 import blog from "../apps/web/src/pages/blog/locales/fr.json" with { type: "json" };
 import { promoteAdmin, resetRateLimits } from "./admin.js";
 import { newMember } from "./members.js";
@@ -67,12 +68,16 @@ test("publish, follow, comment, star, lead the For me feed, then the admin hides
   await expect(await firstOfForMe(reader)).toHaveText(title);
   await report(reader, articleUrl);
 
-  const admin = await newMember(browser, `blog-admin-${stamp}`);
+  const team = await newMember(browser, `blog-admin-${stamp}`);
   await promoteAdmin(`blog-admin-${stamp}`);
-  await admin.goto("/fr/admin/moderation");
-  const row = admin.getByRole("listitem").filter({ hasText: title });
-  await row.getByRole("button", { name: blog.moderation.hide, exact: true }).click();
+  await team.goto("/fr/admin");
+  await team.getByLabel(admin.kindFilter.label).selectOption("post");
+  const row = team.getByRole("listitem").filter({ hasText: title });
+  await row.getByRole("button", { name: admin.decision.hide, exact: true }).click();
+  await team.getByRole("dialog").getByRole("button", { name: admin.decision.hide }).click();
   await expect(row).toHaveCount(0);
+  await team.getByLabel(admin.stateFilter.label).selectOption("hidden");
+  await expect(row.getByText(admin.status.hidden, { exact: true })).toBeVisible();
   const feedLoaded = reader.waitForResponse((answer) =>
     answer.url().includes("/v1/posts?feed=forme"),
   );

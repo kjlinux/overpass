@@ -4,7 +4,13 @@ import { cx } from "./cx";
 
 export type Tab = { id: string; label: string; content: ComponentChildren };
 
-export type TabsProps = { id: string; label: string; tabs: Tab[]; initial?: string };
+export type TabsProps = {
+  id: string;
+  label: string;
+  tabs: Tab[];
+  initial?: string;
+  onChange?: (id: string) => void;
+};
 
 const keyMoves: Record<string, (index: number, count: number) => number> = {
   ArrowRight: (index, count) => (index + 1) % count,
@@ -59,9 +65,32 @@ function moveWithKeys(
   return next;
 }
 
+function TabPanels({ id, tabs, active }: { id: string; tabs: Tab[]; active: string | undefined }) {
+  return (
+    <>
+      {tabs.map((tab) => (
+        <div
+          key={tab.id}
+          role="tabpanel"
+          id={`${id}-panel-${tab.id}`}
+          aria-labelledby={`${id}-tab-${tab.id}`}
+          hidden={tab.id !== active}
+          tabIndex={0}
+        >
+          {tab.content}
+        </div>
+      ))}
+    </>
+  );
+}
+
 /** A ruled tab rail with roving focus; panels are labelled by their tab. */
-export function Tabs({ id, label, tabs, initial }: TabsProps): JSX.Element {
-  const [active, setActive] = useState(initial ?? tabs[0]?.id);
+export function Tabs({ id, label, tabs, initial, onChange }: TabsProps): JSX.Element {
+  const [active, setShown] = useState(initial ?? tabs[0]?.id);
+  const setActive = (next: string) => {
+    setShown(next);
+    onChange?.(next);
+  };
   return (
     <div class="border border-rule">
       <div
@@ -85,18 +114,7 @@ export function Tabs({ id, label, tabs, initial }: TabsProps): JSX.Element {
           />
         ))}
       </div>
-      {tabs.map((tab) => (
-        <div
-          key={tab.id}
-          role="tabpanel"
-          id={`${id}-panel-${tab.id}`}
-          aria-labelledby={`${id}-tab-${tab.id}`}
-          hidden={tab.id !== active}
-          tabIndex={0}
-        >
-          {tab.content}
-        </div>
-      ))}
+      <TabPanels id={id} tabs={tabs} active={active} />
     </div>
   );
 }

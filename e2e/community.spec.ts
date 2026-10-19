@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 import type { Page } from "@playwright/test";
 import dashboard from "../apps/web/src/pages/dashboard/locales/fr.json" with { type: "json" };
 import discussions from "../apps/web/src/pages/discussions/locales/fr.json" with { type: "json" };
-import moderation from "../apps/web/src/pages/moderation/locales/fr.json" with { type: "json" };
+import admin from "../apps/web/src/pages/admin/locales/fr.json" with { type: "json" };
 import requests from "../apps/web/src/pages/requests/locales/fr.json" with { type: "json" };
 import routes from "../apps/web/src/pages/routes/locales/fr.json" with { type: "json" };
 import { promoteAdmin, resetRateLimits } from "./admin.js";
@@ -118,11 +118,11 @@ test("a proposed service is accepted by the team and the member is told", async 
   await member.getByRole("button", { name: requests.propose.submit }).click();
   await expect(member.getByRole("heading", { name: requests.propose.sentTitle })).toBeVisible();
 
-  const admin = await newMember(browser, `admin-${stamp}`);
+  const team = await newMember(browser, `admin-${stamp}`);
   await promoteAdmin(`admin-${stamp}`);
-  await admin.goto("/fr/admin/moderation");
-  const row = admin.getByRole("listitem").filter({ hasText: name });
-  await row.getByRole("button", { name: moderation.proposals.accept }).click();
+  await team.goto("/fr/admin");
+  const row = team.getByRole("listitem").filter({ hasText: name });
+  await row.getByRole("button", { name: admin.proposals.accept }).click();
   await expect(row).toHaveCount(0);
 
   await mailMentioning(`e2e-proposer-${stamp}@example.com`, name);

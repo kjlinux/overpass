@@ -1,11 +1,11 @@
-import { useEffect } from "preact/hooks";
 import { Route, Router, useRoute } from "preact-iso";
 import { useTranslation } from "react-i18next";
 import { ErrorBoundary, ErrorPage } from "../pages/errors";
-import { rememberLanguage, toLanguage } from "./language";
+import { toLanguage } from "./language";
 import { contentRoutes } from "./contentRoutes";
 import { lazyPage } from "./lazyPage";
 import { RootRedirect } from "./RootRedirect";
+import { useUrlLanguage } from "./useUrlLanguage";
 
 const HomePage = lazyPage("app", async () => (await import("./HomePage")).HomePage);
 const accounts = () => import("../pages/accounts");
@@ -49,12 +49,11 @@ const requests = () => import("../pages/requests");
 const ServicePage = lazyPage("requests", async () => (await requests()).ServicePage);
 const ProposePage = lazyPage("requests", async () => (await requests()).ProposePage);
 const RequestsPage = lazyPage("requests", async () => (await requests()).SimulatorRequestsPage);
-const ModerationPage = lazyPage(
-  ["moderation", "blog"],
-  async () => (await import("../pages/moderation")).ModerationPage,
-);
+const admin = () => import("../pages/admin");
+const AdminPage = lazyPage("admin", async () => (await admin()).AdminPage);
+const ModerationRedirect = lazyPage("admin", async () => (await admin()).ModerationRedirect);
 
-/** Discussions, ranking, service requests and moderation; the router flattens the array. */
+/** Discussions, ranking, service requests and administration; the router flattens the array. */
 const communityRoutes = [
   ["/discussions", ThreadsPage],
   ["/discussions/new", NewThreadPage],
@@ -63,21 +62,16 @@ const communityRoutes = [
   ["/services/propose", ProposePage],
   ["/services/:slug", ServicePage],
   ["/simulator-requests", RequestsPage],
-  ["/admin/moderation", ModerationPage],
+  ["/admin", AdminPage],
+  ["/moderation", ModerationRedirect],
+  ["/admin/moderation", ModerationRedirect],
 ] as const;
 
 /** Applies the language of the URL prefix and routes the rest of the path. */
 export function LanguageShell() {
   const { params } = useRoute();
-  const { i18n } = useTranslation();
   const language = toLanguage(params["lang"]);
-
-  useEffect(() => {
-    if (language === undefined) return;
-    document.documentElement.lang = language;
-    rememberLanguage(language);
-    void i18n.changeLanguage(language);
-  }, [i18n, language]);
+  useUrlLanguage(language);
 
   if (language === undefined) return <RootRedirect />;
   return (

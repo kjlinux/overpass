@@ -3,7 +3,6 @@ export { BlogSegmentPage } from "./BlogSegmentPage";
 export { MyBlogPage } from "./MyBlogPage";
 export { FollowsPage } from "./FollowsPage";
 export { PostEditorPage } from "./PostEditorPage";
-export { BlogModerationQueue } from "./BlogModerationQueue";
 export { ArticleView } from "./ArticleView";
 export { FeedTabs } from "./FeedTabs";
 export { PostForm } from "./PostForm";

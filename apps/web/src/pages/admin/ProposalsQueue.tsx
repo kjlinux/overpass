@@ -14,7 +14,7 @@ type Decide = (id: string, decision: "accept" | "reject", reason?: string) => vo
 
 /** A refusal carries an optional reason, sent to the member in the outcome e-mail. */
 function RejectForm(props: { id: string; busy: boolean; onDecide: Decide; onCancel: () => void }) {
-  const { t } = useTranslation("moderation");
+  const { t } = useTranslation("admin");
   const [reason, setReason] = useState("");
   const onSubmit = (event: Event) => {
     event.preventDefault();
@@ -52,7 +52,7 @@ function RejectForm(props: { id: string; busy: boolean; onDecide: Decide; onCanc
 
 /** A link typed by a member: https only on the API side, never trusted with the referrer. */
 function DocsLink({ href }: { href: string }): JSX.Element {
-  const { t } = useTranslation("moderation");
+  const { t } = useTranslation("admin");
   return (
     <a
       class="self-start [overflow-wrap:anywhere]"
@@ -67,7 +67,7 @@ function DocsLink({ href }: { href: string }): JSX.Element {
 
 function ProposalRow(props: { proposal: Proposal; busy: boolean; onDecide: Decide }) {
   const { proposal, busy, onDecide } = props;
-  const { t } = useTranslation("moderation");
+  const { t } = useTranslation("admin");
   const language = useLanguage();
   const [rejecting, setRejecting] = useState(false);
   const facts = [
@@ -105,7 +105,7 @@ function ProposalRow(props: { proposal: Proposal; busy: boolean; onDecide: Decid
 }
 
 function Decisions(props: { busy: boolean; onAccept: () => void; onReject: () => void }) {
-  const { t } = useTranslation("moderation");
+  const { t } = useTranslation("admin");
   return (
     <div class="flex flex-wrap gap-2">
       <Button onClick={props.onAccept} disabled={props.busy}>
@@ -119,7 +119,7 @@ function Decisions(props: { busy: boolean; onAccept: () => void; onReject: () =>
 }
 
 export function ProposalsQueue(): JSX.Element {
-  const { t } = useTranslation("moderation");
+  const { t } = useTranslation("admin");
   const { state, refresh } = useApi<Proposal[]>("/v1/admin/service-proposals");
   const [busy, setBusy] = useState(false);
   const [failure, setFailure] = useState<ApiError | undefined>(undefined);

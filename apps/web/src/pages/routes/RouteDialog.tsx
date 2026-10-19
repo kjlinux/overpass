@@ -1,6 +1,6 @@
 import type { ApiError } from "@overpass/shared";
 import type { ComponentChildren, JSX } from "preact";
-import { useEffect, useRef } from "preact/hooks";
+import { useEffect, useId, useRef } from "preact/hooks";
 import { useTranslation } from "react-i18next";
 import { Button } from "../../components/ui";
 import { FormAlert } from "../../forms";
@@ -22,6 +22,8 @@ export function RouteDialog(props: RouteDialogProps): JSX.Element {
   const { open, title, text, submitLabel, busy, error, onSubmit, onClose, children } = props;
   const { t } = useTranslation("routes");
   const ref = useRef<HTMLDialogElement>(null);
+  // Several dialogs share the itinerary page; each must be named by its own title.
+  const titleId = useId();
   useEffect(() => {
     const dialog = ref.current;
     if (dialog === null) return;
@@ -31,12 +33,12 @@ export function RouteDialog(props: RouteDialogProps): JSX.Element {
   return (
     <dialog
       ref={ref}
-      aria-labelledby="route-dialog-title"
+      aria-labelledby={titleId}
       onClose={onClose}
       class="fade-in w-[min(480px,calc(100%-32px))] border border-rule-strong bg-raised p-8 text-ink shadow-raised backdrop:bg-[rgb(0_0_0/0.4)]"
     >
       <form class="flex flex-col gap-6" noValidate onSubmit={onSubmit}>
-        <h2 id="route-dialog-title" class="text-h3 font-semibold">
+        <h2 id={titleId} class="text-h3 font-semibold">
           {title}
         </h2>
         <p>{text}</p>

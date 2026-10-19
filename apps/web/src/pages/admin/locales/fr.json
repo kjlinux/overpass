@@ -1,0 +1,165 @@
+{
+  "title": "Administration",
+  "intro": "File de modération, comptes des membres, contenus de l'équipe et journal des décisions.",
+  "refusedTitle": "Accès réservé",
+  "refused": "Cette page est réservée à l'équipe d'administration. Votre compte n'y a pas accès.",
+  "tabsLabel": "Sections de l'administration",
+  "tabs": {
+    "queue": "File",
+    "accounts": "Comptes",
+    "content": "Contenus",
+    "log": "Journal"
+  },
+  "more": "Charger plus",
+  "cancel": "Annuler",
+  "kind": {
+    "route": "Itinéraire",
+    "thread": "Sujet",
+    "reply": "Réponse",
+    "post": "Article",
+    "comment": "Commentaire"
+  },
+  "kindFilter": {
+    "label": "Type de contenu",
+    "route": "Itinéraires",
+    "thread": "Sujets",
+    "reply": "Réponses",
+    "post": "Articles",
+    "comment": "Commentaires"
+  },
+  "stateFilter": {
+    "label": "Afficher",
+    "open": "À traiter",
+    "hidden": "Masqués"
+  },
+  "status": {
+    "visible": "Visible",
+    "hidden": "Masqué"
+  },
+  "queue": {
+    "heading": "Contenus signalés ou masqués",
+    "count_one": "{{count}} signalement",
+    "count_other": "{{count}} signalements",
+    "lastReport": "Dernier signalement le {{date}}",
+    "noReport": "Masqué sans signalement",
+    "author": "Auteur : {{author}}",
+    "deletedAuthor": "Compte supprimé",
+    "reason": "Motif (facultatif)",
+    "reasonHelp": "Inscrit au journal des décisions, 500 caractères au plus.",
+    "done": "Décision enregistrée.",
+    "emptyOpenTitle": "Rien à traiter",
+    "emptyOpenText": "Les contenus de ce type signalés par les membres apparaîtront ici.",
+    "emptyHiddenTitle": "Aucun contenu masqué",
+    "emptyHiddenText": "Les contenus de ce type masqués par la modération apparaîtront ici."
+  },
+  "decision": {
+    "hide": "Masquer",
+    "restore": "Rétablir",
+    "remove": "Retirer",
+    "block": "Bloquer",
+    "suspendBlog": "Suspendre le blog"
+  },
+  "confirm": {
+    "hide": "Masquer « {{title}} » ?",
+    "restore": "Rétablir « {{title}} » ?",
+    "remove": "Retirer « {{title}} » ?",
+    "block": "Bloquer « {{title}} » ?",
+    "suspendBlog": "Suspendre le blog de {{author}} ?"
+  },
+  "consequence": {
+    "hide": "Le contenu disparaît pour les lecteurs. Son auteur et l'équipe le voient encore.",
+    "restore": "Le contenu redevient visible et ses signalements sont classés.",
+    "remove": "Il disparaît pour tous les membres et ne rapporte plus de points à son auteur.",
+    "block": "Le contenu est retiré définitivement des lectures et de la file.",
+    "suspendBlog": "Plus aucun article de ce membre n'est lisible tant que le blog est suspendu."
+  },
+  "category": {
+    "payment": "Paiement",
+    "sms": "SMS",
+    "ussd": "USSD"
+  },
+  "proposals": {
+    "heading": "Services proposés",
+    "docs": "Ouvrir la documentation",
+    "accept": "Accepter",
+    "reject": "Refuser",
+    "reason": "Motif du refus (facultatif)",
+    "reasonHelp": "Envoyé au membre dans l'e-mail de réponse, 500 caractères au plus.",
+    "confirmReject": "Confirmer le refus",
+    "cancel": "Annuler",
+    "emptyTitle": "Aucune proposition en attente",
+    "emptyText": "Les services proposés par les membres apparaîtront ici."
+  },
+  "accounts": {
+    "heading": "Comptes des membres",
+    "search": "Pseudo ou début d'adresse e-mail",
+    "searchHelp": "Laissez vide pour voir les derniers inscrits.",
+    "submit": "Rechercher",
+    "caption": "Comptes trouvés",
+    "handle": "Pseudo",
+    "email": "E-mail",
+    "role": "Rôle",
+    "country": "Pays",
+    "createdAt": "Inscription",
+    "state": "État",
+    "actions": "Actions",
+    "roles": {
+      "member": "Membre",
+      "admin": "Administration"
+    },
+    "active": "Actif",
+    "suspendedSince": "Suspendu le {{date}}",
+    "suspend": "Suspendre",
+    "reactivate": "Réactiver",
+    "suspendTitle": "Suspendre {{handle}} ?",
+    "suspendText": "Toutes ses sessions et ses jetons s'arrêtent. Il ne pourra plus se connecter avant une réactivation.",
+    "reason": "Motif de la suspension",
+    "reasonHelp": "Entre 3 et 500 caractères, inscrit au journal des décisions.",
+    "reactivateTitle": "Réactiver {{handle}} ?",
+    "reactivateText": "Le membre pourra de nouveau se connecter.",
+    "suspended": "{{handle}} est suspendu.",
+    "reactivated": "{{handle}} est réactivé.",
+    "emptyTitle": "Aucun compte trouvé",
+    "emptyText": "Vérifiez le pseudo ou le début de l'adresse e-mail."
+  },
+  "content": {
+    "heading": "Contenus de l'équipe",
+    "editor": "Écrire un article",
+    "editorText": "Éditeur d'article : brouillon, aperçu, version française et anglaise, date de publication.",
+    "newsletter": "Numéros de la lettre",
+    "newsletterText": "Préparer, relire et envoyer les numéros de la lettre d'information."
+  },
+  "log": {
+    "heading": "Journal des décisions",
+    "caption": "Décisions de l'équipe, les plus récentes d'abord",
+    "date": "Date",
+    "actor": "Par",
+    "action": "Décision",
+    "target": "Cible",
+    "reason": "Motif",
+    "deletedActor": "Compte supprimé",
+    "noReason": "Sans motif",
+    "emptyTitle": "Journal vide",
+    "emptyText": "Chaque décision de l'équipe y sera inscrite, avec sa date et son motif.",
+    "actions": {
+      "hide": "Masquage",
+      "block": "Blocage",
+      "remove": "Retrait",
+      "restore": "Rétablissement",
+      "suspend": "Suspension",
+      "reactivate": "Réactivation",
+      "accept": "Acceptation",
+      "reject": "Refus"
+    },
+    "targets": {
+      "route": "Itinéraire",
+      "thread": "Sujet",
+      "reply": "Réponse",
+      "post": "Article",
+      "comment": "Commentaire",
+      "account": "Compte",
+      "proposal": "Proposition de service",
+      "blog": "Blog"
+    }
+  }
+}

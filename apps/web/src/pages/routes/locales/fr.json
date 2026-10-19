@@ -150,5 +150,18 @@
     "noneResolved": "Aucune question résolue pour l'instant.",
     "meta_one": "{{count}} réponse, active le {{date}}",
     "meta_other": "{{count}} réponses, active le {{date}}"
+  },
+  "flag": {
+    "action": "Signaler cette fiche",
+    "title": "Signaler cette fiche",
+    "text": "Dites à l'équipe de modération ce qui pose problème : contenu trompeur, spam, lien dangereux ou secret exposé.",
+    "reason": "Motif du signalement",
+    "help": "Entre 3 et 500 caractères.",
+    "submit": "Envoyer le signalement",
+    "sent": "Merci, l'équipe de modération va relire cette fiche."
+  },
+  "hidden": {
+    "title": "Fiche masquée par la modération",
+    "text": "Seuls son auteur et l'équipe d'administration la voient. Elle n'apparaît plus dans le catalogue, la recherche ni le classement."
   }
 }
