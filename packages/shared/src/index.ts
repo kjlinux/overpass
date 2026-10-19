@@ -20,3 +20,4 @@ export * from "./blog/index.js";
 export * from "./newsletter/index.js";
 export * from "./admin/index.js";
 export * from "./stats/index.js";
+export * from "./share/index.js";

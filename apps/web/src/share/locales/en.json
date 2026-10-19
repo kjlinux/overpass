@@ -1,0 +1,75 @@
+{
+  "site": {
+    "name": "Overpass",
+    "promise": "The exchange for verified African integrations",
+    "title": "Overpass, the exchange for verified African integrations",
+    "description": "Integration sheets verified by developers, a test track that simulates a mobile money payment without a merchant account, and an MCP server for your coding assistant."
+  },
+  "titleTemplate": "{{page}} · Overpass",
+  "pages": {
+    "home": {
+      "title": "Home",
+      "description": "Integration sheets verified by developers, a test track that simulates a mobile money payment without a merchant account, and an MCP server for your coding assistant."
+    },
+    "routes": {
+      "title": "Itineraries",
+      "description": "Integration sheets by service, country and stack: the code that works, the known potholes and dated checks by other developers."
+    },
+    "sandbox": {
+      "title": "Test track",
+      "description": "Simulate a mobile money payment and its real cases: success, insufficient funds, operator timeout, duplicate or late webhook."
+    },
+    "demo": {
+      "title": "Demo",
+      "description": "Run a simulated payment end to end in under 30 seconds, with no account and no merchant key."
+    },
+    "discussions": {
+      "title": "Discussions",
+      "description": "Threads open to everything an African developer deals with: integrations, cloud, tools, AI, career and projects."
+    },
+    "ranking": {
+      "title": "Ranking",
+      "description": "The ranking of the countries and developers who publish, check and improve integration sheets."
+    },
+    "simulators": {
+      "title": "Requested simulators",
+      "description": "The services the community wants a simulator for, ranked by votes."
+    },
+    "blog": {
+      "title": "Blog",
+      "description": "African tech news, tutorials and portraits, written by the team and by members."
+    },
+    "newsletter": {
+      "title": "Newsletter",
+      "description": "A weekly digest of the best sheets, discussions and articles, in French or English."
+    },
+    "docs": {
+      "title": "Documentation",
+      "description": "Connect the MCP server to Claude Code, Cursor or VS Code, and the reference of the simulator API."
+    },
+    "pricing": {
+      "title": "Pricing",
+      "description": "Overpass's free plan today, and the Team and Enterprise plans to come. No online payment for now."
+    },
+    "about": {
+      "title": "About",
+      "description": "Overpass, built by the Ghostapi team in Côte d'Ivoire for the Systalink Challenge, with open code."
+    },
+    "legal": {
+      "title": "Legal notice",
+      "description": "The publisher, the hosting and the licences of the open source components Overpass uses."
+    },
+    "privacy": {
+      "title": "Privacy",
+      "description": "The data Overpass stores, why, for how long, the session cookie and self-service account deletion."
+    },
+    "signUp": {
+      "title": "Sign up",
+      "description": "Create your Overpass account with an e-mail address and your country, to publish and check sheets."
+    },
+    "signIn": {
+      "title": "Sign in",
+      "description": "Sign in to Overpass to find your sheets, your checks and your MCP tokens."
+    }
+  }
+}

@@ -1,0 +1,122 @@
+{
+  "placeholder": "To be completed by the team",
+  "legal": {
+    "title": "Legal notice",
+    "intro": "Who publishes Overpass, where it is hosted, and the licences its code and components rest on."
+  },
+  "publisher": {
+    "heading": "Publisher",
+    "team": "Team",
+    "teamValue": "Ghostapi, Côte d'Ivoire",
+    "members": "Members",
+    "membersValue": "Jude Koffi and Bradi",
+    "legalForm": "Legal form and address",
+    "contact": "Contact",
+    "director": "Publication director"
+  },
+  "hosting": {
+    "heading": "Hosting",
+    "text": "Overpass runs on a Systalink Datacloud cloud server, as the contest requires.",
+    "provider": "Host",
+    "providerValue": "Systalink, Datacloud cloud server",
+    "address": "Host address and contact",
+    "domain": "Domain name"
+  },
+  "code": {
+    "heading": "Source code",
+    "repository": "Public repository",
+    "licence": "Code licence",
+    "licenceValue": "MIT, Ghostapi (Jude Koffi and Bradi)",
+    "cliTerm": "Local relay",
+    "cli": "The webhook relay command (apps/cli) is under the MIT licence.",
+    "fonts": "The IBM Plex Sans and IBM Plex Mono fonts are served by Overpass itself, under the SIL Open Font License 1.1.",
+    "fontLicence": "Licence text, {{font}}"
+  },
+  "licences": {
+    "heading": "Component licences",
+    "intro": "Overpass only uses components under permissive licences. This list comes from the automatic licence audit, read from the repository when the site is built.",
+    "audited": "{{total}} packages audited, direct and indirect, all platforms.",
+    "caption": "Number of packages per licence",
+    "licence": "Licence",
+    "count": "Packages",
+    "packages": "Packages under {{licence}}: {{total}}",
+    "dev": "(development tool)"
+  },
+  "privacy": {
+    "title": "Privacy",
+    "intro": "Overpass collects the minimum: an e-mail address, a country and, if you wish, your stacks. Here is everything the database stores, why, and for how long."
+  },
+  "data": {
+    "heading": "Stored data",
+    "what": "What is stored",
+    "why": "Why",
+    "kept": "For how long",
+    "account": {
+      "title": "Account",
+      "what": "E-mail address, password kept only as an Argon2 hash, handle, country, interface language, role, newsletter consent date if you ticked the box, creation and update dates.",
+      "why": "Signing you in, writing to you to confirm sign-up or reset the password, and showing your public profile (handle and country).",
+      "kept": "Until you delete your account."
+    },
+    "stacks": {
+      "title": "Stacks",
+      "what": "The stacks you declare. They are optional.",
+      "why": "Showing them on your public profile.",
+      "kept": "Until you remove them or delete your account."
+    },
+    "tokens": {
+      "title": "MCP tokens and API keys",
+      "what": "Name, usage (MCP or API), token hash (never the token in clear), creation, last use and revocation dates.",
+      "why": "Authenticating your coding assistant or your scripts, and showing you which tokens are still in use.",
+      "kept": "Until you delete your account. A revoked token stays listed with its revocation date."
+    },
+    "contributions": {
+      "title": "Contributions",
+      "what": "Sheets and their versions, checks (country, environment, date), reported potholes, threads and replies with the error message and code you paste in them, useful votes, articles, comments, stars, followed authors, reports, proposed services, simulator votes and ranking points.",
+      "why": "This is the public content of Overpass, and the basis of the ranking.",
+      "kept": "Until you delete your account. The next section says what stays published without an author name."
+    },
+    "sandbox": {
+      "title": "Test track",
+      "what": "Test keys (hash, prefix, scenario, chosen webhook address), simulated requests and responses, simulated objects, webhook deliveries (body, headers, response code, duration).",
+      "why": "Running the test track, its inspector and the local relay.",
+      "kept": "History is erased after 7 days. A test key expires after 30 days, a demo key after one hour."
+    },
+    "newsletter": {
+      "title": "Newsletter",
+      "what": "E-mail address, language, confirmation link hash (valid 48 hours), confirmation and unsubscribe dates, delivery tracking of each issue.",
+      "why": "Writing only to confirmed addresses, and applying unsubscription at once.",
+      "kept": "No automatic erasure today: an unsubscribed address stays marked as such and receives nothing more."
+    },
+    "limits": {
+      "title": "Rate limiting",
+      "what": "Counters per IP address, and per e-mail address on sign-up and forgotten password.",
+      "why": "Slowing down abuse and mass sending of links.",
+      "kept": "Erased at the end of their limiting window."
+    },
+    "logs": {
+      "title": "Server logs",
+      "what": "Method, path, IP address and identifier of each request. Newsletter link tokens and sensitive headers are removed from them.",
+      "why": "Understanding what breaks and responding to abuse.",
+      "kept": "Duration set by the hosting."
+    }
+  },
+  "cookies": {
+    "heading": "Cookie and local storage",
+    "intro": "Overpass sets a single cookie, and only when you sign in.",
+    "session": "It carries your signed session. It is httpOnly (the page's JavaScript cannot read it), SameSite=Lax, limited to HTTPS and our domain, and expires after 7 days or at sign-out.",
+    "noTracking": "No audience measurement, advertising or third-party cookie.",
+    "storage": "Your browser also keeps your language choice in its local storage, which never leaves your device, under the key"
+  },
+  "deletion": {
+    "heading": "Delete your account",
+    "text": "In the settings, Account tab, you delete your account yourself by confirming with your password. Erasure is immediate.",
+    "erased": "Erased: the account, stacks, tokens, checks, votes, comments, stars, followed authors, reports, proposed services, points, your test keys and their history.",
+    "kept": "Kept published without an author name: your sheets and their versions, your threads, your replies, your articles and reported potholes, because other developers rely on them.",
+    "newsletter": "The newsletter does not depend on the account: every issue carries a one-click unsubscribe link.",
+    "action": "Open account deletion"
+  },
+  "contact": {
+    "heading": "Your questions",
+    "text": "For any question about your data, or to ask to see or correct it, write to the team at this address:"
+  }
+}

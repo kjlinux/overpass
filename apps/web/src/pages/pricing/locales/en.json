@@ -1,0 +1,48 @@
+{
+  "title": "Pricing",
+  "intro": "Overpass is free today. The Team and Enterprise plans are coming; their content may still change.",
+  "available": "Available",
+  "soon": "Coming soon",
+  "payment": {
+    "label": "Online payment: coming soon.",
+    "text": "No payment can be taken for now, and no bank card is asked for."
+  },
+  "plans": {
+    "free": {
+      "name": "Free",
+      "price": "No fee, no bank card",
+      "summary": "Everything Overpass offers today, for every developer.",
+      "action": "Create a free account",
+      "features": {
+        "catalogue": "The catalogue of integration sheets, to read, publish and check",
+        "track": "The test track: test keys, replayable scenarios, inspector and webhook log",
+        "relay": "The local webhook relay to your machine",
+        "mcp": "The read-only MCP server, with your personal tokens",
+        "community": "Discussions, the blog, the newsletter and the ranking"
+      }
+    },
+    "team": {
+      "name": "Team",
+      "price": "Price to come",
+      "summary": "For a team integrating the same services.",
+      "features": {
+        "everythingFree": "Everything in the free plan",
+        "space": "A shared team space",
+        "shared": "Test keys and tokens shared between members"
+      }
+    },
+    "enterprise": {
+      "name": "Enterprise",
+      "price": "On quote, to come",
+      "summary": "For an organisation that wants support.",
+      "features": {
+        "everythingTeam": "Everything in the Team plan",
+        "support": "Support provided by the Overpass team"
+      }
+    }
+  },
+  "follow": {
+    "text": "To know when the Team and Enterprise plans open:",
+    "link": "subscribe to the newsletter"
+  }
+}

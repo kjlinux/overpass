@@ -1,0 +1,122 @@
+{
+  "placeholder": "À compléter par l'équipe",
+  "legal": {
+    "title": "Mentions légales",
+    "intro": "Qui publie Overpass, où il est hébergé, et sous quelles licences reposent son code et ses composants."
+  },
+  "publisher": {
+    "heading": "Éditeur",
+    "team": "Équipe",
+    "teamValue": "Ghostapi, Côte d'Ivoire",
+    "members": "Membres",
+    "membersValue": "Jude Koffi et Bradi",
+    "legalForm": "Forme juridique et adresse",
+    "contact": "Contact",
+    "director": "Directeur de la publication"
+  },
+  "hosting": {
+    "heading": "Hébergement",
+    "text": "Overpass tourne sur un serveur cloud Datacloud de Systalink, comme l'exige le concours.",
+    "provider": "Hébergeur",
+    "providerValue": "Systalink, serveur cloud Datacloud",
+    "address": "Adresse et contact de l'hébergeur",
+    "domain": "Nom de domaine"
+  },
+  "code": {
+    "heading": "Code source",
+    "repository": "Dépôt public",
+    "licence": "Licence du code",
+    "licenceValue": "MIT, Ghostapi (Jude Koffi et Bradi)",
+    "cliTerm": "Relais local",
+    "cli": "La commande de relais des webhooks (apps/cli) est sous licence MIT.",
+    "fonts": "Les polices IBM Plex Sans et IBM Plex Mono sont servies par Overpass lui-même, sous SIL Open Font License 1.1.",
+    "fontLicence": "Texte de la licence, {{font}}"
+  },
+  "licences": {
+    "heading": "Licences des composants",
+    "intro": "Overpass n'utilise que des composants sous licence permissive. Cette liste vient de l'audit automatique des licences, lu dans le dépôt au moment de la construction du site.",
+    "audited": "{{total}} paquets audités, directs et indirects, toutes plateformes.",
+    "caption": "Nombre de paquets par licence",
+    "licence": "Licence",
+    "count": "Paquets",
+    "packages": "Paquets sous {{licence}} : {{total}}",
+    "dev": "(outil de développement)"
+  },
+  "privacy": {
+    "title": "Confidentialité",
+    "intro": "Overpass collecte le minimum : une adresse e-mail, un pays et, si vous le voulez, vos stacks. Voici tout ce que la base de données enregistre, pourquoi, et combien de temps."
+  },
+  "data": {
+    "heading": "Données enregistrées",
+    "what": "Ce qui est enregistré",
+    "why": "Pourquoi",
+    "kept": "Combien de temps",
+    "account": {
+      "title": "Compte",
+      "what": "Adresse e-mail, mot de passe conservé seulement sous forme d'empreinte Argon2, pseudo, pays, langue de l'interface, rôle, date d'accord pour la newsletter si vous avez coché la case, dates de création et de modification.",
+      "why": "Vous connecter, vous écrire pour confirmer l'inscription ou réinitialiser le mot de passe, et afficher votre profil public (pseudo et pays).",
+      "kept": "Jusqu'à la suppression de votre compte."
+    },
+    "stacks": {
+      "title": "Stacks",
+      "what": "Les stacks que vous déclarez. Elles sont facultatives.",
+      "why": "Les afficher sur votre profil public.",
+      "kept": "Jusqu'à leur retrait ou la suppression de votre compte."
+    },
+    "tokens": {
+      "title": "Jetons MCP et clés d'API",
+      "what": "Nom, usage (MCP ou API), empreinte du jeton (jamais le jeton en clair), dates de création, de dernière utilisation et de révocation.",
+      "why": "Authentifier votre assistant de code ou vos scripts, et vous montrer quels jetons servent encore.",
+      "kept": "Jusqu'à la suppression de votre compte. Un jeton révoqué reste listé avec sa date de révocation."
+    },
+    "contributions": {
+      "title": "Contributions",
+      "what": "Fiches et leurs versions, vérifications (pays, environnement, date), pièges signalés, sujets et réponses avec le message d'erreur et le code que vous y collez, votes « utile », articles, commentaires, étoiles, auteurs suivis, signalements, services proposés, votes pour un simulateur et points du classement.",
+      "why": "C'est le contenu public d'Overpass, et la base du calcul du classement.",
+      "kept": "Jusqu'à la suppression de votre compte. La section suivante dit ce qui reste publié sans nom d'auteur."
+    },
+    "sandbox": {
+      "title": "Piste d'essai",
+      "what": "Clés de test (empreinte, préfixe, scénario, adresse de webhook choisie), requêtes et réponses simulées, objets simulés, livraisons de webhooks (corps, en-têtes, code de réponse, durée).",
+      "why": "Faire fonctionner la piste d'essai, son inspecteur et le relais local.",
+      "kept": "L'historique est effacé après 7 jours. Une clé de test expire après 30 jours, une clé de démo après une heure."
+    },
+    "newsletter": {
+      "title": "Newsletter",
+      "what": "Adresse e-mail, langue, empreinte du lien de confirmation (valable 48 heures), dates de confirmation et de désinscription, suivi de l'envoi de chaque numéro.",
+      "why": "N'écrire qu'aux adresses confirmées, et appliquer la désinscription immédiatement.",
+      "kept": "Aucun effacement automatique aujourd'hui : une adresse désinscrite reste marquée comme telle et ne reçoit plus rien."
+    },
+    "limits": {
+      "title": "Limitation de débit",
+      "what": "Des compteurs par adresse IP, et par adresse e-mail sur l'inscription et le mot de passe oublié.",
+      "why": "Freiner les abus et les envois massifs de liens.",
+      "kept": "Effacés à la fin de leur fenêtre de limitation."
+    },
+    "logs": {
+      "title": "Journaux du serveur",
+      "what": "Méthode, chemin, adresse IP et identifiant de chaque requête. Les jetons des liens de newsletter et les en-têtes sensibles en sont retirés.",
+      "why": "Comprendre ce qui casse et répondre à un abus.",
+      "kept": "Durée fixée par l'hébergement."
+    }
+  },
+  "cookies": {
+    "heading": "Cookie et stockage local",
+    "intro": "Overpass dépose un seul cookie, et seulement quand vous vous connectez.",
+    "session": "Il porte votre session signée. Il est httpOnly (le JavaScript de la page ne peut pas le lire), SameSite=Lax, réservé à HTTPS et à notre domaine, et expire après 7 jours ou à la déconnexion.",
+    "noTracking": "Aucun cookie de mesure d'audience, de publicité ou de service tiers.",
+    "storage": "Votre navigateur garde aussi votre choix de langue dans son stockage local, qui ne quitte pas votre appareil, sous la clé"
+  },
+  "deletion": {
+    "heading": "Supprimer votre compte",
+    "text": "Dans les paramètres, onglet Compte, vous supprimez votre compte vous-même en confirmant avec votre mot de passe. L'effacement est immédiat.",
+    "erased": "Sont effacés : le compte, les stacks, les jetons, les vérifications, les votes, les commentaires, les étoiles, les auteurs suivis, les signalements, les services proposés, les points, vos clés de test et leur historique.",
+    "kept": "Restent publiés sans nom d'auteur : vos fiches et leurs versions, vos sujets, vos réponses, vos articles et les pièges signalés, parce que d'autres développeurs s'appuient dessus.",
+    "newsletter": "La newsletter ne dépend pas du compte : chaque numéro porte un lien de désinscription en un clic.",
+    "action": "Ouvrir la suppression du compte"
+  },
+  "contact": {
+    "heading": "Vos questions",
+    "text": "Pour toute question sur vos données, ou pour demander à les consulter ou les corriger, écrivez à l'équipe à cette adresse :"
+  }
+}

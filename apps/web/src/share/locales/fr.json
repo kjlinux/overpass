@@ -1,0 +1,75 @@
+{
+  "site": {
+    "name": "Overpass",
+    "promise": "La bourse des intégrations africaines vérifiées",
+    "title": "Overpass, la bourse des intégrations africaines vérifiées",
+    "description": "Des fiches d'intégration vérifiées par des développeurs, une piste d'essai pour simuler un paiement mobile money sans compte marchand, et un serveur MCP pour votre assistant de code."
+  },
+  "titleTemplate": "{{page}} · Overpass",
+  "pages": {
+    "home": {
+      "title": "Accueil",
+      "description": "Des fiches d'intégration vérifiées par des développeurs, une piste d'essai pour simuler un paiement mobile money sans compte marchand, et un serveur MCP pour votre assistant de code."
+    },
+    "routes": {
+      "title": "Itinéraires",
+      "description": "Les fiches d'intégration par service, pays et stack : le code qui marche, les pièges connus et des vérifications datées par d'autres développeurs."
+    },
+    "sandbox": {
+      "title": "Piste d'essai",
+      "description": "Simulez un paiement mobile money et ses cas réels : succès, solde insuffisant, délai dépassé, webhook en double ou en retard."
+    },
+    "demo": {
+      "title": "Démo",
+      "description": "Lancez un paiement simulé de bout en bout en moins de 30 secondes, sans compte et sans clé marchande."
+    },
+    "discussions": {
+      "title": "Discussions",
+      "description": "Des sujets ouverts à tout ce qui occupe un développeur africain : intégrations, cloud, outils, IA, carrière et projets."
+    },
+    "ranking": {
+      "title": "Classement",
+      "description": "Le classement des pays et des développeurs qui publient, vérifient et améliorent les fiches d'intégration."
+    },
+    "simulators": {
+      "title": "Simulateurs demandés",
+      "description": "Les services pour lesquels la communauté demande un simulateur, classés par nombre de votes."
+    },
+    "blog": {
+      "title": "Blog",
+      "description": "Actualité tech africaine, tutoriels et portraits, écrits par l'équipe et par les membres."
+    },
+    "newsletter": {
+      "title": "Newsletter",
+      "description": "Un résumé hebdomadaire des meilleures fiches, discussions et articles, en français ou en anglais."
+    },
+    "docs": {
+      "title": "Documentation",
+      "description": "Brancher le serveur MCP à Claude Code, Cursor ou VS Code, et la référence de l'API du simulateur."
+    },
+    "pricing": {
+      "title": "Tarifs",
+      "description": "L'offre gratuite d'Overpass aujourd'hui, et les offres Équipe et Entreprise à venir. Aucun paiement en ligne pour l'instant."
+    },
+    "about": {
+      "title": "À propos",
+      "description": "Overpass, construit par l'équipe Ghostapi en Côte d'Ivoire pour le Systalink Challenge, avec un code ouvert."
+    },
+    "legal": {
+      "title": "Mentions légales",
+      "description": "L'éditeur, l'hébergement et les licences des composants open source utilisés par Overpass."
+    },
+    "privacy": {
+      "title": "Confidentialité",
+      "description": "Les données qu'Overpass enregistre, pourquoi, combien de temps, le cookie de session et la suppression du compte en libre-service."
+    },
+    "signUp": {
+      "title": "Inscription",
+      "description": "Créez votre compte Overpass avec une adresse e-mail et votre pays, pour publier et vérifier des fiches."
+    },
+    "signIn": {
+      "title": "Connexion",
+      "description": "Connectez-vous à Overpass pour retrouver vos fiches, vos vérifications et vos jetons MCP."
+    }
+  }
+}
