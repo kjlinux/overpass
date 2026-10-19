@@ -69,7 +69,7 @@ Measured contrast, light theme: ink on paper 16.8:1, ink-2 on paper 7.2:1, accen
 
 | Token | Size | Weight | Line height | Letter spacing | Use |
 | --- | --- | --- | --- | --- | --- |
-| `--text-display` | 40 px (48 px from 768 px) | 600 | 1.15 | -0.01em | Home page promise, one per site |
+| `--text-display` | `clamp(44px, 7.5vw, 96px)`: 44 px at 360, 96 px from 1280 px | 600 | 1.02 | -0.025em | Home page promise, one per site, at most 13ch wide (approved 2026-10-16 with home proposal B) |
 | `--text-h1` | 32 px | 600 | 1.2 | -0.01em | Page title, one per page |
 | `--text-h2` | 24 px | 600 | 1.3 | 0 | Section title |
 | `--text-h3` | 20 px | 600 | 1.4 | 0 | Card title, dialog title |
@@ -102,7 +102,7 @@ Measured contrast, light theme: ink on paper 16.8:1, ink-2 on paper 7.2:1, accen
 ### Grid & Container
 
 - Content container 1200 px, centred, with a 1 px rule on both sides from 1024 px (the page reads as a column of the atlas). Reading container 72ch.
-- Home page: single column at 360 px; the promise on a 7/5 ruled grid (copy left, a reduced request and response exchange right) from 1024 px; the three bricks as one ruled strip of three columns; countries as a two-column ruled list; figures as a ruled strip; itineraries as table rows.
+- Home page (proposal B "Bandeau", design-demos/home-b.html): the promise across the full container on two lines, a ruled row under it with the one sentence and the primary action, then the webhook scene as a full-width surface band of three ruled columns (departure, relay, arrival). Sections are long full-width ruled strips of three or four columns (test track cases, operators, figures, countries as tiles at their approximate position); two columns only for the assistants block and the community block. Single column at 360 px, countries as a two-column ruled list.
 - Catalogue: filters above the list under 1024 px, filters in a 280 px left column above.
 - Test track: one column under 1024 px (form, then inspector, then webhook log); two columns above (form left, inspector and log right).
 - Tables scroll horizontally inside their container under 768 px; they never break the page width.
@@ -132,7 +132,7 @@ One permissive set: Lucide (ISC), self-hosted as inline SVG components. Stroke 1
 
 ## Motion
 
-- Durations: `--duration-fast` 150 ms for colour and opacity, `--duration-base` 200 ms for position and dialogs, `--duration-slow` 250 ms for panels. Nothing longer.
+- Durations: `--duration-fast` 150 ms for colour and opacity, `--duration-base` 200 ms for position and dialogs, `--duration-slow` 250 ms for panels. Nothing longer, except the home page figure counters (400 ms, once) and the home page webhook scene, the only looping motion.
 - Easing: `--ease-out: cubic-bezier(0.2, 0, 0, 1)` for entering, `--ease-in: cubic-bezier(0.4, 0, 1, 1)` for leaving.
 - Only `transform` and `opacity` animate. Never layout properties.
 - Under `prefers-reduced-motion: reduce`, every transition drops to 0 ms except a 100 ms opacity crossfade for dialogs and notifications.
@@ -230,7 +230,7 @@ Every component is keyboard operable, shows a visible focus ring (2 px accent, 2
 - No uppercase labels, no letter-spaced kickers, no numbered section eyebrows.
 - No text under 14 px, no running text under 16 px.
 - No shadow outside dialogs, menus and notifications.
-- No motion longer than 250 ms, no bounce, no animated focus ring.
+- No motion longer than 250 ms (home page counters and scene excepted, see Motion), no bounce, no animated focus ring.
 - No text baked into an image.
 - No remote asset: no font CDN, no icon CDN, no hotlinked image.
 - No em dash, anywhere, in any language.
