@@ -1,0 +1,29 @@
+# Overpass behind Caddy: an example to adapt, not a tested production file.
+# The API runs with WEB_DIST_DIR set to the same apps/web/dist that Caddy serves below,
+# and with TRUST_PROXY=1 because Caddy is the one proxy in front of it.
+
+overpass.example.africa {
+	encode zstd gzip
+
+	# API and MCP server.
+	handle /v1/* {
+		reverse_proxy 127.0.0.1:3000
+	}
+	handle /mcp* {
+		reverse_proxy 127.0.0.1:3100
+	}
+
+	# Itinerary and article pages: the API returns the web shell with per-content share tags,
+	# because link previews (WhatsApp and others) read the HTML and run no JavaScript.
+	@sharePages path_regexp ^/[a-z]{2}/(routes|blog)/[^/]+$
+	handle @sharePages {
+		reverse_proxy 127.0.0.1:3000
+	}
+
+	# Everything else is static: pre-rendered pages per language, assets, then the SPA shell.
+	handle {
+		root * /srv/overpass/apps/web/dist
+		try_files {path} {path}/index.html /index.html
+		file_server
+	}
+}

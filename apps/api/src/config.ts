@@ -28,6 +28,7 @@ const configSchema = z
     SMTP_PASSWORD: optionalText,
     MAIL_FROM: z.string().min(3).default("Overpass <no-reply@localhost>"),
     MAIL_OUTBOX_DIR: optionalText,
+    WEB_DIST_DIR: optionalText,
   })
   .refine((config) => config.NODE_ENV !== "production" || config.SMTP_HOST !== undefined, {
     path: ["SMTP_HOST"],
