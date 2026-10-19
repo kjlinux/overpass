@@ -18,7 +18,7 @@ const memberLinks: Link[] = [
   { key: "settings", path: "/settings" },
 ];
 const visitorLinks: Link[] = [{ key: "signIn", path: "/sign-in" }];
-const moderationLink: Link = { key: "moderation", path: "/admin/moderation" };
+const moderationLink: Link = { key: "moderation", path: "/admin" };
 const newsletterLink: Link = { key: "newsletterAdmin", path: "/admin/newsletter" };
 
 /** The closing action: sign up for a visitor, sign out for a member. */

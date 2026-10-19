@@ -1,0 +1,79 @@
+.home-frame {
+  position: relative;
+  aspect-ratio: 4 / 3;
+}
+@media (min-width: 768px) {
+  .home-frame {
+    aspect-ratio: 16 / 6;
+  }
+}
+.home-frame > svg,
+.home-frame > canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.scene-grid {
+  stroke: var(--color-rule);
+  stroke-width: 1;
+}
+.scene-rail {
+  stroke: var(--color-rule-strong);
+  stroke-width: 2;
+}
+.scene-node {
+  fill: var(--color-paper);
+  stroke: var(--color-ink);
+  stroke-width: 2;
+}
+.scene-node-mid {
+  fill: var(--color-ink);
+}
+.scene-lab {
+  fill: var(--color-ink);
+  font-family: var(--font-text);
+  font-weight: 600;
+}
+.scene-sub {
+  fill: var(--color-ink-2);
+  font-family: var(--font-code);
+}
+.scene-evt {
+  fill: var(--color-ink);
+  font-family: var(--font-code);
+}
+.scene-lab.scene-inv,
+.scene-sub.scene-inv {
+  fill: var(--color-paper);
+}
+.scene-packet {
+  fill: var(--color-ink);
+  stroke: var(--color-surface);
+  stroke-width: 4;
+}
+.scene-label {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.scene-label b {
+  display: block;
+  font-size: clamp(20px, 2.6vw, 34px);
+  font-weight: 600;
+  line-height: 1.2;
+}
+.scene-label span {
+  display: block;
+  font-family: var(--font-code);
+  font-size: 14px;
+  color: var(--color-ink-2);
+}
+.scene-label.is-inverse,
+.scene-label.is-inverse span {
+  color: var(--color-paper);
+}

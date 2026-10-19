@@ -1,4 +1,4 @@
-export type NavKey = "routes" | "sandbox" | "discussions" | "blog" | "docs";
+export type NavKey = "routes" | "sandbox" | "discussions" | "blog" | "docs" | "pricing";
 
 export type NavItem = { key: NavKey; path: string };
 
@@ -9,6 +9,7 @@ export const navItems: NavItem[] = [
   { key: "discussions", path: "/discussions" },
   { key: "blog", path: "/blog" },
   { key: "docs", path: "/docs" },
+  { key: "pricing", path: "/pricing" },
 ];
 
 /** Builds a language-prefixed URL from a path inside the site. */

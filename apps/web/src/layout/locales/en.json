@@ -4,6 +4,8 @@
   "mainNavigation": "Main navigation",
   "menu": "Menu",
   "closeMenu": "Close menu",
+  "themeDark": "Dark theme",
+  "themeLight": "Light theme",
   "language": "Language",
   "signIn": "Sign in",
   "signUp": "Sign up",
@@ -15,7 +17,8 @@
     "sandbox": "Test track",
     "discussions": "Discussions",
     "blog": "Blog",
-    "docs": "Docs"
+    "docs": "Docs",
+    "pricing": "Pricing"
   },
   "newsletter": {
     "title": "Get the weekly digest",
@@ -45,8 +48,8 @@
     "simulators": "Requested simulators",
     "propose": "Propose a service"
   },
-  "legalLine": "Overpass by Ghostapi, Côte d'Ivoire. Code under a free licence.",
-  "moderation": "Moderation",
+  "legalLine": "Overpass by Ghostapi, Côte d'Ivoire. Code under the MIT licence.",
+  "moderation": "Administration",
   "myBlog": "My blog",
   "newsletterAdmin": "Newsletter (team)"
 }

@@ -7,6 +7,7 @@ import { Button, cx } from "../components/ui";
 import { AccountLinks } from "./AccountLinks";
 import { LanguageSelect } from "./LanguageSelect";
 import { localizedPath, navItems } from "./nav";
+import { ThemeSwitch } from "./ThemeSwitch";
 
 const frame = "mx-auto max-w-frame px-4 md:px-6 lg:px-8";
 const navLink =
@@ -34,6 +35,9 @@ function NavList({ language }: Props): JSX.Element {
           </li>
         );
       })}
+      <li class="border-b border-rule lg:ml-auto lg:border-b-0 lg:border-l">
+        <ThemeSwitch class="w-full justify-start px-4" />
+      </li>
       <AccountLinks language={language} inMenu />
     </ul>
   );

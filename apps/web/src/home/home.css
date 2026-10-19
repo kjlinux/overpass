@@ -1,0 +1,131 @@
+/* Hallmark · macrostructure: Workbench, home proposal B "Bandeau" · tone: printed road atlas · anchor hue: ink blue · design-system: DESIGN.md */
+.home-promise {
+  font-size: var(--text-display);
+  font-weight: 600;
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  max-width: 13ch;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+@media (min-width: 1024px) {
+  .home-promise {
+    max-width: none;
+  }
+}
+.home-bleed {
+  margin-inline: calc(50% - 50vw);
+}
+.demo-stage {
+  position: relative;
+}
+.demo-stage::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -1px;
+  height: 3px;
+  background: var(--color-ink);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--duration-slow) var(--ease-out);
+}
+.demo-stage[data-state="done"]::before {
+  transform: scaleX(1);
+}
+.demo-stage[data-state="failed"]::before {
+  transform: scaleX(1);
+  background: var(--color-danger);
+}
+.demo-mark {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 8px;
+  border: 1px solid var(--color-rule-strong);
+  vertical-align: 1px;
+}
+[data-state="done"] .demo-mark {
+  background: var(--color-ink);
+  border-color: var(--color-ink);
+}
+[data-state="failed"] .demo-mark {
+  background: var(--color-danger);
+  border-color: var(--color-danger);
+}
+.home-operator {
+  font-size: clamp(32px, 5vw, 56px);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+.home-figure {
+  font-family: var(--font-code);
+  font-size: clamp(40px, 6vw, 72px);
+  font-weight: 500;
+  line-height: 1.05;
+  font-variant-numeric: tabular-nums;
+}
+@media (min-width: 768px) {
+  .home-atlas {
+    grid-template-columns: repeat(9, minmax(0, 1fr));
+    border: 0;
+  }
+  .home-atlas > li {
+    grid-column: var(--c);
+    grid-row: var(--r);
+    aspect-ratio: 1;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 0 -1px -1px 0;
+    border: 1px solid var(--color-ink);
+  }
+}
+.home-strip4 > :last-child {
+  border-bottom: 0;
+}
+@media (min-width: 768px) {
+  .home-strip4 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .home-strip4 > * {
+    padding-inline: 24px;
+  }
+  .home-strip4 > :nth-child(odd) {
+    padding-left: 0;
+  }
+  .home-strip4 > :nth-child(even) {
+    border-left: 1px solid var(--color-rule);
+  }
+  .home-strip4 > :nth-child(3) {
+    border-bottom: 0;
+  }
+}
+@media (min-width: 1024px) {
+  .home-strip4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .home-strip4 > * {
+    border-bottom: 0;
+    border-left: 1px solid var(--color-rule);
+  }
+  .home-strip4 > :nth-child(odd) {
+    padding-left: 24px;
+  }
+  .home-strip4 > :first-child {
+    padding-left: 0;
+    border-left: 0;
+  }
+}
+.reveal-pending {
+  opacity: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .demo-stage::before {
+    transition: none;
+  }
+  .reveal-pending {
+    opacity: 1;
+  }
+}

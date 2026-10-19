@@ -1,0 +1,89 @@
+{
+  "track": {
+    "title": "The test track",
+    "body": "The test track replays real cases: successful payment, insufficient balance, duplicate or late webhook, timeout. No merchant account.",
+    "open": "Open the test track",
+    "alt": "Test track: scenarios on the left, inspector with the JSON response of a payment session, then the delivery of the checkout.session.completed webhook.",
+    "caption": "Inspector and deliveries, capture of the application",
+    "cases": "Replayed cases",
+    "success": {
+      "title": "Successful payment",
+      "code": "checkout.session.completed"
+    },
+    "insufficient": {
+      "title": "Insufficient balance",
+      "code": "checkout.session.payment_failed"
+    },
+    "duplicate": {
+      "title": "Duplicate webhook",
+      "code": "same event, twice"
+    },
+    "late": {
+      "title": "Late webhook",
+      "code": "sent 60 s after the payment"
+    },
+    "operators": "Simulated operators",
+    "unofficial": "unofficial simulator, built from the public documentation",
+    "wave": {
+      "name": "Wave",
+      "kind": "merchant payment"
+    },
+    "pispi": {
+      "name": "PI-SPI",
+      "kind": "instant payment"
+    },
+    "paydunya": {
+      "name": "PayDunya",
+      "kind": "aggregator"
+    }
+  },
+  "routes": {
+    "title": "The itineraries",
+    "body": "Each sheet says whether the road is clear, to verify or reported broken, with the date of the last check.",
+    "alt": "Itinerary sheet: PHP code creating a Wave session, known traps, then a pothole reported by another developer.",
+    "caption": "Code, known traps and potholes of a sheet, capture of the application",
+    "states": "States of a sheet",
+    "clear": "Checked recently by another developer.",
+    "toVerify": "The last check is old, one try is enough.",
+    "broken": "Open potholes, to fix before use.",
+    "browse": "Browse the itineraries"
+  },
+  "mcp": {
+    "title": "In your code assistant",
+    "body": "Your code assistant reads the sheets. Plug the Overpass MCP server into Claude Code, Cursor or VS Code with a personal token, and it writes the local integration that works.",
+    "editors": "Supported editors",
+    "claudeCode": "Claude Code",
+    "cursor": "Cursor",
+    "vscode": "VS Code",
+    "caption": ".cursor/mcp.json",
+    "token": "YOUR_TOKEN",
+    "note": "The token is created in your settings. The three configurations are in the",
+    "docs": "documentation"
+  },
+  "community": {
+    "title": "Community",
+    "intro": "Three spaces around the sheets, for everything the official documentation does not say.",
+    "discussions": "Career, tools, cloud, AI, projects: everything an African developer deals with.",
+    "blog": "African tech news, tutorials and portraits.",
+    "newsletter": "Newsletter",
+    "newsletterBody": "The week in short: the best sheets, discussions and articles."
+  },
+  "countries": {
+    "title": "Countries covered",
+    "intro": "From the listed services and the community sheets.",
+    "loading": "Loading countries and figures"
+  },
+  "figures": {
+    "label": "Figures",
+    "routes_one": "itinerary published",
+    "routes_other": "itineraries published",
+    "checks_one": "dated check",
+    "checks_other": "dated checks",
+    "countries_one": "country covered",
+    "countries_other": "countries covered"
+  },
+  "signup": {
+    "text": "Share what you learned in production.",
+    "button": "Create an account"
+  }
+}

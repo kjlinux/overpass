@@ -8,10 +8,12 @@
 /* Hallmark · macrostructure: Workbench · tone: printed road atlas · anchor hue: ink blue · design-system: DESIGN.md */
 html {
   -webkit-text-size-adjust: 100%;
+  overflow-x: clip;
   background: var(--color-paper);
 }
 body {
   margin: 0;
+  overflow-x: clip;
   background: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-text);
