@@ -21,9 +21,6 @@ export function moderationRoutes({ app, service, resolve }: Context): void {
       return reply.code(201).send(ok(await service.report(account, kind, id)));
     });
   }
-  app.get("/v1/moderation/blog", async (request) =>
-    ok(await service.queue(await requireAccount(resolve, request))),
-  );
   app.post("/v1/moderation/blog/:kind/:id", async (request) => {
     const account = await requireAccount(resolve, request);
     const { kind, id } = parseInput(blogModerationParams, request.params);

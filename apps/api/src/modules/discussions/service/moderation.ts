@@ -1,15 +1,8 @@
 import { reportEligibility, statusAfterDecision, statusAfterReports } from "@overpass/shared";
-import type {
-  ContentKind,
-  ContentStatus,
-  ModerationDecision,
-  ModerationItem,
-} from "@overpass/shared";
+import type { ContentKind, ContentStatus, ModerationDecision } from "@overpass/shared";
 import { AppError } from "../../../http/app-error.js";
 import type { Account } from "../../accounts/index.js";
 import type { DiscussionsDeps } from "./context.js";
-
-const queueSize = 100;
 
 type Target = {
   authorId: string | null;
@@ -55,18 +48,6 @@ async function report(deps: DiscussionsDeps, account: Account, kind: ContentKind
   return { status };
 }
 
-async function queue(deps: DiscussionsDeps, account: Account): Promise<ModerationItem[]> {
-  requireAdmin(account);
-  const rows = await deps.repository.moderationQueue(queueSize);
-  const authors = rows.flatMap((row) => (row.authorId === null ? [] : [row.authorId]));
-  const names = await deps.handles(authors);
-  return rows.map(({ authorId, lastReportAt, ...row }) => ({
-    ...row,
-    author: names.get(authorId ?? "") ?? "",
-    lastReportAt: lastReportAt.toISOString(),
-  }));
-}
-
 /** A decision settles the open reports, so later reports start counting from zero. */
 async function decide(
   deps: DiscussionsDeps,
@@ -77,8 +58,12 @@ async function decide(
   requireAdmin(account);
   const { earners } = await targetOf(deps, target.kind, target.id);
   const status = statusAfterDecision(decision);
-  await deps.repository.setStatus(target.kind, target.id, status);
-  await deps.repository.resolveReports(target.kind, target.id, deps.now());
+  const entry = { actorId: account.id, targetKind: target.kind, targetId: target.id };
+  await deps.repository.atomically(async (repository, tx) => {
+    await repository.setStatus(target.kind, target.id, status);
+    await repository.resolveReports(target.kind, target.id, deps.now());
+    await deps.log({ ...entry, action: decision }, tx);
+  });
   await deps.onContribution(earners);
   return { status };
 }
@@ -86,7 +71,6 @@ async function decide(
 export function moderationService(deps: DiscussionsDeps) {
   return {
     report: (account: Account, kind: ContentKind, id: string) => report(deps, account, kind, id),
-    queue: (account: Account) => queue(deps, account),
     decide: (account: Account, kind: ContentKind, id: string, decision: ModerationDecision) =>
       decide(deps, account, { kind, id }, decision),
   };

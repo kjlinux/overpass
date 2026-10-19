@@ -2,12 +2,14 @@ import { canReadPost, isListed } from "@overpass/shared";
 import type { PostDetail, PostSummary } from "@overpass/shared";
 import { AppError } from "../../../http/app-error.js";
 import type { Account } from "../../accounts/index.js";
+import type { ModerationLog } from "../../admin/index.js";
 import type { ContributionListener } from "../../ranking/index.js";
 import type { BlogRepository, PostRow } from "../model.js";
 
 export type BlogDeps = {
   repository: BlogRepository;
   onContribution: ContributionListener;
+  log: ModerationLog;
   webOrigin: string;
   now: () => Date;
 };

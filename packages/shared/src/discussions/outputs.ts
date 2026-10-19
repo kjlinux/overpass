@@ -59,21 +59,8 @@ export const threadPageSchema = z.object({
   nextCursor: z.string().nullable(),
 });
 
-export const moderationItemSchema = z.object({
-  kind: z.enum(["thread", "reply"]),
-  id: z.uuid(),
-  threadId: z.uuid(),
-  title: z.string(),
-  excerpt: z.string(),
-  author: z.string(),
-  status: z.enum(contentStatuses),
-  reports: z.number().int(),
-  lastReportAt: z.string(),
-});
-
 export type DiscussionTopic = z.infer<typeof discussionTopicSchema>;
 export type ThreadSummary = z.infer<typeof threadSummarySchema>;
 export type Reply = z.infer<typeof replySchema>;
 export type ThreadDetail = z.infer<typeof threadDetailSchema>;
 export type ThreadPage = z.infer<typeof threadPageSchema>;
-export type ModerationItem = z.infer<typeof moderationItemSchema>;

@@ -42,7 +42,12 @@
     "translation_invalid": "Liez la traduction à un article de même sorte, dans l'autre langue, que vous pouvez modifier.",
     "newsletter_link_invalid": "Ce lien n'est plus valide. Inscrivez-vous de nouveau pour en recevoir un autre.",
     "issue_not_draft": "Ce numéro est déjà parti ou en cours d'envoi, il ne peut plus changer.",
-    "issue_empty": "Ajoutez au moins une fiche, une discussion ou un article avant l'envoi."
+    "issue_empty": "Ajoutez au moins une fiche, une discussion ou un article avant l'envoi.",
+    "account_suspended": "Ce compte est suspendu par l'équipe de modération.",
+    "suspend_self": "Vous ne pouvez pas suspendre votre propre compte.",
+    "suspend_admin": "Un compte administrateur ne peut pas être suspendu.",
+    "already_suspended": "Ce compte est déjà suspendu.",
+    "not_suspended": "Ce compte n'est pas suspendu."
   },
   "fields": {
     "required": "Ce champ est obligatoire.",
@@ -105,6 +110,8 @@
     "subject_invalid": "L'objet doit compter de 1 à 140 caractères.",
     "intro_too_long": "L'introduction ne doit pas dépasser 5 000 caractères.",
     "items_invalid": "Choisissez au plus 15 contenus existants.",
-    "slug_invalid": "Cette adresse d'article n'est pas valide."
+    "slug_invalid": "Cette adresse d'article n'est pas valide.",
+    "report_reason_invalid": "Expliquez le problème en 3 à 500 caractères.",
+    "suspension_reason_invalid": "Indiquez le motif de la suspension en 3 à 500 caractères."
   }
 }

@@ -1,0 +1,11 @@
+drop table moderation_actions;
+drop function moderation_actions_insert_only();
+drop index users_handle_prefix_idx;
+drop index users_email_prefix_idx;
+alter table users drop constraint users_suspension_reason;
+alter table users drop column suspended_reason;
+alter table users drop column suspended_at;
+drop table route_reports;
+drop index routes_listing_idx;
+alter table routes drop column moderation;
+create index routes_listing_idx on routes (updated_at desc, id desc) where deleted_at is null;

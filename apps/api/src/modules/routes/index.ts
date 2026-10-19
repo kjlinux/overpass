@@ -7,6 +7,11 @@ import type { ContributionListener } from "../ranking/index.js";
 import { createRoutesRepository } from "./repository.js";
 export { serviceCatalogue, slugOf } from "./repository/catalogue.js";
 export type { CatalogueEntry, NewService, ServiceCatalogue } from "./repository/catalogue.js";
+/** The visibility rule of itineraries, for modules that count or pick routes in SQL. */
+export {
+  countedCoverage as countedCoverageCondition,
+  listedRoute as listedRouteCondition,
+} from "./repository/visibility.js";
 import { registerRoutesRoutes } from "./routes.js";
 import { createRoutesService } from "./service.js";
 
@@ -30,7 +35,7 @@ export function routeDirectory(
   const repository = createRoutesRepository(db, checks);
   return {
     facts: async (routeId) => {
-      const route = await repository.findLive(routeId);
+      const route = await repository.findListed(routeId);
       return route === null ? null : { authorId: route.authorId };
     },
     titles: (ids) => repository.titles(ids),
@@ -44,7 +49,7 @@ export function routeLookup(db: Database, checks: ChecksReader): RouteLookup {
   const repository = createRoutesRepository(db, checks);
   return {
     facts: async (routeId) => {
-      const route = await repository.findLive(routeId);
+      const route = await repository.findListed(routeId);
       if (route === null) return null;
       const service = (await repository.serviceNames([route.serviceId])).get(route.serviceId);
       if (service === undefined) return null;

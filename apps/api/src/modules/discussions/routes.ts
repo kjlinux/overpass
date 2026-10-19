@@ -78,9 +78,6 @@ function clickRoutes({ app, service, resolve }: Context): void {
 }
 
 function moderationRoutes({ app, service, resolve }: Context): void {
-  app.get("/v1/moderation/reports", async (request) =>
-    ok(await service.queue(await requireAccount(resolve, request))),
-  );
   app.post("/v1/moderation/:kind/:id", async (request) => {
     const account = await requireAccount(resolve, request);
     const { kind, id } = parseInput(moderationParams, request.params);

@@ -4,14 +4,17 @@ import { AppError } from "../../../http/app-error.js";
 import type { Account } from "../../accounts/index.js";
 import { SourceThreadTaken, TranslationExists } from "../model.js";
 import type { RoutePatch } from "../model.js";
-import { assertCanEdit, serviceIdOf } from "./context.js";
+import { assertCanEdit, mayRead, serviceIdOf } from "./context.js";
 import type { RoutesDeps } from "./context.js";
 
-/** The group of the source route, refusing a second version in the same language. */
-async function translationGroupOf(deps: RoutesDeps, input: RouteCreateInput) {
+/** The group of the source route; a hidden one only takes translations from the moderators. */
+async function translationGroupOf(deps: RoutesDeps, account: Account, input: RouteCreateInput) {
   if (input.translationOf === undefined) return undefined;
   const source = await deps.repository.findLive(input.translationOf);
-  if (source === null) throw new AppError("not_found", 404);
+  if (source === null || !mayRead(source, account)) throw new AppError("not_found", 404);
+  if (source.moderation === "hidden" && account.role !== "admin") {
+    throw new AppError("content_unavailable", 409);
+  }
   if (source.language === input.language) throw new AppError("translation_exists", 409);
   return source.translationGroup;
 }
@@ -24,7 +27,7 @@ async function sourceThreadOf(deps: RoutesDeps, account: Account, input: RouteCr
   const eligibility = transformEligibility({
     isThreadAuthor: facts.authorId === account.id,
     resolved: facts.resolved,
-    alreadyTransformed: (await deps.repository.fromThreads([input.sourceThread])).size > 0,
+    alreadyTransformed: await deps.repository.hasRouteFromThread(input.sourceThread),
   });
   if (eligibility === "not_author") throw new AppError("not_thread_author", 403);
   if (eligibility === "not_resolved") throw new AppError("thread_not_resolved", 409);
@@ -41,7 +44,7 @@ async function editableRoute(deps: RoutesDeps, id: string, account: Account) {
 
 async function createRoute(deps: RoutesDeps, account: Account, input: RouteCreateInput) {
   const serviceId = await serviceIdOf(deps.repository, input.service);
-  const translationGroup = await translationGroupOf(deps, input);
+  const translationGroup = await translationGroupOf(deps, account, input);
   const sourceThreadId = await sourceThreadOf(deps, account, input);
   const at = deps.now();
   const { country, stack, language, title, content } = input;

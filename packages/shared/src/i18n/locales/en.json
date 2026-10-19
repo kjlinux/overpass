@@ -42,7 +42,12 @@
     "translation_invalid": "Link the translation to a post of the same kind, in the other language, that you can edit.",
     "newsletter_link_invalid": "This link is no longer valid. Subscribe again to receive a new one.",
     "issue_not_draft": "This issue has already gone out or is being sent, it can no longer change.",
-    "issue_empty": "Add at least one itinerary, discussion or post before sending."
+    "issue_empty": "Add at least one itinerary, discussion or post before sending.",
+    "account_suspended": "This account is suspended by the moderation team.",
+    "suspend_self": "You cannot suspend your own account.",
+    "suspend_admin": "An administrator account cannot be suspended.",
+    "already_suspended": "This account is already suspended.",
+    "not_suspended": "This account is not suspended."
   },
   "fields": {
     "required": "This field is required.",
@@ -105,6 +110,8 @@
     "subject_invalid": "The subject must be 1 to 140 characters long.",
     "intro_too_long": "The introduction must not exceed 5,000 characters.",
     "items_invalid": "Choose at most 15 existing items.",
-    "slug_invalid": "This post address is not valid."
+    "slug_invalid": "This post address is not valid.",
+    "report_reason_invalid": "Explain the problem in 3 to 500 characters.",
+    "suspension_reason_invalid": "Give the reason for the suspension in 3 to 500 characters."
   }
 }

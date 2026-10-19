@@ -17,6 +17,7 @@ export function rowSelection(checks: ChecksReader) {
     title: routes.title,
     content: routes.content,
     version: routes.version,
+    moderation: routes.moderation,
     createdAt: routes.createdAt,
     updatedAt: routes.updatedAt,
     service: { slug: services.slug, name: services.name, simulated: services.simulated },

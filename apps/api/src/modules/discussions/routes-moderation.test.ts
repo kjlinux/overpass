@@ -75,9 +75,12 @@ describe("reports", () => {
   });
 });
 
+const queueOf = async (query: string) =>
+  (await call(app, "GET", `/v1/admin/queue${query}`, { cookie: admin })).body.data?.items;
+
 describe("moderation queue", () => {
   it("is reserved to admins", async () => {
-    expect((await call(app, "GET", "/v1/moderation/reports", { cookie: first })).status).toBe(403);
+    expect((await call(app, "GET", "/v1/admin/queue", { cookie: first })).status).toBe(403);
     const decide = await call(app, "POST", `/v1/moderation/thread/${threadId}`, {
       cookie: first,
       payload: { decision: "restore" },
@@ -87,8 +90,7 @@ describe("moderation queue", () => {
 
   it("lists reported content with its count of open reports", async () => {
     await report(first);
-    const queue = (await call(app, "GET", "/v1/moderation/reports", { cookie: admin })).body.data;
-    expect(queue).toEqual([
+    expect(await queueOf("?kind=thread")).toEqual([
       expect.objectContaining({ kind: "thread", id: threadId, reports: 1, status: "visible" }),
     ]);
   });
@@ -102,8 +104,8 @@ describe("moderation queue", () => {
     });
     expect(decided.status).toBe(200);
     expect(await listed()).toEqual([threadId]);
-    const queue = (await call(app, "GET", "/v1/moderation/reports", { cookie: admin })).body.data;
-    expect(queue).toEqual([]);
+    expect(await queueOf("?kind=thread")).toEqual([]);
+    expect(await queueOf("?kind=thread&state=hidden")).toEqual([]);
     expect((await report(first)).status).toBe(201);
     expect(await listed()).toEqual([threadId]);
   });
@@ -125,7 +127,6 @@ describe("moderation queue", () => {
       cookie: admin,
       payload: { decision: "remove" },
     });
-    const queue = (await call(app, "GET", "/v1/moderation/reports", { cookie: admin })).body.data;
-    expect(queue).toEqual([]);
+    expect(await queueOf("?kind=reply")).toEqual([]);
   });
 });

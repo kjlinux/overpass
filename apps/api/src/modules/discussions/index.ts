@@ -1,6 +1,7 @@
 import type { FastifyInstance } from "fastify";
 import type { Database } from "../../db/client.js";
 import type { AccountResolver, HandleDirectory } from "../accounts/index.js";
+import type { ModerationLog } from "../admin/index.js";
 import type { ContributionListener } from "../ranking/index.js";
 import type { RouteLookup } from "./model.js";
 import { createDiscussionsRepository } from "./repository.js";
@@ -31,6 +32,7 @@ export type DiscussionsOptions = {
   handles: HandleDirectory;
   resolveAccount: AccountResolver;
   onContribution: ContributionListener;
+  log: ModerationLog;
   now: () => Date;
 };
 
@@ -44,6 +46,7 @@ export async function registerDiscussions(
     routes: options.routes,
     handles: options.handles,
     onContribution: options.onContribution,
+    log: options.log,
     now: options.now,
   });
   await app.register((scope) => {

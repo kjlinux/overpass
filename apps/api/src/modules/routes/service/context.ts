@@ -50,6 +50,12 @@ export async function summaries(deps: RoutesDeps, rows: RouteRow[]): Promise<Rou
   return rows.map((row) => toSummary(row, names.get(row.authorId ?? "") ?? ""));
 }
 
+/** A hidden itinerary stays readable by its author and the moderation team only. */
+export function mayRead(route: RouteRecord, account: Account | null): boolean {
+  if (route.moderation === "visible") return true;
+  return account !== null && (route.authorId === account.id || account.role === "admin");
+}
+
 /** The author edits and deletes; an admin may too, for moderation. */
 export function assertCanEdit(route: RouteRecord, account: Account): void {
   if (route.authorId !== account.id && account.role !== "admin") {

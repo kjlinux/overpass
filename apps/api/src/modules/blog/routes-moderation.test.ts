@@ -70,10 +70,12 @@ describe("reports", () => {
 describe("admin decisions", () => {
   it("lists reported content for admins only", async () => {
     await report(first);
-    expect((await call(app, "GET", "/v1/moderation/blog", { cookie: first })).status).toBe(403);
-    const { body } = await call(app, "GET", "/v1/moderation/blog", { cookie: admin });
-    expect(body.data).toMatchObject([
-      { kind: "post", id: post.id, reports: 1, postSlug: post.slug },
+    expect((await call(app, "GET", "/v1/admin/queue?kind=post", { cookie: first })).status).toBe(
+      403,
+    );
+    const { body } = await call(app, "GET", "/v1/admin/queue?kind=post", { cookie: admin });
+    expect(body.data?.items).toMatchObject([
+      { kind: "post", id: post.id, reports: 1, path: `/blog/${post.slug}` },
     ]);
   });
 

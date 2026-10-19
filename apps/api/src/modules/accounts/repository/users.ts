@@ -34,6 +34,7 @@ function toRecord(row: UserRow, stacks: string[]): UserRecord {
     role: row.role,
     sessionVersion: row.sessionVersion,
     newsletterConsentAt: row.newsletterConsentAt,
+    suspendedAt: row.suspendedAt,
     createdAt: row.createdAt,
     stacks,
   };

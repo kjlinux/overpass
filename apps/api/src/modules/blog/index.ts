@@ -1,6 +1,7 @@
 import type { FastifyInstance } from "fastify";
 import type { Database } from "../../db/client.js";
 import type { AccountResolver } from "../accounts/index.js";
+import type { ModerationLog } from "../admin/index.js";
 import type { ContributionListener } from "../ranking/index.js";
 import { createBlogRepository } from "./repository.js";
 import { registerBlogRoutes } from "./routes.js";
@@ -10,6 +11,7 @@ export type BlogOptions = {
   db: Database;
   resolveAccount: AccountResolver;
   onContribution: ContributionListener;
+  log: ModerationLog;
   webOrigin: string;
   now: () => Date;
 };
@@ -19,6 +21,7 @@ export async function registerBlog(app: FastifyInstance, options: BlogOptions): 
   const service = createBlogService({
     repository: createBlogRepository(options.db),
     onContribution: options.onContribution,
+    log: options.log,
     webOrigin: options.webOrigin,
     now: options.now,
   });

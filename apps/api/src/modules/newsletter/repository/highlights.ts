@@ -3,6 +3,7 @@ import { sql } from "drizzle-orm";
 import type { SQL } from "drizzle-orm";
 import type { Database } from "../../../db/client.js";
 import { listedPostCondition } from "../../blog/index.js";
+import { listedRouteCondition } from "../../routes/index.js";
 import type { HighlightsPart } from "../model.js";
 import { at, rows } from "./sql.js";
 
@@ -14,7 +15,7 @@ const threadColumns = sql`'thread' as kind, t.id, t.title,
   left(t.content, ${excerptLength}) as summary, '/discussions/' || t.id as path`;
 const postColumns = sql`'post' as kind, p.id, p.title, p.summary, '/blog/' || p.slug as path`;
 
-const liveRoute = sql`r.deleted_at is null`;
+const liveRoute = listedRouteCondition("r");
 const liveThread = sql`t.status = 'visible'`;
 const livePost = (now: Date) => listedPostCondition("p", at(now));
 

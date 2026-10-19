@@ -2,6 +2,7 @@ import type { CountryRank, DeveloperRank, PointsBreakdown } from "@overpass/shar
 import { sql } from "drizzle-orm";
 import type { SQL } from "drizzle-orm";
 import type { Database } from "../../db/client.js";
+import { listedRouteCondition } from "../routes/index.js";
 import type { RankingRepository } from "./model.js";
 
 async function rows<Row>(db: Database, query: SQL): Promise<Row[]> {
@@ -16,7 +17,8 @@ const livePost = sql`p.status = 'published' and p.moderation = 'visible'
 /** Section 9: points come from the contribution tables; self-acceptance and self-votes earn nothing. */
 function breakdownQuery(userId: string): SQL {
   return sql`select
-    (select count(*)::int from routes where author_id = ${userId} and deleted_at is null) as routes,
+    (select count(*)::int from routes r where r.author_id = ${userId}
+      and ${listedRouteCondition("r")}) as routes,
     (select count(*)::int from checks where user_id = ${userId}) as checks,
     (select count(*)::int from potholes where user_id = ${userId} and status = 'confirmed') as potholes,
     (select count(*)::int from threads t join replies r on r.id = t.accepted_reply_id

@@ -2,6 +2,7 @@ import type { FastifyInstance, FastifyBaseLogger } from "fastify";
 import type { Database } from "../../db/client.js";
 import type { Mailer } from "../../mail/mailer.js";
 import type { AccountResolver, ContactDirectory, HandleDirectory } from "../accounts/index.js";
+import type { ModerationLog } from "../admin/index.js";
 import type { ServiceCatalogue } from "../routes/index.js";
 import { createRequestsRepository } from "./repository.js";
 import { registerRequestsRoutes } from "./routes.js";
@@ -15,6 +16,7 @@ export type RequestsOptions = {
   resolveAccount: AccountResolver;
   mailer: Mailer;
   log: FastifyBaseLogger;
+  moderationLog: ModerationLog;
   webOrigin: string;
   now: () => Date;
 };
@@ -24,10 +26,11 @@ export async function registerRequests(
   app: FastifyInstance,
   options: RequestsOptions,
 ): Promise<void> {
-  const { db, mailer, log, resolveAccount, ...shared } = options;
+  const { db, mailer, log, resolveAccount, moderationLog, ...shared } = options;
   const service = createRequestsService({
     ...shared,
     repository: createRequestsRepository(db),
+    log: moderationLog,
     reportError: (error) => {
       log.error({ err: error }, "proposal outcome could not be prepared");
     },

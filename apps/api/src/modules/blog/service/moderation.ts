@@ -1,16 +1,9 @@
 import { blogReportEligibility, statusAfterAction, statusAfterPostReports } from "@overpass/shared";
-import type {
-  BlogContentKind,
-  BlogModerationItem,
-  ModerationAction,
-  ModerationStatus,
-} from "@overpass/shared";
+import type { BlogContentKind, ModerationAction, ModerationStatus } from "@overpass/shared";
 import { AppError } from "../../../http/app-error.js";
 import type { Account } from "../../accounts/index.js";
 import { readablePost, requireAdmin } from "./context.js";
 import type { BlogDeps } from "./context.js";
-
-const queueSize = 100;
 
 type Target = { authorId: string | null; moderation: ModerationStatus; earner: string | null };
 
@@ -55,16 +48,6 @@ async function report(deps: BlogDeps, account: Account, kind: BlogContentKind, i
   return { moderation };
 }
 
-async function queue(deps: BlogDeps, account: Account): Promise<BlogModerationItem[]> {
-  requireAdmin(account);
-  const rows = await deps.repository.queue(queueSize);
-  return rows.map(({ authorHandle, lastReportAt, ...row }) => ({
-    ...row,
-    author: authorHandle,
-    lastReportAt: lastReportAt.toISOString(),
-  }));
-}
-
 /** A decision settles the open reports, so later reports start counting from zero. */
 async function moderate(
   deps: BlogDeps,
@@ -75,8 +58,12 @@ async function moderate(
   requireAdmin(account);
   const { earner } = await targetOf(deps, target.kind, target.id);
   const moderation = statusAfterAction(action);
-  await deps.repository.setModeration(target.kind, target.id, moderation);
-  await deps.repository.resolveReports(target.kind, target.id, deps.now());
+  const entry = { actorId: account.id, targetKind: target.kind, targetId: target.id, action };
+  await deps.repository.atomically(async (repository, tx) => {
+    await repository.setModeration(target.kind, target.id, moderation);
+    await repository.resolveReports(target.kind, target.id, deps.now());
+    await deps.log(entry, tx);
+  });
   await deps.onContribution([earner]);
   return { moderation };
 }
@@ -85,7 +72,11 @@ async function suspend(deps: BlogDeps, account: Account, handle: string, suspend
   requireAdmin(account);
   const member = await deps.repository.memberByHandle(handle);
   if (member === null) throw new AppError("not_found", 404);
-  await deps.repository.setSuspended(member.id, account.id, suspended, deps.now());
+  const action = suspended ? "suspend" : "reactivate";
+  await deps.repository.atomically(async (repository, tx) => {
+    await repository.setSuspended(member.id, account.id, suspended, deps.now());
+    await deps.log({ actorId: account.id, targetKind: "blog", targetId: member.id, action }, tx);
+  });
   await deps.onContribution([member.id]);
   return { suspended };
 }
@@ -94,7 +85,6 @@ export function moderationService(deps: BlogDeps) {
   return {
     report: (account: Account, kind: BlogContentKind, id: string) =>
       report(deps, account, kind, id),
-    queue: (account: Account) => queue(deps, account),
     moderate: (account: Account, kind: BlogContentKind, id: string, action: ModerationAction) =>
       moderate(deps, account, { kind, id }, action),
     suspend: (account: Account, handle: string, suspended: boolean) =>

@@ -16,6 +16,9 @@ export type AccountResolver = (request: FastifyRequest) => Promise<Account | nul
 /** Public handles of a set of accounts; deleted accounts are simply absent. */
 export type HandleDirectory = (ids: string[]) => Promise<Map<string, string>>;
 
+/** Requests made with the session of a suspended account, read as anonymous on public pages. */
+const suspendedRequests = new WeakSet<FastifyRequest>();
+
 export function accountResolver(
   service: AccountsService,
   cookies: SessionCookies,
@@ -24,6 +27,10 @@ export function accountResolver(
     const session = cookies.read(request);
     const user = session === undefined ? null : await service.authenticateSession(session);
     if (user === null) return null;
+    if (user.suspendedAt !== null) {
+      suspendedRequests.add(request);
+      return null;
+    }
     return { id: user.id, handle: user.handle, country: user.country, role: user.role };
   };
 }
@@ -59,6 +66,9 @@ export async function requireAccount(
   request: FastifyRequest,
 ): Promise<Account> {
   const account = await resolve(request);
+  if (account === null && suspendedRequests.has(request)) {
+    throw new AppError("account_suspended", 403);
+  }
   if (account === null) throw new AppError("unauthorized", 401);
   return account;
 }

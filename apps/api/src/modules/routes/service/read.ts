@@ -4,7 +4,7 @@ import { AppError } from "../../../http/app-error.js";
 import type { Account } from "../../accounts/index.js";
 import { decodeCursor, encodeCursor } from "../cursor.js";
 import type { ListedRow, RouteRow } from "../model.js";
-import { summaries, toService } from "./context.js";
+import { mayRead, summaries, toService } from "./context.js";
 import type { RoutesDeps } from "./context.js";
 
 function nextCursor(rows: ListedRow[], limit: number, ranked: boolean): string | null {
@@ -32,7 +32,7 @@ async function readRoute(
   language?: Language,
 ): Promise<RouteDetail> {
   const found = await deps.repository.findRow(id);
-  if (found === null) throw new AppError("not_found", 404);
+  if (found === null || !mayRead(found, account)) throw new AppError("not_found", 404);
   const { row, fallback } = await inLanguage(deps, found, language);
   const [summary] = await summaries(deps, [row]);
   if (summary === undefined) throw new AppError("not_found", 404);
@@ -40,6 +40,7 @@ async function readRoute(
     ...summary,
     content: row.content,
     fallback,
+    moderation: row.moderation,
     translations: await deps.repository.translations(row.translationGroup),
     ...(await deps.checks.community(row.id, row.authorId, account)),
   };

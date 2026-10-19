@@ -53,7 +53,20 @@ export const routes = pgTable("routes", {
   updatedAt: utc("updated_at").notNull(),
   deletedAt: utc("deleted_at"),
   sourceThreadId: uuid("source_thread_id"),
+  moderation: text("moderation").$type<"visible" | "hidden">().notNull().default("visible"),
 });
+
+/** Mirror of migrations/0015_admin: one report per account and per itinerary. */
+export const routeReports = pgTable(
+  "route_reports",
+  {
+    routeId: uuid("route_id").notNull(),
+    userId: uuid("user_id").notNull(),
+    reason: text("reason").notNull(),
+    createdAt: utc("created_at").notNull(),
+  },
+  (table) => [primaryKey({ columns: [table.routeId, table.userId] })],
+);
 
 export const routeVersions = pgTable(
   "route_versions",

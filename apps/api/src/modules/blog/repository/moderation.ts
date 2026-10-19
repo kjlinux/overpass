@@ -1,8 +1,8 @@
 import type { BlogContentKind } from "@overpass/shared";
 import { sql } from "drizzle-orm";
 import type { Database } from "../../../db/client.js";
-import type { ModerationPart, ModerationRow } from "../model.js";
-import { at, rows, toDate } from "./sql.js";
+import type { ModerationPart } from "../model.js";
+import { at, rows } from "./sql.js";
 
 const tableOf = (kind: BlogContentKind) => sql.raw(kind === "post" ? "posts" : "post_comments");
 
@@ -37,25 +37,6 @@ async function setModeration(db: Database, kind: BlogContentKind, id: string, st
     where p.id = (select post_id from post_comments where id = ${id})`);
 }
 
-async function queue(db: Database, limit: number): Promise<ModerationRow[]> {
-  const raw = await rows<ModerationRow & { lastReportAt: Date | string }>(
-    db,
-    sql`select q.kind, q.id, coalesce(p.slug, cp.slug) as "postSlug",
-        coalesce(p.title, cp.title) as title, left(coalesce(p.summary, c.content), 280) as excerpt,
-        u.handle as "authorHandle", coalesce(p.moderation, c.moderation) as moderation,
-        q.reports, q.last_report_at as "lastReportAt"
-      from (select kind, target_id as id, count(*)::int as reports, max(created_at) as last_report_at
-        from post_reports where resolved_at is null group by kind, target_id) q
-      left join posts p on q.kind = 'post' and p.id = q.id
-      left join post_comments c on q.kind = 'comment' and c.id = q.id
-      left join posts cp on cp.id = c.post_id
-      left join users u on u.id = coalesce(p.author_id, c.author_id)
-      where coalesce(p.moderation, c.moderation) in ('visible', 'hidden')
-      order by q.reports desc, q.last_report_at desc limit ${limit}`,
-  );
-  return raw.map((row) => ({ ...row, lastReportAt: toDate(row.lastReportAt) }));
-}
-
 export function moderationQueries(db: Database): ModerationPart {
   return {
     report: (kind, id, userId, when) => report(db, kind, id, userId, when),
@@ -77,7 +58,6 @@ export function moderationQueries(db: Database): ModerationPart {
         sql`update post_reports set resolved_at = ${at(when)} where ${openOn(kind, id)}`,
       );
     },
-    queue: (limit) => queue(db, limit),
     setSuspended: async (userId, by, suspended, when) => {
       await db.execute(
         suspended

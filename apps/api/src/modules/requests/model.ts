@@ -1,3 +1,4 @@
+import type { Atomic } from "../../db/client.js";
 import type { ProposalStatus } from "@overpass/shared";
 import type { serviceProposals } from "./tables.js";
 
@@ -30,4 +31,5 @@ export type RequestsRepository = {
   removeVote(serviceId: string, userId: string): Promise<void>;
   votes(serviceId: string, userId: string | null): Promise<{ votes: number; voted: boolean }>;
   mostVoted(limit: number): Promise<{ serviceId: string; votes: number }[]>;
+  atomically: Atomic<RequestsRepository>;
 };

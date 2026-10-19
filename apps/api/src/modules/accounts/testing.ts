@@ -6,6 +6,11 @@ import { UniqueViolation } from "./model.js";
 import type { AccountsRepository, TokenRecord, UserRecord } from "./model.js";
 import type { AccountsService } from "./service.js";
 
+const defaults = {
+  ...{ role: "member", sessionVersion: 0, newsletterConsentAt: null, suspendedAt: null },
+  stacks: [],
+};
+
 type StoredToken = TokenRecord & { tokenHash: string; revokedAt: Date | null };
 type UserPart = Pick<
   AccountsRepository,
@@ -37,7 +42,6 @@ function clash(
 function memoryUsers(users: Map<string, UserRecord>, tokens: Map<string, StoredToken>): UserPart {
   const find = (test: (user: UserRecord) => boolean) =>
     settle(() => [...users.values()].find(test) ?? null);
-  const defaults = { role: "member", sessionVersion: 0, newsletterConsentAt: null, stacks: [] };
   return {
     createUser: (input) =>
       settle(() => {

@@ -1,3 +1,4 @@
+import { atomic } from "../../db/client.js";
 import type { Database } from "../../db/client.js";
 import type { BlogRepository } from "./model.js";
 import { feedQueries } from "./repository/feed.js";
@@ -13,5 +14,6 @@ export function createBlogRepository(db: Database): BlogRepository {
     ...feedQueries(db),
     ...socialQueries(db),
     ...moderationQueries(db),
+    atomically: atomic(db, createBlogRepository),
   };
 }

@@ -1,4 +1,5 @@
 import { and, count, desc, eq, sql } from "drizzle-orm";
+import { atomic } from "../../db/client.js";
 import type { Database } from "../../db/client.js";
 import type { RequestsRepository } from "./model.js";
 import { serviceProposals, simulatorVotes } from "./tables.js";
@@ -103,5 +104,9 @@ function voteQueries(db: Database): VotePart {
 }
 
 export function createRequestsRepository(db: Database): RequestsRepository {
-  return { ...proposalQueries(db), ...voteQueries(db) };
+  return {
+    ...proposalQueries(db),
+    ...voteQueries(db),
+    atomically: atomic(db, createRequestsRepository),
+  };
 }

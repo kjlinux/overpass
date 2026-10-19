@@ -1,3 +1,4 @@
+import type { Atomic } from "../../db/client.js";
 import type {
   ContentKind,
   ContentStatus,
@@ -29,18 +30,6 @@ export type ThreadFilters = {
   limit: number;
 };
 
-export type ModerationRow = {
-  kind: ContentKind;
-  id: string;
-  threadId: string;
-  title: string;
-  excerpt: string;
-  authorId: string | null;
-  status: ContentStatus;
-  reports: number;
-  lastReportAt: Date;
-};
-
 /** Storage port of the module; the service never sees SQL. */
 export type DiscussionsRepository = {
   topics(): Promise<TopicRecord[]>;
@@ -62,7 +51,7 @@ export type DiscussionsRepository = {
   reportedBy(userId: string, kind: ContentKind, ids: string[]): Promise<Set<string>>;
   setStatus(kind: ContentKind, id: string, status: ContentStatus): Promise<void>;
   resolveReports(kind: ContentKind, id: string, at: Date): Promise<void>;
-  moderationQueue(limit: number): Promise<ModerationRow[]>;
+  atomically: Atomic<DiscussionsRepository>;
 };
 
 export type RouteFacts = {

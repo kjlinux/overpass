@@ -1,5 +1,6 @@
 import type { FastifyInstance, LightMyRequestResponse } from "fastify";
 import { buildApp } from "./app.js";
+import type { Config } from "./config.js";
 import type { SandboxDeps } from "./app.js";
 import { createTestDatabase } from "./db/testing.js";
 import { captureMailer } from "./mail/testing.js";
@@ -11,7 +12,9 @@ export const password = "correct horse battery";
 export const sessionSecret = "test-secret-with-at-least-32-characters!";
 
 /** A full API on an in-process PostgreSQL, with mails captured instead of sent. */
-export async function createTestApp(options: { now?: () => Date; sandbox?: SandboxDeps } = {}) {
+export async function createTestApp(
+  options: { now?: () => Date; sandbox?: SandboxDeps; config?: Partial<Config> } = {},
+) {
   const database = await createTestDatabase();
   const mailer = captureMailer();
   const app = await buildApp({
@@ -21,6 +24,7 @@ export async function createTestApp(options: { now?: () => Date; sandbox?: Sandb
       TRUST_PROXY: 0,
       WEB_ORIGIN: webOrigin,
       SESSION_SECRET: sessionSecret,
+      ...options.config,
     },
     db: database.db,
     mailer,

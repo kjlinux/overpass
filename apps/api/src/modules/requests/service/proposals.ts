@@ -54,12 +54,18 @@ async function decide(
   const proposal = await deps.repository.findProposal(id);
   if (proposal === null) throw new AppError("not_found", 404);
   const accepted = input.decision === "accept";
-  const claimed = await deps.repository.decideProposal(id, {
-    status: accepted ? "accepted" : "rejected",
-    reason: input.reason ?? null,
-    serviceId: null,
-    decidedBy: account.id,
-    decidedAt: deps.now(),
+  const entry = { actorId: account.id, targetKind: "proposal", targetId: id } as const;
+  const claimed = await deps.repository.atomically(async (repository, tx) => {
+    const decision = await repository.decideProposal(id, {
+      status: accepted ? "accepted" : "rejected",
+      reason: input.reason ?? null,
+      serviceId: null,
+      decidedBy: account.id,
+      decidedAt: deps.now(),
+    });
+    if (decision === null) return null;
+    await deps.log({ ...entry, action: input.decision, reason: input.reason }, tx);
+    return decision;
   });
   if (claimed === null) throw new AppError("proposal_decided", 409);
   const decided = accepted ? await withService(deps, claimed) : claimed;

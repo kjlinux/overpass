@@ -66,18 +66,6 @@ export const followSchema = z.object({
   followedAt: z.string(),
 });
 
-export const blogModerationItemSchema = z.object({
-  kind: z.enum(["post", "comment"]),
-  id: z.uuid(),
-  postSlug: z.string(),
-  title: z.string(),
-  excerpt: z.string(),
-  author: z.string().nullable(),
-  moderation: z.enum(moderationStatuses),
-  reports: z.number().int(),
-  lastReportAt: z.string(),
-});
-
 export type PostAuthor = z.infer<typeof postAuthorSchema>;
 export type PostSummary = z.infer<typeof postSummarySchema>;
 export type PostDetail = z.infer<typeof postDetailSchema>;
@@ -86,4 +74,3 @@ export type PostComment = z.infer<typeof postCommentSchema>;
 export type CommentPage = z.infer<typeof commentPageSchema>;
 export type Blog = z.infer<typeof blogSchema>;
 export type Follow = z.infer<typeof followSchema>;
-export type BlogModerationItem = z.infer<typeof blogModerationItemSchema>;

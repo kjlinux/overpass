@@ -10,6 +10,8 @@ export type UserRecord = {
   role: Role;
   sessionVersion: number;
   newsletterConsentAt: Date | null;
+  /** Set by the moderation team; a suspended account cannot sign in or use its tokens. */
+  suspendedAt: Date | null;
   createdAt: Date;
   stacks: string[];
 };

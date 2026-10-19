@@ -1,8 +1,6 @@
 import { randomUUID } from "node:crypto";
 import cookie from "@fastify/cookie";
 import rateLimit from "@fastify/rate-limit";
-import { providers } from "@overpass/providers";
-import type { ProviderAdapter } from "@overpass/simulator";
 import Fastify from "fastify";
 import type { FastifyInstance } from "fastify";
 import type { Config } from "./config.js";
@@ -18,15 +16,17 @@ import type { Mailer } from "./mail/mailer.js";
 import { itineraries } from "./itineraries.js";
 import { contactDirectory, handleDirectory, registerAccounts } from "./modules/accounts/index.js";
 import type { AccountResolver } from "./modules/accounts/index.js";
+import { adminModule } from "./modules/admin/index.js";
+import type { ModerationLog } from "./modules/admin/index.js";
 import { registerBlog } from "./modules/blog/index.js";
 import type { ContributionListener } from "./modules/ranking/index.js";
 import { newsletterModule } from "./modules/newsletter/index.js";
 import { rankingModule } from "./modules/ranking/index.js";
 import { registerRequests } from "./modules/requests/index.js";
 import { serviceCatalogue } from "./modules/routes/index.js";
-import { registerSandbox } from "./modules/sandbox/index.js";
-import { memoryBus, postgresBus } from "./modules/sandbox/index.js";
-import type { HostResolver, RelayBus } from "./modules/sandbox/index.js";
+import { registerStats } from "./modules/stats/index.js";
+import { registerSimulator } from "./simulator.js";
+import type { SandboxDeps } from "./simulator.js";
 
 export type AppConfig = Pick<
   Config,
@@ -34,26 +34,7 @@ export type AppConfig = Pick<
 > &
   Partial<Config>;
 
-/** Tests swap the simulated providers and the DNS resolver; production uses the real ones. */
-export type SandboxDeps = {
-  providers?: readonly ProviderAdapter[];
-  resolveHost?: HostResolver;
-  bus?: RelayBus;
-  demoProvider?: string;
-};
-
-/** Instances share relay announcements through PostgreSQL; without a URL, one process is enough. */
-function relayBus(
-  app: FastifyInstance,
-  config: AppConfig,
-  injected: RelayBus | undefined,
-): RelayBus {
-  if (injected !== undefined) return injected;
-  const bus =
-    config.DATABASE_URL === undefined ? memoryBus() : postgresBus(config.DATABASE_URL, app.log);
-  app.addHook("onClose", () => bus.close());
-  return bus;
-}
+export type { SandboxDeps } from "./simulator.js";
 
 export type AppDeps = {
   config: AppConfig;
@@ -87,10 +68,11 @@ async function registerCommunity(
     webOrigin: string;
     now: () => Date;
     onContribution: ContributionListener;
+    moderationLog: ModerationLog;
     newsletter: ReturnType<typeof newsletterModule>;
   },
 ): Promise<void> {
-  const { db, sender, onContribution, newsletter, ...rest } = deps;
+  const { db, sender, onContribution, moderationLog, newsletter, ...rest } = deps;
   await registerRequests(app, {
     ...rest,
     db,
@@ -99,35 +81,10 @@ async function registerCommunity(
     contacts: contactDirectory(db),
     mailer: sender,
     log: app.log,
+    moderationLog,
   });
-  await registerBlog(app, { ...rest, db, onContribution });
+  await registerBlog(app, { ...rest, db, onContribution, log: moderationLog });
   await newsletter.register(app, rest.resolveAccount);
-}
-
-/** The sandbox shares the rate limit counters and announces relays across instances. */
-async function registerSimulator(
-  app: FastifyInstance,
-  deps: Pick<AppDeps, "config"> & {
-    sandbox: SandboxDeps | undefined;
-    db: Database;
-    counters: ReturnType<typeof postgresCounters>;
-    resolveAccount: AccountResolver;
-    now: () => Date;
-  },
-): Promise<void> {
-  const { config, db, counters, sandbox, resolveAccount, now } = deps;
-  await registerSandbox(app, {
-    db,
-    counters,
-    providers: sandbox?.providers ?? providers,
-    resolveAccount,
-    serverSecret: config.SESSION_SECRET,
-    webOrigin: config.WEB_ORIGIN,
-    now,
-    bus: relayBus(app, config, sandbox?.bus),
-    ...(sandbox?.demoProvider === undefined ? {} : { demoProvider: sandbox.demoProvider }),
-    ...(sandbox?.resolveHost === undefined ? {} : { resolveHost: sandbox.resolveHost }),
-  });
 }
 
 /** Mounts every data module; they share one clock and one set of rate limit counters. */
@@ -139,7 +96,8 @@ async function registerModules(
   const clock = now ?? (() => new Date());
   await app.register(rateLimit, { global: false, store: counterStoreFor(counters) });
   const ranking = rankingModule(db, clock, app.log);
-  const catalogue = itineraries(db, clock, ranking.listener);
+  const admin = adminModule({ db, onContribution: ranking.listener, now: clock });
+  const catalogue = itineraries(db, clock, { onContribution: ranking.listener, log: admin.log });
   const sender = mailer ?? createMailer(config, app.log);
   const newsletter = newsletterModule({
     db,
@@ -162,8 +120,11 @@ async function registerModules(
   });
   await catalogue.register(app, resolveAccount);
   await ranking.register(app);
+  await admin.register(app, resolveAccount);
+  await registerStats(app, { db, now: clock });
   const community = { db, sender, resolveAccount, webOrigin: config.WEB_ORIGIN, now: clock };
-  await registerCommunity(app, { ...community, onContribution: ranking.listener, newsletter });
+  const ports = { onContribution: ranking.listener, moderationLog: admin.log };
+  await registerCommunity(app, { ...community, ...ports, newsletter });
   await registerSimulator(app, { config, db, counters, sandbox, resolveAccount, now: clock });
 }
 

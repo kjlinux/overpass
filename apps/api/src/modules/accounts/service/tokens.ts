@@ -2,6 +2,7 @@ import type { CreatedToken, TokenCreateInput, TokenSummary } from "@overpass/sha
 import { AppError } from "../../../http/app-error.js";
 import { generateApiToken, hashApiToken, looksLikeApiToken } from "../api-tokens.js";
 import type { TokenRecord } from "../model.js";
+import { refuseSuspended } from "./auth.js";
 import type { ServiceContext } from "./context.js";
 
 export function toTokenSummary(token: TokenRecord): TokenSummary {
@@ -38,7 +39,9 @@ export function tokenService(ctx: ServiceContext) {
 
     authenticateToken: async (token: string) => {
       if (!looksLikeApiToken(token)) return null;
-      return ctx.repository.findUserByActiveTokenHash(hashApiToken(token), ctx.now());
+      return refuseSuspended(
+        await ctx.repository.findUserByActiveTokenHash(hashApiToken(token), ctx.now()),
+      );
     },
   };
 }

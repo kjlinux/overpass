@@ -1,3 +1,4 @@
+import type { Atomic } from "../../db/client.js";
 import type {
   BlogContentKind,
   Language,
@@ -72,18 +73,6 @@ export type CommentRow = {
   createdAt: Date;
 };
 
-export type ModerationRow = {
-  kind: BlogContentKind;
-  id: string;
-  postSlug: string;
-  title: string;
-  excerpt: string;
-  authorHandle: string | null;
-  moderation: ModerationStatus;
-  reports: number;
-  lastReportAt: Date;
-};
-
 export type Member = { id: string; handle: string; country: string };
 
 export type PostsPart = {
@@ -124,9 +113,11 @@ export type ModerationPart = {
   reportedBy(userId: string, kind: BlogContentKind, ids: string[]): Promise<Set<string>>;
   setModeration(kind: BlogContentKind, id: string, status: ModerationStatus): Promise<void>;
   resolveReports(kind: BlogContentKind, id: string, at: Date): Promise<void>;
-  queue(limit: number): Promise<ModerationRow[]>;
   setSuspended(userId: string, by: string, suspended: boolean, at: Date): Promise<void>;
 };
 
 /** Storage port of the module; the service never sees SQL. */
-export type BlogRepository = PostsPart & FeedPart & SocialPart & ModerationPart;
+export type BlogRepository = PostsPart &
+  FeedPart &
+  SocialPart &
+  ModerationPart & { atomically: Atomic<BlogRepository> };

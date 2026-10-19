@@ -70,6 +70,8 @@ export const routeDetailSchema = routeSummarySchema.extend({
   checks: z.array(checkSchema),
   potholes: z.array(potholeSchema),
   viewer: viewerSchema,
+  /** Only its author and admins ever read a hidden itinerary. */
+  moderation: z.enum(["visible", "hidden"]).optional(),
 });
 
 export const routePageSchema = z.object({

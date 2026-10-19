@@ -1,6 +1,7 @@
 import type { Proposal } from "@overpass/shared";
 import type { MailMessage } from "../../../mail/mailer.js";
 import type { ContactDirectory, HandleDirectory } from "../../accounts/index.js";
+import type { ModerationLog } from "../../admin/index.js";
 import type { ServiceCatalogue } from "../../routes/index.js";
 import type { ProposalRecord, RequestsRepository } from "../model.js";
 
@@ -12,6 +13,7 @@ export type RequestsDeps = {
   /** Sends in the background: a mail failure never undoes a decision already stored. */
   notify: (message: MailMessage) => void;
   reportError: (error: unknown) => void;
+  log: ModerationLog;
   webOrigin: string;
   now: () => Date;
 };
