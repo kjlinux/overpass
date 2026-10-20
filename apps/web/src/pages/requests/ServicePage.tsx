@@ -5,7 +5,7 @@ import { useRoute } from "preact-iso";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../app/useLanguage";
 import { ButtonLink, Chip, Flag, Skeleton } from "../../components/ui";
-import { FormAlert } from "../../forms";
+import { LoadError } from "../../forms";
 import { Layout, localizedPath } from "../../layout";
 import { ErrorPage } from "../errors";
 import { useApi } from "../routes";
@@ -88,7 +88,7 @@ function ServiceView({ service }: { service: Service }): JSX.Element {
 export function ServicePage(): JSX.Element {
   const language = useLanguage();
   const { params } = useRoute();
-  const { state } = useApi<Service[]>("/v1/services");
+  const { state, reload } = useApi<Service[]>("/v1/services");
   const service =
     state.status === "ready" ? state.data.find((item) => item.slug === params["slug"]) : undefined;
   if (state.status === "ready" && service === undefined)
@@ -103,7 +103,7 @@ export function ServicePage(): JSX.Element {
       ) : null}
       {state.status === "error" ? (
         <div class="py-12">
-          <FormAlert error={state.error} />
+          <LoadError error={state.error} onRetry={() => void reload()} />
         </div>
       ) : null}
     </Layout>

@@ -45,7 +45,7 @@ function useColumns(): Column<LogEntry>[] {
 /** Insert-only history of the team's decisions, newest first, fifty at a time. */
 export function LogTab(): JSX.Element {
   const { t } = useTranslation("admin");
-  const { state, more } = usePaged<LogEntry>("/v1/admin/log");
+  const { state, more, retry } = usePaged<LogEntry>("/v1/admin/log");
   const columns = useColumns();
   const empty = { icon: ScrollText, title: t("log.emptyTitle"), description: t("log.emptyText") };
   return (
@@ -53,7 +53,7 @@ export function LogTab(): JSX.Element {
       <h2 id="log-heading" class="text-h2 font-semibold">
         {t("log.heading")}
       </h2>
-      <PagedView state={state} more={more} empty={empty}>
+      <PagedView state={state} more={more} retry={retry} empty={empty}>
         {(items) => (
           <Table
             caption={t("log.caption")}

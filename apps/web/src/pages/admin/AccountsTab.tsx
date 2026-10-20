@@ -173,7 +173,7 @@ export function AccountsTab({ me }: { me: Me }): JSX.Element {
       <p role="status" class="text-success empty:hidden">
         {done === null ? "" : t(doneKeys[done.action], { handle: done.account.handle })}
       </p>
-      <PagedView state={accounts.state} more={accounts.more} empty={empty}>
+      <PagedView state={accounts.state} more={accounts.more} retry={accounts.retry} empty={empty}>
         {(items) => (
           <Table
             caption={t("accounts.caption")}

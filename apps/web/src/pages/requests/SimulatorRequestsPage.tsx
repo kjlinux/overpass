@@ -1,11 +1,11 @@
-import type { SimulatorRequest } from "@overpass/shared";
+import type { Language, SimulatorRequest } from "@overpass/shared";
 import { Vote } from "lucide-preact";
 import type { JSX } from "preact";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../app/useLanguage";
 import { ButtonLink, EmptyState, Skeleton, Table } from "../../components/ui";
 import type { Column } from "../../components/ui";
-import { FormAlert } from "../../forms";
+import { LoadError } from "../../forms";
 import { Layout, localizedPath } from "../../layout";
 import { useApi } from "../routes";
 
@@ -48,14 +48,27 @@ function RequestTable({ rows }: { rows: SimulatorRequest[] }): JSX.Element {
   );
 }
 
+/** Sits right under the page title, hence a level 2 heading. */
+function NoRequest({ language }: { language: Language }): JSX.Element {
+  const { t } = useTranslation("requests");
+  return (
+    <EmptyState
+      level={2}
+      icon={Vote}
+      title={t("ranking.emptyTitle")}
+      description={t("ranking.emptyText")}
+      action={
+        <ButtonLink href={localizedPath(language, "/routes")}>{t("ranking.browse")}</ButtonLink>
+      }
+    />
+  );
+}
+
 /** The public ranking of the simulators members ask for. */
 export function SimulatorRequestsPage(): JSX.Element {
   const { t } = useTranslation("requests");
   const language = useLanguage();
-  const { state } = useApi<SimulatorRequest[]>("/v1/simulator-requests");
-  const browse = (
-    <ButtonLink href={localizedPath(language, "/routes")}>{t("ranking.browse")}</ButtonLink>
-  );
+  const { state, reload } = useApi<SimulatorRequest[]>("/v1/simulator-requests");
   return (
     <Layout language={language}>
       <section class="py-12 md:py-16">
@@ -69,15 +82,12 @@ export function SimulatorRequestsPage(): JSX.Element {
           </ButtonLink>
         </div>
         <div class="mt-8">
-          {state.status === "error" ? <FormAlert error={state.error} /> : null}
+          {state.status === "error" ? (
+            <LoadError error={state.error} onRetry={() => void reload()} />
+          ) : null}
           {state.status === "loading" ? <Skeleton lines={5} /> : null}
           {state.status === "ready" && state.data.length === 0 ? (
-            <EmptyState
-              icon={Vote}
-              title={t("ranking.emptyTitle")}
-              description={t("ranking.emptyText")}
-              action={browse}
-            />
+            <NoRequest language={language} />
           ) : null}
           {state.status === "ready" && state.data.length > 0 ? (
             <RequestTable rows={state.data} />

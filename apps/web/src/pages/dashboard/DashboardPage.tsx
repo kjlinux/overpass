@@ -3,9 +3,11 @@ import type { ComponentChildren, JSX } from "preact";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../app/useLanguage";
 import { Button, Skeleton } from "../../components/ui";
+import { LoadError } from "../../forms";
 import { Layout } from "../../layout";
 import { localizedPath } from "../../layout/nav";
 import { RequireSession, usePublicProfile } from "../../session";
+import { Fetched } from "../routes/Fetched";
 import { useApi } from "../routes/useApi";
 import { MyChecksList, MyRoutesList } from "./MyLists";
 import { MyProposalsList } from "./MyProposals";
@@ -22,11 +24,13 @@ function Column({ heading, children }: { heading: string; children: ComponentChi
 function PointsColumn({ handle }: { handle: string }): JSX.Element {
   const { t } = useTranslation("dashboard");
   const language = useLanguage();
-  const { state } = usePublicProfile(handle);
+  const { state, retry } = usePublicProfile(handle);
   return (
     <Column heading={t("points.heading")}>
       {state.status === "ready" ? (
         <p class="text-display font-bold tabular-nums">{state.profile.points}</p>
+      ) : state.status === "error" ? (
+        <LoadError error={state.error} onRetry={() => void retry()} />
       ) : (
         <Skeleton title={false} lines={1} />
       )}
@@ -43,37 +47,33 @@ function PointsColumn({ handle }: { handle: string }): JSX.Element {
 
 function ProposalsSection(): JSX.Element {
   const { t } = useTranslation("dashboard");
-  const { state } = useApi<Proposal[]>("/v1/me/service-proposals");
+  const proposals = useApi<Proposal[]>("/v1/me/service-proposals");
   return (
     <section aria-labelledby="proposals-heading" class="mt-8 border-t border-rule pt-8">
       <h2 id="proposals-heading" class="mb-4 text-h2 font-semibold">
         {t("proposals.heading")}
       </h2>
-      {state.status === "ready" ? <MyProposalsList proposals={state.data} /> : <Loading />}
+      <Fetched api={proposals}>{(items) => <MyProposalsList proposals={items} />}</Fetched>
     </section>
   );
 }
 
-function Loading(): JSX.Element {
-  return <Skeleton title={false} lines={3} />;
-}
-
 function RoutesColumn(): JSX.Element {
   const { t } = useTranslation("dashboard");
-  const { state } = useApi<RouteSummary[]>("/v1/me/routes");
+  const routes = useApi<RouteSummary[]>("/v1/me/routes");
   return (
     <Column heading={t("routes.heading")}>
-      {state.status === "ready" ? <MyRoutesList routes={state.data} /> : <Loading />}
+      <Fetched api={routes}>{(items) => <MyRoutesList routes={items} />}</Fetched>
     </Column>
   );
 }
 
 function ChecksColumn(): JSX.Element {
   const { t } = useTranslation("dashboard");
-  const { state } = useApi<MyCheck[]>("/v1/me/checks");
+  const checks = useApi<MyCheck[]>("/v1/me/checks");
   return (
     <Column heading={t("checks.heading")}>
-      {state.status === "ready" ? <MyChecksList checks={state.data} /> : <Loading />}
+      <Fetched api={checks}>{(items) => <MyChecksList checks={items} />}</Fetched>
     </Column>
   );
 }

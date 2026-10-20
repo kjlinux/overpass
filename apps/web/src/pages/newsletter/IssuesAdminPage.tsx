@@ -5,7 +5,7 @@ import { useState } from "preact/hooks";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../app/useLanguage";
 import { Button, Field, Select, Skeleton } from "../../components/ui";
-import { FormAlert } from "../../forms";
+import { FormAlert, LoadError } from "../../forms";
 import { Layout } from "../../layout";
 import { RequireSession } from "../../session";
 import { useApi } from "../routes";
@@ -51,14 +51,16 @@ function Prepare({ busy, onPrepare }: PrepareProps): JSX.Element {
   );
 }
 
-function IssuesSection({ state, onOpen }: { state: Loaded<Issue[]>; onOpen: Open }): JSX.Element {
+type SectionProps = { state: Loaded<Issue[]>; onOpen: Open; onRetry: () => void };
+
+function IssuesSection({ state, onOpen, onRetry }: SectionProps): JSX.Element {
   const { t } = useTranslation("newsletter");
   return (
     <section aria-labelledby="issues-heading" class="border-t border-rule pt-6">
       <h2 id="issues-heading" class="mb-4 text-h2 font-semibold">
         {t("admin.listHeading")}
       </h2>
-      {state.status === "error" ? <FormAlert error={state.error} /> : null}
+      {state.status === "error" ? <LoadError error={state.error} onRetry={onRetry} /> : null}
       {state.status === "ready" ? <IssueList issues={state.data} onOpen={onOpen} /> : null}
       {state.status === "loading" ? <Skeleton lines={4} /> : null}
     </section>
@@ -67,7 +69,7 @@ function IssuesSection({ state, onOpen }: { state: Loaded<Issue[]>; onOpen: Open
 
 function IssuesAdmin(): JSX.Element {
   const { t } = useTranslation("newsletter");
-  const { state, refresh } = useApi<Issue[]>("/v1/newsletter/issues");
+  const { state, refresh, reload } = useApi<Issue[]>("/v1/newsletter/issues");
   const editor = useIssueEditor(refresh);
   const { editing } = editor;
   return (
@@ -95,7 +97,7 @@ function IssuesAdmin(): JSX.Element {
           )}
         </div>
       </section>
-      <IssuesSection state={state} onOpen={editor.open} />
+      <IssuesSection state={state} onOpen={editor.open} onRetry={() => void reload()} />
     </div>
   );
 }

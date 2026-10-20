@@ -3,6 +3,7 @@ import { LocationProvider } from "preact-iso";
 import { render } from "preact-render-to-string";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 import { setupTestI18n } from "../../i18n/test-i18n";
+import ui from "../../components/ui/locales/fr.json";
 import fr from "./locales/fr.json";
 import { ContentTab } from "./ContentTab";
 import { PagedView } from "./PagedView";
@@ -93,7 +94,7 @@ describe("paged view", () => {
     const loading = { ...base, items: [], phase: "loading" as const };
     expect(
       page(
-        <PagedView state={loading} more={() => undefined} empty={empty}>
+        <PagedView state={loading} more={() => undefined} retry={() => undefined} empty={empty}>
           {() => null}
         </PagedView>,
       ),
@@ -101,34 +102,34 @@ describe("paged view", () => {
     const none = { ...base, items: [], phase: "ready" as const };
     expect(
       page(
-        <PagedView state={none} more={() => undefined} empty={empty}>
+        <PagedView state={none} more={() => undefined} retry={() => undefined} empty={empty}>
           {() => null}
         </PagedView>,
       ),
     ).toContain("Rien ici.");
     const rows = { ...base, items: [1], next: "c", phase: "ready" as const };
     const html = page(
-      <PagedView state={rows} more={() => undefined} empty={empty}>
+      <PagedView state={rows} more={() => undefined} retry={() => undefined} empty={empty}>
         {(items) => <p>{items.length}</p>}
       </PagedView>,
     );
     expect(html).toContain(fr.more);
   });
 
-  it("writes the error when the first page fails", () => {
+  it("writes the error with a retry button when the first page fails", () => {
     const failed = {
       ...base,
       items: [],
       phase: "ready" as const,
       error: { code: "admin_only", message: "Réservé." },
     };
-    expect(
-      page(
-        <PagedView state={failed} more={() => undefined} empty={empty}>
-          {() => null}
-        </PagedView>,
-      ),
-    ).toContain('role="alert"');
+    const html = page(
+      <PagedView state={failed} more={() => undefined} retry={() => undefined} empty={empty}>
+        {() => null}
+      </PagedView>,
+    );
+    expect(html).toContain('role="alert"');
+    expect(html).toContain(ui.retry);
   });
 });
 

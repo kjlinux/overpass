@@ -5,7 +5,7 @@ import { useLocation } from "preact-iso";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../app/useLanguage";
 import { Button, ButtonLink } from "../../components/ui";
-import { FormAlert, useForm } from "../../forms";
+import { FormAlert, LoadError, useForm } from "../../forms";
 import { localizedPath } from "../../layout";
 import { Markdown } from "../../markdown";
 import { formatDate } from "../routes";
@@ -98,7 +98,27 @@ export type CommentsProps = {
   actions: CommentActions;
   onMore?: () => void;
   loadingMore?: boolean;
+  failure?: CommentsFailure | undefined;
 };
+
+/** A failed first page or next page, with the call that asks for it again. */
+export type CommentsFailure = { error: ApiError; retry: () => void };
+
+function CommentList(props: CommentsProps) {
+  const { t } = useTranslation("blog");
+  const { items } = props.page;
+  if (items.length === 0) {
+    if (props.failure !== undefined) return null;
+    return <p class="m-0 text-ink-2">{t("comments.empty")}</p>;
+  }
+  return (
+    <ul class="m-0 list-none border-t border-rule p-0">
+      {items.map((item) => (
+        <CommentItem key={item.id} item={item} signedIn={props.signedIn} actions={props.actions} />
+      ))}
+    </ul>
+  );
+}
 
 export function Comments(props: CommentsProps) {
   const { t } = useTranslation("blog");
@@ -107,21 +127,13 @@ export function Comments(props: CommentsProps) {
       <h2 id="comments-heading" class="m-0 text-h2 font-semibold">
         {t("comments.heading")}
       </h2>
-      {props.page.items.length === 0 ? (
-        <p class="m-0 text-ink-2">{t("comments.empty")}</p>
-      ) : (
-        <ul class="m-0 list-none border-t border-rule p-0">
-          {props.page.items.map((item) => (
-            <CommentItem
-              key={item.id}
-              item={item}
-              signedIn={props.signedIn}
-              actions={props.actions}
-            />
-          ))}
-        </ul>
+      <CommentList {...props} />
+      {props.failure === undefined ? null : (
+        <LoadError error={props.failure.error} onRetry={props.failure.retry} />
       )}
-      {props.page.nextCursor === null || props.onMore === undefined ? null : (
+      {props.page.nextCursor === null ||
+      props.onMore === undefined ||
+      props.failure !== undefined ? null : (
         <Button class="self-start" onClick={props.onMore} loading={props.loadingMore ?? false}>
           {t("comments.more")}
         </Button>

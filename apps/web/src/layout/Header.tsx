@@ -15,6 +15,13 @@ const navLink =
 
 type Props = { language: Language };
 
+const toggleId = "site-nav-toggle";
+
+/** Escape closes an open menu; any other key, or a closed menu, is left alone. */
+export function closesMenu(open: boolean, key: string): boolean {
+  return open && key === "Escape";
+}
+
 function NavList({ language }: Props): JSX.Element {
   const { t } = useTranslation("layout");
   const { path } = useLocation();
@@ -43,12 +50,23 @@ function NavList({ language }: Props): JSX.Element {
   );
 }
 
+/** Open state of the mobile menu; Escape closes it and gives focus back to its toggle. */
+function useMenu() {
+  const [open, setOpen] = useState(false);
+  const onKeyDown = (event: KeyboardEvent) => {
+    if (!closesMenu(open, event.key)) return;
+    setOpen(false);
+    document.getElementById(toggleId)?.focus();
+  };
+  return { open, setOpen, onKeyDown };
+}
+
 /** Masthead: wordmark row with tools, then the navigation on its own ruled row. */
 export function Header({ language }: Props): JSX.Element {
   const { t } = useTranslation("layout");
-  const [open, setOpen] = useState(false);
+  const { open, setOpen, onKeyDown } = useMenu();
   return (
-    <header class="border-b border-rule bg-paper">
+    <header class="border-b border-rule bg-paper" onKeyDown={onKeyDown}>
       <div class={cx(frame, "flex min-h-16 items-center justify-between gap-4")}>
         <a
           href={localizedPath(language, "/")}
@@ -60,6 +78,7 @@ export function Header({ language }: Props): JSX.Element {
           <LanguageSelect language={language} />
           <AccountLinks language={language} inMenu={false} />
           <Button
+            id={toggleId}
             class="lg:hidden"
             aria-expanded={open}
             aria-controls="site-nav"

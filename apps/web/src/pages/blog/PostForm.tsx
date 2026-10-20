@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { Button, Field, TextInput } from "../../components/ui";
 import { FormAlert, SelectField, TextField, useForm } from "../../forms";
 import type { Bindable } from "../../forms";
+import { useLanguage } from "../../app/useLanguage";
 import { MarkdownPanes } from "./MarkdownPanes";
 import { TextAreaField } from "./TextAreaField";
 import { emptyPost, postFormSchema } from "./postValues";
@@ -94,7 +95,9 @@ export function PostForm({
   published = false,
   onSave,
 }: PostFormProps) {
-  const form = useForm(postFormSchema, { ...emptyPost, ...initial });
+  // A new post starts in the language the member is reading the site in.
+  const language = useLanguage();
+  const form = useForm(postFormSchema, { ...emptyPost, language, ...initial });
   const [busy, setBusy] = useState<PostStatus | null>(null);
   const save = async (status: PostStatus) => {
     const data = form.validate();

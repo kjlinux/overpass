@@ -5,7 +5,7 @@ import type { JSX } from "preact";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../app/useLanguage";
 import { ButtonLink, Chip, EmptyState, Skeleton } from "../../components/ui";
-import { FormAlert } from "../../forms";
+import { LoadError } from "../../forms";
 import { Layout, localizedPath } from "../../layout";
 import { RequireSession } from "../../session";
 import { formatDate, useApi } from "../routes";
@@ -45,8 +45,10 @@ function MinePost({ post }: { post: PostSummary }): JSX.Element {
 function MinePosts(): JSX.Element {
   const { t } = useTranslation("blog");
   const language = useLanguage();
-  const { state } = useApi<PostPage>("/v1/me/posts");
-  if (state.status === "error") return <FormAlert error={state.error} />;
+  const { state, reload } = useApi<PostPage>("/v1/me/posts");
+  if (state.status === "error") {
+    return <LoadError error={state.error} onRetry={() => void reload()} />;
+  }
   if (state.status !== "ready") return <Skeleton lines={5} />;
   if (state.data.items.length === 0) {
     const write = (

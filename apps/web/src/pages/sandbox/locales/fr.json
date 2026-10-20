@@ -2,6 +2,10 @@
   "title": "Piste d'essai",
   "intro": "Appelez un opérateur simulé avec une clé de test, choisissez ce qui doit mal tourner, puis lisez la requête, la réponse et chaque webhook. Aucun compte marchand, aucun argent réel.",
   "openapi": "Référence OpenAPI du simulateur",
+  "noProviders": {
+    "title": "Aucun prestataire simulé pour l'instant",
+    "text": "La piste d'essai ouvre dès qu'un administrateur publie un premier prestataire simulé."
+  },
   "visitor": {
     "heading": "Une clé de test vous attend",
     "body": "Connectez-vous pour créer une clé, appeler le simulateur depuis votre code et recevoir les webhooks sur votre poste.",

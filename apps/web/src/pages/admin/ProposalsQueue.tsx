@@ -6,7 +6,7 @@ import { useState } from "preact/hooks";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../app/useLanguage";
 import { Button, EmptyState, Field, Skeleton, Textarea } from "../../components/ui";
-import { FormAlert } from "../../forms";
+import { FormAlert, LoadError } from "../../forms";
 import { apiRequest } from "../../session";
 import { useApi } from "../routes";
 
@@ -120,7 +120,7 @@ function Decisions(props: { busy: boolean; onAccept: () => void; onReject: () =>
 
 export function ProposalsQueue(): JSX.Element {
   const { t } = useTranslation("admin");
-  const { state, refresh } = useApi<Proposal[]>("/v1/admin/service-proposals");
+  const { state, refresh, reload } = useApi<Proposal[]>("/v1/admin/service-proposals");
   const [busy, setBusy] = useState(false);
   const [failure, setFailure] = useState<ApiError | undefined>(undefined);
   const decide: Decide = (id, decision, reason) => {
@@ -132,7 +132,9 @@ export function ProposalsQueue(): JSX.Element {
       setFailure(error ?? undefined);
     });
   };
-  if (state.status === "error") return <FormAlert error={state.error} />;
+  if (state.status === "error") {
+    return <LoadError error={state.error} onRetry={() => void reload()} />;
+  }
   if (state.status !== "ready") return <Skeleton lines={4} />;
   if (state.data.length === 0) {
     return (

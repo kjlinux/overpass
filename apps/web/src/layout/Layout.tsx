@@ -3,6 +3,7 @@ import type { ComponentChildren, JSX } from "preact";
 import { useTranslation } from "react-i18next";
 import { Footer } from "./Footer";
 import { Header } from "./Header";
+import { useRouteFocus } from "./routeFocus";
 
 /** Pages that already show the subscribe form drop it from the footer. */
 export type LayoutProps = {
@@ -14,6 +15,7 @@ export type LayoutProps = {
 /** Skip link, masthead, the ruled main column and the footer. */
 export function Layout({ language, children, footerNewsletter = true }: LayoutProps): JSX.Element {
   const { t } = useTranslation("layout");
+  useRouteFocus("main");
   return (
     <div class="flex min-h-screen flex-col">
       <a
@@ -26,7 +28,7 @@ export function Layout({ language, children, footerNewsletter = true }: LayoutPr
       <main
         id="main"
         tabIndex={-1}
-        class="mx-auto w-full max-w-frame flex-1 px-4 md:px-6 lg:border-x lg:border-rule lg:px-8"
+        class="mx-auto w-full max-w-frame flex-1 px-4 focus-visible:outline-none md:px-6 lg:border-x lg:border-rule lg:px-8"
       >
         {children}
       </main>

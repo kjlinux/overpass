@@ -1,4 +1,6 @@
 export { FormAlert } from "./FormAlert";
+export { LoadError } from "./LoadError";
+export type { LoadErrorProps } from "./LoadError";
 export { SelectField, TextField } from "./fields";
 export type { Bindable, SelectFieldProps, TextFieldProps } from "./fields";
 export { useForm } from "./useForm";
