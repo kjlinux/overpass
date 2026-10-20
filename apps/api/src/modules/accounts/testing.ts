@@ -100,11 +100,11 @@ function memoryTokens(users: Map<string, UserRecord>, tokens: Map<string, Stored
         tokens.set(token.id, { ...token, tokenHash, revokedAt: null });
         return token;
       }),
-    listActiveTokens: (userId) =>
+    listActiveTokens: (userId, now) =>
       settle(() =>
-        active((token) => token.userId === userId).map(
-          ({ id, userId: owner, name, usage, createdAt, lastUsedAt }) => ({
-            ...{ id, userId: owner, name, usage, createdAt, lastUsedAt },
+        active((token) => token.userId === userId && token.expiresAt > now).map(
+          ({ id, userId: owner, name, usage, createdAt, lastUsedAt, expiresAt }) => ({
+            ...{ id, userId: owner, name, usage, createdAt, lastUsedAt, expiresAt },
           }),
         ),
       ),
@@ -122,7 +122,7 @@ function memoryTokens(users: Map<string, UserRecord>, tokens: Map<string, Stored
       }),
     findUserByActiveTokenHash: (hash, usedAt) =>
       settle(() => {
-        const [token] = active((t) => t.tokenHash === hash);
+        const [token] = active((t) => t.tokenHash === hash && t.expiresAt > usedAt);
         if (token === undefined) return null;
         tokens.set(token.id, { ...token, lastUsedAt: usedAt });
         return users.get(token.userId) ?? null;

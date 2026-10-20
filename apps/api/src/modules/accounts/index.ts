@@ -24,6 +24,8 @@ export type {
 } from "./service.js";
 export type { Account, AccountResolver, ContactDirectory, HandleDirectory } from "./directory.js";
 export { contactDirectory, handleDirectory, requireAccount } from "./directory.js";
+export { ensureAdmin } from "./seed.js";
+export type { AdminSeed, AdminSeedResult } from "./seed.js";
 
 export type AccountsOptions = {
   db: Database;
@@ -35,6 +37,7 @@ export type AccountsOptions = {
   points?: PointsSource;
   deletion?: DeletionEffects;
   newsletterConsent?: NewsletterConsent;
+  now?: () => Date;
 };
 
 /** Mounts the accounts module in its own encapsulated scope; other modules get the resolver. */
@@ -47,6 +50,7 @@ export async function registerAccounts(
     mailer: options.mailer,
     secret: options.secret,
     webOrigin: options.webOrigin,
+    ...(options.now === undefined ? {} : { now: options.now }),
     ...(options.contributions === undefined ? {} : { contributions: options.contributions }),
     ...(options.points === undefined ? {} : { points: options.points }),
     ...(options.deletion === undefined ? {} : { deletion: options.deletion }),

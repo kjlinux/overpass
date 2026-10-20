@@ -38,10 +38,20 @@ describe("parseArgs", () => {
     [["listen", "--forward-to", "ftp://x", ...key, ...api], "invalid_forward"],
     [["listen", ...forward, "--key", "sk_live_x", ...api], "invalid_key"],
     [["listen", ...forward, ...key, "--api", "nope"], "invalid_api"],
+    [["listen", "--forward-to", "http://shop.example/hook", ...key, ...api], "invalid_forward"],
+    [["listen", ...forward, ...key, "--api", "http://api.example.com"], "invalid_api"],
     [["serve"], "unknown_command"],
   ])("reports %j as %s", (argv, error) => {
     expect(parseArgs(argv, {})).toEqual({ command: "error", error });
   });
+
+  it.each(["http://localhost:3000/x", "http://127.0.0.1:3000/x", "http://[::1]:3000/x"])(
+    "allows plain http to the developer's own machine: %s",
+    (target) => {
+      const parsed = parseArgs(["listen", "--forward-to", target, ...key, "--api", target], {});
+      expect(parsed).toMatchObject({ command: "listen", forwardTo: target, api: target });
+    },
+  );
 
   it("shows help without arguments or with --help", () => {
     expect(parseArgs([], {})).toEqual({ command: "help" });

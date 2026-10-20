@@ -1,4 +1,5 @@
 import type { FastifyInstance, FastifyReply } from "fastify";
+import { webContentSecurityPolicy } from "../../http/security-headers.js";
 import { postPageParams, routePageParams } from "./schemas.js";
 import type { ShareService } from "./service.js";
 
@@ -11,6 +12,7 @@ function sendPage(reply: FastifyReply, html: string): FastifyReply {
   return reply
     .header("content-type", "text/html; charset=utf-8")
     .header("cache-control", "public, max-age=300")
+    .header("content-security-policy", webContentSecurityPolicy)
     .send(html);
 }
 

@@ -37,7 +37,7 @@ export async function publicAddresses(
   } catch {
     return undefined;
   }
-  if (parsed.protocol !== "https:" && parsed.protocol !== "http:") return undefined;
+  if (parsed.protocol !== "https:") return undefined;
   if (parsed.username !== "" || parsed.password !== "") return undefined;
   if (!webPorts.has(parsed.port)) return undefined;
   const host = parsed.hostname.replace(/^\[|\]$/g, "");

@@ -36,6 +36,7 @@ export const tokenSummarySchema = z.object({
   usage: z.enum(["mcp", "api"]),
   createdAt: z.string(),
   lastUsedAt: z.string().nullable(),
+  expiresAt: z.string(),
 });
 
 /** The only response that ever carries the clear token. */

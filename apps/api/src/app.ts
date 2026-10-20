@@ -1,16 +1,16 @@
 import { randomUUID } from "node:crypto";
+import { providers } from "@overpass/providers";
 import cookie from "@fastify/cookie";
-import rateLimit from "@fastify/rate-limit";
 import Fastify from "fastify";
 import type { FastifyInstance } from "fastify";
 import type { Config } from "./config.js";
 import type { Database } from "./db/client.js";
 import { registerErrorHandlers } from "./http/errors.js";
 import { registerHealth } from "./http/health.js";
-import { requestSerializer } from "./http/log-request.js";
+import { redactedHeaders, requestSerializer } from "./http/log-request.js";
 import { registerOriginCheck } from "./http/origin.js";
 import { registerSecurityHeaders } from "./http/security-headers.js";
-import { counterStoreFor, postgresCounters } from "./limits/index.js";
+import { postgresCounters, registerRateLimits } from "./limits/index.js";
 import { createMailer } from "./mail/mailer.js";
 import type { Mailer } from "./mail/mailer.js";
 import { itineraries } from "./itineraries.js";
@@ -50,15 +50,6 @@ function trustedHops(count: number) {
   return count === 0 ? false : (_address: string, hop: number) => hop < count;
 }
 
-const redactedHeaders = [
-  "req.headers.cookie",
-  "req.headers.authorization",
-  'req.headers["x-api-key"]',
-  'req.headers["paydunya-master-key"]',
-  'req.headers["paydunya-private-key"]',
-  'req.headers["paydunya-token"]',
-];
-
 /** Service proposals and simulator requests, with outcome mails sent in the background. */
 async function registerCommunity(
   app: FastifyInstance,
@@ -95,23 +86,15 @@ async function registerModules(
 ): Promise<void> {
   const counters = postgresCounters(db);
   const clock = now ?? (() => new Date());
-  await app.register(rateLimit, { global: false, store: counterStoreFor(counters) });
+  await registerRateLimits(app, counters);
   const ranking = rankingModule(db, clock, app.log);
   const admin = adminModule({ db, onContribution: ranking.listener, now: clock });
   const catalogue = itineraries(db, clock, { onContribution: ranking.listener, log: admin.log });
   const sender = mailer ?? createMailer(config, app.log);
-  const newsletter = newsletterModule({
-    db,
-    mailer: sender,
-    secret: config.SESSION_SECRET,
-    webOrigin: config.WEB_ORIGIN,
-    now: clock,
-    log: app.log,
-  });
+  const signing = { db, mailer: sender, secret: config.SESSION_SECRET, now: clock };
+  const newsletter = newsletterModule({ ...signing, webOrigin: config.WEB_ORIGIN, log: app.log });
   const { resolveAccount } = await registerAccounts(app, {
-    db,
-    mailer: sender,
-    secret: config.SESSION_SECRET,
+    ...signing,
     webOrigin: config.WEB_ORIGIN,
     secureCookies: config.NODE_ENV === "production",
     contributions: catalogue.contributions,
@@ -136,7 +119,7 @@ export async function buildApp(deps: AppDeps): Promise<FastifyInstance> {
   const app = Fastify({
     logger: {
       level: config.LOG_LEVEL,
-      redact: redactedHeaders,
+      redact: redactedHeaders(providers),
       serializers: { req: requestSerializer },
     },
     genReqId: () => randomUUID(),

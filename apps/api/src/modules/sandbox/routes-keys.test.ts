@@ -76,9 +76,16 @@ describe("POST /v1/sandbox/keys", () => {
     expect(JSON.stringify(response.body.error)).toContain("webhook_url_required");
   });
 
+  it("refuses a plain http webhook URL; localhost goes through the relay", async () => {
+    const webhookUrl = "http://hooks.example.com/overpass";
+    const response = await createKey(awa, { provider: "fake", target: "url", webhookUrl });
+    expect(response.status).toBe(400);
+    expect(JSON.stringify(response.body.error)).toContain("webhook_url_invalid");
+  });
+
   it.each([
-    "http://127.0.0.1/hook",
-    "http://localhost:3000/hook",
+    "https://127.0.0.1/hook",
+    "https://localhost:8443/hook",
     "https://[::1]/x",
     "https://sneaky.example.com/x",
     "https://unknown.example.com/x",

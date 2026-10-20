@@ -3,6 +3,7 @@ import type { CreatedToken } from "@overpass/shared";
 import type { JSX } from "preact";
 import { useState } from "preact/hooks";
 import { useTranslation } from "react-i18next";
+import { useLanguage } from "../../app/useLanguage";
 import { Button, CodeBlock } from "../../components/ui";
 import { FormAlert, SelectField, TextField, useForm, useSubmit } from "../../forms";
 import { McpConfigTabs } from "../../mcp";
@@ -19,11 +20,15 @@ export function CreatedPanel({
   onDone: () => void;
 }): JSX.Element {
   const { t } = useTranslation("settings");
+  const language = useLanguage();
+  const dateOf = (iso: string) =>
+    new Intl.DateTimeFormat(language, { dateStyle: "medium" }).format(new Date(iso));
   return (
     <div class="flex flex-col gap-4 border border-l-4 border-rule-strong border-l-warning p-4">
       <div role="status" class="flex flex-col gap-4">
         <h3 class="text-h3 font-semibold">{t("tokens.createdTitle")}</h3>
         <p>{t("tokens.createdText")}</p>
+        <p>{t("tokens.expiresOn", { date: dateOf(token.expiresAt) })}</p>
       </div>
       <CodeBlock code={token.token} />
       {token.usage === "mcp" && (

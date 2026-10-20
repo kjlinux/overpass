@@ -35,9 +35,12 @@ export type TokenRecord = {
   usage: TokenCreateInput["usage"];
   createdAt: Date;
   lastUsedAt: Date | null;
+  expiresAt: Date;
 };
 
-export type NewToken = Pick<TokenRecord, "userId" | "name" | "usage"> & { tokenHash: string };
+export type NewToken = Pick<TokenRecord, "userId" | "name" | "usage" | "expiresAt"> & {
+  tokenHash: string;
+};
 
 /** Storage port of the module; the service never sees SQL. */
 export type AccountsRepository = {
@@ -51,7 +54,7 @@ export type AccountsRepository = {
   rotateCredentials(id: string, change: { passwordHash?: string }): Promise<UserRecord>;
   revokeAllTokens(userId: string, at: Date): Promise<void>;
   createToken(token: NewToken): Promise<TokenRecord>;
-  listActiveTokens(userId: string): Promise<TokenRecord[]>;
+  listActiveTokens(userId: string, now: Date): Promise<TokenRecord[]>;
   revokeToken(userId: string, tokenId: string, at: Date): Promise<boolean>;
   findUserByActiveTokenHash(tokenHash: string, usedAt: Date): Promise<UserRecord | null>;
 };

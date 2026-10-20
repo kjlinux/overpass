@@ -1,3 +1,4 @@
+import { readdirSync } from "node:fs";
 import { PGlite } from "@electric-sql/pglite";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { migrateDown, migrateUp, migrationsDirectory } from "./migrations.js";
@@ -39,6 +40,10 @@ describe("migrations", () => {
       "0013_star_points",
       "0014_newsletter",
       "0015_admin",
+      "0016_filter_indexes",
+      "0017_token_expiry",
+      "0018_cinetpay_simulated",
+      "0019_https_webhooks",
     ]);
     expect(await tables()).toEqual([
       "api_tokens",
@@ -85,7 +90,11 @@ describe("migrations", () => {
 
   it("reverts the last migration and can apply it again", async () => {
     await migrateUp(executor, migrationsDirectory);
-    expect(await migrateDown(executor, migrationsDirectory, 15)).toEqual([
+    expect(await migrateDown(executor, migrationsDirectory, 19)).toEqual([
+      "0019_https_webhooks",
+      "0018_cinetpay_simulated",
+      "0017_token_expiry",
+      "0016_filter_indexes",
       "0015_admin",
       "0014_newsletter",
       "0013_star_points",
@@ -103,7 +112,7 @@ describe("migrations", () => {
       "0001_accounts",
     ]);
     expect(await tables()).toEqual(["schema_migrations"]);
-    expect(await migrateUp(executor, migrationsDirectory)).toHaveLength(15);
+    expect(await migrateUp(executor, migrationsDirectory)).toHaveLength(19);
   });
 
   it("seeds the six translated discussion themes in their order", async () => {
@@ -154,7 +163,11 @@ describe("migrations", () => {
     await executor.query(
       "insert into routes (author_id, service_id, country, stack, language, title, content) select '00000000-0000-4000-8000-000000000001', id, 'CI', 'laravel', 'fr', 'Une fiche ancienne', 'x' from services where slug = 'wave'",
     );
-    await migrateDown(executor, migrationsDirectory, 7);
+    // Steps back to 0008 whatever migrations come after the ranking one.
+    const since = readdirSync(migrationsDirectory).filter(
+      (name) => name.endsWith(".up.sql") && name >= "0009",
+    );
+    await migrateDown(executor, migrationsDirectory, since.length);
     await migrateUp(executor, migrationsDirectory);
     expect(await executor.query("select routes, points from member_points")).toEqual([
       { routes: 1, points: 10 },

@@ -5,6 +5,9 @@
 overpass.example.africa {
 	encode zstd gzip
 
+	# HSTS covers every path; the API sends its own policy headers, so they are not repeated on /v1.
+	header Strict-Transport-Security "max-age=31536000; includeSubDomains"
+
 	# API and MCP server.
 	handle /v1/* {
 		reverse_proxy 127.0.0.1:3000
@@ -22,6 +25,12 @@ overpass.example.africa {
 
 	# Everything else is static: pre-rendered pages per language, assets, then the SPA shell.
 	handle {
+		# Same policy as webContentSecurityPolicy in apps/api/src/http/security-headers.ts; a test compares them.
+		header {
+			X-Content-Type-Options "nosniff"
+			Referrer-Policy "strict-origin-when-cross-origin"
+			Content-Security-Policy "default-src 'self'; script-src 'self' 'sha256-nGYicizQ+S1TS9WJVFlj199CScajNaTZYbEHh0QCWdk='; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'"
+		}
 		root * /srv/overpass/apps/web/dist
 		try_files {path} {path}/index.html /index.html
 		file_server
