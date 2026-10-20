@@ -321,6 +321,7 @@ Les licences sont vérifiées par l'audit automatique, dépendances indirectes c
 - Preact remplace React pour tenir le budget de l'accueil : moins de 80 Ko de JavaScript compressé pour la page vide, contrôlé automatiquement par `npm run check:budget`. React DOM pèse à lui seul 65 Ko compressés ; la page vide passe de 98,6 Ko avec React à 29,8 Ko avec Preact. React Router 8 ne fonctionne pas avec Preact, d'où preact-iso. Les paquets `react` et `react-dom` sont redirigés vers @preact/compat dans tout le dépôt.
 - TypeScript reste en 6.0 : typescript-eslint ne prend pas encore en charge TypeScript 7.
 - Tailwind CSS 3 tire des outils de build signalés par `npm audit` (braces, postcss-selector-parser). Ils ne traitent que nos propres sources et ne partent pas dans le navigateur ; les dépendances de production n'ont aucune alerte. À revoir si lightningcss change de licence.
+- Décision du 20 octobre 2026 : Tailwind CSS 3 est conservé malgré ces alertes, qui ne touchent que les outils de développement. Alertes concernées : [GHSA-vfj7-8cjw-p6xm](https://github.com/advisories/GHSA-vfj7-8cjw-p6xm) (braces, sévérité haute, déni de service par motifs imbriqués, tiré par chokidar, micromatch et fast-glob) et [GHSA-rj75-hqrm-r3gf](https://github.com/advisories/GHSA-rj75-hqrm-r3gf) (postcss-selector-parser, sévérité modérée, complexité quadratique). La seule correction proposée par `npm audit` est Tailwind CSS 4, exclu par la licence de lightningcss.
 
 **Pourquoi ces choix**
 
