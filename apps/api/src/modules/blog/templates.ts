@@ -1,13 +1,14 @@
-import { postCategories, slugFor, supportedLanguages } from "@overpass/shared";
+import { postCategories, readLocales, slugFor, supportedLanguages } from "@overpass/shared";
 import type { Language, PostCategory } from "@overpass/shared";
 import { sql } from "drizzle-orm";
 import type { Database } from "../../db/client.js";
-import en from "./locales/en.json" with { type: "json" };
-import fr from "./locales/fr.json" with { type: "json" };
 import { createBlogRepository } from "./repository.js";
 import { rows } from "./repository/sql.js";
+import type catalogue from "./locales/fr.json";
 
-const texts = { fr, en } satisfies Record<Language, typeof fr>;
+type Copy = typeof catalogue;
+
+const texts = readLocales<Copy>(new URL("./locales/", import.meta.url));
 
 async function adminId(db: Database, handle: string): Promise<string> {
   const [row] = await rows<{ id: string }>(

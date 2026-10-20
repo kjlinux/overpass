@@ -1,8 +1,7 @@
-import type { ProviderAdapter, SimRequest } from "@overpass/simulator";
+import { readLocales } from "@overpass/shared";
+import type { ProviderAdapter, ProviderCopy, SimRequest } from "@overpass/simulator";
 import { waveEndpoints } from "./endpoints.js";
 import { waveErrors } from "./errors.js";
-import en from "./locales/en.json" with { type: "json" };
-import fr from "./locales/fr.json" with { type: "json" };
 import protocol from "./protocol.json" with { type: "json" };
 import { waveEvents } from "./schemas.js";
 import type { WaveOutcome } from "./session.js";
@@ -19,6 +18,7 @@ function unauthorized(request: SimRequest) {
 
 /** Unofficial Wave Checkout simulator, built from the public reference only. */
 export const wave: ProviderAdapter<WaveOutcome> = {
+  rank: 1,
   identity: {
     id: "wave",
     name: "Wave",
@@ -27,7 +27,7 @@ export const wave: ProviderAdapter<WaveOutcome> = {
     docsVersion: "2024-03-29",
     consultedAt: "2026-10-14",
     unofficial: true,
-    copy: { fr, en },
+    copy: readLocales<ProviderCopy>(new URL("./locales/", import.meta.url)),
   },
   scenarios: {
     success: { payment: "succeeded" },

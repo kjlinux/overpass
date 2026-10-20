@@ -1,19 +1,31 @@
-import en from "./locales/en.json" with { type: "json" };
-import fr from "./locales/fr.json" with { type: "json" };
+import { readCatalogs } from "./catalogs.js";
 import type { RelayEvent } from "./relay.js";
+import type catalogue from "./locales/en.json";
 
-export type Messages = typeof en;
-export type Language = "fr" | "en";
+export type Messages = typeof catalogue;
 
-export const messages: Record<Language, Messages> = { fr, en };
+const fallback = "en";
+const messages = readCatalogs<Messages>(new URL("./locales/", import.meta.url));
+
+/** English is the fallback because it ships with every release. */
+export function messagesFor(language: string): Messages {
+  const found = messages[language] ?? messages[fallback];
+  if (found === undefined) throw new Error(`missing ${fallback}.json catalogue`);
+  return found;
+}
 
 type Env = Record<string, string | undefined>;
 
 /** OVERPASS_LANG wins, then the POSIX locale variables, then the system locale. */
-export function detectLanguage(env: Env, systemLocale: string): Language {
+export function detectLanguage(
+  env: Env,
+  systemLocale: string,
+  available: readonly string[] = Object.keys(messages),
+): string {
   const candidates = [env.OVERPASS_LANG, env.LC_ALL, env.LC_MESSAGES, env.LANG, systemLocale];
   const first = candidates.find((value) => value !== undefined && value !== "") ?? "";
-  return first.toLowerCase().startsWith("fr") ? "fr" : "en";
+  const code = first.toLowerCase().split(/[-_.@]/)[0] ?? "";
+  return available.includes(code) ? code : fallback;
 }
 
 export function format(template: string, values: Record<string, string>): string {

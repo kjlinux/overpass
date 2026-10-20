@@ -1,11 +1,13 @@
+import { readLocales } from "@overpass/shared";
 import type { Language } from "@overpass/shared";
 import type { MailMessage } from "../../mail/mailer.js";
-import en from "./locales/en.json" with { type: "json" };
-import fr from "./locales/fr.json" with { type: "json" };
+import type catalogue from "./locales/fr.json";
 
-const texts = { fr, en } satisfies Record<Language, typeof fr>;
+type Copy = typeof catalogue;
 
-type Template = keyof typeof fr;
+const texts = readLocales<Copy>(new URL("./locales/", import.meta.url));
+
+type Template = keyof Copy;
 
 function fill(body: string, values: Record<string, string>): string {
   return Object.entries(values).reduce(

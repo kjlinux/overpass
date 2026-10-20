@@ -1,9 +1,11 @@
+import { readLocales } from "@overpass/shared";
 import type { Language } from "@overpass/shared";
 import type { PostRow } from "../model.js";
-import en from "../locales/en.json" with { type: "json" };
-import fr from "../locales/fr.json" with { type: "json" };
+import type catalogue from "../locales/fr.json";
 
-const texts = { fr, en } satisfies Record<Language, typeof fr>;
+type Copy = typeof catalogue;
+
+const texts = readLocales<Copy>(new URL("../locales/", import.meta.url));
 
 const entities: Record<string, string> = {
   "&": "&amp;",

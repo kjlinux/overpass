@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 import { parseArgs } from "./args.js";
-import { describeEvent, detectLanguage, messages } from "./messages.js";
+import { describeEvent, detectLanguage, messagesFor } from "./messages.js";
 import { startRelay } from "./relay.js";
 
-const text = messages[detectLanguage(process.env, Intl.DateTimeFormat().resolvedOptions().locale)];
+const locale = Intl.DateTimeFormat().resolvedOptions().locale;
+const text = messagesFor(detectLanguage(process.env, locale));
 const parsed = parseArgs(process.argv.slice(2), process.env);
 const print = (line: string) => process.stdout.write(`${line}\n`);
 

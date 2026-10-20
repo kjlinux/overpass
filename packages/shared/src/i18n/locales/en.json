@@ -1,4 +1,5 @@
 {
+  "languageName": "English",
   "errors": {
     "not_found": "This resource could not be found.",
     "internal": "Something went wrong. Please try again in a moment.",
@@ -82,7 +83,7 @@
     "nothing_to_update": "Change at least one field before saving.",
     "scenario_invalid": "Choose one of the offered scenarios.",
     "target_invalid": "Choose where webhooks go: built-in receiver, URL or local relay.",
-    "webhook_url_invalid": "Enter a full http or https URL, for example https://example.com/webhook.",
+    "webhook_url_invalid": "Enter a full https URL, for example https://example.com/webhook. To reach localhost, use the local relay.",
     "webhook_url_required": "Enter the URL that will receive the webhooks.",
     "webhook_url_private": "This URL points to a private or local address. Use the local relay for your machine.",
     "provider_not_simulated": "This provider has no simulator.",
@@ -113,5 +114,6 @@
     "slug_invalid": "This post address is not valid.",
     "report_reason_invalid": "Explain the problem in 3 to 500 characters.",
     "suspension_reason_invalid": "Give the reason for the suspension in 3 to 500 characters."
-  }
+  },
+  "template": "## Prerequisites\n\n- The account or API key to obtain.\n- The framework version in use.\n\n## Installation\n\nThe packages to install and the configuration to add.\n\n## Payment\n\nThe code that creates the payment, with its parameters.\n\n```\n\n```\n\n## Webhook\n\nHow to receive and verify the notification from the provider.\n\n```\n\n```\n\n## Known traps\n\n- What the official documentation does not say.\n"
 }
