@@ -22,9 +22,18 @@ export const addressLimits = {
   forgot: { max: 3, timeWindow: 15 * minute },
 };
 
+/** One key per inbox: many providers ignore the +tag and the dots, so aliases share a budget. */
+export function addressKey(email: string): string {
+  const address = email.trim().toLowerCase();
+  const at = address.lastIndexOf("@");
+  if (at === -1) return address;
+  const local = (address.slice(0, at).split("+")[0] ?? "").replaceAll(".", "");
+  return `${local}${address.slice(at)}`;
+}
+
 function addressOf(request: FastifyRequest): string {
   const email = (request.body as { email?: unknown } | undefined)?.email;
-  return typeof email === "string" ? email.trim().toLowerCase() : request.ip;
+  return typeof email === "string" ? addressKey(email) : request.ip;
 }
 
 /** A second limiter keyed on the e-mail of the body, run after the per-IP one. */

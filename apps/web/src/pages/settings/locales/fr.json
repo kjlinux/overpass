@@ -50,6 +50,8 @@
     "created": "Créé le",
     "lastUsed": "Dernière utilisation",
     "never": "Jamais",
+    "expires": "Expire le",
+    "expiresOn": "Expire le {{date}}, renouvelez-le avant.",
     "revoke": "Révoquer",
     "revokeLabel": "Révoquer le jeton {{name}}",
     "revokeTitle": "Révoquer « {{name}} » ?",

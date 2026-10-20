@@ -20,3 +20,8 @@ export function promoteAdmin(name: string): Promise<void> {
 export function resetRateLimits(): Promise<void> {
   return run("delete from rate_limit_counters");
 }
+
+/** Rankings show the top hundred: members left by earlier runs must not push new ones out. */
+export function forgetPastMembers(): Promise<void> {
+  return run("delete from users where email like 'e2e-%@example.com'");
+}

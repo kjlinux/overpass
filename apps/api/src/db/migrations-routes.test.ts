@@ -29,7 +29,7 @@ beforeEach(async () => {
 afterEach(() => pg.close());
 
 describe("routes and checks migrations", () => {
-  it("seeds the six services of the specification, three of them simulated since CinetPay is postponed", async () => {
+  it("seeds the six services of the specification, four of them simulated", async () => {
     const rows = await executor.query<{ slug: string; simulated: boolean }>(
       "select slug, simulated from services order by slug",
     );
@@ -42,6 +42,7 @@ describe("routes and checks migrations", () => {
       "wave",
     ]);
     expect(rows.filter((row) => row.simulated).map((row) => row.slug)).toEqual([
+      "cinetpay",
       "paydunya",
       "pi-spi",
       "wave",

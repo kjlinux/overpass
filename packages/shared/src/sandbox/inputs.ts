@@ -12,8 +12,9 @@ export type SandboxTarget = (typeof sandboxTargets)[number];
 
 export const scenarioSchema = z.enum(scenarios, { error: codeOr("scenario_invalid") });
 const targetSchema = z.enum(sandboxTargets, { error: codeOr("target_invalid") });
+// https only: the local relay is how a developer reaches localhost, never a plain http URL.
 const webhookUrlSchema = z
-  .url({ protocol: /^https?$/, error: "webhook_url_invalid" })
+  .url({ protocol: /^https$/, error: "webhook_url_invalid" })
   .max(2048, { error: "webhook_url_invalid" });
 
 function urlTargetHasUrl(input: {

@@ -2,9 +2,12 @@ import type { ThreadPage, ThreadSummary } from "@overpass/shared";
 import type { JSX } from "preact";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../app/useLanguage";
+import { Skeleton } from "../../components/ui";
 import { localizedPath } from "../../layout";
+import { Fetched } from "./Fetched";
 import { formatDate } from "./format";
 import { useApi } from "./useApi";
+import type { Loaded } from "./useApi";
 
 const pageSize = 50;
 
@@ -40,27 +43,47 @@ function QuestionList(props: { heading: string; threads: ThreadSummary[]; empty:
   );
 }
 
+type BodyProps = { api: { state: Loaded<ThreadPage>; reload: () => Promise<void> } };
+
+/** "None" is only said once the list arrived; a failed load says why and offers a retry. */
+export function QuestionsBody({ api }: BodyProps): JSX.Element {
+  return (
+    <Fetched api={api} placeholder={<Skeleton lines={3} title={false} />}>
+      {(page) => <QuestionLists threads={page.items} />}
+    </Fetched>
+  );
+}
+
+function QuestionLists({ threads }: { threads: ThreadSummary[] }): JSX.Element {
+  const { t } = useTranslation("routes");
+  return (
+    <div class="grid gap-6">
+      <QuestionList
+        heading={t("questions.open")}
+        threads={threads.filter((thread) => thread.state === "open")}
+        empty={t("questions.noneOpen")}
+      />
+      <QuestionList
+        heading={t("questions.resolved")}
+        threads={threads.filter((thread) => thread.state === "resolved")}
+        empty={t("questions.noneResolved")}
+      />
+    </div>
+  );
+}
+
 /** The questions members asked about this route, open ones first. */
 export function RouteQuestions({ routeId }: { routeId: string }): JSX.Element {
   const { t } = useTranslation("routes");
-  const { state } = useApi<ThreadPage>(`/v1/threads?route=${routeId}&limit=${String(pageSize)}`);
-  const threads = state.status === "ready" ? state.data.items : [];
+  const path = `/v1/threads?route=${routeId}&limit=${String(pageSize)}`;
+  const { state, reload } = useApi<ThreadPage>(path);
   return (
     <section aria-labelledby="questions-heading" class="max-w-prose border-t border-rule py-8">
       <h2 id="questions-heading" class="text-h2 font-semibold">
         {t("questions.heading")}
       </h2>
-      <div class="mt-4 grid gap-6">
-        <QuestionList
-          heading={t("questions.open")}
-          threads={threads.filter((thread) => thread.state === "open")}
-          empty={t("questions.noneOpen")}
-        />
-        <QuestionList
-          heading={t("questions.resolved")}
-          threads={threads.filter((thread) => thread.state === "resolved")}
-          empty={t("questions.noneResolved")}
-        />
+      <div class="mt-4">
+        <QuestionsBody api={{ state, reload }} />
       </div>
     </section>
   );

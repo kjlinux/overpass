@@ -21,6 +21,7 @@ function useColumns(onAsk: (token: TokenSummary) => void): Column<TokenSummary>[
     { key: "usage", header: t("tokens.usage"), render: (token) => t(`tokens.${token.usage}`) },
     { key: "created", header: t("tokens.created"), render: (token) => date(token.createdAt) },
     { key: "used", header: t("tokens.lastUsed"), render: (token) => date(token.lastUsedAt) },
+    { key: "expires", header: t("tokens.expires"), render: (token) => date(token.expiresAt) },
     {
       key: "revoke",
       header: t("tokens.revoke"),

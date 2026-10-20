@@ -4,7 +4,7 @@ import { useState } from "preact/hooks";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../app/useLanguage";
 import { Button, Skeleton } from "../../components/ui";
-import { FormAlert } from "../../forms";
+import { FormAlert, LoadError } from "../../forms";
 import { Layout } from "../../layout";
 import { apiRequest, usePublicProfile, useSession } from "../../session";
 import { ErrorPage } from "../errors";
@@ -43,8 +43,10 @@ function FollowButton({ blog, onChange }: { blog: Blog; onChange: () => Promise<
 function BlogHeader({ handle }: { handle: string }): JSX.Element | null {
   const { t } = useTranslation("blog");
   const { me } = useSession();
-  const { state, refresh } = useApi<Blog>(`/v1/blogs/${handle}`);
-  if (state.status === "error") return <FormAlert error={state.error} />;
+  const { state, refresh, reload } = useApi<Blog>(`/v1/blogs/${handle}`);
+  if (state.status === "error") {
+    return <LoadError error={state.error} onRetry={() => void reload()} />;
+  }
   if (state.status !== "ready") return <Skeleton lines={1} />;
   const blog = state.data;
   return (
@@ -62,7 +64,7 @@ function BlogHeader({ handle }: { handle: string }): JSX.Element | null {
 export function MemberBlogPage({ handle }: { handle: string }): JSX.Element {
   const { t } = useTranslation("blog");
   const language = useLanguage();
-  const profile = usePublicProfile(handle).state;
+  const { state: profile, retry } = usePublicProfile(handle);
   if (profile.status === "notFound") return <ErrorPage kind="notFound" language={language} />;
   const path = (cursor?: string) =>
     `/v1/posts?author=${encodeURIComponent(handle)}${cursor === undefined ? "" : `&cursor=${encodeURIComponent(cursor)}`}`;
@@ -70,11 +72,11 @@ export function MemberBlogPage({ handle }: { handle: string }): JSX.Element {
     <Layout language={language}>
       <section class="py-12 md:py-16">
         <p class="m-0 text-caption font-semibold text-ink-2">{t("blog.title", { handle })}</p>
-        {profile.status === "ready" ? (
-          <ProfileSummary profile={profile.profile} />
-        ) : (
-          <Skeleton lines={3} />
-        )}
+        {profile.status === "ready" ? <ProfileSummary profile={profile.profile} /> : null}
+        {profile.status === "error" ? (
+          <LoadError error={profile.error} onRetry={() => void retry()} />
+        ) : null}
+        {profile.status === "loading" ? <Skeleton lines={3} /> : null}
         <BlogHeader handle={handle} />
         <section aria-labelledby="blog-posts" class="mt-8">
           <h2 id="blog-posts" class="mb-4 text-h2 font-semibold">

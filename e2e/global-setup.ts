@@ -1,5 +1,7 @@
 import { chromium } from "@playwright/test";
 import type { FullConfig } from "@playwright/test";
+import { forgetPastMembers } from "./admin.js";
+import { languages, path } from "./i18n.js";
 
 const deadlineMs = 120_000;
 const pollMs = 250;
@@ -21,11 +23,14 @@ export default async function globalSetup(config: FullConfig): Promise<void> {
     "API health through the web proxy",
     async () => (await fetch(`${base}/v1/health`)).ok,
   );
+  await forgetPastMembers();
   const browser = await chromium.launch();
   const page = await browser.newPage();
-  for (const path of ["/fr/sign-up", "/fr/routes", "/fr/routes/new"]) {
-    await page.goto(`${base}${path}`);
-    await page.locator("main h1").first().waitFor({ timeout: deadlineMs });
+  for (const language of languages) {
+    for (const route of ["/sign-up", "/routes", "/routes/new"]) {
+      await page.goto(`${base}${path(route, language)}`);
+      await page.locator("main h1").first().waitFor({ timeout: deadlineMs });
+    }
   }
   await browser.close();
 }

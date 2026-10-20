@@ -9,6 +9,7 @@ import {
   moderationDecisionInput,
   moderationParams,
   replyCreateInput,
+  replyListQuery,
   threadCreateInput,
   threadListQuery,
 } from "./schemas.js";
@@ -38,6 +39,11 @@ function readRoutes({ app, service, resolve }: Context): void {
   app.get("/v1/threads/:id", options, async (request) => {
     const { id } = parseInput(idParams, request.params);
     return ok(await service.read(id, await resolve(request)));
+  });
+  app.get("/v1/threads/:id/replies", options, async (request) => {
+    const { id } = parseInput(idParams, request.params);
+    const query = parseInput(replyListQuery, request.query);
+    return ok(await service.replies(id, query, await resolve(request)));
   });
 }
 

@@ -66,12 +66,14 @@ describe("publicAddresses", () => {
     "https://ok.example:22/x",
     "http://ok.example:6379/x",
     "https://user:pass@ok.example/x",
+    "http://ok.example/x",
+    "http://93.184.216.34/x",
     "not a url",
   ])("refuses %s", async (url) => {
     expect(await publicAddresses(url, dns)).toBeUndefined();
   });
 
-  it.each(["http://ok.example/x", "https://ok.example:443/x", "http://ok.example:8080/x"])(
+  it.each(["https://ok.example/x", "https://ok.example:443/x", "https://ok.example:8443/x"])(
     "accepts the web port of %s",
     async (url) => {
       expect(await publicAddresses(url, dns)).toEqual(["93.184.216.34"]);
@@ -79,6 +81,6 @@ describe("publicAddresses", () => {
   );
 
   it("accepts a public IP literal without asking the resolver", async () => {
-    expect(await publicAddresses("http://93.184.216.34:8443/x", dns)).toEqual(["93.184.216.34"]);
+    expect(await publicAddresses("https://93.184.216.34:8443/x", dns)).toEqual(["93.184.216.34"]);
   });
 });

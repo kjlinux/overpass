@@ -86,7 +86,7 @@ function Items({ queue, state }: { queue: ReturnType<typeof useQueue>; state: Qu
     description: t(`queue.empty${tone}Text`),
   };
   return (
-    <PagedView state={queue.state} more={queue.more} empty={empty}>
+    <PagedView state={queue.state} more={queue.more} retry={queue.retry} empty={empty}>
       {(items) => (
         <ul class="m-0 list-none border-t border-rule p-0">
           {items.map((item) => (

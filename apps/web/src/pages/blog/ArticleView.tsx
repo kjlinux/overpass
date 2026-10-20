@@ -8,7 +8,7 @@ import { Markdown } from "../../markdown";
 import { formatDate } from "../routes";
 import { ArticleActions } from "./ArticleActions";
 import { Comments } from "./Comments";
-import type { CommentActions } from "./Comments";
+import type { CommentActions, CommentsFailure } from "./Comments";
 import { AuthorLink } from "./PostMeta";
 
 export type ArticleActionsSet = CommentActions & {
@@ -24,6 +24,7 @@ export type ArticleViewProps = {
   newsletter?: ComponentChildren;
   onMoreComments?: () => void;
   loadingMoreComments?: boolean;
+  commentsFailure?: CommentsFailure | undefined;
 };
 
 function Notice({ post }: { post: PostDetail }): JSX.Element | null {
@@ -127,6 +128,7 @@ export function ArticleView(props: ArticleViewProps): JSX.Element {
         actions={actions}
         {...more}
         loadingMore={props.loadingMoreComments ?? false}
+        failure={props.commentsFailure}
       />
       <Related posts={post.related} />
       {newsletter === undefined ? null : (

@@ -1,9 +1,11 @@
+import { readLocales } from "@overpass/shared";
 import type { Language } from "@overpass/shared";
-import en from "../locales/en.json" with { type: "json" };
-import fr from "../locales/fr.json" with { type: "json" };
+import type catalogue from "../locales/en.json";
 
-export type OpenApiText = typeof en.openapi;
+type Copy = typeof catalogue;
 
-const texts: Record<Language, OpenApiText> = { fr: fr.openapi, en: en.openapi };
+export type OpenApiText = Copy["openapi"];
 
-export const openApiText = (language: Language): OpenApiText => texts[language];
+const texts = readLocales<Copy>(new URL("../locales/", import.meta.url));
+
+export const openApiText = (language: Language): OpenApiText => texts[language].openapi;

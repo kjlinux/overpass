@@ -1,8 +1,7 @@
 import { createHmac } from "node:crypto";
-import type { ProviderAdapter } from "@overpass/simulator";
+import { readLocales } from "@overpass/shared";
+import type { ProviderAdapter, ProviderCopy } from "@overpass/simulator";
 import { pispiEndpoints } from "./endpoints.js";
-import en from "./locales/en.json" with { type: "json" };
-import fr from "./locales/fr.json" with { type: "json" };
 import { problems } from "./problem.js";
 import { webhookEvents } from "./schemas.js";
 import type { PispiOutcome } from "./settle.js";
@@ -14,6 +13,7 @@ const payer = "8b1b2499-3e50-435b-b757-ac7a83d8aa7f";
 
 /** Unofficial PI-SPI API Business simulator, built from the BCEAO specification 1.5.0 only. */
 export const pispi: ProviderAdapter<PispiOutcome> = {
+  rank: 2,
   identity: {
     id: "pi-spi",
     name: "PI-SPI",
@@ -23,7 +23,7 @@ export const pispi: ProviderAdapter<PispiOutcome> = {
     consultedAt: "2026-10-14",
     officialSandboxUrl: "https://developer.pispi.bceao.int/dashboard",
     unofficial: true,
-    copy: { fr, en },
+    copy: readLocales<ProviderCopy>(new URL("./locales/", import.meta.url)),
   },
   scenarios: {
     success: { accept: true },

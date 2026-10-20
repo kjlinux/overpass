@@ -1,10 +1,11 @@
 import { supportedLanguages } from "@overpass/shared";
-import type { RouteDetail, Service, ThreadDetail } from "@overpass/shared";
+import type { ApiError, RouteDetail, Service, ThreadDetail } from "@overpass/shared";
 import type { JSX } from "preact";
 import { useLocation, useRoute } from "preact-iso";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../app/useLanguage";
 import { Skeleton } from "../../components/ui";
+import { LoadError } from "../../forms";
 import { Layout, localizedPath } from "../../layout";
 import { RequireSession } from "../../session";
 import { ErrorPage } from "../errors";
@@ -13,6 +14,7 @@ import type { Draft } from "./draft";
 import { EditorView } from "./EditorView";
 import type { EditorViewProps } from "./EditorView";
 import { useApi } from "./useApi";
+import type { Loaded } from "./useApi";
 
 function translationDraft(source: RouteDetail): Draft {
   const language = supportedLanguages.find((code) => code !== source.language) ?? source.language;
@@ -24,18 +26,29 @@ function translationDraft(source: RouteDetail): Draft {
   };
 }
 
+type Failure = { error: ApiError; retry: () => void } | undefined;
+
+/** The error of a failed load and the way to ask again, or nothing. */
+function failureOf<T>(api: { state: Loaded<T>; reload: () => Promise<void> }): Failure {
+  if (api.state.status !== "error") return undefined;
+  return { error: api.state.error, retry: () => void api.reload() };
+}
+
 type ShellProps = {
   heading: string;
   draft: Draft | null;
+  failure?: Failure;
   extra: Omit<EditorViewProps, "initial" | "services" | "onSaved">;
 };
 
-function EditorShell({ heading, draft, extra }: ShellProps): JSX.Element {
+function EditorShell({ heading, draft, failure, extra }: ShellProps): JSX.Element {
   const { t } = useTranslation("routes");
   const language = useLanguage();
   const { route } = useLocation();
-  const services = useApi<Service[]>("/v1/services").state;
+  const servicesApi = useApi<Service[]>("/v1/services");
+  const services = servicesApi.state;
   const ready = draft !== null && services.status === "ready";
+  const failed = failure ?? failureOf(servicesApi);
   return (
     <Layout language={language}>
       <RequireSession>
@@ -53,8 +66,10 @@ function EditorShell({ heading, draft, extra }: ShellProps): JSX.Element {
                     route(localizedPath(language, `/routes/${id}`));
                   }}
                 />
-              ) : (
+              ) : failed === undefined ? (
                 <Skeleton lines={8} />
+              ) : (
+                <LoadError error={failed.error} onRetry={failed.retry} />
               )}
             </div>
           </section>
@@ -68,12 +83,14 @@ function EditorShell({ heading, draft, extra }: ShellProps): JSX.Element {
 function FromThreadPage({ threadId }: { threadId: string }): JSX.Element {
   const { t } = useTranslation("routes");
   const language = useLanguage();
-  const { state } = useApi<ThreadDetail>(`/v1/threads/${threadId}`);
+  const thread = useApi<ThreadDetail>(`/v1/threads/${threadId}`);
+  const { state } = thread;
   if (state.status === "notFound") return <ErrorPage kind="notFound" language={language} />;
   return (
     <EditorShell
       heading={t("editor.titleFromThread")}
       draft={state.status === "ready" ? threadDraft(state.data) : null}
+      failure={failureOf(thread)}
       extra={{ mode: "create", sourceThread: threadId }}
     />
   );
@@ -86,9 +103,8 @@ export function NewRoutePage(): JSX.Element {
   const { query } = useLocation();
   const threadId = query["fromThread"];
   const sourceId = query["translationOf"];
-  const source = useApi<RouteDetail>(
-    sourceId === undefined ? null : `/v1/routes/${sourceId}`,
-  ).state;
+  const sourceApi = useApi<RouteDetail>(sourceId === undefined ? null : `/v1/routes/${sourceId}`);
+  const source = sourceApi.state;
   if (threadId !== undefined) return <FromThreadPage threadId={threadId} />;
   if (sourceId === undefined) {
     return (
@@ -105,6 +121,7 @@ export function NewRoutePage(): JSX.Element {
     <EditorShell
       heading={t("editor.titleTranslate")}
       draft={draft}
+      failure={failureOf(sourceApi)}
       extra={{ mode: "create", translationOf: sourceId }}
     />
   );
@@ -116,13 +133,15 @@ export function EditRoutePage(): JSX.Element {
   const language = useLanguage();
   const { params } = useRoute();
   const id = params["id"] ?? "";
-  const { state } = useApi<RouteDetail>(`/v1/routes/${id}`);
+  const routeApi = useApi<RouteDetail>(`/v1/routes/${id}`);
+  const { state } = routeApi;
   if (state.status === "notFound") return <ErrorPage kind="notFound" language={language} />;
   const draft = state.status === "ready" ? draftFrom(state.data) : null;
   return (
     <EditorShell
       heading={t("editor.titleEdit")}
       draft={draft}
+      failure={failureOf(routeApi)}
       extra={{ mode: "edit", routeId: id }}
     />
   );

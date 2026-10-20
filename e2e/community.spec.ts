@@ -1,30 +1,23 @@
 import { expect, test } from "@playwright/test";
 import type { Page } from "@playwright/test";
-import dashboard from "../apps/web/src/pages/dashboard/locales/fr.json" with { type: "json" };
-import discussions from "../apps/web/src/pages/discussions/locales/fr.json" with { type: "json" };
-import admin from "../apps/web/src/pages/admin/locales/fr.json" with { type: "json" };
-import requests from "../apps/web/src/pages/requests/locales/fr.json" with { type: "json" };
-import routes from "../apps/web/src/pages/routes/locales/fr.json" with { type: "json" };
+import { format, locale, path } from "./i18n.js";
 import { promoteAdmin, resetRateLimits } from "./admin.js";
-import { newMember } from "./members.js";
+import { publishRoute, stampOf } from "./itineraries.js";
+import { emailOf, handleOf, newMember } from "./members.js";
 import { mailMentioning } from "./outbox.js";
 
 test.beforeEach(() => resetRateLimits());
 
-const stampOf = () => `${String(Date.now())}-${test.info().project.name}`;
-
-async function handleOf(page: Page): Promise<string> {
-  const me = await page.request.get("/v1/me");
-  return ((await me.json()) as { data: { handle: string } }).data.handle;
-}
+const stamp = () => stampOf(test.info().project.name);
 
 async function pointsShown(page: Page, handle: string, points: number): Promise<void> {
-  await page.goto(`/fr/members/${handle}`);
+  await page.goto(path(`/members/${handle}`));
   await expect(page.locator("dd", { hasText: new RegExp(`^${String(points)}$`) })).toBeVisible();
 }
 
 async function openThread(page: Page, title: string, topic: string): Promise<void> {
-  await page.goto("/fr/discussions/new");
+  const discussions = locale("discussions");
+  await page.goto(path("/discussions/new"));
   const main = page.getByRole("main");
   await main.getByLabel(discussions.form.title, { exact: true }).fill(title);
   await main
@@ -39,13 +32,14 @@ test("a thread outside integrations gets a reply, the author accepts it, the poi
   browser,
 }) => {
   test.setTimeout(90_000);
-  const stamp = stampOf();
-  const title = `Taux journalier en freelance ${stamp}`;
-  const asker = await newMember(browser, `asker-${stamp}`);
+  const discussions = locale("discussions");
+  const run = stamp();
+  const title = `Taux journalier en freelance ${run}`;
+  const asker = await newMember(browser, `asker-${run}`);
   await openThread(asker, title, "career");
   const url = asker.url();
 
-  const helper = await newMember(browser, `helper-${stamp}`);
+  const helper = await newMember(browser, `helper-${run}`);
   await helper.goto(url);
   await helper.getByLabel(discussions.reply.label).fill("Partez de vos charges, divisez par 15.");
   await helper.getByRole("button", { name: discussions.reply.submit, exact: true }).click();
@@ -58,27 +52,18 @@ test("a thread outside integrations gets a reply, the author accepts it, the poi
   await expect(asker.getByText(discussions.reply.accepted, { exact: true })).toBeVisible();
   await expect(asker.getByRole("link", { name: discussions.detail.transform })).toBeVisible();
   await pointsShown(helper, handle, 5);
-  await helper.goto("/fr/ranking");
+  await helper.goto(path("/ranking"));
   await expect(helper.getByRole("link", { name: handle, exact: true })).toBeVisible();
 });
 
 test("a question asked from a route masks the key pasted in it", async ({ browser }) => {
   test.setTimeout(90_000);
-  const stamp = stampOf();
-  const author = await newMember(browser, `route-author-${stamp}`);
-  await author.goto("/fr/routes/new");
-  const main = author.getByRole("main");
-  await main.getByLabel(routes.editor.title, { exact: true }).fill(`Wave Checkout en PHP ${stamp}`);
-  await main.getByLabel(routes.editor.service, { exact: true }).selectOption("wave");
-  await main.getByLabel(routes.editor.country, { exact: true }).selectOption("SN");
-  await main.getByLabel(routes.editor.stack, { exact: true }).selectOption("laravel");
-  await author.getByRole("button", { name: routes.editor.submitCreate }).click();
-  await expect(
-    author.getByRole("heading", { level: 1, name: `Wave Checkout en PHP ${stamp}` }),
-  ).toBeVisible();
-  const routeUrl = author.url();
+  const [discussions, routes] = [locale("discussions"), locale("routes")];
+  const run = stamp();
+  const author = await newMember(browser, `route-author-${run}`);
+  const routeUrl = await publishRoute(author, `Wave Checkout en PHP ${run}`, "SN");
 
-  const asker = await newMember(browser, `route-asker-${stamp}`);
+  const asker = await newMember(browser, `route-asker-${run}`);
   await asker.goto(routeUrl);
   await asker.getByRole("link", { name: routes.detail.notWorking }).click();
   await expect(
@@ -86,30 +71,27 @@ test("a question asked from a route masks the key pasted in it", async ({ browse
   ).toBeVisible();
   const secret = "YhUNAUh7SY8w2A4gBLGTEVR3RkQhWaWZ";
   const form = asker.getByRole("main");
-  await form.getByLabel(discussions.form.title, { exact: true }).fill(`Erreur 401 Wave ${stamp}`);
+  await form.getByLabel(discussions.form.title, { exact: true }).fill(`Erreur 401 Wave ${run}`);
   await form.getByLabel(discussions.form.content, { exact: true }).fill("Le checkout répond 401.");
   await form
     .getByLabel(discussions.form.codeText)
     .fill(`Authorization: Bearer wave_sn_prod_${secret}`);
-  await expect(asker.getByText("1 secret masqué avant publication.")).toBeVisible();
+  await expect(asker.getByText(format(discussions.form.masked_one, { count: 1 }))).toBeVisible();
   await asker.getByRole("button", { name: discussions.form.submit }).click();
   await expect(
-    asker.getByRole("heading", { level: 1, name: `Erreur 401 Wave ${stamp}` }),
+    asker.getByRole("heading", { level: 1, name: `Erreur 401 Wave ${run}` }),
   ).toBeVisible();
   await expect(asker.getByRole("main")).not.toContainText(secret);
   await expect(asker.getByRole("main")).toContainText("Authorization: Bearer ••••••••");
 
   await asker.goto(routeUrl);
   const questions = asker.getByRole("region", { name: routes.questions.heading });
-  await expect(questions.getByRole("link", { name: `Erreur 401 Wave ${stamp}` })).toBeVisible();
+  await expect(questions.getByRole("link", { name: `Erreur 401 Wave ${run}` })).toBeVisible();
 });
 
-test("a proposed service is accepted by the team and the member is told", async ({ browser }) => {
-  test.setTimeout(90_000);
-  const stamp = stampOf();
-  const name = `Pay ${stamp}`;
-  const member = await newMember(browser, `proposer-${stamp}`);
-  await member.goto("/fr/services/propose");
+async function proposeService(member: Page, name: string): Promise<void> {
+  const requests = locale("requests");
+  await member.goto(path("/services/propose"));
   const form = member.getByRole("main");
   await form.getByLabel(requests.propose.name).fill(name);
   await form.getByLabel(requests.propose.category).selectOption("payment");
@@ -117,16 +99,25 @@ test("a proposed service is accepted by the team and the member is told", async 
   await form.getByLabel(requests.propose.docsUrl).fill("https://developer.example.com/pay");
   await member.getByRole("button", { name: requests.propose.submit }).click();
   await expect(member.getByRole("heading", { name: requests.propose.sentTitle })).toBeVisible();
+}
 
-  const team = await newMember(browser, `admin-${stamp}`);
-  await promoteAdmin(`admin-${stamp}`);
-  await team.goto("/fr/admin");
+test("a proposed service is accepted by the team and the member is told", async ({ browser }) => {
+  test.setTimeout(90_000);
+  const [admin, dashboard] = [locale("admin"), locale("dashboard")];
+  const run = stamp();
+  const name = `Pay ${run}`;
+  const member = await newMember(browser, `proposer-${run}`);
+  await proposeService(member, name);
+
+  const team = await newMember(browser, `admin-${run}`);
+  await promoteAdmin(`admin-${run}`);
+  await team.goto(path("/admin"));
   const row = team.getByRole("listitem").filter({ hasText: name });
   await row.getByRole("button", { name: admin.proposals.accept }).click();
   await expect(row).toHaveCount(0);
 
-  await mailMentioning(`e2e-proposer-${stamp}@example.com`, name);
-  await member.goto("/fr/dashboard");
+  await mailMentioning(emailOf(`proposer-${run}`), name);
+  await member.goto(path("/dashboard"));
   const mine = member.getByRole("region", { name: dashboard.proposals.heading });
   await expect(mine.getByText(dashboard.proposals.status.accepted)).toBeVisible();
   await mine.getByRole("link", { name }).click();
@@ -136,8 +127,9 @@ test("a proposed service is accepted by the team and the member is told", async 
 test("a member votes for a simulator and the request enters the public ranking", async ({
   browser,
 }) => {
-  const member = await newMember(browser, `voter-${stampOf()}`);
-  await member.goto("/fr/services/moov-money");
+  const requests = locale("requests");
+  const member = await newMember(browser, `voter-${stamp()}`);
+  await member.goto(path("/services/moov-money"));
   const vote = member.getByRole("button", { name: requests.vote.ask });
   const withdraw = member.getByRole("button", { name: requests.vote.withdraw });
   if (await withdraw.isVisible()) await withdraw.click();

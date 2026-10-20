@@ -10,6 +10,7 @@
     "db:migrate": "tsx --env-file-if-exists=../../.env src/db/migrate.ts up",
     "db:rollback": "tsx --env-file-if-exists=../../.env src/db/migrate.ts down",
     "blog:templates": "tsx --env-file-if-exists=../../.env src/blog-templates.ts",
+    "db:seed": "tsx --env-file-if-exists=../../.env src/seed.ts",
     "dev:worker": "tsx watch --env-file-if-exists=../../.env src/worker.ts",
     "start:worker": "node dist/worker.js",
     "openapi": "tsx src/openapi.ts"

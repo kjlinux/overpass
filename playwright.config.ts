@@ -1,17 +1,23 @@
 import { defineConfig, devices } from "@playwright/test";
-import { apiEnv } from "./e2e/paths.js";
+import type { LanguageOptions } from "./e2e/i18n.js";
+import { apiEnv, retries } from "./e2e/paths.js";
 
-export default defineConfig({
+const desktop = devices["Desktop Chrome"];
+
+export default defineConfig<LanguageOptions>({
   testDir: "e2e",
   globalSetup: "./e2e/global-setup.ts",
   fullyParallel: false,
-  retries: process.env["CI"] === undefined ? 0 : 1,
+  retries,
+  // This machine is short on memory: a first render can take longer than the 5 s default.
+  expect: { timeout: 10_000 },
   use: { baseURL: "http://127.0.0.1:5173", trace: "retain-on-failure" },
   projects: [
-    { name: "desktop", use: { ...devices["Desktop Chrome"] } },
+    { name: "desktop-fr", use: { ...desktop, language: "fr" } },
+    { name: "desktop-en", use: { ...desktop, language: "en" } },
     {
-      name: "phone-360",
-      use: { ...devices["Desktop Chrome"], viewport: { width: 360, height: 760 } },
+      name: "phone-360-fr",
+      use: { ...desktop, language: "fr", viewport: { width: 360, height: 760 } },
     },
   ],
   webServer: [

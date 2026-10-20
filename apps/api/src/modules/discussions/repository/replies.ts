@@ -1,14 +1,26 @@
-import { and, asc, eq, inArray, sql } from "drizzle-orm";
+import { and, asc, eq, gte, inArray, ne, sql } from "drizzle-orm";
+import type { SQL } from "drizzle-orm";
 import type { Database } from "../../../db/client.js";
-import type { DiscussionsRepository, NewReply } from "../model.js";
+import type { DiscussionsRepository, NewReply, ReplyWindow } from "../model.js";
 import { replies, replyVotes, threads } from "../tables.js";
 
 type ReplyPart = Pick<
   DiscussionsRepository,
-  "insertReply" | "findReply" | "repliesOf" | "votedBy" | "insertVote"
+  "insertReply" | "findReply" | "repliesOf" | "countRepliesOf" | "votedBy" | "insertVote"
 >;
 
-const repliesShown = 200;
+/** The plain bound lets replies_thread_idx narrow the scan; the row comparison breaks ties. */
+function windowConditions(threadId: string, window: ReplyWindow): SQL[] {
+  const { after, withRemoved } = window;
+  return [
+    eq(replies.threadId, threadId),
+    withRemoved ? undefined : ne(replies.status, "removed"),
+    after === undefined ? undefined : gte(replies.createdAt, after.at),
+    after === undefined
+      ? undefined
+      : sql`(${replies.createdAt}, ${replies.id}) > (${after.at.toISOString()}::timestamptz, ${after.id}::uuid)`,
+  ].filter((condition): condition is SQL => condition !== undefined);
+}
 
 function insertReply(db: Database, { at, ...reply }: NewReply) {
   return db.transaction(async (tx) => {
@@ -54,13 +66,21 @@ export function replyQueries(db: Database): ReplyPart {
     insertReply: (reply) => insertReply(db, reply),
     findReply: async (id) =>
       (await db.select().from(replies).where(eq(replies.id, id)).limit(1))[0] ?? null,
-    repliesOf: (threadId) =>
+    repliesOf: (threadId, window) =>
       db
         .select()
         .from(replies)
-        .where(eq(replies.threadId, threadId))
+        .where(and(...windowConditions(threadId, window)))
         .orderBy(asc(replies.createdAt), asc(replies.id))
-        .limit(repliesShown),
+        .limit(window.limit + 1),
+    countRepliesOf: async (threadId, withRemoved) => {
+      const where = and(...windowConditions(threadId, { withRemoved, limit: 0 }));
+      const [row] = await db
+        .select({ count: sql<number>`count(*)::int` })
+        .from(replies)
+        .where(where);
+      return row?.count ?? 0;
+    },
     votedBy: (userId, replyIds) => votedBy(db, userId, replyIds),
     insertVote: (replyId, userId, at) => insertVote(db, replyId, userId, at),
   };

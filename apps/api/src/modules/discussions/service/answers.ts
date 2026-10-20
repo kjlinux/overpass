@@ -4,7 +4,8 @@ import { AppError } from "../../../http/app-error.js";
 import type { Account } from "../../accounts/index.js";
 import { readableThread } from "./context.js";
 import type { DiscussionsDeps } from "./context.js";
-import { threadDetail, toReply } from "./detail.js";
+import { threadDetail } from "./detail.js";
+import { toReply } from "./replies.js";
 import { maskWithin } from "./masking.js";
 
 async function visibleThread(deps: DiscussionsDeps, id: string, account: Account) {

@@ -11,9 +11,9 @@
     "missing_forward": "Indiquez votre serveur local avec --forward-to, par exemple http://localhost:3000/webhook.",
     "missing_key": "Indiquez votre clé de test avec --key ou la variable OVERPASS_KEY.",
     "missing_api": "Indiquez l'API Overpass avec --api ou la variable OVERPASS_API_URL.",
-    "invalid_forward": "--forward-to doit être une URL http ou https.",
+    "invalid_forward": "--forward-to doit être une URL https, ou http vers localhost, 127.0.0.1 ou [::1].",
     "invalid_key": "La clé doit commencer par ovp_test_.",
-    "invalid_api": "--api doit être une URL http ou https.",
+    "invalid_api": "--api doit être une URL https, ou http vers localhost, 127.0.0.1 ou [::1].",
     "unknown_command": "Commande inconnue. Utilisez overpass listen ou overpass --help."
   },
   "failures": {

@@ -1,6 +1,6 @@
 import type { ProviderAdapter } from "@overpass/simulator";
-import { paydunya } from "./paydunya/index.js";
-import { pispi } from "./pispi/index.js";
-import { wave } from "./wave/index.js";
+import { discoverProviders } from "./discover.js";
 
-export const providers: readonly ProviderAdapter[] = [wave, pispi, paydunya];
+export const providers: readonly ProviderAdapter[] = await discoverProviders(
+  new URL("./", import.meta.url),
+);

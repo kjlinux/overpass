@@ -1,10 +1,9 @@
-import type { ProviderAdapter } from "@overpass/simulator";
+import { readLocales } from "@overpass/shared";
+import type { ProviderAdapter, ProviderCopy } from "@overpass/simulator";
 import { paydunyaEndpoints } from "./endpoints.js";
 import { paydunyaErrors } from "./errors.js";
 import { confirmBody } from "./invoice.js";
 import type { InvoiceRecord, PaydunyaOutcome } from "./invoice.js";
-import en from "./locales/en.json" with { type: "json" };
-import fr from "./locales/fr.json" with { type: "json" };
 import protocol from "./protocol.json" with { type: "json" };
 import { ipnEvents } from "./schemas.js";
 import { ipnForm, masterKeyHash } from "./wire.js";
@@ -17,6 +16,7 @@ const merchantHeaders = {
 
 /** Unofficial PayDunya checkout invoice simulator, built from the public HTTP/JSON page only. */
 export const paydunya: ProviderAdapter<PaydunyaOutcome> = {
+  rank: 3,
   identity: {
     id: "paydunya",
     name: "PayDunya",
@@ -25,7 +25,7 @@ export const paydunya: ProviderAdapter<PaydunyaOutcome> = {
     docsVersion: "2026-10-15",
     consultedAt: "2026-10-15",
     unofficial: true,
-    copy: { fr, en },
+    copy: readLocales<ProviderCopy>(new URL("./locales/", import.meta.url)),
   },
   scenarios: {
     success: { status: "completed" },

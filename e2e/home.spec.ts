@@ -1,7 +1,6 @@
 import { expect, test } from "@playwright/test";
-import app from "../apps/web/src/app/locales/fr.json" with { type: "json" };
-import home from "../apps/web/src/home/locales/fr.json" with { type: "json" };
-import layout from "../apps/web/src/layout/locales/fr.json" with { type: "json" };
+import { locale, path } from "./i18n.js";
+import { expectNoSidewaysScroll } from "./layout.js";
 import { startWorker } from "./processes.js";
 import type { Running } from "./processes.js";
 
@@ -16,7 +15,8 @@ test.afterAll(() => {
 test("the demo button takes the keyboard to the embedded demo, which shows a delivered webhook", async ({
   page,
 }) => {
-  await page.goto("/fr");
+  const app = locale("app");
+  await page.goto(path("/"));
   await expect(page.getByRole("heading", { level: 1, name: app.app.tagline })).toBeVisible();
   await page.getByRole("button", { name: app.app.demo }).click();
   const run = page.getByRole("button", { name: app.demo.run });
@@ -33,7 +33,8 @@ test("the demo button takes the keyboard to the embedded demo, which shows a del
 test("the figures come from the API, or the section stays hidden, never an error", async ({
   page,
 }) => {
-  await page.goto("/fr");
+  const home = locale("home");
+  await page.goto(path("/"));
   await page.getByText(home.signup.text).scrollIntoViewIfNeeded();
   await expect(page.getByLabel(home.countries.loading)).toHaveCount(0, { timeout: 10_000 });
   await expect(page.locator("main [role=alert]")).toHaveCount(0);
@@ -43,8 +44,9 @@ test("the figures come from the API, or the section stays hidden, never an error
 });
 
 test("the theme switch is remembered and applied to the root element", async ({ page }) => {
+  const layout = locale("layout");
   await page.setViewportSize({ width: 1280, height: 800 });
-  await page.goto("/fr");
+  await page.goto(path("/"));
   await page.getByRole("button", { name: layout.themeDark }).click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await page.reload();
@@ -54,18 +56,15 @@ test("the theme switch is remembered and applied to the root element", async ({ 
 
 test("at 360 px the page never scrolls sideways and shows the still scene", async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 780 });
-  await page.goto("/fr");
-  await expect(page.getByRole("img", { name: app.scene.label })).toBeVisible();
+  await page.goto(path("/"));
+  await expect(page.getByRole("img", { name: locale("app").scene.label })).toBeVisible();
   await expect(page.locator(".home-frame canvas")).toBeHidden();
-  const overflow = await page.evaluate(
-    () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
-  );
-  expect(overflow).toBe(0);
+  await expectNoSidewaysScroll(page);
 });
 
 test("scene=off keeps the still image on a wide screen", async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
-  await page.goto("/fr?scene=off");
+  await page.goto(`${path("/")}?scene=off`);
   await page.waitForTimeout(1500);
   await expect(page.locator(".home-frame svg").first()).toBeVisible();
   await expect(page.locator(".home-frame canvas")).toBeHidden();

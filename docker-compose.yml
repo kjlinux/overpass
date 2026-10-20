@@ -6,7 +6,8 @@ services:
     restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-overpass}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-overpass}
+      # No default: a published password must never reach a running database.
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env, see .env.example}
       POSTGRES_DB: ${POSTGRES_DB:-overpass}
     ports:
       - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"

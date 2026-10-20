@@ -50,6 +50,8 @@
     "created": "Created on",
     "lastUsed": "Last used",
     "never": "Never",
+    "expires": "Expires",
+    "expiresOn": "Expires on {{date}}, renew it before then.",
     "revoke": "Revoke",
     "revokeLabel": "Revoke the token {{name}}",
     "revokeTitle": "Revoke \"{{name}}\"?",

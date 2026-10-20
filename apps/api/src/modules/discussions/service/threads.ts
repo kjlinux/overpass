@@ -1,5 +1,11 @@
 import { integrationsTopic } from "@overpass/shared";
-import type { Language, ThreadCreateInput, ThreadListQuery, ThreadPage } from "@overpass/shared";
+import type {
+  Language,
+  ReplyListQuery,
+  ThreadCreateInput,
+  ThreadListQuery,
+  ThreadPage,
+} from "@overpass/shared";
 import { decodeDateCursor, encodeDateCursor } from "../../../http/date-cursor.js";
 import { AppError } from "../../../http/app-error.js";
 import type { Account } from "../../accounts/index.js";
@@ -8,6 +14,7 @@ import { readableThread, summaries } from "./context.js";
 import type { DiscussionsDeps, Reader } from "./context.js";
 import { threadDetail } from "./detail.js";
 import { maskOptional, maskWithin } from "./masking.js";
+import { replyPage } from "./replies.js";
 
 /** A question asked from a route lands in Integrations with its service and country. */
 async function routeTags(deps: DiscussionsDeps, input: ThreadCreateInput) {
@@ -66,6 +73,9 @@ export function threadService(deps: DiscussionsDeps) {
 
     read: async (id: string, reader: Reader) =>
       threadDetail(deps, await readableThread(deps, id, reader), reader),
+
+    replies: async (id: string, query: ReplyListQuery, reader: Reader) =>
+      replyPage(deps, await readableThread(deps, id, reader), reader, query),
 
     create: async (account: Account, input: ThreadCreateInput) => {
       const created = await newThread(deps, account, input);

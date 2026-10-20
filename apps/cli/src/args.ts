@@ -16,10 +16,13 @@ type Env = Record<string, string | undefined>;
 
 const keyPattern = /^ovp_test_[\w-]+$/;
 
+const localHosts = new Set(["localhost", "127.0.0.1", "[::1]"]);
+
+/** https anywhere; plain http only to the developer's own machine, where no one can listen in. */
 function isHttpUrl(value: string): boolean {
   try {
-    const { protocol } = new URL(value);
-    return protocol === "http:" || protocol === "https:";
+    const { protocol, hostname } = new URL(value);
+    return protocol === "https:" || (protocol === "http:" && localHosts.has(hostname));
   } catch {
     return false;
   }

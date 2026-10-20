@@ -1,10 +1,9 @@
-import en from "./locales/en.json" with { type: "json" };
-import fr from "./locales/fr.json" with { type: "json" };
-import type { Language } from "./languages.js";
+import { sharedCatalogs } from "./languages.js";
+import type { Language, SharedCatalog } from "./languages.js";
 
-export const apiMessages = { fr, en } satisfies Record<Language, typeof fr>;
-export type ErrorCode = keyof typeof fr.errors;
-export type FieldCode = keyof typeof fr.fields;
+export const apiMessages = sharedCatalogs;
+export type ErrorCode = keyof SharedCatalog["errors"];
+export type FieldCode = keyof SharedCatalog["fields"];
 
 /** Returns the translated message for a stable error code. */
 export function errorMessage(code: ErrorCode, language: Language): string {

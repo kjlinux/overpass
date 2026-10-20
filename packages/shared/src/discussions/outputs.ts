@@ -39,6 +39,7 @@ export const replySchema = z.object({
   viewer: z.object({ isAuthor: z.boolean(), voted: z.boolean(), reported: z.boolean() }),
 });
 
+/** Items hold the first page of replies; the accepted one comes apart, whatever its page. */
 export const threadDetailSchema = threadSummarySchema.extend({
   content: z.string().nullable(),
   errorText: z.string().nullable(),
@@ -46,6 +47,10 @@ export const threadDetailSchema = threadSummarySchema.extend({
   acceptedReplyId: z.uuid().nullable(),
   transformedRoute: z.uuid().nullable(),
   items: z.array(replySchema),
+  /** Replies this reader's list holds across all pages; replies counts the visible ones only. */
+  listed: z.number().int(),
+  nextCursor: z.string().nullable(),
+  accepted: replySchema.nullable(),
   viewer: z.object({
     isAuthor: z.boolean(),
     isAdmin: z.boolean(),
@@ -59,8 +64,14 @@ export const threadPageSchema = z.object({
   nextCursor: z.string().nullable(),
 });
 
+export const replyPageSchema = z.object({
+  items: z.array(replySchema),
+  nextCursor: z.string().nullable(),
+});
+
 export type DiscussionTopic = z.infer<typeof discussionTopicSchema>;
 export type ThreadSummary = z.infer<typeof threadSummarySchema>;
 export type Reply = z.infer<typeof replySchema>;
 export type ThreadDetail = z.infer<typeof threadDetailSchema>;
+export type ReplyPage = z.infer<typeof replyPageSchema>;
 export type ThreadPage = z.infer<typeof threadPageSchema>;

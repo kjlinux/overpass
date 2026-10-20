@@ -5,7 +5,7 @@ import { useLocation } from "preact-iso";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../app/useLanguage";
 import { Button, ButtonLink, Skeleton } from "../../components/ui";
-import { FormAlert } from "../../forms";
+import { FormAlert, LoadError } from "../../forms";
 import { localizedPath } from "../../layout";
 import { apiRequest, useSession } from "../../session";
 import { useApi } from "../routes";
@@ -55,9 +55,12 @@ export function SimulatorVote({ slug }: { slug: string }): JSX.Element {
   const { t } = useTranslation("requests");
   const language = useLanguage();
   const { me } = useSession();
-  const { state, refresh } = useApi<Vote>(`/v1/services/${slug}/simulator-vote`);
+  const { state, refresh, reload } = useApi<Vote>(`/v1/services/${slug}/simulator-vote`);
   const [busy, setBusy] = useState(false);
   const [failure, setFailure] = useState<ApiError | undefined>(undefined);
+  if (state.status === "error") {
+    return <LoadError error={state.error} onRetry={() => void reload()} />;
+  }
   if (state.status !== "ready") return <Skeleton lines={2} />;
   const change = async (method: "PUT" | "DELETE") => {
     setBusy(true);

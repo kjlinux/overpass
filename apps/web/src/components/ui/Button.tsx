@@ -46,7 +46,9 @@ export function Button({
       disabled={disabled === true || loading}
       aria-busy={loading}
     >
-      {loading ? <LoaderCircle class="h-4 w-4 animate-spin" aria-hidden="true" /> : null}
+      {loading ? (
+        <LoaderCircle class="h-4 w-4 motion-safe:animate-spin" aria-hidden="true" />
+      ) : null}
       <span class={cx(loading && "sr-only")}>{children}</span>
       {loading ? <span aria-live="polite">{t("loading")}</span> : null}
     </button>

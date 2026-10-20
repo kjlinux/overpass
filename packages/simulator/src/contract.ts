@@ -112,6 +112,8 @@ export type Refusal = "notFound" | "unauthorized" | "tooManyRequests";
 
 /** The four-part contract: endpoints, outcome per scenario, webhooks, identity. */
 export type ProviderAdapter<Outcome = unknown> = {
+  /** Position in every list; operators are discovered from folders, which carry no order. */
+  rank?: number;
   identity: ProviderIdentity;
   endpoints: readonly Endpoint<Outcome>[];
   scenarios: Readonly<Record<Scenario, Outcome>>;

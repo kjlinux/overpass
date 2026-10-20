@@ -7,29 +7,37 @@ import { useLocation } from "preact-iso";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../app/useLanguage";
 import { Button, ButtonLink, EmptyState, Field, Select, Skeleton } from "../../components/ui";
-import { FormAlert, countryOptions } from "../../forms";
+import { countryOptions } from "../../forms";
 import { Layout, localizedPath } from "../../layout";
-import { useApi } from "../routes";
+import { Fetched, useApi } from "../routes";
 import type { Loaded } from "../routes";
 import { CountryTable, DeveloperTable } from "./RankingTables";
 
-function Show<T>(props: { state: Loaded<T[]>; children: (rows: T[]) => ComponentChildren }) {
+type ShowProps<T> = {
+  state: Loaded<T[]>;
+  reload: () => unknown;
+  children: (rows: T[]) => ComponentChildren;
+};
+
+function Show<T>(props: ShowProps<T>) {
   const { t } = useTranslation("ranking");
   const language = useLanguage();
-  const { state } = props;
-  if (state.status === "error") return <FormAlert error={state.error} />;
-  if (state.status !== "ready") return <Skeleton lines={5} />;
-  if (state.data.length > 0) return <>{props.children(state.data)}</>;
+  const api = { state: props.state, reload: () => Promise.resolve(void props.reload()) };
   const browse = (
     <ButtonLink href={localizedPath(language, "/routes")}>{t("empty.action")}</ButtonLink>
   );
-  return (
+  const empty = (
     <EmptyState
       icon={Trophy}
       title={t("empty.title")}
       description={t("empty.text")}
       action={browse}
     />
+  );
+  return (
+    <Fetched api={api} placeholder={<Skeleton lines={5} />}>
+      {(rows) => (rows.length > 0 ? props.children(rows) : empty)}
+    </Fetched>
   );
 }
 
@@ -90,10 +98,10 @@ export function RankingPage(): JSX.Element {
   const language = useLanguage();
   const { query, route } = useLocation();
   const country = query["country"] ?? "";
-  const countries = useApi<CountryRank[]>("/v1/ranking/countries").state;
+  const countries = useApi<CountryRank[]>("/v1/ranking/countries");
   const developers = useApi<DeveloperRank[]>(
     `/v1/ranking/developers${country === "" ? "" : `?country=${country}`}`,
-  ).state;
+  );
   const apply = (next: string) => {
     route(`${localizedPath(language, "/ranking")}${next === "" ? "" : `?country=${next}`}`);
   };
@@ -106,7 +114,7 @@ export function RankingPage(): JSX.Element {
           <h2 id="countries-heading" class="mb-4 text-h2 font-semibold">
             {t("countries.heading")}
           </h2>
-          <Show state={countries}>{(rows) => <CountryTable rows={rows} />}</Show>
+          <Show {...countries}>{(rows) => <CountryTable rows={rows} />}</Show>
         </section>
         <section aria-labelledby="developers-heading" class="border-t border-rule py-8">
           <h2 id="developers-heading" class="mb-4 text-h2 font-semibold">
@@ -115,7 +123,7 @@ export function RankingPage(): JSX.Element {
           <div class="mb-6">
             <CountryFilter key={country} value={country} onApply={apply} />
           </div>
-          <Show state={developers}>{(rows) => <DeveloperTable rows={rows} />}</Show>
+          <Show {...developers}>{(rows) => <DeveloperTable rows={rows} />}</Show>
         </section>
         <PointRules />
       </section>

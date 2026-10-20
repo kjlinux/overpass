@@ -28,6 +28,7 @@ const awa: NewUser = {
   country: "CI",
   language: "fr",
 };
+const expiresAt = new Date("2099-01-01T00:00:00Z");
 
 describe.each(factories)("accounts repository (%s)", (_name, factory) => {
   let repository: AccountsRepository;
@@ -78,7 +79,13 @@ describe.each(factories)("accounts repository (%s)", (_name, factory) => {
   it("deletes the user with stacks and tokens", async () => {
     const user = await repository.createUser(awa);
     await repository.updateUser(user.id, { stacks: ["go"] });
-    await repository.createToken({ userId: user.id, name: "a", usage: "mcp", tokenHash: "h1" });
+    await repository.createToken({
+      userId: user.id,
+      name: "a",
+      usage: "mcp",
+      tokenHash: "h1",
+      expiresAt,
+    });
     await repository.deleteUser(user.id);
     expect(await repository.findUserById(user.id)).toBeNull();
     expect(await repository.findUserByActiveTokenHash("h1", new Date())).toBeNull();
@@ -91,11 +98,28 @@ describe.each(factories)("accounts repository (%s)", (_name, factory) => {
       name: "a",
       usage: "api",
       tokenHash: "h1",
+      expiresAt,
     });
     const usedAt = new Date("2026-10-12T10:00:00Z");
     expect((await repository.findUserByActiveTokenHash("h1", usedAt))?.id).toBe(user.id);
-    const [listed] = await repository.listActiveTokens(user.id);
+    const [listed] = await repository.listActiveTokens(user.id, new Date());
     expect(listed).toMatchObject({ id: token.id, lastUsedAt: usedAt });
+  });
+
+  it("neither finds nor lists a token past its expiry", async () => {
+    const user = await repository.createUser(awa);
+    const end = new Date("2026-12-01T00:00:00Z");
+    await repository.createToken({
+      userId: user.id,
+      name: "a",
+      usage: "api",
+      tokenHash: "h9",
+      expiresAt: end,
+    });
+    expect(await repository.findUserByActiveTokenHash("h9", end)).toBeNull();
+    expect(await repository.listActiveTokens(user.id, end)).toEqual([]);
+    const before = new Date(end.getTime() - 1000);
+    expect((await repository.findUserByActiveTokenHash("h9", before))?.id).toBe(user.id);
   });
 
   it("revokes a token once, only for its owner", async () => {
@@ -110,11 +134,12 @@ describe.each(factories)("accounts repository (%s)", (_name, factory) => {
       name: "a",
       usage: "api",
       tokenHash: "h1",
+      expiresAt,
     });
     expect(await repository.revokeToken(other.id, token.id, new Date())).toBe(false);
     expect(await repository.revokeToken(user.id, token.id, new Date())).toBe(true);
     expect(await repository.revokeToken(user.id, token.id, new Date())).toBe(false);
-    expect(await repository.listActiveTokens(user.id)).toEqual([]);
+    expect(await repository.listActiveTokens(user.id, new Date())).toEqual([]);
     expect(await repository.findUserByActiveTokenHash("h1", new Date())).toBeNull();
   });
 
@@ -128,9 +153,21 @@ describe.each(factories)("accounts repository (%s)", (_name, factory) => {
 
   it("revokes every active token of a user at once", async () => {
     const user = await repository.createUser(awa);
-    await repository.createToken({ userId: user.id, name: "a", usage: "api", tokenHash: "h1" });
-    await repository.createToken({ userId: user.id, name: "b", usage: "mcp", tokenHash: "h2" });
+    await repository.createToken({
+      userId: user.id,
+      name: "a",
+      usage: "api",
+      tokenHash: "h1",
+      expiresAt,
+    });
+    await repository.createToken({
+      userId: user.id,
+      name: "b",
+      usage: "mcp",
+      tokenHash: "h2",
+      expiresAt,
+    });
     await repository.revokeAllTokens(user.id, new Date());
-    expect(await repository.listActiveTokens(user.id)).toEqual([]);
+    expect(await repository.listActiveTokens(user.id, new Date())).toEqual([]);
   });
 });

@@ -5,7 +5,7 @@ import type { JSX } from "preact";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../app/useLanguage";
 import { EmptyState, Skeleton } from "../../components/ui";
-import { FormAlert } from "../../forms";
+import { LoadError } from "../../forms";
 import { Layout, localizedPath } from "../../layout";
 import { RequireSession } from "../../session";
 import { formatDate, useApi } from "../routes";
@@ -13,8 +13,10 @@ import { formatDate, useApi } from "../routes";
 function FollowList(): JSX.Element {
   const { t } = useTranslation("blog");
   const language = useLanguage();
-  const { state } = useApi<Follow[]>("/v1/me/follows");
-  if (state.status === "error") return <FormAlert error={state.error} />;
+  const { state, reload } = useApi<Follow[]>("/v1/me/follows");
+  if (state.status === "error") {
+    return <LoadError error={state.error} onRetry={() => void reload()} />;
+  }
   if (state.status !== "ready") return <Skeleton lines={4} />;
   if (state.data.length === 0) {
     return (

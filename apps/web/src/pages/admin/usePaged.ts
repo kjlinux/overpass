@@ -29,6 +29,9 @@ export function usePaged<Item>(path: string) {
   }, [load]);
   return {
     state,
+    retry: () => {
+      void load(undefined);
+    },
     more: () => {
       if (state.next !== null && state.phase === "ready") void load(state.next);
     },

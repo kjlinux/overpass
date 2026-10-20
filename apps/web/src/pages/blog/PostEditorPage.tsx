@@ -5,7 +5,7 @@ import { useLocation, useRoute } from "preact-iso";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../app/useLanguage";
 import { ButtonLink, Skeleton } from "../../components/ui";
-import { FormAlert } from "../../forms";
+import { FormAlert, LoadError } from "../../forms";
 import { Layout, localizedPath } from "../../layout";
 import { RequireSession, apiRequest } from "../../session";
 import { useApi } from "../routes";
@@ -102,8 +102,10 @@ function Editor({ me, post }: { me: Me; post: PostDetail | null }): JSX.Element 
 
 function Existing({ me, id }: { me: Me; id: string }): JSX.Element {
   const language = useLanguage();
-  const { state } = useApi<PostDetail>(`/v1/me/posts/${id}`);
-  if (state.status === "error") return <FormAlert error={state.error} />;
+  const { state, reload } = useApi<PostDetail>(`/v1/me/posts/${id}`);
+  if (state.status === "error") {
+    return <LoadError error={state.error} onRetry={() => void reload()} />;
+  }
   if (state.status === "notFound") {
     const missing = { code: "not_found", message: errorMessage("not_found", language) };
     return <FormAlert error={missing} />;

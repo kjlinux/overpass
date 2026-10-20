@@ -12,6 +12,7 @@ import { ErrorPage } from "../errors";
 import { useApi } from "../routes";
 import { ArticleView } from "./ArticleView";
 import type { ArticleActionsSet } from "./ArticleView";
+import type { CommentsFailure } from "./Comments";
 
 const noComments: CommentPage = { items: [], nextCursor: null };
 
@@ -32,38 +33,57 @@ function useActions(post: PostDetail, reload: () => Promise<void>): ArticleActio
   };
 }
 
-function Loaded(props: { post: PostDetail; reload: () => Promise<void> }) {
-  const { me } = useSession();
-  const language = useLanguage();
-  const path = `/v1/posts/${props.post.id}/comments`;
+/** The comment pages: the first one through useApi, the next ones appended on demand. */
+function useComments(postId: string) {
+  const path = `/v1/posts/${postId}/comments`;
   const comments = useApi<CommentPage>(path);
   const [extra, setExtra] = useState<CommentPage | null>(null);
   const [loadingMore, setLoadingMore] = useState(false);
-  const reload = async () => {
-    setExtra(null);
-    await Promise.all([props.reload(), comments.refresh()]);
-  };
-  const actions = useActions(props.post, reload);
+  const [moreError, setMoreError] = useState<ApiError | undefined>(undefined);
   const page = extra ?? (comments.state.status === "ready" ? comments.state.data : noComments);
   const more = async () => {
     if (page.nextCursor === null) return;
     setLoadingMore(true);
+    setMoreError(undefined);
     const next = await apiRequest<CommentPage>(
       "GET",
       `${path}?cursor=${encodeURIComponent(page.nextCursor)}`,
     );
     setLoadingMore(false);
-    if (next.error === null)
-      setExtra({ items: [...page.items, ...next.data.items], nextCursor: next.data.nextCursor });
+    if (next.error !== null) setMoreError(next.error);
+    else setExtra({ items: [...page.items, ...next.data.items], nextCursor: next.data.nextCursor });
   };
+  const failure: CommentsFailure | undefined =
+    comments.state.status === "error"
+      ? { error: comments.state.error, retry: () => void comments.reload() }
+      : moreError === undefined
+        ? undefined
+        : { error: moreError, retry: () => void more() };
+  const refresh = async () => {
+    setExtra(null);
+    setMoreError(undefined);
+    await comments.refresh();
+  };
+  return { page, more, loadingMore, failure, refresh };
+}
+
+function Loaded(props: { post: PostDetail; reload: () => Promise<void> }) {
+  const { me } = useSession();
+  const language = useLanguage();
+  const comments = useComments(props.post.id);
+  const reload = async () => {
+    await Promise.all([props.reload(), comments.refresh()]);
+  };
+  const actions = useActions(props.post, reload);
   return (
     <ArticleView
       post={props.post}
-      comments={page}
+      comments={comments.page}
       signedIn={me != null}
       actions={actions}
-      onMoreComments={() => void more()}
-      loadingMoreComments={loadingMore}
+      onMoreComments={() => void comments.more()}
+      loadingMoreComments={comments.loadingMore}
+      commentsFailure={comments.failure}
       newsletter={<SubscribeForm language={language} variant="compact" />}
     />
   );

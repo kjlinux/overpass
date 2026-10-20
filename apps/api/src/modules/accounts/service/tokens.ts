@@ -12,8 +12,12 @@ export function toTokenSummary(token: TokenRecord): TokenSummary {
     usage: token.usage,
     createdAt: token.createdAt.toISOString(),
     lastUsedAt: token.lastUsedAt?.toISOString() ?? null,
+    expiresAt: token.expiresAt.toISOString(),
   };
 }
+
+/** A leaked token stops working on its own after this long, even if nobody revokes it. */
+export const tokenLifetimeMs = 90 * 24 * 60 * 60 * 1000;
 
 export function tokenService(ctx: ServiceContext) {
   return {
@@ -24,12 +28,13 @@ export function tokenService(ctx: ServiceContext) {
         ...input,
         userId,
         tokenHash: hashApiToken(token),
+        expiresAt: new Date(ctx.now().getTime() + tokenLifetimeMs),
       });
       return { ...toTokenSummary(record), token };
     },
 
     listTokens: async (userId: string) =>
-      (await ctx.repository.listActiveTokens(userId)).map(toTokenSummary),
+      (await ctx.repository.listActiveTokens(userId, ctx.now())).map(toTokenSummary),
 
     revokeToken: async (userId: string, tokenId: string) => {
       if (!(await ctx.repository.revokeToken(userId, tokenId, ctx.now()))) {

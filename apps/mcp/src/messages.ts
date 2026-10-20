@@ -1,10 +1,10 @@
+import { readLocales } from "@overpass/shared";
 import type { Language } from "@overpass/shared";
-import en from "./locales/en.json" with { type: "json" };
-import fr from "./locales/fr.json" with { type: "json" };
+import type catalogue from "./locales/en.json";
 
-export type Messages = typeof en;
+export type Messages = typeof catalogue;
 
-const messages: Record<Language, Messages> = { fr, en };
+const messages = readLocales<Messages>(new URL("./locales/", import.meta.url));
 
 export function messagesFor(language: Language): Messages {
   return messages[language];

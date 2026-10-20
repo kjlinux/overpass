@@ -1,90 +1,12 @@
-import { createSimulator } from "@overpass/simulator";
 import { sql } from "drizzle-orm";
-import type { FastifyInstance } from "fastify";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { Database } from "../../../db/client.js";
-import { call } from "../../../testing-routes.js";
-import { createTestApp, registerAccount } from "../../../testing.js";
-import { testProvider } from "../fixtures.js";
-import type { SendResult, WebhookRequest } from "./http-client.js";
-import { createDeliveryWorker } from "./worker.js";
-import type { WorkerDeps } from "./worker.js";
+import type { WebhookRequest } from "./http-client.js";
+import { workerHarness } from "./testing-worker.js";
 
-let app: FastifyInstance;
-let db: Database;
-let close: () => Promise<void>;
-let awa: string;
-let time: number;
-let dns: Record<string, string[]>;
-const now = () => new Date(time);
-const notified: { channel: string; payload: string }[] = [];
-const notifier = {
-  notify: (channel: string, payload: string) =>
-    Promise.resolve(void notified.push({ channel, payload })),
-};
-
-beforeEach(async () => {
-  time = Date.parse("2026-10-14T10:00:00Z");
-  dns = { "hooks.example.com": ["93.184.216.34"] };
-  notified.length = 0;
-  const resolveHost = (host: string) => Promise.resolve(dns[host] ?? []);
-  ({ app, db, close } = await createTestApp({
-    now,
-    sandbox: { providers: [testProvider], resolveHost },
-  }));
-  awa = await registerAccount(app, "awa@example.com");
-});
-afterEach(() => close());
-
-function worker(
-  send: (request: WebhookRequest) => Promise<SendResult> = () =>
-    Promise.resolve({ status: 200, durationMs: 12 }),
-  extra: Partial<WorkerDeps> = {},
-) {
-  const resolveHost = (host: string) => Promise.resolve(dns[host] ?? []);
-  const simulator = createSimulator([testProvider]);
-  return createDeliveryWorker({
-    db,
-    simulator,
-    serverSecret: "s".repeat(40),
-    resolveHost,
-    send,
-    notifier,
-    now,
-    ...extra,
-  });
-}
-
-async function pay(payload: object) {
-  const key = (
-    await call(app, "POST", "/v1/sandbox/keys", {
-      cookie: awa,
-      payload: { provider: "fake", ...payload },
-    })
-  ).body.data as { id: string; key: string };
-  await app.inject({
-    method: "POST",
-    url: "/v1/sandbox/fake/payments",
-    headers: { authorization: `Bearer ${key.key}` },
-    payload: {},
-  });
-  return key.id;
-}
-
-async function deliveries(keyId: string) {
-  const events = (await call(app, "GET", `/v1/sandbox/events?keyId=${keyId}`, { cookie: awa })).body
-    .data as unknown as {
-    deliveries: {
-      status: string;
-      attempts: number;
-      body: string;
-      headers: Record<string, string>;
-      responseStatus: number | null;
-      dueAt: string;
-    }[];
-  }[];
-  return events.flatMap((event) => event.deliveries);
-}
+const w = workerHarness();
+beforeEach(w.setup);
+afterEach(w.teardown);
+const { worker, pay, deliveries } = w;
 
 describe("delivery worker", () => {
   it("files webhooks for the built-in receiver with the provider's wire format", async () => {
@@ -102,7 +24,7 @@ describe("delivery worker", () => {
   it("leaves a late webhook alone until it is due", async () => {
     const keyId = await pay({ scenario: "late_webhook" });
     expect(await worker().runOnce()).toBe(0);
-    time += 61_000;
+    w.time += 61_000;
     expect(await worker().runOnce()).toBe(1);
     expect((await deliveries(keyId))[0]?.status).toBe("delivered");
   });
@@ -129,28 +51,19 @@ describe("delivery worker", () => {
     await failing.runOnce();
     const [retry] = await deliveries(keyId);
     expect(retry).toMatchObject({ status: "scheduled", attempts: 1, responseStatus: 500 });
-    expect(Date.parse(retry?.dueAt ?? "") - time).toBe(10_000);
+    expect(Date.parse(retry?.dueAt ?? "") - w.time).toBe(10_000);
     for (const wait of [10_000, 60_000, 300_000, 1_800_000]) {
-      time += wait;
+      w.time += wait;
       await failing.runOnce();
     }
     expect((await deliveries(keyId))[0]).toMatchObject({ status: "failed", attempts: 5 });
-  });
-
-  it("refuses a URL whose name now resolves to a private address", async () => {
-    const keyId = await pay({ target: "url", webhookUrl: "https://hooks.example.com/in" });
-    dns["hooks.example.com"] = ["169.254.169.254"];
-    const send = vi.fn(() => Promise.resolve({ status: 200, durationMs: 1 }));
-    await worker(send).runOnce();
-    expect(send).not.toHaveBeenCalled();
-    expect((await deliveries(keyId))[0]).toMatchObject({ status: "failed" });
   });
 
   it("hands relay webhooks to the listeners through a notification", async () => {
     const keyId = await pay({ target: "relay" });
     await worker().runOnce();
     expect((await deliveries(keyId))[0]?.status).toBe("sent");
-    expect(notified).toEqual([
+    expect(w.notified).toEqual([
       { channel: "sandbox_relay", payload: expect.stringContaining(keyId) as string },
     ]);
   });
@@ -184,7 +97,7 @@ describe("delivery worker", () => {
     const send = vi.fn(() => Promise.reject(new Error("boom")));
     for (let i = 0; i < 7; i++) {
       await worker(send).runOnce();
-      time += 61_000;
+      w.time += 61_000;
     }
     expect(send).toHaveBeenCalledTimes(5);
     expect((await deliveries(keyId))[0]).toMatchObject({ status: "failed", attempts: 6 });
@@ -192,9 +105,9 @@ describe("delivery worker", () => {
 
   it("purges sandbox history older than seven days", async () => {
     await pay({});
-    await db.execute(sql`update sandbox_events set created_at = now() - interval '8 days'`);
-    await db.execute(sql`update sandbox_objects set updated_at = now() - interval '8 days'`);
-    time = Date.now();
+    await w.db.execute(sql`update sandbox_events set created_at = now() - interval '8 days'`);
+    await w.db.execute(sql`update sandbox_objects set updated_at = now() - interval '8 days'`);
+    w.time = Date.now();
     expect(await worker().purge()).toEqual({ events: 1, objects: 1 });
   });
 });

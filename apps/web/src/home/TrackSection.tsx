@@ -3,10 +3,10 @@ import type { JSX } from "preact";
 import { useTranslation } from "react-i18next";
 import { localizedPath } from "../layout";
 import { Capture } from "./Capture";
+import { Operators } from "./operators/Operators";
 import { sectionClass } from "./SectionHead";
 
 const cases = ["success", "insufficient", "duplicate", "late"] as const;
-const operators = ["wave", "pispi", "paydunya"] as const;
 
 /** Text left, capture right from 1024 px; the shared shape of the track and itinerary sections. */
 export function Pair(props: {
@@ -30,32 +30,7 @@ export function Pair(props: {
   );
 }
 
-function Operators(): JSX.Element {
-  const { t } = useTranslation("home");
-  return (
-    <div class="border-t border-rule">
-      <div class="flex flex-wrap items-center gap-x-4 gap-y-2 py-4">
-        <h3 class="text-caption font-medium text-ink-2">{t("track.operators")}</h3>
-        <span class="inline-flex min-h-7 items-center border border-rule-strong px-2 text-caption font-medium text-ink-2">
-          {t("track.unofficial")}
-        </span>
-      </div>
-      <ul class="grid border-t border-rule md:grid-cols-3">
-        {operators.map((operator) => (
-          <li
-            key={operator}
-            class="flex items-baseline justify-between gap-4 border-b border-rule py-4 md:flex-col md:border-b-0 md:border-l md:px-6 md:py-5 md:first:border-l-0 md:first:pl-0"
-          >
-            <strong class="home-operator">{t(`track.${operator}.name`)}</strong>
-            <span class="text-caption text-ink-2">{t(`track.${operator}.kind`)}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
-/** The test track: what it replays, a real capture, the cases and the three simulated operators. */
+/** The test track: what it replays, a real capture, the cases and the simulated operators read from the API. */
 export function TrackSection({ language }: { language: Language }): JSX.Element {
   const { t } = useTranslation("home");
   const link = <a href={localizedPath(language, "/sandbox")}>{t("track.open")}</a>;

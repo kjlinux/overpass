@@ -1,9 +1,11 @@
 import type { CommentPage, PostDetail, PostSummary } from "@overpass/shared";
+import i18next from "i18next";
 import { LocationProvider } from "preact-iso";
 import { render } from "preact-render-to-string";
 import { beforeAll, describe, expect, it, vi } from "vitest";
 import { validateAll } from "../../forms";
 import { setupTestI18n } from "../../i18n/test-i18n";
+import ui from "../../components/ui/locales/fr.json";
 import fr from "./locales/fr.json";
 import { emptyPost, postFormSchema } from "./postValues";
 import { ArticleView, FeedTabs, PostForm, PostList, blogQueryFrom, blogSearch } from "./index";
@@ -116,6 +118,22 @@ describe("article", () => {
     const html = page(<ArticleView post={hidden} comments={comments} signedIn actions={actions} />);
     expect(html).toContain(fr.article.hidden);
   });
+
+  it("shows why the comments failed to load, with a retry, instead of none", () => {
+    const error = { code: "server_error", message: "Le serveur ne répond pas." };
+    const html = page(
+      <ArticleView
+        post={post}
+        comments={{ items: [], nextCursor: null }}
+        commentsFailure={{ error, retry: () => undefined }}
+        signedIn
+        actions={actions}
+      />,
+    );
+    expect(html).toContain(error.message);
+    expect(html).toContain(ui.retry);
+    expect(html).not.toContain(fr.comments.empty);
+  });
 });
 
 describe("post form", () => {
@@ -126,6 +144,14 @@ describe("post form", () => {
     expect(admin).toContain('name="kind"');
     expect(admin).toContain(fr.editor.saveDraft);
     expect(admin).toContain(fr.editor.publish);
+  });
+
+  it("writes a new post in the language of the interface", async () => {
+    await i18next.changeLanguage("en");
+    const html = page(<PostForm isAdmin={false} onSave={noop} />);
+    await i18next.changeLanguage("fr");
+    expect(html).toMatch(/<option selected value="en">/);
+    expect(html).not.toMatch(/<option selected value="fr">/);
   });
 });
 

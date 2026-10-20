@@ -24,6 +24,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+      # Compose requires a password and has no default: each job draws a throwaway one.
+      - run: echo "POSTGRES_PASSWORD=$(openssl rand -hex 16)" >> "$GITHUB_ENV"
       - run: docker compose config --quiet
       - run: docker compose up -d --wait db
       - run: docker compose exec -T db psql -U overpass -d overpass -c "select version();"
@@ -38,9 +40,11 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
+      # Compose requires a password and has no default: each job draws a throwaway one.
+      - run: echo "POSTGRES_PASSWORD=$(openssl rand -hex 16)" >> "$GITHUB_ENV"
       - run: docker compose up -d --wait db
       - run: npx playwright install --with-deps chromium
-      - run: npm run test:e2e
+      - run: E2E_DATABASE_URL="postgres://overpass:${POSTGRES_PASSWORD}@127.0.0.1:5432/overpass" npm run test:e2e
       - if: failure()
         uses: actions/upload-artifact@v4
         with:

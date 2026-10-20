@@ -35,4 +35,5 @@ export const apiTokens = pgTable("api_tokens", {
   createdAt: utc("created_at").notNull().defaultNow(),
   lastUsedAt: utc("last_used_at"),
   revokedAt: utc("revoked_at"),
+  expiresAt: utc("expires_at").notNull(),
 });

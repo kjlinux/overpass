@@ -11,6 +11,7 @@ import { ErrorPage } from "../errors";
 import { useApi } from "../routes";
 import type { ThreadActions } from "./ThreadView";
 import { ThreadView } from "./ThreadView";
+import { useReplyPages } from "./useReplyPages";
 
 /** Every action reloads the thread, so votes, acceptance and moderation are the server's. */
 function useActions(id: string, reload: () => Promise<void>): ThreadActions {
@@ -37,13 +38,22 @@ function useActions(id: string, reload: () => Promise<void>): ThreadActions {
 function Loaded(props: { thread: ThreadDetail; reload: () => Promise<void> }): JSX.Element {
   const { me } = useSession();
   const actions = useActions(props.thread.id, props.reload);
+  const pages = useReplyPages(props.thread);
   const topics = useApi<DiscussionTopic[]>("/v1/topics").state;
   const topic =
     topics.status === "ready"
       ? (topics.data.find((item) => item.slug === props.thread.topic)?.name ?? props.thread.topic)
       : props.thread.topic;
   const signedIn = me !== null && me !== undefined;
-  return <ThreadView thread={props.thread} topic={topic} signedIn={signedIn} actions={actions} />;
+  return (
+    <ThreadView
+      thread={props.thread}
+      topic={topic}
+      signedIn={signedIn}
+      actions={actions}
+      pages={pages}
+    />
+  );
 }
 
 export function ThreadPage(): JSX.Element {

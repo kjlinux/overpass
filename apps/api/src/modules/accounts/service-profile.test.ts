@@ -130,6 +130,7 @@ describe("api tokens", () => {
         usage: "mcp",
         createdAt: created.createdAt,
         lastUsedAt: null,
+        expiresAt: created.expiresAt,
       },
     ]);
     expect(JSON.stringify(listed)).not.toContain(created.token);

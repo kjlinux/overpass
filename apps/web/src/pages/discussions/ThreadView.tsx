@@ -7,8 +7,8 @@ import { Button, ButtonLink, CodeBlock } from "../../components/ui";
 import { FormAlert } from "../../forms";
 import { localizedPath } from "../../layout";
 import { Markdown } from "../../markdown";
-import { ReplyForm } from "./ReplyForm";
-import { ReplyItem } from "./ReplyItem";
+import { Replies } from "./ReplyList";
+import type { ReplyPagesView } from "./replyPages";
 import { ThreadHead } from "./ThreadHead";
 
 export type ThreadActions = {
@@ -23,6 +23,7 @@ export type ThreadViewProps = {
   topic: string;
   signedIn: boolean;
   actions: ThreadActions;
+  pages: ReplyPagesView;
 };
 
 /** Turning into a route is the page's one primary action, offered to the author once resolved. */
@@ -81,58 +82,6 @@ function Question({ thread }: { thread: ThreadDetail }): JSX.Element {
         <CodeBlock code={thread.codeText} language={t("form.codeCaption")} />
       )}
     </div>
-  );
-}
-
-type RunProps = ThreadViewProps & {
-  run: (call: Promise<ApiError | undefined>) => void;
-  busy: boolean;
-};
-
-function ReplyList({ thread, signedIn, actions, run, busy }: RunProps): JSX.Element {
-  const can = {
-    signedIn,
-    isThreadAuthor: thread.viewer.isAuthor,
-    open: thread.status === "visible",
-  };
-  return (
-    <ul class="m-0 mt-4 list-none p-0">
-      {thread.items.map((reply) => (
-        <ReplyItem
-          key={reply.id}
-          reply={reply}
-          can={can}
-          busy={busy}
-          onVote={() => {
-            run(actions.vote(reply.id));
-          }}
-          onAccept={() => {
-            run(actions.accept(reply.id));
-          }}
-          onReport={() => {
-            run(actions.report("reply", reply.id));
-          }}
-        />
-      ))}
-    </ul>
-  );
-}
-
-function Replies(props: RunProps): JSX.Element {
-  const { thread, signedIn, actions } = props;
-  const { t } = useTranslation("discussions");
-  return (
-    <section aria-labelledby="replies-heading" class="border-t border-rule pt-8">
-      <h2 id="replies-heading" class="text-h2 font-semibold">
-        {t("detail.replies", { count: thread.items.length })}
-      </h2>
-      <ReplyList {...props} />
-      {thread.status === "visible" ? (
-        <div class="mt-8 max-w-prose">
-          <ReplyForm signedIn={signedIn} onSend={actions.reply} />
-        </div>
-      ) : null}
-    </section>
   );
 }
 

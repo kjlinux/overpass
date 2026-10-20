@@ -123,6 +123,13 @@ describe("CodeBlock, dialog, skeleton, empty state", () => {
     );
     expect(html).toContain("Rien");
     expect(html).toContain("Créer");
+    expect(html).toContain("<h3");
+  });
+
+  it("lets an empty state that follows the page title use the next heading level", () => {
+    const html = render(<EmptyState level={2} title="Rien" description="Vide" />);
+    expect(html).toContain("<h2");
+    expect(html).not.toContain("<h3");
   });
 });
 

@@ -66,6 +66,10 @@ function redact(headers: Record<string, string>, secrets: Secrets): Record<strin
   );
 }
 
+// Some providers carry the test key in a body, such as a login call or the token it returns.
+const scrub = (text: string, credential: string) =>
+  credential === "" ? text : text.split(credential).join("[redacted]");
+
 function pickScenario(header: string | undefined, fallback: string): Scenario {
   const wanted = scenarios.find((scenario) => scenario === header);
   return wanted ?? (fallback as Scenario);
@@ -97,9 +101,9 @@ async function authenticate(
 function storedRequest(call: GatewayCall, secrets: Secrets) {
   return {
     method: call.method,
-    path: call.path,
+    path: scrub(call.path, secrets.credential),
     headers: redact(call.headers, secrets),
-    body: call.rawBody.slice(0, storedBodyLimit),
+    body: scrub(call.rawBody, secrets.credential).slice(0, storedBodyLimit),
   };
 }
 
@@ -125,7 +129,10 @@ async function simulate(
   const raw = result.response.body;
   const response = {
     status: result.response.status,
-    body: typeof raw === "string" || raw === undefined ? (raw ?? null) : JSON.stringify(raw),
+    body:
+      raw === undefined
+        ? null
+        : scrub(typeof raw === "string" ? raw : JSON.stringify(raw), credential),
   };
   const eventId = await deps.events.record(
     {

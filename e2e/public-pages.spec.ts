@@ -1,19 +1,21 @@
 import { expect, test } from "@playwright/test";
 import type { Page } from "@playwright/test";
-import about from "../apps/web/src/pages/about/locales/fr.json" with { type: "json" };
-import legal from "../apps/web/src/pages/legal/locales/fr.json" with { type: "json" };
-import pricing from "../apps/web/src/pages/pricing/locales/fr.json" with { type: "json" };
-import share from "../apps/web/src/share/locales/fr.json" with { type: "json" };
+import { currentLanguage, locale, path, urlEndingWith } from "./i18n.js";
+import { expectNoSidewaysScroll } from "./layout.js";
 
-const pages = [
-  { path: "/fr/pricing", title: pricing.title, action: pricing.plans.free.action },
-  { path: "/fr/about", title: about.title, action: about.product.action },
-  { path: "/fr/legal", title: legal.legal.title, action: undefined },
-  { path: "/fr/privacy", title: legal.privacy.title, action: legal.deletion.action },
-] as const;
+/** The title and the keyboard-reachable action of each page, in the project's language. */
+function pageTexts() {
+  const [about, legal, pricing] = [locale("about"), locale("legal"), locale("pricing")];
+  return {
+    "/pricing": { title: pricing.title, action: pricing.plans.free.action },
+    "/about": { title: about.title, action: about.product.action },
+    "/legal": { title: legal.legal.title, action: undefined },
+    "/privacy": { title: legal.privacy.title, action: legal.deletion.action },
+  };
+}
 
-const overflow = (page: Page) =>
-  page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
+/** Words of a checkout button, which the pricing page must not show yet. */
+const checkoutWords = { fr: /payer|acheter/i, en: /\b(pay|buy|checkout)\b/i } as const;
 
 /** Tabs until the focused element has the given accessible name, or gives up. */
 async function tabTo(page: Page, name: string): Promise<boolean> {
@@ -25,11 +27,12 @@ async function tabTo(page: Page, name: string): Promise<boolean> {
   return false;
 }
 
-for (const { path, title, action } of pages) {
-  test(`${path} reads at any width and its action is reachable by keyboard`, async ({ page }) => {
-    await page.goto(path);
+for (const route of ["/pricing", "/about", "/legal", "/privacy"] as const) {
+  test(`${route} reads at any width and its action is reachable by keyboard`, async ({ page }) => {
+    const { title, action } = pageTexts()[route];
+    await page.goto(path(route));
     await expect(page.getByRole("heading", { level: 1, name: title })).toBeVisible();
-    expect(await overflow(page)).toBe(0);
+    await expectNoSidewaysScroll(page);
     if (action === undefined) return;
     expect(await tabTo(page, action)).toBe(true);
     await expect(page.locator(":focus")).toHaveCSS("outline-style", "solid");
@@ -37,13 +40,13 @@ for (const { path, title, action } of pages) {
 }
 
 test("the pricing page names payment as coming and shows no checkout", async ({ page }) => {
-  await page.goto("/fr/pricing");
-  await expect(page.getByText(pricing.payment.label)).toBeVisible();
-  await expect(page.getByRole("button", { name: /payer|acheter/i })).toHaveCount(0);
+  await page.goto(path("/pricing"));
+  await expect(page.getByText(locale("pricing").payment.label)).toBeVisible();
+  await expect(page.getByRole("button", { name: checkoutWords[currentLanguage()] })).toHaveCount(0);
 });
 
 test("the licence list opens with the keyboard", async ({ page }) => {
-  await page.goto("/fr/legal#licences");
+  await page.goto(`${path("/legal")}#licences`);
   const first = page.locator("#licences ~ div summary").first();
   await first.focus();
   await page.keyboard.press("Enter");
@@ -51,9 +54,10 @@ test("the licence list opens with the keyboard", async ({ page }) => {
 });
 
 test("client-side navigation updates the title and the share tags", async ({ page }) => {
-  await page.goto("/fr/about");
+  const share = locale("share");
+  await page.goto(path("/about"));
   await expect(page).toHaveTitle(`${share.pages.about.title} · Overpass`);
-  await page.goto("/fr/legal");
+  await page.goto(path("/legal"));
   await page
     .getByRole("contentinfo")
     .getByRole("link", { name: share.pages.privacy.title })
@@ -61,7 +65,7 @@ test("client-side navigation updates the title and the share tags", async ({ pag
   await expect(page).toHaveTitle(`${share.pages.privacy.title} · Overpass`);
   const canonical = page.locator('link[rel="canonical"]');
   await expect(canonical).toHaveCount(1);
-  await expect(canonical).toHaveAttribute("href", /\/fr\/privacy$/);
+  await expect(canonical).toHaveAttribute("href", urlEndingWith("/privacy"));
   await expect(page.locator('meta[name="description"]')).toHaveAttribute(
     "content",
     share.pages.privacy.description,

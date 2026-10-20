@@ -59,6 +59,7 @@ async function toUrl(
   now: Date,
 ): Promise<DeliveryUpdate> {
   const url = row.webhookUrl ?? "";
+  if (!url.startsWith("https://")) return { status: "failed", lastError: "https_required" };
   const addresses = await publicAddresses(url, deps.resolveHost);
   if (addresses === undefined) return { status: "failed", lastError: "private_address" };
   return afterHttp(row, await send({ url, addresses, ...wire, timeoutMs }), now);

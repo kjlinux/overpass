@@ -1,5 +1,9 @@
 {
   "extends": "../tsconfig.base.json",
-  "compilerOptions": { "noEmit": true, "types": ["node"], "lib": ["ES2023", "DOM"] },
-  "include": ["*.ts", "../playwright.config.ts"]
+  "compilerOptions": {
+    "noEmit": true,
+    "types": ["node"],
+    "lib": ["ES2023", "DOM", "DOM.Iterable"]
+  },
+  "include": ["*.ts", "a11y/*.ts", "../playwright.config.ts"]
 }

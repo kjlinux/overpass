@@ -5,8 +5,8 @@ import { useState } from "preact/hooks";
 import { useLocation } from "preact-iso";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../app/useLanguage";
-import { ButtonLink, Skeleton } from "../../components/ui";
-import { FormAlert } from "../../forms";
+import { ButtonLink, EmptyState, Skeleton } from "../../components/ui";
+import { FormAlert, LoadError } from "../../forms";
 import { Layout, localizedPath } from "../../layout";
 import { useSession } from "../../session";
 import { useApi } from "../routes/useApi";
@@ -122,6 +122,10 @@ function Bench({ providers }: { providers: SandboxProvider[] }): JSX.Element {
   const choices = useChoices(providers);
   const { provider } = choices;
   const track = useTrack(provider?.id);
+  const { t } = useTranslation("sandbox");
+  if (providers.length === 0) {
+    return <EmptyState title={t("noProviders.title")} description={t("noProviders.text")} />;
+  }
   if (provider === undefined) return <Skeleton />;
   const scenario = choices.picked ?? track.current?.scenario ?? "success";
   return (
@@ -143,7 +147,7 @@ export function TrackPage(): JSX.Element {
   const { t } = useTranslation("sandbox");
   const language = useLanguage();
   const { me } = useSession();
-  const providers = useApi<SandboxProvider[]>("/v1/sandbox/providers").state;
+  const { state: providers, reload } = useApi<SandboxProvider[]>("/v1/sandbox/providers");
   const loading = me === undefined || providers.status === "loading";
   return (
     <Layout language={language}>
@@ -165,7 +169,7 @@ export function TrackPage(): JSX.Element {
       ) : null}
       {providers.status === "error" ? (
         <div class="py-8">
-          <FormAlert error={providers.error} />
+          <LoadError error={providers.error} onRetry={() => void reload()} />
         </div>
       ) : null}
     </Layout>

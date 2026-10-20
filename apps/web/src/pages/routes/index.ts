@@ -10,6 +10,8 @@ export { EditRoutePage, NewRoutePage } from "./EditorPage";
 export { EditorView } from "./EditorView";
 export { draftFrom, newDraft, threadDraft } from "./draft";
 export { formatDate, statusOf } from "./format";
+export { Fetched } from "./Fetched";
+export type { FetchedProps } from "./Fetched";
 export { useApi } from "./useApi";
 export type { Loaded } from "./useApi";
 export { CoverageSection } from "./CoverageSection";

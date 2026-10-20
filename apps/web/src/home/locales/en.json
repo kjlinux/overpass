@@ -24,18 +24,14 @@
     },
     "operators": "Simulated operators",
     "unofficial": "unofficial simulator, built from the public documentation",
-    "wave": {
-      "name": "Wave",
-      "kind": "merchant payment"
+    "loading": "Loading the simulated operators",
+    "category": {
+      "payment": "payment",
+      "sms": "SMS",
+      "ussd": "USSD"
     },
-    "pispi": {
-      "name": "PI-SPI",
-      "kind": "instant payment"
-    },
-    "paydunya": {
-      "name": "PayDunya",
-      "kind": "aggregator"
-    }
+    "kind_one": "{{category}}, {{count}} country",
+    "kind_other": "{{category}}, {{count}} countries"
   },
   "routes": {
     "title": "The itineraries",

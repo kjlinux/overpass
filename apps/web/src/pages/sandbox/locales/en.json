@@ -2,6 +2,10 @@
   "title": "Test track",
   "intro": "Call a simulated provider with a test key, choose what should go wrong, then read the request, the response and every webhook. No merchant account, no real money.",
   "openapi": "Simulator OpenAPI reference",
+  "noProviders": {
+    "title": "No simulated provider yet",
+    "text": "The test track opens as soon as an administrator publishes a first simulated provider."
+  },
   "visitor": {
     "heading": "A test key is waiting for you",
     "body": "Sign in to create a key, call the simulator from your code and receive the webhooks on your machine.",

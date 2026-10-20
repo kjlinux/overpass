@@ -1,4 +1,5 @@
 {
+  "languageName": "Français",
   "errors": {
     "not_found": "Cette ressource est introuvable.",
     "internal": "Une erreur est survenue. Réessayez dans un instant.",
@@ -82,7 +83,7 @@
     "nothing_to_update": "Modifiez au moins un champ avant d'enregistrer.",
     "scenario_invalid": "Choisissez un des scénarios proposés.",
     "target_invalid": "Choisissez où envoyer les webhooks : récepteur intégré, URL ou relais local.",
-    "webhook_url_invalid": "Saisissez une URL http ou https complète, par exemple https://exemple.com/webhook.",
+    "webhook_url_invalid": "Saisissez une URL https complète, par exemple https://exemple.com/webhook. Pour atteindre localhost, utilisez le relais local.",
     "webhook_url_required": "Saisissez l'URL qui recevra les webhooks.",
     "webhook_url_private": "Cette URL vise une adresse privée ou locale. Utilisez le relais local pour votre poste.",
     "provider_not_simulated": "Cet opérateur n'a pas de simulateur.",
@@ -113,5 +114,6 @@
     "slug_invalid": "Cette adresse d'article n'est pas valide.",
     "report_reason_invalid": "Expliquez le problème en 3 à 500 caractères.",
     "suspension_reason_invalid": "Indiquez le motif de la suspension en 3 à 500 caractères."
-  }
+  },
+  "template": "## Prérequis\n\n- Le compte ou la clé d'API à obtenir.\n- La version du framework utilisée.\n\n## Installation\n\nLes paquets à installer et la configuration à ajouter.\n\n## Paiement\n\nLe code qui crée le paiement, avec ses paramètres.\n\n```\n\n```\n\n## Webhook\n\nComment recevoir et vérifier la notification de l'opérateur.\n\n```\n\n```\n\n## Pièges connus\n\n- Ce que la documentation officielle ne dit pas.\n"
 }

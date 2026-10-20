@@ -3,6 +3,8 @@ import { dirname, join, resolve } from "node:path";
 import { injectShareTags, shareMessagesSchema, shareShellFiles } from "@overpass/shared";
 import type { ShareMessages } from "@overpass/shared";
 import type { Plugin } from "vite";
+import { injectPreloads, preloadLinks } from "./preload";
+import type { Manifest } from "./preload";
 import type { PublicPage } from "./publicPaths";
 import { publicPages } from "./publicPaths";
 import { shareTags } from "./shareTags";
@@ -32,12 +34,16 @@ function write(file: string, content: string): void {
 /** Static pages per language, plus the shell and texts the API needs for content pages. */
 function writePages(outDir: string, root: string, template: string, options: Options): void {
   const all: Record<string, ShareMessages> = {};
+  const manifest = JSON.parse(
+    readFileSync(join(outDir, ".vite/manifest.json"), "utf8"),
+  ) as Manifest;
   for (const language of options.languages) {
     const messages = messagesOf(root, language);
     all[language] = messages;
     for (const [page, path] of Object.entries(publicPages) as [PublicPage, string][]) {
       const html = prerenderedHtml(template, { ...options, language, page, messages });
-      write(join(outDir, language, path, "index.html"), html);
+      const links = preloadLinks(manifest, language, page === "home");
+      write(join(outDir, language, path, "index.html"), injectPreloads(html, links));
     }
   }
   write(join(outDir, shareShellFiles.shell), template);

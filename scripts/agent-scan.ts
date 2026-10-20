@@ -1,5 +1,5 @@
 import { spawnSync } from "node:child_process";
-import { cpSync, mkdtempSync, rmSync } from "node:fs";
+import { cpSync, existsSync, mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 
@@ -16,7 +16,10 @@ function projectFiles(): string[] {
     },
   );
   if (listing.status !== 0) throw new Error(listing.stderr);
-  return listing.stdout.split("\0").filter((file) => file !== "" && !excluded.has(file));
+  // A tracked file deleted in the working tree is skipped, as the repository checks do.
+  return listing.stdout
+    .split("\0")
+    .filter((file) => file !== "" && !excluded.has(file) && existsSync(file));
 }
 
 /** Copies the project into a scratch folder, so the scanner never sees what it must skip. */

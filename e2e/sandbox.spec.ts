@@ -3,12 +3,14 @@ import { createServer } from "node:http";
 import type { AddressInfo } from "node:net";
 import { expect, test } from "@playwright/test";
 import type { Browser, Page } from "@playwright/test";
-import sandbox from "../apps/web/src/pages/sandbox/locales/fr.json" with { type: "json" };
+import { currentLanguage, format, lead, locale, path } from "./i18n.js";
+import { expectNoSidewaysScroll, isPhone } from "./layout.js";
 import { newMember } from "./members.js";
 import { start, startWorker } from "./processes.js";
 import type { Running } from "./processes.js";
 
 let worker: Running;
+const texts = () => locale("sandbox");
 let member: Page | undefined;
 
 /** One sign-up for the whole file: sign-ups are limited per address, like in production. */
@@ -25,65 +27,56 @@ test.afterAll(() => {
 
 type Scenario = "success" | "insufficient_funds" | "timeout" | "duplicate_webhook" | "late_webhook";
 
-const trip = (page: Page) => page.getByRole("list", { name: sandbox.deliveries.trip });
+const trip = (page: Page) => page.getByRole("list", { name: texts().deliveries.trip });
 
 async function trackWithKey(page: Page): Promise<string> {
-  await page.goto("/fr/sandbox?provider=wave");
-  await page.getByRole("button", { name: sandbox.keys.create }).click();
-  const reveal = page.getByRole("status").filter({ hasText: sandbox.keys.revealTitle });
+  await page.goto(`${path("/sandbox")}?provider=wave`);
+  await page.getByRole("button", { name: texts().keys.create }).click();
+  const reveal = page.getByRole("status").filter({ hasText: texts().keys.revealTitle });
   return (await reveal.locator("code").textContent()) ?? "";
 }
 
 async function run(page: Page, scenario: Scenario): Promise<void> {
-  await page.getByRole("radio", { name: sandbox.scenario[scenario].label }).check();
-  await page.getByRole("button", { name: sandbox.launch.button }).click();
+  await page.getByRole("radio", { name: texts().scenario[scenario].label }).check();
+  await page.getByRole("button", { name: texts().launch.button }).click();
 }
 
 test("the public demo shows a webhook within 30 seconds, without an account", async ({ page }) => {
-  await page.goto("/fr/sandbox/demo");
-  await page.getByRole("radio", { name: sandbox.scenario.duplicate_webhook.label }).check();
-  await page.getByRole("button", { name: sandbox.demo.button }).click();
-  await expect(page.getByRole("status").filter({ hasText: sandbox.demo.done })).toBeVisible({
+  await page.goto(path("/sandbox/demo"));
+  await page.getByRole("radio", { name: texts().scenario.duplicate_webhook.label }).check();
+  await page.getByRole("button", { name: texts().demo.button }).click();
+  await expect(page.getByRole("status").filter({ hasText: texts().demo.done })).toBeVisible({
     timeout: 30_000,
   });
-  await expect(page.getByText(sandbox.deliveries.same)).toBeVisible();
-  const overflow = await page.evaluate(
-    () => document.documentElement.scrollWidth - window.innerWidth,
-  );
-  expect(overflow).toBe(0);
+  await expect(page.getByText(texts().deliveries.same)).toBeVisible();
+  await expectNoSidewaysScroll(page);
 });
 
-test("a member runs every Wave scenario and receives its webhook", async ({ browser }, info) => {
-  test.skip(info.project.name !== "desktop", "the five scenarios run once, at desktop width");
+test("a member runs every Wave scenario and receives its webhook", async ({ browser }) => {
+  test.skip(isPhone(), "the five scenarios run once, at desktop width");
   test.setTimeout(180_000);
   const page = await sharedMember(browser);
   await trackWithKey(page);
   for (const scenario of ["success", "insufficient_funds", "duplicate_webhook"] as const) {
     await run(page, scenario);
-    await expect(trip(page).first()).toContainText(sandbox.deliveries.state.passed, {
+    await expect(trip(page).first()).toContainText(texts().deliveries.state.passed, {
       timeout: 15_000,
     });
   }
-  await expect(page.getByText(sandbox.deliveries.same)).toBeVisible();
+  await expect(page.getByText(texts().deliveries.same)).toBeVisible();
   await run(page, "timeout");
-  await expect(page.getByText(sandbox.deliveries.none)).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByText(texts().deliveries.none)).toBeVisible({ timeout: 15_000 });
   await run(page, "late_webhook");
-  await expect(trip(page).first()).toContainText("part à", { timeout: 15_000 });
-  await expect(trip(page).first()).toContainText(sandbox.deliveries.state.passed, {
+  await expect(trip(page).first()).toContainText(lead(texts().deliveries.state.leaves), {
+    timeout: 15_000,
+  });
+  await expect(trip(page).first()).toContainText(texts().deliveries.state.passed, {
     timeout: 90_000,
   });
 });
 
-test("the local relay replays a webhook whose Wave signature verifies on the developer's server", async ({
-  browser,
-}, info) => {
-  test.skip(info.project.name !== "desktop", "one relay run is enough");
-  test.setTimeout(120_000);
-  const page = await sharedMember(browser);
-  const key = await trackWithKey(page);
-  await page.getByRole("radio", { name: sandbox.target.relay.label }).check();
-  const secretBlock = page.getByText(sandbox.keys.secret, { exact: true }).locator("xpath=../..");
-  const secret = (await secretBlock.locator("code").textContent()) ?? "";
+/** The developer's local server, which records every webhook the relay forwards. */
+async function developerServer() {
   const received: { signature: string; body: string }[] = [];
   const local = createServer((request, response) => {
     const chunks: Buffer[] = [];
@@ -98,9 +91,23 @@ test("the local relay replays a webhook whose Wave signature verifies on the dev
   });
   await new Promise<void>((resolve) => local.listen(0, "127.0.0.1", resolve));
   const forward = `http://127.0.0.1:${String((local.address() as AddressInfo).port)}/webhook`;
+  return { local, received, forward };
+}
+
+test("the local relay replays a webhook whose Wave signature verifies on the developer's server", async ({
+  browser,
+}) => {
+  test.skip(isPhone(), "one relay run is enough");
+  test.setTimeout(120_000);
+  const page = await sharedMember(browser);
+  const key = await trackWithKey(page);
+  await page.getByRole("radio", { name: texts().target.relay.label }).check();
+  const secretBlock = page.getByText(texts().keys.secret, { exact: true }).locator("xpath=../..");
+  const secret = (await secretBlock.locator("code").textContent()) ?? "";
+  const { local, received, forward } = await developerServer();
   const args = ["listen", "--forward-to", forward, "--key", key, "--api", "http://127.0.0.1:3000"];
-  const cli = start("apps/cli/src/cli.ts", args, { OVERPASS_LANG: "fr" });
-  await expect.poll(() => cli.output(), { timeout: 20_000 }).toContain("Relais prêt");
+  const cli = start("apps/cli/src/cli.ts", args, { OVERPASS_LANG: currentLanguage() });
+  await expect.poll(() => cli.output(), { timeout: 20_000 }).toContain(lead(locale("cli").ready));
   await run(page, "success");
   await expect.poll(() => received.length, { timeout: 20_000 }).toBe(1);
   const [, stamp, v1] = /^t=(\d+),v1=([0-9a-f]+)$/.exec(received[0]?.signature ?? "") ?? [];
@@ -108,19 +115,22 @@ test("the local relay replays a webhook whose Wave signature verifies on the dev
     .update(`${stamp ?? ""}${received[0]?.body ?? ""}`)
     .digest("hex");
   expect(expected).toBe(v1);
-  await expect(trip(page).first()).toContainText("reçu, 200 en", { timeout: 20_000 });
+  await expect(trip(page).first()).toContainText(
+    lead(format(texts().deliveries.state.received, { status: 200 })),
+    { timeout: 20_000 },
+  );
   cli.stop();
   local.close();
 });
 
-test("a member runs every PI-SPI scenario and plays the guided demo", async ({ browser }, info) => {
-  test.skip(info.project.name !== "desktop", "the PI-SPI scenarios run once, at desktop width");
+test("a member runs every PI-SPI scenario and plays the guided demo", async ({ browser }) => {
+  test.skip(isPhone(), "the PI-SPI scenarios run once, at desktop width");
   test.setTimeout(300_000);
   const page = await sharedMember(browser);
-  await page.goto("/fr/sandbox?provider=pi-spi");
+  await page.goto(`${path("/sandbox")}?provider=pi-spi`);
   await expect(page.getByRole("note")).toContainText("mTLS");
-  await expect(page.getByRole("link", { name: sandbox.provider.officialSandbox })).toBeVisible();
-  await page.getByRole("button", { name: sandbox.keys.create }).click();
+  await expect(page.getByRole("link", { name: texts().provider.officialSandbox })).toBeVisible();
+  await page.getByRole("button", { name: texts().keys.create }).click();
   for (const scenario of [
     "success",
     "insufficient_funds",
@@ -128,50 +138,50 @@ test("a member runs every PI-SPI scenario and plays the guided demo", async ({ b
     "duplicate_webhook",
   ] as const) {
     await run(page, scenario);
-    await expect(trip(page).first()).toContainText(sandbox.deliveries.state.passed, {
+    await expect(trip(page).first()).toContainText(texts().deliveries.state.passed, {
       timeout: 15_000,
     });
   }
-  await expect(page.getByText(sandbox.deliveries.same)).toBeVisible({ timeout: 20_000 });
-  const plays = page.getByRole("button", { name: sandbox.guided.play });
+  await expect(page.getByText(texts().deliveries.same)).toBeVisible({ timeout: 20_000 });
+  const plays = page.getByRole("button", { name: texts().guided.play });
   for (let index = 0; index < 3; index += 1) {
     await plays.nth(index).click();
-    await expect(page.getByRole("status").filter({ hasText: "Réponse 200" })).toHaveCount(
-      index + 1,
-    );
+    await expect(
+      page.getByRole("status").filter({ hasText: format(texts().guided.result, { status: 200 }) }),
+    ).toHaveCount(index + 1);
   }
   await expect(page.getByText('"statut": "IRREVOCABLE"')).toBeVisible();
   await run(page, "late_webhook");
-  await expect(trip(page).first()).toContainText(sandbox.deliveries.state.passed, {
+  await expect(trip(page).first()).toContainText(texts().deliveries.state.passed, {
     timeout: 90_000,
   });
 });
 
-test("a member runs every PayDunya scenario and checks the invoice", async ({ browser }, info) => {
-  test.skip(info.project.name !== "desktop", "the PayDunya scenarios run once, at desktop width");
+test("a member runs every PayDunya scenario and checks the invoice", async ({ browser }) => {
+  test.skip(isPhone(), "the PayDunya scenarios run once, at desktop width");
   test.setTimeout(300_000);
   const page = await sharedMember(browser);
-  await page.goto("/fr/sandbox?provider=paydunya");
-  await page.getByRole("button", { name: sandbox.keys.create }).click();
+  await page.goto(`${path("/sandbox")}?provider=paydunya`);
+  await page.getByRole("button", { name: texts().keys.create }).click();
   for (const scenario of ["success", "insufficient_funds", "duplicate_webhook"] as const) {
     await run(page, scenario);
-    await expect(trip(page).first()).toContainText(sandbox.deliveries.state.passed, {
+    await expect(trip(page).first()).toContainText(texts().deliveries.state.passed, {
       timeout: 15_000,
     });
   }
-  await expect(page.getByText(sandbox.deliveries.same)).toBeVisible({ timeout: 20_000 });
+  await expect(page.getByText(texts().deliveries.same)).toBeVisible({ timeout: 20_000 });
   await run(page, "timeout");
-  await expect(page.getByText(sandbox.deliveries.none)).toBeVisible({ timeout: 15_000 });
-  const plays = page.getByRole("button", { name: sandbox.guided.play });
+  await expect(page.getByText(texts().deliveries.none)).toBeVisible({ timeout: 15_000 });
+  const plays = page.getByRole("button", { name: texts().guided.play });
   for (let index = 0; index < 2; index += 1) {
     await plays.nth(index).click();
-    await expect(page.getByRole("status").filter({ hasText: "Réponse 200" })).toHaveCount(
-      index + 1,
-    );
+    await expect(
+      page.getByRole("status").filter({ hasText: format(texts().guided.result, { status: 200 }) }),
+    ).toHaveCount(index + 1);
   }
   await expect(page.getByText('"status": "pending"')).toBeVisible();
   await run(page, "late_webhook");
-  await expect(trip(page).first()).toContainText(sandbox.deliveries.state.passed, {
+  await expect(trip(page).first()).toContainText(texts().deliveries.state.passed, {
     timeout: 90_000,
   });
 });
