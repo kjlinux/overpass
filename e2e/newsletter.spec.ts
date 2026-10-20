@@ -1,9 +1,8 @@
 import { expect, test } from "@playwright/test";
 import type { Page } from "@playwright/test";
-import blog from "../apps/web/src/pages/blog/locales/fr.json" with { type: "json" };
-import newsletter from "../apps/web/src/pages/newsletter/locales/fr.json" with { type: "json" };
-import layout from "../apps/web/src/layout/locales/fr.json" with { type: "json" };
+import { locale, path } from "./i18n.js";
 import { promoteAdmin, resetRateLimits } from "./admin.js";
+import { stampOf } from "./itineraries.js";
 import { newMember } from "./members.js";
 import { linkMailedTo, mailMentioning } from "./outbox.js";
 import { startWorker } from "./processes.js";
@@ -18,10 +17,9 @@ test.afterEach(() => {
   worker.stop();
 });
 
-const stampOf = () => `${String(Date.now())}-${test.info().project.name}`;
-
 async function subscribe(page: Page, email: string): Promise<void> {
-  await page.goto("/fr/newsletter");
+  const layout = locale("layout");
+  await page.goto(path("/newsletter"));
   const main = page.getByRole("main");
   await main.getByLabel(layout.newsletter.email, { exact: true }).fill(email);
   await main.getByRole("button", { name: layout.newsletter.subscribe }).click();
@@ -29,13 +27,15 @@ async function subscribe(page: Page, email: string): Promise<void> {
 }
 
 async function confirm(page: Page, email: string): Promise<void> {
+  const done = locale("newsletter").confirm.doneTitle;
   await page.goto(await linkMailedTo(email));
-  await expect(page.getByRole("heading", { name: newsletter.confirm.doneTitle })).toBeVisible();
+  await expect(page.getByRole("heading", { name: done })).toBeVisible();
 }
 
 /** The team writes one post so the week has content, then reviews and sends the issue. */
 async function sendIssue(admin: Page, subject: string): Promise<void> {
-  await admin.goto("/fr/blog/write");
+  const [blog, newsletter] = [locale("blog"), locale("newsletter")];
+  await admin.goto(path("/blog/write"));
   const main = admin.getByRole("main");
   await main
     .getByLabel(blog.editor.title, { exact: true })
@@ -43,7 +43,7 @@ async function sendIssue(admin: Page, subject: string): Promise<void> {
   await main.getByLabel(blog.editor.summary, { exact: true }).fill("Un résumé.");
   await main.getByLabel(blog.editor.content, { exact: true }).fill("Le texte de la semaine.");
   await main.getByRole("button", { name: blog.editor.publish, exact: true }).click();
-  await admin.goto("/fr/admin/newsletter");
+  await admin.goto(path("/admin/newsletter"));
   await admin.getByRole("button", { name: newsletter.admin.prepare }).click();
   await admin.getByLabel(newsletter.admin.subject, { exact: true }).fill(subject);
   await admin.getByRole("button", { name: newsletter.admin.send, exact: true }).click();
@@ -71,7 +71,7 @@ test("subscribe, confirm, receive an issue in the test mailbox, then unsubscribe
   page,
 }) => {
   test.setTimeout(120_000);
-  const stamp = stampOf();
+  const stamp = stampOf(test.info().project.name);
   const email = `e2e-reader-${stamp}@example.com`;
   await subscribe(page, email);
   await confirm(page, email);
@@ -85,5 +85,6 @@ test("subscribe, confirm, receive an issue in the test mailbox, then unsubscribe
   expect(issue.subject).toBe(subject);
   const link = /https?:\/\/\S+\/newsletter\/unsubscribe#token=\S+/.exec(issue.text)?.[0] ?? "";
   await page.goto(link);
-  await expect(page.getByRole("heading", { name: newsletter.unsubscribe.doneTitle })).toBeVisible();
+  const left = locale("newsletter").unsubscribe.doneTitle;
+  await expect(page.getByRole("heading", { name: left })).toBeVisible();
 });

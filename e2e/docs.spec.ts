@@ -1,16 +1,15 @@
 import { expect, test } from "@playwright/test";
 import type { Page } from "@playwright/test";
-import docs from "../apps/web/src/pages/docs/locales/fr.json" with { type: "json" };
-import settings from "../apps/web/src/pages/settings/locales/fr.json" with { type: "json" };
+import { currentLanguage, format, locale, path } from "./i18n.js";
 import { resetRateLimits } from "./admin.js";
+import { expectNoSidewaysScroll } from "./layout.js";
+import { stampOf } from "./itineraries.js";
 import { newMember } from "./members.js";
 
 test.beforeEach(() => resetRateLimits());
 
-const stampOf = () => `${String(Date.now())}-${test.info().project.name}`;
-
 async function callTool(page: Page, token: string, name: string) {
-  const response = await page.request.post("/mcp?lang=fr", {
+  const response = await page.request.post(`/mcp?lang=${currentLanguage()}`, {
     headers: {
       authorization: `Bearer ${token}`,
       accept: "application/json, text/event-stream",
@@ -24,9 +23,9 @@ async function callTool(page: Page, token: string, name: string) {
 test("the documentation reads at any width and its editor tabs work with the keyboard", async ({
   page,
 }) => {
-  await page.goto("/fr/docs");
-  await expect(page.getByRole("heading", { level: 1, name: docs.title })).toBeVisible();
-  expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBe(0);
+  await page.goto(path("/docs"));
+  await expect(page.getByRole("heading", { level: 1, name: locale("docs").title })).toBeVisible();
+  await expectNoSidewaysScroll(page);
   await page.getByRole("tab", { name: "Claude Code" }).focus();
   await page.keyboard.press("ArrowRight");
   await expect(page.getByRole("tab", { name: "Cursor" })).toHaveAttribute("aria-selected", "true");
@@ -37,8 +36,9 @@ test("the documentation reads at any width and its editor tabs work with the key
 test("a member creates an MCP token, copies the configuration, and loses access on revoke", async ({
   browser,
 }) => {
-  const page = await newMember(browser, `mcp-${stampOf()}`);
-  await page.goto("/fr/settings#tokens");
+  const settings = locale("settings");
+  const page = await newMember(browser, `mcp-${stampOf(test.info().project.name)}`);
+  await page.goto(`${path("/settings")}#tokens`);
   const main = page.getByRole("main");
   await main.getByLabel(settings.tokens.name).fill("Portable");
   await page.getByRole("button", { name: settings.tokens.submit }).click();
@@ -52,7 +52,9 @@ test("a member creates an MCP token, copies the configuration, and loses access 
   expect(served.result.content[0]?.text).toContain("<overpass_data");
 
   await page.getByRole("button", { name: settings.tokens.dismiss }).click();
-  await page.getByRole("button", { name: `Révoquer le jeton Portable` }).click();
+  await page
+    .getByRole("button", { name: format(settings.tokens.revokeLabel, { name: "Portable" }) })
+    .click();
   await page.getByRole("dialog").getByRole("button", { name: settings.tokens.revoke }).click();
   await expect(page.getByText(settings.tokens.emptyTitle)).toBeVisible();
   const refused = await callTool(page, token, "list_services");
