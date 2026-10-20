@@ -1,0 +1,28 @@
+{
+  "summary": "Simulateur non officiel de l'API REST de CinetPay : jeton Bearer, création de paiement, vérification du statut et notification.",
+  "warning": "CinetPay ne publie aucune référence d'API : ce simulateur suit le README de son SDK PHP officiel 3.0.1. Les chemins de connexion et de création de paiement, les noms JSON et les corps de refus sont des suppositions du simulateur ; vérifiez-les sur votre compte CinetPay avant la mise en production.",
+  "notes": [
+    "Construit à partir du README du SDK PHP officiel (github.com/cinetpay/cinetpay-php-sdk), version 3.0.1 du 11 août 2026. docs.cinetpay.com ne répond plus, et le code du SDK n'a pas servi de source.",
+    "Remplacez https://api.cinetpay.net par l'adresse du simulateur. Seul GET /v1/payment/{id} est nommé par le README ; POST /v1/oauth/login et POST /v1/payment sont des choix du simulateur.",
+    "Connectez-vous avec votre clé de test Overpass comme api_key ; tout api_password est accepté. L'access_token renvoyé commence par votre clé de test et vit une heure, puis le simulateur répond EXPIRED_TOKEN ; un jeton inconnu reçoit INVALID_TOKEN.",
+    "Les noms JSON sont ceux du README en snake_case (merchant_transaction_id, success_url, notify_url, client_email...). Les champs obligatoires sont currency, merchant_transaction_id, amount, success_url, failed_url et notify_url, un choix du simulateur.",
+    "Les devises acceptées sont XOF, XAF, GNF et CDF, celles des pays dont la couverture est confirmée. Le README lie un compte à un pays ; une clé de test n'a pas de pays, la devise n'est donc pas comparée à un pays.",
+    "payment_method, s'il est envoyé, doit porter un suffixe pays (OM_CI, MTN_CM), comme l'exige le README ; client_phone_number doit être au format E.164.",
+    "La notification est un POST JSON qui porte notify_token, merchant_transaction_id, transaction_id et status, sans en-tête de signature. Comparez notify_token à celui gardé à la création, en temps constant, puis vérifiez le paiement avec GET /v1/payment/{id} : ne vous fiez jamais au statut reçu.",
+    "Les scénarios donnent les statuts du README : SUCCESS pour le succès, INSUFFICIENT_BALANCE pour le solde insuffisant, PENDING sans notification pour le délai dépassé. Une notification en double porte le même transaction_id, la clé de déduplication du README.",
+    "Le statut est fixé dès la création : GET /v1/payment/{id} le renvoie déjà, même avant l'arrivée d'une notification en retard.",
+    "La notification part vers la cible choisie sur la piste d'essai, pas vers notify_url. Répondez-y en HTTP 200 en moins de 10 secondes, comme le demande le README.",
+    "Les refus portent code, status et message ; le README ne nomme qu'INVALID_TOKEN et EXPIRED_TOKEN, les autres statuts sont ceux du simulateur. Les montants des réponses sont des chaînes, comme l'indique le README.",
+    "Les transferts et le solde, décrits dans le README, ne sont pas simulés."
+  ],
+  "endpoints": {
+    "POST /v1/oauth/login": "Échanger api_key et api_password contre un jeton Bearer",
+    "POST /v1/payment": "Créer un paiement et obtenir l'adresse de paiement",
+    "GET /v1/payment/:id": "Vérifier un paiement par merchant_transaction_id ou transaction_id"
+  },
+  "steps": {
+    "login": "Se connecter pour obtenir un jeton Bearer.",
+    "payment": "Créer un paiement de 5 000 FCFA avec le jeton.",
+    "check": "Vérifier le statut du paiement : le payeur virtuel a agi selon le scénario."
+  }
+}

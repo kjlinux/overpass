@@ -28,6 +28,14 @@
         "docsUrl": "https://developers.paydunya.com/doc/FR/http_json",
         "docsVersion": "2026-10-15",
         "consultedAt": "2026-10-15"
+      },
+      {
+        "id": "cinetpay",
+        "name": "CinetPay",
+        "unofficial": true,
+        "docsUrl": "https://github.com/cinetpay/cinetpay-php-sdk",
+        "docsVersion": "3.0.1",
+        "consultedAt": "2026-10-20"
       }
     ]
   },
@@ -5437,6 +5445,488 @@
         }
       }
     },
+    "/v1/sandbox/cinetpay/v1/oauth/login": {
+      "post": {
+        "summary": "Exchange api_key and api_password for a bearer token",
+        "tags": [
+          "CinetPay"
+        ],
+        "security": [
+          {
+            "cinetpay": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Overpass-Scenario",
+            "in": "header",
+            "required": false,
+            "description": "Scenario of this call, instead of the key's",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "success",
+                "insufficient_funds",
+                "timeout",
+                "duplicate_webhook",
+                "late_webhook"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "api_key": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 100
+                  },
+                  "api_password": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 100
+                  }
+                },
+                "required": [
+                  "api_key",
+                  "api_password"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "access_token": {
+                      "type": "string"
+                    },
+                    "token_type": {
+                      "type": "string",
+                      "const": "Bearer"
+                    },
+                    "expires_in": {
+                      "type": "integer",
+                      "minimum": -9007199254740991,
+                      "maximum": 9007199254740991
+                    }
+                  },
+                  "required": [
+                    "access_token",
+                    "token_type",
+                    "expires_in"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sandbox/cinetpay/v1/payment": {
+      "post": {
+        "summary": "Create a payment and get the payment address",
+        "tags": [
+          "CinetPay"
+        ],
+        "security": [
+          {
+            "cinetpay": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Overpass-Scenario",
+            "in": "header",
+            "required": false,
+            "description": "Scenario of this call, instead of the key's",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "success",
+                "insufficient_funds",
+                "timeout",
+                "duplicate_webhook",
+                "late_webhook"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "currency": {
+                    "type": "string",
+                    "enum": [
+                      "XOF",
+                      "XAF",
+                      "GNF",
+                      "CDF"
+                    ]
+                  },
+                  "merchant_transaction_id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 100
+                  },
+                  "amount": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "maximum": 9007199254740991
+                  },
+                  "success_url": {
+                    "type": "string",
+                    "maxLength": 2048,
+                    "format": "uri"
+                  },
+                  "failed_url": {
+                    "type": "string",
+                    "maxLength": 2048,
+                    "format": "uri"
+                  },
+                  "notify_url": {
+                    "type": "string",
+                    "maxLength": 2048,
+                    "format": "uri"
+                  },
+                  "lang": {
+                    "type": "string",
+                    "enum": [
+                      "fr",
+                      "en"
+                    ]
+                  },
+                  "designation": {
+                    "type": "string",
+                    "maxLength": 200
+                  },
+                  "payment_method": {
+                    "type": "string",
+                    "pattern": "^[A-Z0-9]+_[A-Z]{2}$"
+                  },
+                  "client_first_name": {
+                    "type": "string",
+                    "maxLength": 100
+                  },
+                  "client_last_name": {
+                    "type": "string",
+                    "maxLength": 100
+                  },
+                  "client_email": {
+                    "type": "string",
+                    "maxLength": 254,
+                    "format": "email",
+                    "pattern": "^(?:[A-Za-z0-9_'+\\-]+\\.)*[A-Za-z0-9_'+\\-]*[A-Za-z0-9_+-]@(?:[A-Za-z0-9][A-Za-z0-9\\-]*\\.)+[A-Za-z]{2,}$"
+                  },
+                  "client_phone_number": {
+                    "type": "string",
+                    "pattern": "^\\+\\d{6,15}$"
+                  }
+                },
+                "required": [
+                  "currency",
+                  "merchant_transaction_id",
+                  "amount",
+                  "success_url",
+                  "failed_url",
+                  "notify_url"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "merchant_transaction_id": {
+                      "type": "string"
+                    },
+                    "transaction_id": {
+                      "type": "string"
+                    },
+                    "status": {
+                      "type": "string",
+                      "const": "PENDING"
+                    },
+                    "payment_url": {
+                      "type": "string"
+                    },
+                    "notify_token": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "merchant_transaction_id",
+                    "transaction_id",
+                    "status",
+                    "payment_url",
+                    "notify_token"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/sandbox/cinetpay/v1/payment/{id}": {
+      "get": {
+        "summary": "Check a payment by merchant_transaction_id or transaction_id",
+        "tags": [
+          "CinetPay"
+        ],
+        "security": [
+          {
+            "cinetpay": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Overpass-Scenario",
+            "in": "header",
+            "required": false,
+            "description": "Scenario of this call, instead of the key's",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "success",
+                "insufficient_funds",
+                "timeout",
+                "duplicate_webhook",
+                "late_webhook"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "merchant_transaction_id": {
+                      "type": "string"
+                    },
+                    "transaction_id": {
+                      "type": "string"
+                    },
+                    "amount": {
+                      "type": "string"
+                    },
+                    "currency": {
+                      "type": "string",
+                      "enum": [
+                        "XOF",
+                        "XAF",
+                        "GNF",
+                        "CDF"
+                      ]
+                    },
+                    "status": {
+                      "type": "string",
+                      "enum": [
+                        "PENDING",
+                        "SUCCESS",
+                        "FAILED",
+                        "INSUFFICIENT_BALANCE"
+                      ]
+                    },
+                    "payment_method": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "designation": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "merchant_transaction_id",
+                    "transaction_id",
+                    "amount",
+                    "currency",
+                    "status",
+                    "payment_method",
+                    "designation"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "number"
+                    },
+                    "status": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/sandbox/listen": {
       "get": {
         "summary": "Receive your key's webhooks on your machine (local relay, SSE stream)",
@@ -6392,6 +6882,108 @@
           }
         }
       }
+    },
+    "cinetpay.SUCCESS": {
+      "post": {
+        "summary": "Simulated webhook, signed as the provider documents it",
+        "tags": [
+          "CinetPay"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "notify_token": {
+                    "type": "string"
+                  },
+                  "merchant_transaction_id": {
+                    "type": "string"
+                  },
+                  "transaction_id": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "PENDING",
+                      "SUCCESS",
+                      "FAILED",
+                      "INSUFFICIENT_BALANCE"
+                    ]
+                  }
+                },
+                "required": [
+                  "notify_token",
+                  "merchant_transaction_id",
+                  "transaction_id",
+                  "status"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "cinetpay.INSUFFICIENT_BALANCE": {
+      "post": {
+        "summary": "Simulated webhook, signed as the provider documents it",
+        "tags": [
+          "CinetPay"
+        ],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "notify_token": {
+                    "type": "string"
+                  },
+                  "merchant_transaction_id": {
+                    "type": "string"
+                  },
+                  "transaction_id": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "PENDING",
+                      "SUCCESS",
+                      "FAILED",
+                      "INSUFFICIENT_BALANCE"
+                    ]
+                  }
+                },
+                "required": [
+                  "notify_token",
+                  "merchant_transaction_id",
+                  "transaction_id",
+                  "status"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -6411,6 +7003,11 @@
         "type": "apiKey",
         "in": "header",
         "name": "PAYDUNYA-PRIVATE-KEY",
+        "description": "Overpass test key"
+      },
+      "cinetpay": {
+        "type": "http",
+        "scheme": "bearer",
         "description": "Overpass test key"
       },
       "overpass": {

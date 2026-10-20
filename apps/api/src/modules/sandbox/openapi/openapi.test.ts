@@ -115,6 +115,7 @@ describe("buildSandboxOpenApi", () => {
         unofficial: true,
         docsUrl: "https://developers.paydunya.com/doc/FR/http_json",
       }),
+      expect.objectContaining({ id: "cinetpay", unofficial: true, docsVersion: "3.0.1" }),
     ]);
   });
 

@@ -100,6 +100,15 @@ describe("/v1/sandbox/:provider/*", () => {
     ]);
   });
 
+  it("never stores the test key when a provider carries it in a body", async () => {
+    const { id, key } = await newKey();
+    await external("POST", "/v1/sandbox/fake/payments", { key, payload: { api_key: key } });
+    const [event] = (await call(app, "GET", `/v1/sandbox/events?keyId=${id}`, { cookie: awa })).body
+      .data as unknown as { request: { body: string }; response: { body: string } }[];
+    expect(event?.request.body).toBe('{"api_key":"[redacted]"}');
+    expect(event?.response.body).not.toContain(key);
+  });
+
   it("follows the key scenario, unless a valid Overpass-Scenario header overrides it", async () => {
     const { id, key } = await newKey({ provider: "fake", scenario: "duplicate_webhook" });
     await external("POST", "/v1/sandbox/fake/payments", { key });

@@ -9,6 +9,7 @@ describe("providers", () => {
       "wave",
       "pi-spi",
       "paydunya",
+      "cinetpay",
     ]);
   });
 

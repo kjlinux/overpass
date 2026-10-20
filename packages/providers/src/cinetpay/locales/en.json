@@ -1,0 +1,28 @@
+{
+  "summary": "Unofficial simulator of CinetPay's REST API: bearer token, payment creation, payment status check and notification.",
+  "warning": "CinetPay publishes no API reference: this simulator follows the README of its official PHP SDK 3.0.1. The paths of the login and of payment creation, the JSON names and the refusal bodies are guesses of the simulator; check them against your CinetPay account before going live.",
+  "notes": [
+    "Built from the README of the official PHP SDK (github.com/cinetpay/cinetpay-php-sdk), version 3.0.1 of 2026-08-11. docs.cinetpay.com no longer answers, and the SDK code was not used as a source.",
+    "Replace https://api.cinetpay.net with the simulator's address. Only GET /v1/payment/{id} is named by the README; POST /v1/oauth/login and POST /v1/payment are choices of the simulator.",
+    "Log in with your Overpass test key as api_key; any api_password is accepted. The access_token returned starts with your test key and lives one hour, then the simulator answers EXPIRED_TOKEN; an unknown token gets INVALID_TOKEN.",
+    "JSON names are the README's names in snake_case (merchant_transaction_id, success_url, notify_url, client_email...). Required fields are currency, merchant_transaction_id, amount, success_url, failed_url and notify_url, a choice of the simulator.",
+    "Accepted currencies are XOF, XAF, GNF and CDF, those of the countries where coverage is confirmed. The README ties one account to one country; a test key has no country, so the currency is not checked against one.",
+    "payment_method, when sent, must carry a country suffix (OM_CI, MTN_CM), as the README requires; client_phone_number must be in E.164 format.",
+    "The notification is a JSON POST carrying notify_token, merchant_transaction_id, transaction_id and status, with no signature header. Compare notify_token with the one kept at creation, in constant time, then check the payment with GET /v1/payment/{id}: never trust the status received.",
+    "Scenarios give the README's statuses: SUCCESS for success, INSUFFICIENT_BALANCE for insufficient funds, PENDING with no notification for the timeout. A duplicate notification carries the same transaction_id, the README's deduplication key.",
+    "The status is settled at creation: GET /v1/payment/{id} already returns it, even before a late notification arrives.",
+    "The notification goes to the target chosen on the test track, not to notify_url. Answer it with HTTP 200 within 10 seconds, as the README asks.",
+    "Refusals carry code, status and message; the README only names INVALID_TOKEN and EXPIRED_TOKEN, the other statuses are the simulator's. Amounts in responses are strings, as the README says.",
+    "Transfers and the balance, described in the README, are not simulated."
+  ],
+  "endpoints": {
+    "POST /v1/oauth/login": "Exchange api_key and api_password for a bearer token",
+    "POST /v1/payment": "Create a payment and get the payment address",
+    "GET /v1/payment/:id": "Check a payment by merchant_transaction_id or transaction_id"
+  },
+  "steps": {
+    "login": "Log in to get a bearer token.",
+    "payment": "Create a 5,000 FCFA payment with the token.",
+    "check": "Check the payment status: the virtual payer acted according to the scenario."
+  }
+}

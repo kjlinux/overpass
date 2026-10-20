@@ -1,0 +1,21 @@
+{
+  "source": "Built from the README of CinetPay's official PHP SDK 3.0.1 (https://github.com/cinetpay/cinetpay-php-sdk), consulted 2026-10-20; paths, JSON names and refusal bodies it does not give are choices of the simulator. Protocol data sent to the developer's code, not interface text.",
+  "statuses": {
+    "invalidToken": "INVALID_TOKEN",
+    "expiredToken": "EXPIRED_TOKEN",
+    "invalid": "VALIDATION_ERROR",
+    "notFound": "NOT_FOUND",
+    "tooManyRequests": "TOO_MANY_REQUESTS"
+  },
+  "texts": {
+    "invalidToken": "Overpass simulator: missing or unknown bearer token, log in again with your Overpass test key",
+    "expiredToken": "Overpass simulator: bearer token expired, log in again",
+    "invalid": "Overpass simulator: invalid request, missing or invalid field ",
+    "duplicate": "Overpass simulator: merchant_transaction_id already used ",
+    "notFound": "Overpass simulator: no payment or endpoint here",
+    "tooManyRequests": "Overpass simulator: too many requests"
+  },
+  "stepApiKey": "ovp_test_trial",
+  "stepApiPassword": "trial-password",
+  "stepDesignation": "Commande 1042"
+}
