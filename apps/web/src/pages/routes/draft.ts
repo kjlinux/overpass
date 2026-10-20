@@ -22,7 +22,7 @@ function fenced(code: string): string {
 
 /** A route seeded by a resolved thread: its question, its code, then the accepted reply. */
 export function threadDraft(thread: ThreadDetail): Draft {
-  const accepted = thread.items.find((reply) => reply.accepted)?.content ?? null;
+  const accepted = thread.accepted?.content ?? null;
   const code = thread.codeText === null ? null : fenced(thread.codeText);
   const parts = [thread.content, code, accepted].filter((part): part is string => part !== null);
   return {

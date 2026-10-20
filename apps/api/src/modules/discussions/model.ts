@@ -19,6 +19,9 @@ export type NewThread = Omit<ThreadRecord, "id" | "acceptedReplyId" | "status" |
 };
 export type NewReply = { threadId: string; authorId: string; content: string; at: Date };
 
+/** Removed replies are kept only for moderators. */
+export type ReplyWindow = { after?: DateCursor | undefined; limit: number; withRemoved: boolean };
+
 export type ThreadFilters = {
   topic?: TopicSlug | undefined;
   country?: string | undefined;
@@ -40,7 +43,10 @@ export type DiscussionsRepository = {
   /** Inserts the reply and marks the thread active, in one transaction. */
   insertReply(reply: NewReply): Promise<ReplyRecord>;
   findReply(id: string): Promise<ReplyRecord | null>;
-  repliesOf(threadId: string): Promise<ReplyRecord[]>;
+  /** Oldest first, one page plus one row, so the caller knows whether another page exists. */
+  repliesOf(threadId: string, window: ReplyWindow): Promise<ReplyRecord[]>;
+  /** Every reply repliesOf can return across all pages, under the same visibility. */
+  countRepliesOf(threadId: string, withRemoved: boolean): Promise<number>;
   votedBy(userId: string, replyIds: string[]): Promise<Set<string>>;
   /** The new useful count, or null when the account already voted. */
   insertVote(replyId: string, userId: string, at: Date): Promise<number | null>;

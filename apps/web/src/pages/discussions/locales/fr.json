@@ -70,7 +70,8 @@
     "report": "Signaler ce sujet",
     "reported": "Vous avez signalé ce sujet. L'équipe de modération va le relire.",
     "replies_one": "{{count}} réponse",
-    "replies_other": "{{count}} réponses"
+    "replies_other": "{{count}} réponses",
+    "more": "Afficher les réponses suivantes"
   },
   "reply": {
     "accepted": "Réponse acceptée",

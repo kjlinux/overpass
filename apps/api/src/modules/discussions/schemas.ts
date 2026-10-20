@@ -5,6 +5,7 @@ export {
   moderationDecisionInput,
   moderationParams,
   replyCreateInput,
+  replyListQuery,
   threadCreateInput,
   threadListQuery,
 } from "@overpass/shared";

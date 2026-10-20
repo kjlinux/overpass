@@ -51,11 +51,15 @@ const thread: ThreadDetail = {
   acceptedReplyId: reply.id,
   transformedRoute: null,
   items: [reply],
+  listed: 1,
+  nextCursor: null,
+  accepted: reply,
   viewer: { isAuthor: true, isAdmin: false, reported: false, canTransform: true },
 };
 
 const noop = () => Promise.resolve(undefined);
 const actions = { reply: noop, vote: noop, accept: noop, report: noop };
+const pages = { extra: [], next: null, loading: false, error: undefined, onMore: () => undefined };
 
 describe("thread filters in the URL", () => {
   it("keeps known filters and drops an unknown theme", () => {
@@ -102,7 +106,13 @@ describe("thread list", () => {
 describe("thread detail", () => {
   it("offers the author to turn the resolved thread into a route", () => {
     const html = page(
-      <ThreadView thread={thread} topic="Intégrations et API" signedIn actions={actions} />,
+      <ThreadView
+        thread={thread}
+        topic="Intégrations et API"
+        signedIn
+        actions={actions}
+        pages={pages}
+      />,
     );
     expect(html).toContain(`href="/fr/routes/new?fromThread=${thread.id}"`);
     expect(html).toContain(fr.reply.accepted);
@@ -111,7 +121,9 @@ describe("thread detail", () => {
 
   it("blanks hidden content for other readers", () => {
     const hidden = { ...thread, status: "hidden" as const, content: null, codeText: null };
-    const html = page(<ThreadView thread={hidden} topic="" signedIn={false} actions={actions} />);
+    const html = page(
+      <ThreadView thread={hidden} topic="" signedIn={false} actions={actions} pages={pages} />,
+    );
     expect(html).toContain(fr.hidden.thread);
   });
 

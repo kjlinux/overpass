@@ -70,7 +70,8 @@
     "report": "Report this thread",
     "reported": "You reported this thread. The moderation team will review it.",
     "replies_one": "{{count}} reply",
-    "replies_other": "{{count}} replies"
+    "replies_other": "{{count}} replies",
+    "more": "Show the next replies"
   },
   "reply": {
     "accepted": "Accepted reply",

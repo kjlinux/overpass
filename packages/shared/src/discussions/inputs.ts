@@ -45,6 +45,17 @@ export const threadListQuery = z.object({
     .default(pageSizeDefault),
 });
 
+/** Replies come oldest first, a full page unless the reader asks for fewer. */
+export const replyListQuery = z.object({
+  cursor: optionalFilter(z.string().max(400, { error: "cursor_invalid" })),
+  limit: z.coerce
+    .number({ error: "limit_invalid" })
+    .int({ error: "limit_invalid" })
+    .min(1, { error: "limit_invalid" })
+    .max(pageSizeMax, { error: "limit_invalid" })
+    .default(pageSizeMax),
+});
+
 export const replyCreateInput = z.strictObject({ content: bodySchema });
 
 export const acceptInput = z.strictObject({ reply: idSchema });
@@ -60,6 +71,7 @@ export const moderationParams = z.object({
 
 export type ThreadCreateInput = z.infer<typeof threadCreateInput>;
 export type ThreadListQuery = z.infer<typeof threadListQuery>;
+export type ReplyListQuery = z.infer<typeof replyListQuery>;
 export type ReplyCreateInput = z.infer<typeof replyCreateInput>;
 export type AcceptInput = z.infer<typeof acceptInput>;
 export type ModerationDecisionInput = z.infer<typeof moderationDecisionInput>;
