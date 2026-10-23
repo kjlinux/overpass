@@ -61,12 +61,17 @@ describe("service catalogue growth migration", () => {
        where s.slug = any($1) and c.confirmed order by s.slug, c.country`,
       [added],
     );
-    expect(rows.filter((row) => row.slug === "orange-sms")).toHaveLength(11);
-    expect(rows.filter((row) => row.slug !== "orange-sms")).toEqual([
-      { slug: "m-pesa", country: "KE" },
-      { slug: "paystack", country: "NG" },
-      { slug: "termii", country: "NG" },
-    ]);
+    const bySlug = (slug: string) => rows.filter((row) => row.slug === slug).map((r) => r.country);
+    expect(bySlug("orange-sms")).toHaveLength(11);
+    expect(bySlug("airtel-money")).toHaveLength(13);
+    expect(bySlug("airtel-money")).not.toContain("NG");
+    expect(bySlug("paystack")).toEqual(["CI", "EG", "GH", "KE", "NG", "RW", "ZA"]);
+    expect(bySlug("flutterwave")).toEqual(["GH", "KE", "NG", "RW", "TZ", "UG", "ZA", "ZM"]);
+    expect(bySlug("africas-talking-sms")).toEqual(["KE"]);
+    expect(bySlug("africas-talking-ussd")).toEqual([]);
+    expect(bySlug("mtn-momo")).toEqual([]);
+    expect(bySlug("m-pesa")).toEqual(["KE"]);
+    expect(bySlug("termii")).toEqual(["NG"]);
   });
 
   it("rolls back to the six services even once content references the new ones", async () => {
