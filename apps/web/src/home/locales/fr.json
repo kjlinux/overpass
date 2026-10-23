@@ -1,9 +1,9 @@
 {
   "track": {
     "title": "La piste d'essai",
-    "body": "La piste d'essai rejoue les cas réels : paiement réussi, solde insuffisant, webhook reçu en double ou en retard, délai dépassé. Sans compte marchand.",
+    "body": "La piste d'essai rejoue chez un opérateur simulé ce qui arrive en production. Paiement réussi, solde insuffisant, webhook en double ou en retard, délai dépassé. Sans compte marchand.",
     "open": "Ouvrir la piste d'essai",
-    "alt": "Piste d'essai : scénarios à gauche, inspecteur avec la réponse JSON d'une session de paiement, puis la livraison du webhook checkout.session.completed.",
+    "alt": "Piste d'essai avec les scénarios à gauche, l'inspecteur et la réponse JSON d'une session de paiement, puis la livraison du webhook checkout.session.completed.",
     "cases": "Cas rejoués",
     "success": {
       "title": "Paiement réussi",
@@ -34,8 +34,8 @@
   },
   "routes": {
     "title": "Les itinéraires",
-    "body": "Chaque fiche dit si la voie est libre, à vérifier ou signalée cassée, avec la date de la dernière vérification.",
-    "alt": "Fiche d'itinéraire : code PHP de création d'une session Wave, pièges connus, puis un nid-de-poule signalé par un autre développeur.",
+    "body": "Un itinéraire est une fiche d'intégration pour un service, un pays et une stack. Elle donne le code qui marche et les pièges connus, et dit si la voie est libre, à vérifier ou signalée cassée, avec la date de la dernière vérification.",
+    "alt": "Fiche d'itinéraire, ici une session de paiement Wave en PHP, ses pièges connus, puis un nid-de-poule signalé par un autre développeur.",
     "states": "États d'une fiche",
     "clear": "Vérifiée récemment par un autre développeur.",
     "toVerify": "La dernière vérification date, un essai suffit.",
@@ -44,7 +44,7 @@
   },
   "mcp": {
     "title": "Dans votre assistant de code",
-    "body": "Branchez le serveur MCP d'Overpass dans Claude Code, Cursor ou VS Code avec un jeton personnel, et il écrit l'intégration locale qui marche.",
+    "body": "Branchez le serveur MCP d'Overpass dans Claude Code, Cursor ou VS Code avec un jeton personnel. Votre assistant lit les fiches vérifiées et écrit l'intégration locale qui marche.",
     "editors": "Éditeurs pris en charge",
     "claudeCode": "Claude Code",
     "cursor": "Cursor",
@@ -56,10 +56,10 @@
   },
   "community": {
     "title": "Communauté",
-    "discussions": "Carrière, outils, cloud, IA, projets : tout ce qui occupe un développeur africain.",
+    "discussions": "Carrière, outils, cloud, IA et projets, au-delà des intégrations.",
     "blog": "Actualité tech africaine, tutoriels et portraits.",
     "newsletter": "Newsletter",
-    "newsletterBody": "Le résumé de la semaine : les meilleures fiches, discussions et articles."
+    "newsletterBody": "Chaque semaine, les meilleures fiches, discussions et articles."
   },
   "countries": {
     "title": "Pays couverts",

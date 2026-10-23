@@ -22,7 +22,13 @@ export type World = {
   root: Group;
   packet: Mesh;
   setPacketOpacity: (opacity: number) => void;
-  anchors: { wave: Vector3; overpass: Vector3; localhost: Vector3; post: Vector3; event: Vector3 };
+  anchors: {
+    operator: Vector3;
+    overpass: Vector3;
+    localhost: Vector3;
+    post: Vector3;
+    event: Vector3;
+  };
   recolor: (palette: Palette) => void;
   dispose: () => void;
 };
@@ -67,7 +73,7 @@ function paint({ fills, inkLines, railLine, grid }: Painted, palette: Palette): 
 function anchorsOf(): World["anchors"] {
   const front = nodeSize.d / 2 + 0.01;
   return {
-    wave: new Vector3(stops[0], 0, front),
+    operator: new Vector3(stops[0], 0, front),
     overpass: new Vector3(stops[1], 0, front),
     localhost: new Vector3(stops[2], 0, front),
     post: new Vector3(-3.5, 2.4, 0),

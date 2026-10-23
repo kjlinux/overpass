@@ -1,22 +1,22 @@
 {
   "app": {
     "name": "Overpass",
-    "tagline": "La bourse des intégrations africaines vérifiées.",
-    "intro": "Le code qui marche, les pièges connus et des vérifications datées, partagés par les développeurs qui ont intégré Wave, Orange Money ou PI-SPI avant vous.",
+    "tagline": "Intégrez les API africaines sans tâtonner.",
+    "intro": "Paiement mobile, SMS, USSD ou tout autre service africain, d'autres développeurs l'ont déjà branché. Ils partagent ici le code qui marche, les pièges rencontrés et la date de leur dernier essai.",
     "demo": "Essayer la démo",
     "routes": "Parcourir les itinéraires"
   },
   "scene": {
-    "label": "Un webhook part de Wave ou PI-SPI, passe par Overpass et arrive sur localhost.",
+    "label": "Un webhook part d'un opérateur simulé, passe par Overpass et arrive sur localhost.",
     "departure": "Départ",
     "relay": "Relais",
     "arrival": "Arrivée",
-    "caption": "Trajet d'un webhook",
+    "caption": "Trajet d'un webhook jusqu'à votre serveur local",
     "still": "Image fixe",
     "live": "Boucle lente, en pause hors de l'écran",
-    "wave": "Wave",
-    "waveSub": "ou PI-SPI, simulé",
-    "waveShort": "simulé",
+    "operator": "Opérateur",
+    "operatorSub": "Wave, simulé",
+    "operatorShort": "simulé",
     "overpass": "Overpass",
     "overpassSub": "relais",
     "localhost": "localhost",
@@ -30,7 +30,7 @@
   },
   "demo": {
     "title": "La démo, ici même",
-    "intro": "Un paiement Wave simulé, sans compte. Un clic, et regardez le webhook arriver.",
+    "intro": "Un paiement mobile simulé, chez Wave pour la démo, sans compte ni clé marchande. Un clic, et regardez le webhook arriver.",
     "run": "Lancer un paiement simulé",
     "rerun": "Relancer le paiement simulé",
     "loading": "Chargement de la démo",
@@ -47,10 +47,10 @@
       "request": "Requête envoyée.",
       "response": "Réponse reçue, {{status}}. Le webhook est en route.",
       "webhook": "Webhook livré au récepteur intégré.",
-      "webhookFailed": "Le webhook n'a pas été livré : rejouez-le depuis la piste d'essai.",
+      "webhookFailed": "Le webhook n'a pas été livré. Rejouez-le depuis la piste d'essai.",
       "failed": "Le simulateur ne répond pas. Réessayez dans un instant."
     },
-    "more": "Clés de test, relais local et cinq scénarios :",
-    "open": "ouvrir la piste d'essai"
+    "more": "Clés de test, relais local et cinq scénarios sur la",
+    "open": "piste d'essai"
   }
 }

@@ -1,16 +1,16 @@
 {
   "title": "About",
-  "intro": "Overpass is the exchange for verified African integrations.",
+  "intro": "Overpass is the exchange for verified African integrations. Developers share here the code that works with African services, mobile money, SMS, USSD or any other API, and the traps the official documentation leaves out.",
   "placeholder": "To be completed by the team",
   "product": {
     "heading": "The product",
     "routes": {
       "name": "Itineraries.",
-      "text": "Integration sheets sorted by service, country and stack, with the code that works, the known potholes and dated checks by other developers."
+      "text": "Integration sheets for one service, country and stack, with the code that works, the known traps and dated checks by other developers."
     },
     "track": {
       "name": "The test track.",
-      "text": "A simulator that replays the real cases of a mobile money payment, to test an integration without a merchant account."
+      "text": "A simulator that replays with a simulated operator the real cases of a mobile payment, to test without a merchant account."
     },
     "mcp": {
       "name": "The MCP server.",

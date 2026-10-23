@@ -3,21 +3,21 @@
     "name": "Overpass",
     "promise": "La bourse des intégrations africaines vérifiées",
     "title": "Overpass, la bourse des intégrations africaines vérifiées",
-    "description": "Des fiches d'intégration vérifiées par des développeurs, une piste d'essai pour simuler un paiement mobile money sans compte marchand, et un serveur MCP pour votre assistant de code."
+    "description": "Des développeurs partagent le code qui marche avec les API africaines, paiement mobile, SMS ou USSD, les pièges connus et des vérifications datées. Une piste d'essai simule un paiement sans compte marchand, et un serveur MCP sert les fiches à votre assistant de code."
   },
   "titleTemplate": "{{page}} · Overpass",
   "pages": {
     "home": {
       "title": "Accueil",
-      "description": "Des fiches d'intégration vérifiées par des développeurs, une piste d'essai pour simuler un paiement mobile money sans compte marchand, et un serveur MCP pour votre assistant de code."
+      "description": "Des développeurs partagent le code qui marche avec les API africaines, paiement mobile, SMS ou USSD, les pièges connus et des vérifications datées. Une piste d'essai simule un paiement sans compte marchand, et un serveur MCP sert les fiches à votre assistant de code."
     },
     "routes": {
       "title": "Itinéraires",
-      "description": "Les fiches d'intégration par service, pays et stack : le code qui marche, les pièges connus et des vérifications datées par d'autres développeurs."
+      "description": "Les fiches d'intégration par service, pays et stack, avec le code qui marche, les pièges connus et des vérifications datées par d'autres développeurs."
     },
     "sandbox": {
       "title": "Piste d'essai",
-      "description": "Simulez un paiement mobile money et ses cas réels : succès, solde insuffisant, délai dépassé, webhook en double ou en retard."
+      "description": "Simulez un paiement mobile et ses cas réels, succès, solde insuffisant, délai dépassé, webhook en double ou en retard."
     },
     "demo": {
       "title": "Démo",
@@ -25,7 +25,7 @@
     },
     "discussions": {
       "title": "Discussions",
-      "description": "Des sujets ouverts à tout ce qui occupe un développeur africain : intégrations, cloud, outils, IA, carrière et projets."
+      "description": "Des sujets ouverts à tout ce qui occupe un développeur africain, intégrations, cloud, outils, IA, carrière et projets."
     },
     "ranking": {
       "title": "Classement",

@@ -91,7 +91,7 @@ export function DemoRun({ language }: { language: Language }): JSX.Element {
       </div>
       <Stages run={run} />
       <p class="border-t border-rule py-5">
-        {t("demo.more")} <a href={localizedPath(language, "/sandbox")}>{t("demo.open")}</a>
+        {t("demo.more")} <a href={localizedPath(language, "/sandbox")}>{t("demo.open")}</a>.
       </p>
     </div>
   );

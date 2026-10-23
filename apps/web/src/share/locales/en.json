@@ -3,21 +3,21 @@
     "name": "Overpass",
     "promise": "The exchange for verified African integrations",
     "title": "Overpass, the exchange for verified African integrations",
-    "description": "Integration sheets verified by developers, a test track that simulates a mobile money payment without a merchant account, and an MCP server for your coding assistant."
+    "description": "Developers share the code that works with African APIs, mobile money, SMS or USSD, the known traps and dated checks. A test track simulates a payment without a merchant account, and an MCP server serves the sheets to your coding assistant."
   },
   "titleTemplate": "{{page}} · Overpass",
   "pages": {
     "home": {
       "title": "Home",
-      "description": "Integration sheets verified by developers, a test track that simulates a mobile money payment without a merchant account, and an MCP server for your coding assistant."
+      "description": "Developers share the code that works with African APIs, mobile money, SMS or USSD, the known traps and dated checks. A test track simulates a payment without a merchant account, and an MCP server serves the sheets to your coding assistant."
     },
     "routes": {
       "title": "Itineraries",
-      "description": "Integration sheets by service, country and stack: the code that works, the known potholes and dated checks by other developers."
+      "description": "Integration sheets by service, country and stack, with the code that works, the known traps and dated checks by other developers."
     },
     "sandbox": {
       "title": "Test track",
-      "description": "Simulate a mobile money payment and its real cases: success, insufficient funds, operator timeout, duplicate or late webhook."
+      "description": "Simulate a mobile payment and its real cases, success, insufficient funds, operator timeout, duplicate or late webhook."
     },
     "demo": {
       "title": "Demo",
@@ -25,7 +25,7 @@
     },
     "discussions": {
       "title": "Discussions",
-      "description": "Threads open to everything an African developer deals with: integrations, cloud, tools, AI, career and projects."
+      "description": "Threads open to everything an African developer deals with, integrations, cloud, tools, AI, career and projects."
     },
     "ranking": {
       "title": "Ranking",

@@ -8,9 +8,9 @@ import { StillScene } from "./StillScene";
 import { useScene } from "./useScene";
 import type { SceneLabels } from "./webhookScene";
 
-const names = ["wave", "overpass", "localhost", "post", "event"] as const;
+const names = ["operator", "overpass", "localhost", "post", "event"] as const;
 const subs: Partial<Record<(typeof names)[number], string>> = {
-  wave: "scene.waveSub",
+  operator: "scene.operatorSub",
   overpass: "scene.overpassSub",
   localhost: "scene.localhostSub",
 };

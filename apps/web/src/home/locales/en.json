@@ -1,9 +1,9 @@
 {
   "track": {
     "title": "The test track",
-    "body": "The test track replays real cases: successful payment, insufficient balance, duplicate or late webhook, timeout. No merchant account.",
+    "body": "The test track replays with a simulated operator what happens in production. Successful payment, insufficient balance, duplicate or late webhook, timeout. No merchant account.",
     "open": "Open the test track",
-    "alt": "Test track: scenarios on the left, inspector with the JSON response of a payment session, then the delivery of the checkout.session.completed webhook.",
+    "alt": "Test track with the scenarios on the left, the inspector and the JSON response of a payment session, then the delivery of the checkout.session.completed webhook.",
     "cases": "Replayed cases",
     "success": {
       "title": "Successful payment",
@@ -34,8 +34,8 @@
   },
   "routes": {
     "title": "The itineraries",
-    "body": "Each sheet says whether the road is clear, to verify or reported broken, with the date of the last check.",
-    "alt": "Itinerary sheet: PHP code creating a Wave session, known traps, then a pothole reported by another developer.",
+    "body": "An itinerary is an integration sheet for one service, country and stack. It gives the code that works and the known traps, and says whether the road is clear, to verify or reported broken, with the date of the last check.",
+    "alt": "Itinerary sheet, here a Wave payment session in PHP, its known traps, then a pothole reported by another developer.",
     "states": "States of a sheet",
     "clear": "Checked recently by another developer.",
     "toVerify": "The last check is old, one try is enough.",
@@ -44,7 +44,7 @@
   },
   "mcp": {
     "title": "In your code assistant",
-    "body": "Plug the Overpass MCP server into Claude Code, Cursor or VS Code with a personal token, and it writes the local integration that works.",
+    "body": "Plug the Overpass MCP server into Claude Code, Cursor or VS Code with a personal token. Your assistant reads the verified sheets and writes the local integration that works.",
     "editors": "Supported editors",
     "claudeCode": "Claude Code",
     "cursor": "Cursor",
@@ -56,10 +56,10 @@
   },
   "community": {
     "title": "Community",
-    "discussions": "Career, tools, cloud, AI, projects: everything an African developer deals with.",
+    "discussions": "Career, tools, cloud, AI and projects, beyond integrations.",
     "blog": "African tech news, tutorials and portraits.",
     "newsletter": "Newsletter",
-    "newsletterBody": "The week in short: the best sheets, discussions and articles."
+    "newsletterBody": "Every week, the best sheets, discussions and articles."
   },
   "countries": {
     "title": "Countries covered",
