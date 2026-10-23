@@ -7,6 +7,8 @@ import type { ContributionListener } from "../ranking/index.js";
 import { createRoutesRepository } from "./repository.js";
 export { serviceCatalogue, slugOf } from "./repository/catalogue.js";
 export type { CatalogueEntry, NewService, ServiceCatalogue } from "./repository/catalogue.js";
+export { seedRoutes } from "./seed.js";
+export type { RouteSeed } from "./seed.js";
 /** The visibility rule of itineraries, for modules that count or pick routes in SQL. */
 export {
   countedCoverage as countedCoverageCondition,

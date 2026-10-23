@@ -24,7 +24,7 @@ export type {
 } from "./service.js";
 export type { Account, AccountResolver, ContactDirectory, HandleDirectory } from "./directory.js";
 export { contactDirectory, handleDirectory, requireAccount } from "./directory.js";
-export { ensureAdmin } from "./seed.js";
+export { adminIdByHandle, ensureAdmin } from "./seed.js";
 export type { AdminSeed, AdminSeedResult } from "./seed.js";
 
 export type AccountsOptions = {
