@@ -44,6 +44,7 @@ describe("migrations", () => {
       "0017_token_expiry",
       "0018_cinetpay_simulated",
       "0019_https_webhooks",
+      "0020_service_catalogue_growth",
     ]);
     expect(await tables()).toEqual([
       "api_tokens",
@@ -90,7 +91,8 @@ describe("migrations", () => {
 
   it("reverts the last migration and can apply it again", async () => {
     await migrateUp(executor, migrationsDirectory);
-    expect(await migrateDown(executor, migrationsDirectory, 19)).toEqual([
+    expect(await migrateDown(executor, migrationsDirectory, 20)).toEqual([
+      "0020_service_catalogue_growth",
       "0019_https_webhooks",
       "0018_cinetpay_simulated",
       "0017_token_expiry",
@@ -112,7 +114,7 @@ describe("migrations", () => {
       "0001_accounts",
     ]);
     expect(await tables()).toEqual(["schema_migrations"]);
-    expect(await migrateUp(executor, migrationsDirectory)).toHaveLength(19);
+    expect(await migrateUp(executor, migrationsDirectory)).toHaveLength(20);
   });
 
   it("seeds the six translated discussion themes in their order", async () => {

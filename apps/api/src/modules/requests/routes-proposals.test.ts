@@ -114,6 +114,8 @@ describe("admin review of proposals", () => {
     const services = (await call(app, "GET", "/v1/services")).body.data as unknown as {
       slug: string;
     }[];
-    expect(services.filter((service) => service.slug.startsWith("m-pesa"))).toHaveLength(1);
+    expect(services.filter((service) => service.slug.startsWith("m-pesa-tanzanie"))).toHaveLength(
+      1,
+    );
   });
 });
