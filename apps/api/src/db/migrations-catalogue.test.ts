@@ -69,8 +69,24 @@ describe("service catalogue growth migration", () => {
     ]);
   });
 
-  it("rolls back to the six services of the first catalogue", async () => {
+  it("rolls back to the six services even once content references the new ones", async () => {
+    const userId = "00000000-0000-4000-8000-000000000001";
+    await executor.query(
+      "insert into users (id, email, password_hash, handle, country) values ($1, 'a@b.co', 'h', 'dev-a', 'CI')",
+      [userId],
+    );
+    await executor.query(
+      `insert into routes (author_id, service_id, country, stack, language, title, content)
+       select $1, id, 'GH', 'nodejs', 'en', 'Collect MTN MoMo payments', 'Body' from services where slug = 'mtn-momo'`,
+      [userId],
+    );
+    await executor.query(
+      `insert into threads (author_id, topic, title, content, language, service_id)
+       select $1, 'integrations', 'MTN MoMo sandbox question', 'Body', 'en', id from services where slug = 'mtn-momo'`,
+      [userId],
+    );
     await migrateDown(executor, migrationsDirectory);
+    expect(await executor.query("select 1 from threads")).toHaveLength(1);
     const [row] = await executor.query<{ count: number }>(
       "select count(*)::int as count from services",
     );

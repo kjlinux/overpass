@@ -71,6 +71,15 @@ describe("parseFrontmatter", () => {
   it("refuses a file without a frontmatter block", () => {
     expect(() => parseFrontmatter("# Just a title")).toThrow(/frontmatter/);
   });
+
+  it("tolerates a byte order mark, Windows line endings and spaces around the fences", () => {
+    const text = `${String.fromCharCode(0xfeff)}--- \r\ntitle: "Hello there"\r\n---  \r\nBody.\r\n`;
+    expect(parseFrontmatter(text)).toEqual({ fields: { title: "Hello there" }, body: "Body." });
+  });
+
+  it("refuses a duplicate key instead of keeping the last one", () => {
+    expect(() => parseFrontmatter("---\nstack: php\nstack: nodejs\n---\nBody.")).toThrow(/stack/);
+  });
 });
 
 describe("readContent", () => {

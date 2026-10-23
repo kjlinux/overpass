@@ -70,6 +70,23 @@ describe("seedPosts", () => {
     expect(groups[0]?.count).toBe(1);
   });
 
+  it("ignores a member's post that happens to carry the same title", async () => {
+    await db.execute(
+      sql`insert into users (id, email, password_hash, handle, country)
+        values ('00000000-0000-4000-8000-000000000002', 'm@b.co', 'h', 'member', 'CI')`,
+    );
+    await db.execute(
+      sql`insert into posts (kind, author_id, language, slug, category, title, summary, content)
+        values ('member', '00000000-0000-4000-8000-000000000002', 'fr', 'autre', 'tech-news',
+          ${launchFr.title}, 'Un billet', 'Corps')`,
+    );
+    expect(await seedPosts(db, handle, [launchFr, launchEn], at)).toEqual({ created: 2 });
+    const groups = await rows<{ count: number }>(
+      sql`select count(distinct translation_group)::int as count from posts where kind = 'news'`,
+    );
+    expect(groups[0]?.count).toBe(1);
+  });
+
   it("refuses a handle that is not an admin", async () => {
     await expect(seedPosts(db, "someone", [launchFr], at)).rejects.toThrow("admin");
   });

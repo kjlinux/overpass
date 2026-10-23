@@ -15,7 +15,7 @@ export type RouteSeed = {
   content: string;
 };
 
-/** One itinerary per author, service, country, stack and language is enough to skip. */
+/** Create only: an itinerary already there keeps its title and content, members may have edited it. */
 async function exists(db: Database, authorId: string, serviceId: string, seed: RouteSeed) {
   const found = await db
     .select({ id: routes.id })

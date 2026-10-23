@@ -20,20 +20,21 @@ export type PostSeed = {
 
 type Stored = { translation_group: string };
 
-async function stored(db: Database, seed: PostSeed): Promise<Stored | null> {
+/** Only the team's own posts count: a member may publish under the same title. */
+async function stored(db: Database, authorId: string, seed: PostSeed): Promise<Stored | null> {
   const found = await rows<Stored>(
     db,
-    sql`select translation_group from posts
-      where title = ${seed.title} and language = ${seed.language}`,
+    sql`select translation_group from posts where author_id = ${authorId}
+      and title = ${seed.title} and language = ${seed.language}`,
   );
   return found[0] ?? null;
 }
 
 /** The group of a translation already in the database, so both languages stay linked. */
-async function groupOf(db: Database, seed: PostSeed, seeds: readonly PostSeed[]) {
+async function groupOf(db: Database, authorId: string, seed: PostSeed, seeds: readonly PostSeed[]) {
   for (const sibling of seeds) {
     if (sibling === seed || sibling.group !== seed.group) continue;
-    const existing = await stored(db, sibling);
+    const existing = await stored(db, authorId, sibling);
     if (existing !== null) return existing.translation_group;
   }
   return undefined;
@@ -50,12 +51,12 @@ export async function seedPosts(
   const repository = createBlogRepository(db);
   let created = 0;
   for (const seed of seeds) {
-    if ((await stored(db, seed)) !== null) continue;
+    if ((await stored(db, authorId, seed)) !== null) continue;
     const { kind, category, language, title, summary, content, publishedAt } = seed;
     await repository.insertPost({
       ...{ kind, category, language, title, summary, content, publishedAt },
       authorId,
-      translationGroup: await groupOf(db, seed, seeds),
+      translationGroup: await groupOf(db, authorId, seed, seeds),
       baseSlug: slugFor(title),
       status: "published",
       at,
