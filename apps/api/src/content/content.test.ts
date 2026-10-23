@@ -51,7 +51,9 @@ function write(path: string, text: string): void {
 beforeEach(() => {
   dir = mkdtempSync(join(tmpdir(), "overpass-content-"));
 });
-afterEach(() => rmSync(dir, { recursive: true, force: true }));
+afterEach(() => {
+  rmSync(dir, { recursive: true, force: true });
+});
 
 describe("parseFrontmatter", () => {
   it("splits quoted and bare fields from the Markdown body", () => {

@@ -29,7 +29,7 @@ beforeEach(async () => {
     password: "a long passphrase",
     country: "CI",
   });
-  [{ handle }] = await rows<{ handle: string }>(sql`select handle from users`);
+  handle = (await rows<{ handle: string }>(sql`select handle from users`))[0]?.handle ?? "";
 });
 afterEach(() => close());
 
