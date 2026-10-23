@@ -1,5 +1,7 @@
 export { africanCountries, countryName } from "./countries.js";
 export type { Country } from "./countries.js";
+export { countryFacts, factsOf } from "./country-facts.js";
+export type { CountryFacts } from "./country-facts.js";
 export { stackIds, stackNames } from "./stacks.js";
 export type { StackId } from "./stacks.js";
 export {
