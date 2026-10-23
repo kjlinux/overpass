@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { onFirstInteraction } from "../hooks/interaction";
 import { createFrameCap } from "./frameCap";
+import { frameFor, sceneView } from "./frame";
 import { chooseScene } from "./gate";
 import type { SceneEnv } from "./gate";
 
@@ -46,6 +47,25 @@ describe("createFrameCap", () => {
     const shouldDraw = createFrameCap(30);
     const ticks = Array.from({ length: 144 }, (_, index) => (index * 1000) / 144);
     expect(ticks.filter((now) => shouldDraw(now)).length).toBeLessThanOrEqual(30);
+  });
+});
+
+describe("frameFor", () => {
+  it("fits the three columns across a wide band", () => {
+    const frame = frameFor(16 / 6);
+    expect(frame.right - frame.left).toBeCloseTo(sceneView.width);
+    expect(frame.top - frame.bottom).toBeGreaterThanOrEqual(sceneView.height);
+  });
+
+  it("keeps the whole height on a squat band, widening instead", () => {
+    const frame = frameFor(6);
+    expect(frame.top - frame.bottom).toBeCloseTo(sceneView.height);
+    expect(frame.right - frame.left).toBeGreaterThan(sceneView.width);
+  });
+
+  it("keeps the band's own proportions", () => {
+    const frame = frameFor(2);
+    expect((frame.right - frame.left) / (frame.top - frame.bottom)).toBeCloseTo(2);
   });
 });
 

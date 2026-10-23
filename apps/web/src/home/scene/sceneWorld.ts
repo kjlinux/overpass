@@ -2,7 +2,6 @@ import {
   BoxGeometry,
   Color,
   EdgesGeometry,
-  GridHelper,
   Group,
   LineBasicMaterial,
   LineSegments,
@@ -16,7 +15,7 @@ export type Palette = { paper: string; surface: string; rule: string; strong: st
 
 /** Node centres along the road: departure, relay, arrival. */
 export const stops = [-7, 0, 7] as const;
-const nodeSize = { w: 4.2, h: 2.6, d: 1.6 };
+const nodeSize = { w: 4.2, h: 2.6, d: 0.6 };
 
 export type World = {
   root: Group;
@@ -50,24 +49,26 @@ type Fills = {
   paper: MeshBasicMaterial;
   ink: MeshBasicMaterial;
   rail: MeshBasicMaterial;
+  ground: MeshBasicMaterial;
   packet: MeshBasicMaterial;
 };
 type Painted = {
   fills: Fills;
   inkLines: LineBasicMaterial[];
   railLine: LineBasicMaterial;
-  grid: GridHelper;
+  groundLine: LineBasicMaterial;
 };
 
 /** Applies the theme colours read from the page to every material. */
-function paint({ fills, inkLines, railLine, grid }: Painted, palette: Palette): void {
+function paint({ fills, inkLines, railLine, groundLine }: Painted, palette: Palette): void {
   fills.paper.color = new Color(palette.paper);
   fills.ink.color = new Color(palette.ink);
   fills.rail.color = new Color(palette.strong);
+  fills.ground.color = new Color(palette.rule);
   fills.packet.color = new Color(palette.ink);
   for (const line of inkLines) line.color = new Color(palette.ink);
   railLine.color = new Color(palette.strong);
-  grid.material.color = new Color(palette.rule);
+  groundLine.color = new Color(palette.rule);
 }
 
 function anchorsOf(): World["anchors"] {
@@ -86,20 +87,18 @@ function createFills(parts: Parts): Fills {
     paper: new MeshBasicMaterial(),
     ink: new MeshBasicMaterial(),
     rail: new MeshBasicMaterial(),
+    ground: new MeshBasicMaterial(),
     packet: new MeshBasicMaterial({ transparent: true }),
   };
   parts.materials.push(...Object.values(fills));
   return fills;
 }
 
-/** The floor grid in one rule colour instead of the helper's two vertex colours. */
-function createGrid(parts: Parts): GridHelper {
-  const grid = new GridHelper(36, 36);
-  grid.material.vertexColors = false;
-  grid.position.y = -nodeSize.h / 2;
-  parts.geometries.push(grid.geometry);
-  parts.materials.push(grid.material);
-  return grid;
+/** One rule under the nodes instead of a receding floor grid, so the band reads as a diagram. */
+function createGround(parts: Parts, fills: Fills) {
+  const ground = box(parts, { w: 40, h: 0.02, d: 0.02 }, fills.ground);
+  ground.mesh.position.y = -nodeSize.h / 2;
+  return ground;
 }
 
 /** Builds the road, three nodes and the packet; flat materials only, no light, no shadow. */
@@ -114,14 +113,14 @@ export function buildWorld(): World {
   const rail = box(parts, { w: 14, h: 0.06, d: 0.06 }, fills.rail);
   const packet = box(parts, { w: 0.5, h: 0.5, d: 0.5 }, fills.packet);
   packet.line.transparent = true;
-  const grid = createGrid(parts);
+  const ground = createGround(parts, fills);
   const root = new Group();
-  root.add(...nodes.map((node) => node.mesh), rail.mesh, packet.mesh, grid);
+  root.add(...nodes.map((node) => node.mesh), rail.mesh, packet.mesh, ground.mesh);
   const painted = {
     fills,
     inkLines: [...nodes, packet].map((node) => node.line),
     railLine: rail.line,
-    grid,
+    groundLine: ground.line,
   };
   return {
     root,

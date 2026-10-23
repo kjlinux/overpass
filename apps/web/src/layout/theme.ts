@@ -5,15 +5,15 @@ export type ThemeStorage = Pick<Storage, "getItem" | "setItem">;
 export const themeKey = "overpass-theme";
 
 export function parseTheme(value: string | null): Theme {
-  return value === "dark" ? "dark" : "light";
+  return value === "light" ? "light" : "dark";
 }
 
-/** Reads the viewer's choice; blocked storage (private window, previews) means light. */
+/** Reads the viewer's choice; blocked storage (private window, previews) means dark. */
 export function readStoredTheme(storage: ThemeStorage): Theme {
   try {
     return parseTheme(storage.getItem(themeKey));
   } catch {
-    return "light";
+    return "dark";
   }
 }
 
@@ -25,7 +25,7 @@ export function writeStoredTheme(storage: ThemeStorage, theme: Theme): void {
   }
 }
 
-/** Sets or clears data-theme on the root element; light is the attribute-free default. */
+/** Sets or clears data-theme on the root element; light is the attribute-free theme. */
 export function applyTheme(root: HTMLElement, theme: Theme): void {
   if (theme === "dark") root.setAttribute("data-theme", "dark");
   else root.removeAttribute("data-theme");

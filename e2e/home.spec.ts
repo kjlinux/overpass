@@ -47,11 +47,12 @@ test("the theme switch is remembered and applied to the root element", async ({ 
   const layout = locale("layout");
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.goto(path("/"));
-  await page.getByRole("button", { name: layout.themeDark }).click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await page.getByRole("button", { name: layout.themeLight }).click();
+  await expect(page.locator("html")).not.toHaveAttribute("data-theme", "dark");
   await page.reload();
-  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
-  await expect(page.getByRole("button", { name: layout.themeLight })).toBeVisible();
+  await expect(page.locator("html")).not.toHaveAttribute("data-theme", "dark");
+  await expect(page.getByRole("button", { name: layout.themeDark })).toBeVisible();
 });
 
 test("at 360 px the page never scrolls sideways and shows the still scene", async ({ page }) => {

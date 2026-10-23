@@ -1,4 +1,5 @@
-import { PerspectiveCamera, Scene, Vector3, WebGLRenderer } from "three";
+import { OrthographicCamera, Scene, Vector3, WebGLRenderer } from "three";
+import { frameFor, sceneView } from "./frame";
 import { createFrameCap } from "./frameCap";
 import { buildWorld, packetAt } from "./sceneWorld";
 import type { Palette, World } from "./sceneWorld";
@@ -22,14 +23,22 @@ function readPalette(): Palette {
   };
 }
 
-type Stage = { renderer: WebGLRenderer; camera: PerspectiveCamera; scene: Scene; world: World };
+type Stage = { renderer: WebGLRenderer; camera: OrthographicCamera; scene: Scene; world: World };
+
+function frameCamera(camera: OrthographicCamera, aspect: number): void {
+  Object.assign(camera, frameFor(aspect));
+  camera.updateProjectionMatrix();
+}
 
 function createStage(canvas: HTMLCanvasElement): Stage {
   const renderer = new WebGLRenderer({ canvas, antialias: true, powerPreference: "low-power" });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  const camera = new PerspectiveCamera(28, 16 / 6, 0.1, 100);
-  camera.position.set(0, 3, 15.5);
-  camera.lookAt(0, -0.1, 0);
+  const camera = new OrthographicCamera();
+  camera.far = 100;
+  // Front view, barely raised: the node tops show as a thin edge, nothing recedes.
+  camera.position.set(0, sceneView.centerY + 4, 20);
+  camera.lookAt(0, sceneView.centerY, 0);
+  frameCamera(camera, 16 / 6);
   const scene = new Scene();
   const world = buildWorld();
   scene.add(world.root);
@@ -59,8 +68,7 @@ function resize(stage: Stage, labels: SceneLabels, host: HTMLElement): void {
   const { width, height } = host.getBoundingClientRect();
   if (width === 0 || height === 0) return;
   stage.renderer.setSize(width, height, false);
-  stage.camera.aspect = width / height;
-  stage.camera.updateProjectionMatrix();
+  frameCamera(stage.camera, width / height);
   placeLabels(stage, labels, host);
 }
 
@@ -80,7 +88,6 @@ function startLoop(stage: Stage, isActive: () => boolean): () => void {
     if (!shouldDraw(now)) return;
     const { x, opacity } = packetAt(elapsed / loopMs);
     stage.world.packet.position.x = x;
-    stage.world.packet.rotation.y = (elapsed / loopMs) * Math.PI;
     stage.world.setPacketOpacity(opacity);
     stage.renderer.render(stage.scene, stage.camera);
   });

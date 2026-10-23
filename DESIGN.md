@@ -13,7 +13,7 @@ The visual voice is a printed road atlas, not a dashboard: a neutral paper floor
 **Key characteristics**
 
 - One accent colour, used for the primary action, links, the active tab and focus. Nothing else is coloured except the three status roles.
-- Light theme by default, dark theme available, both AA on every text and control.
+- Dark theme by default, light theme available, both AA on every text and control.
 - Running text at 16 px minimum, line height 1.6, reading width of 72 characters on itineraries.
 - Two typefaces under the SIL Open Font License, self-hosted: IBM Plex Sans for titles and text, IBM Plex Mono for code.
 - Square corners on every element. The grid of rules is the identity; no radius softens it.
@@ -24,7 +24,7 @@ The visual voice is a printed road atlas, not a dashboard: a neutral paper floor
 
 ## Colors
 
-Every colour is declared once as a CSS custom property on `:root`, with the dark values under `[data-theme="dark"]`. Light is the default for everyone; the dark theme is a choice made in the settings, never an automatic switch, so that a screen looks the same for the jury and the developer. Components reference roles, never hex values. Values are given in hex.
+Every colour is declared once as a CSS custom property on `:root`, with the dark values under `[data-theme="dark"]`. The web shell sets `data-theme="dark"` itself, so dark is the default for everyone; the light theme is a choice made with the theme switch, never an automatic switch, so that a screen looks the same for the jury and the developer. Components reference roles, never hex values. Values are given in hex.
 
 ### Roles
 

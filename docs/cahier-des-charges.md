@@ -228,7 +228,7 @@ L'interface doit paraître calme, lisible et professionnelle : un développeur d
 | --- | --- |
 | Fichier de référence | Un `DESIGN.md` propre à Overpass à la racine du dépôt, seule source de vérité visuelle |
 | Espacement | Échelle de 4 px (4, 8, 12, 16, 24, 32, 48, 64, 96). Marge verticale de 96 px entre sections de l'accueil |
-| Couleurs | Fond clair par défaut, thème sombre disponible. Rôles nommés : fond, surface, texte, accent, succès, alerte, danger |
+| Couleurs | Thème sombre par défaut, thème clair disponible. Rôles nommés : fond, surface, texte, accent, succès, alerte, danger |
 | Typographie | Deux familles sous licence libre : une pour les titres et le texte, une à chasse fixe pour le code |
 | Composants | Bouton, champ, carte, badge d'état, tableau, onglets, fenêtre de confirmation, notification, bloc de code avec copie |
 | Icônes | Un seul jeu d'icônes sous licence permissive |

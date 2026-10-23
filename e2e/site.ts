@@ -85,11 +85,12 @@ export async function openPage(
   const context = await browser.newContext(
     options.session === undefined ? {} : { storageState: options.session },
   );
-  if (options.dark) {
-    await context.addInitScript(() => {
-      localStorage.setItem("overpass-theme", "dark");
-    });
-  }
+  await context.addInitScript(
+    (theme) => {
+      localStorage.setItem("overpass-theme", theme);
+    },
+    options.dark ? "dark" : "light",
+  );
   const page = await context.newPage();
   await page.goto(url);
   await page.locator("main h1").first().waitFor();

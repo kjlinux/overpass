@@ -29,7 +29,7 @@ overpass.example.africa {
 		header {
 			X-Content-Type-Options "nosniff"
 			Referrer-Policy "strict-origin-when-cross-origin"
-			Content-Security-Policy "default-src 'self'; script-src 'self' 'sha256-nGYicizQ+S1TS9WJVFlj199CScajNaTZYbEHh0QCWdk='; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'"
+			Content-Security-Policy "default-src 'self'; script-src 'self' 'sha256-7FPCoee6Uje0y9WLrI7dZetAZX+TqftNIwp5o8EV+b0='; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'"
 		}
 		root * /srv/overpass/apps/web/dist
 		try_files {path} {path}/index.html /index.html

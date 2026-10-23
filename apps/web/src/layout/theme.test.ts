@@ -11,15 +11,15 @@ const throwing = {
 };
 
 describe("theme storage", () => {
-  it("defaults to light for anything but dark", () => {
+  it("defaults to dark for anything but light", () => {
     expect(parseTheme("dark")).toBe("dark");
     expect(parseTheme("light")).toBe("light");
-    expect(parseTheme(null)).toBe("light");
-    expect(parseTheme("auto")).toBe("light");
+    expect(parseTheme(null)).toBe("dark");
+    expect(parseTheme("auto")).toBe("dark");
   });
 
-  it("falls back to light when storage is blocked", () => {
-    expect(readStoredTheme(throwing)).toBe("light");
+  it("falls back to dark when storage is blocked", () => {
+    expect(readStoredTheme(throwing)).toBe("dark");
     expect(() => {
       writeStoredTheme(throwing, "dark");
     }).not.toThrow();
@@ -33,7 +33,7 @@ describe("theme storage", () => {
         values.set(key, value);
       },
     };
-    writeStoredTheme(storage, "dark");
-    expect(readStoredTheme(storage)).toBe("dark");
+    writeStoredTheme(storage, "light");
+    expect(readStoredTheme(storage)).toBe("light");
   });
 });
