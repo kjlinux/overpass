@@ -78,3 +78,4 @@ Les deux types utiles sont `checkout.session.completed` et `checkout.session.pay
 - La clé est liée au pays. Une clé `wave_sn_` ne crée pas de session pour un client ivoirien ; ouvrez un compte Business dans chaque pays.
 - Répondez 2xx vite et traitez en file d'attente si besoin. Wave réessaie en cas d'erreur, et le même événement peut donc arriver deux fois.
 - Les numéros sénégalais ont neuf chiffres. Wave n'a pas besoin du numéro pour une session Checkout : c'est le client qui s'identifie dans l'application.
+- Pendant une rotation de secret, l'en-tête porte plusieurs valeurs `v1` : acceptez la requête si l'une d'elles correspond. Wave réessaie jusqu'à trois jours en l'absence de réponse 2xx.

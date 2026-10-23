@@ -64,7 +64,7 @@ Redirigez le client vers `payment_url`.
 
 ## Webhook
 
-CinetPay appelle `notify_url` en POST, corps `application/x-www-form-urlencoded`, avec `cpm_trans_id`, `cpm_site_id` et d'autres champs `cpm_*`. L'en-tête `x-token` porte un HMAC calculé avec votre clé secrète. La notification ne dit pas si le paiement est accepté : il faut relire la transaction.
+CinetPay appelle `notify_url` en POST, corps `application/x-www-form-urlencoded`, avec `cpm_trans_id`, `cpm_site_id` et d'autres champs `cpm_*`. Selon la configuration de votre compte, l'en-tête `x-token` porte un HMAC calculé avec votre clé secrète : vérifiez-le dans le tableau de bord. La notification ne dit pas si le paiement est accepté : il faut relire la transaction.
 
 ```php
 #[Route('/webhooks/cinetpay', methods: ['POST'])]
