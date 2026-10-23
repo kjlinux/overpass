@@ -116,7 +116,6 @@ export function ReportDialog(props: DialogProps<PotholeCreateInput>): JSX.Elemen
     <RouteDialog
       {...{ open: props.open, onClose: props.onClose, busy, onSubmit, error: form.formError }}
       title={t("dialog.reportTitle")}
-      text={t("dialog.reportText")}
       submitLabel={t("dialog.reportSubmit")}
     >
       <DescriptionField binding={description} />

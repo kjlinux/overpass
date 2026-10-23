@@ -77,7 +77,6 @@
     }
   },
   "api": {
-    "intro": "Simulated providers follow their public documentation, without logos, and are marked unofficial. The full OpenAPI specification can be downloaded.",
     "download": "Download the OpenAPI specification",
     "providers": "Simulated providers",
     "provider": "{{name}} (documentation followed: {{version}})",

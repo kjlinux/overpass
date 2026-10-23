@@ -4,7 +4,6 @@
     "body": "The test track replays real cases: successful payment, insufficient balance, duplicate or late webhook, timeout. No merchant account.",
     "open": "Open the test track",
     "alt": "Test track: scenarios on the left, inspector with the JSON response of a payment session, then the delivery of the checkout.session.completed webhook.",
-    "caption": "Inspector and deliveries, capture of the application",
     "cases": "Replayed cases",
     "success": {
       "title": "Successful payment",
@@ -23,7 +22,7 @@
       "code": "sent 60 s after the payment"
     },
     "operators": "Simulated operators",
-    "unofficial": "unofficial simulator, built from the public documentation",
+    "unofficial": "Unofficial",
     "loading": "Loading the simulated operators",
     "category": {
       "payment": "payment",
@@ -37,7 +36,6 @@
     "title": "The itineraries",
     "body": "Each sheet says whether the road is clear, to verify or reported broken, with the date of the last check.",
     "alt": "Itinerary sheet: PHP code creating a Wave session, known traps, then a pothole reported by another developer.",
-    "caption": "Code, known traps and potholes of a sheet, capture of the application",
     "states": "States of a sheet",
     "clear": "Checked recently by another developer.",
     "toVerify": "The last check is old, one try is enough.",
@@ -46,7 +44,7 @@
   },
   "mcp": {
     "title": "In your code assistant",
-    "body": "Your code assistant reads the sheets. Plug the Overpass MCP server into Claude Code, Cursor or VS Code with a personal token, and it writes the local integration that works.",
+    "body": "Plug the Overpass MCP server into Claude Code, Cursor or VS Code with a personal token, and it writes the local integration that works.",
     "editors": "Supported editors",
     "claudeCode": "Claude Code",
     "cursor": "Cursor",
@@ -58,7 +56,6 @@
   },
   "community": {
     "title": "Community",
-    "intro": "Three spaces around the sheets, for everything the official documentation does not say.",
     "discussions": "Career, tools, cloud, AI, projects: everything an African developer deals with.",
     "blog": "African tech news, tutorials and portraits.",
     "newsletter": "Newsletter",
@@ -66,7 +63,6 @@
   },
   "countries": {
     "title": "Countries covered",
-    "intro": "From the listed services and the community sheets.",
     "loading": "Loading countries and figures"
   },
   "figures": {

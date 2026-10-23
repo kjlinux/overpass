@@ -34,15 +34,7 @@ export function Pair(props: {
 export function TrackSection({ language }: { language: Language }): JSX.Element {
   const { t } = useTranslation("home");
   const link = <a href={localizedPath(language, "/sandbox")}>{t("track.open")}</a>;
-  const figure = (
-    <Capture
-      name="track"
-      alt={t("track.alt")}
-      caption={t("track.caption")}
-      wide={[760, 980]}
-      phone={[360, 640]}
-    />
-  );
+  const figure = <Capture name="track" alt={t("track.alt")} wide={[760, 980]} phone={[360, 640]} />;
   return (
     <section id="track" aria-labelledby="track-title" class={sectionClass}>
       <Pair

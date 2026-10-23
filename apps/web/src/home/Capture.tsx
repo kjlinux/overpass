@@ -6,13 +6,12 @@ type Size = readonly [number, number];
 type Props = {
   name: CaptureName;
   alt: string;
-  caption: string;
   wide: Size;
   phone: Size;
 };
 
 /** A real interface capture: phone crop under 768 px, desktop column crop above, in the current theme. */
-export function Capture({ name, alt, caption, wide, phone }: Props): JSX.Element {
+export function Capture({ name, alt, wide, phone }: Props): JSX.Element {
   const dark = useTheme() === "dark";
   const theme = dark ? "-dark" : "";
   const base = `/home/${name}${theme}`;
@@ -40,7 +39,6 @@ export function Capture({ name, alt, caption, wide, phone }: Props): JSX.Element
           />
         </picture>
       </div>
-      <figcaption class="pt-2 text-caption text-ink-2">{caption}</figcaption>
     </figure>
   );
 }

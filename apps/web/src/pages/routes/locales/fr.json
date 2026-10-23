@@ -79,7 +79,7 @@
   },
   "potholes": {
     "heading": "Nids-de-poule",
-    "intro": "Pièges signalés par d'autres développeurs. Deux nids-de-poule non résolus suffisent à signaler la fiche cassée.",
+    "intro": "Deux nids-de-poule non résolus suffisent à signaler la fiche cassée.",
     "empty": "Aucun nid-de-poule signalé pour l'instant.",
     "report": "Signaler un nid-de-poule",
     "status": {
@@ -93,7 +93,6 @@
   },
   "checks": {
     "heading": "Vérifications",
-    "intro": "Chaque ligne est un développeur qui a fait marcher cette fiche chez lui, à cette date.",
     "empty": "Personne ne l'a encore vérifiée.",
     "environment": {
       "test": "test",
@@ -107,7 +106,6 @@
     "environment": "Environnement",
     "verifySubmit": "Confirmer la vérification",
     "reportTitle": "Signaler un nid-de-poule",
-    "reportText": "Décrivez ce qui ne marche pas, comme vous l'auriez voulu le lire avant d'intégrer.",
     "description": "Ce qui ne marche pas",
     "reportSubmit": "Envoyer le signalement",
     "cancel": "Annuler"

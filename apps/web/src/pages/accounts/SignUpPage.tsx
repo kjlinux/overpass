@@ -78,7 +78,6 @@ export function SignUpPage(): JSX.Element {
   return (
     <AuthLayout
       title={t("signUp.title")}
-      intro={t("signUp.intro")}
       footer={
         <>
           {t("signUp.haveAccount")} {signIn}

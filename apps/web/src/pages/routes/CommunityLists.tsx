@@ -9,7 +9,7 @@ import { formatDate } from "./format";
 type SectionProps = {
   id: string;
   title: string;
-  intro: string;
+  intro?: string;
   action?: ComponentChildren;
   children: ComponentChildren;
 };
@@ -27,7 +27,7 @@ function Section({ id, title, intro, action, children }: SectionProps): JSX.Elem
         </h2>
         {action}
       </div>
-      <p class="mb-4 mt-2 text-ink-2">{intro}</p>
+      {intro === undefined ? null : <p class="mb-4 mt-2 text-ink-2">{intro}</p>}
       {children}
     </section>
   );
@@ -129,7 +129,7 @@ export function CheckList({ route }: { route: RouteDetail }): JSX.Element {
   const { t } = useTranslation("routes");
   const language = useLanguage();
   return (
-    <Section id="checks" title={t("checks.heading")} intro={t("checks.intro")}>
+    <Section id="checks" title={t("checks.heading")}>
       {route.checks.length === 0 ? (
         <p class="border-t border-rule py-4 text-ink-2">{t("checks.empty")}</p>
       ) : (

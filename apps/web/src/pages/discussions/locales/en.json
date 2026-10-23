@@ -6,7 +6,6 @@
   },
   "list": {
     "title": "Discussions",
-    "intro": "Integrations, cloud, tools, career, projects and events: ask your question, developers across the continent answer it.",
     "new": "New thread",
     "resultsHeading": "Threads",
     "replies_one": "{{count}} reply",

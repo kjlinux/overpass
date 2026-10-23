@@ -25,8 +25,8 @@
     "email": "Email address",
     "language": "Newsletter language",
     "subscribe": "Subscribe",
-    "note": "Double opt-in: a link arrives by email and the subscription starts only after you click it. Every issue carries a one-click unsubscribe link.",
-    "sent": "Noted. If this address can receive the digest, a confirmation link is on its way: open it to confirm the subscription.",
+    "note": "A confirmation link arrives by email. One-click unsubscribe in every issue.",
+    "sent": "If this address can receive the digest, a confirmation link is on its way: open it to confirm the subscription.",
     "another": "Subscribe another address"
   },
   "groups": {

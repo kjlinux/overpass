@@ -30,7 +30,6 @@
   },
   "list": {
     "title": "Blog",
-    "intro": "Les actualités de l'équipe et les blogs des membres : tutoriels, retours d'intégration et portraits.",
     "write": "Écrire un article",
     "mine": "Mon blog",
     "following": "Mes abonnements",
@@ -87,7 +86,7 @@
   },
   "mine": {
     "title": "Mon blog",
-    "intro": "Vos brouillons et vos articles publiés. Vous publiez sans relecture préalable ; l'équipe peut masquer un contenu après coup.",
+    "intro": "Vous publiez sans relecture préalable ; l'équipe peut masquer un contenu après coup.",
     "new": "Nouvel article",
     "view": "Voir mon blog public",
     "edit": "Modifier « {{title}} »",

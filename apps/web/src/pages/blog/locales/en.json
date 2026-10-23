@@ -30,7 +30,6 @@
   },
   "list": {
     "title": "Blog",
-    "intro": "News from the team and member blogs: tutorials, integration stories and portraits.",
     "write": "Write a post",
     "mine": "My blog",
     "following": "My follows",
@@ -87,7 +86,7 @@
   },
   "mine": {
     "title": "My blog",
-    "intro": "Your drafts and published posts. You publish without prior review; the team may hide content afterwards.",
+    "intro": "You publish without prior review; the team may hide content afterwards.",
     "new": "New post",
     "view": "See my public blog",
     "edit": "Edit \"{{title}}\"",

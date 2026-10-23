@@ -33,7 +33,6 @@
     "intro": "Un paiement Wave simulé, sans compte. Un clic, et regardez le webhook arriver.",
     "run": "Lancer un paiement simulé",
     "rerun": "Relancer le paiement simulé",
-    "idle": "Le vrai simulateur répond : rien n'est débité, rien ne sort d'Overpass.",
     "loading": "Chargement de la démo",
     "pending": "en attente",
     "elapsed": "+{{ms}} ms",

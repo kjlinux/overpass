@@ -8,7 +8,7 @@ import { FormAlert } from "../../forms";
 export type RouteDialogProps = {
   open: boolean;
   title: string;
-  text: string;
+  text?: string;
   submitLabel: string;
   busy: boolean;
   error: ApiError | undefined;
@@ -41,7 +41,7 @@ export function RouteDialog(props: RouteDialogProps): JSX.Element {
         <h2 id={titleId} class="text-h3 font-semibold">
           {title}
         </h2>
-        <p>{text}</p>
+        {text === undefined ? null : <p>{text}</p>}
         <FormAlert error={error} />
         {children}
         <div class="flex flex-wrap justify-between gap-3">

@@ -1,6 +1,6 @@
 {
   "title": "À propos",
-  "intro": "Overpass est la bourse des intégrations africaines vérifiées : les développeurs y échangent ce que la documentation officielle ne dit pas.",
+  "intro": "Overpass est la bourse des intégrations africaines vérifiées.",
   "placeholder": "À compléter par l'équipe",
   "product": {
     "heading": "Le produit",
@@ -16,7 +16,6 @@
       "name": "Le serveur MCP.",
       "text": "Il sert les fiches aux assistants de code, pour que l'IA du développeur écrive la bonne intégration locale."
     },
-    "community": "Autour de ce cœur, les discussions, le blog et la newsletter font vivre la communauté.",
     "action": "Essayer la démo"
   },
   "team": {

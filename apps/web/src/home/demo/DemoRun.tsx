@@ -20,7 +20,7 @@ function liveText(run: Run, t: TFunction): string {
   if (stages.webhook === "failed") return t("demo.live.webhookFailed");
   if (run.event !== undefined)
     return t("demo.live.response", { status: run.event.response.status });
-  return run.busy ? t("demo.live.request") : t("demo.idle");
+  return run.busy ? t("demo.live.request") : "";
 }
 
 type Body = { line: string; body?: string } | undefined;

@@ -17,7 +17,6 @@ function Header(): JSX.Element {
     <div class="flex flex-wrap items-end justify-between gap-6 border-b border-rule pb-6">
       <div class="max-w-prose">
         <h1 class="text-h1 font-semibold">{t("list.title")}</h1>
-        <p class="mt-2 text-ink-2">{t("list.intro")}</p>
       </div>
       <div class="flex flex-wrap gap-2">
         {me == null ? null : (

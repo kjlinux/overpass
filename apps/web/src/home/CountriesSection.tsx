@@ -31,11 +31,7 @@ export function CountriesSection({ language }: { language: Language }): JSX.Elem
     <>
       {view.kind === "hidden" ? null : (
         <section id="countries" aria-labelledby="countries-title" class={sectionClass}>
-          <SectionHead
-            id="countries-title"
-            title={t("countries.title")}
-            intro={t("countries.intro")}
-          />
+          <SectionHead id="countries-title" title={t("countries.title")} />
           {view.kind === "loading" ? <StatsSkeleton /> : null}
           {view.kind === "shown" && view.tiles ? (
             <div class="border-t border-rule py-6">

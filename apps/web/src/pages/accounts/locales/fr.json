@@ -3,13 +3,12 @@
     "email": "Adresse e-mail",
     "password": "Mot de passe",
     "newPassword": "Nouveau mot de passe",
-    "passwordHelp": "Au moins 10 caractères. Une phrase de quelques mots est à la fois sûre et facile à retenir.",
+    "passwordHelp": "Au moins 10 caractères.",
     "country": "Pays",
     "countryHelp": "Il date vos vérifications et range vos contributions dans le classement par pays."
   },
   "signUp": {
     "title": "Créer un compte",
-    "intro": "Trois champs. Vos stacks viennent ensuite, si vous le souhaitez.",
     "submit": "Créer mon compte",
     "haveAccount": "Déjà inscrit ?",
     "signIn": "Se connecter",

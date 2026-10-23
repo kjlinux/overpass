@@ -6,7 +6,6 @@
   },
   "list": {
     "title": "Discussions",
-    "intro": "Intégrations, cloud, outils, carrière, projets et événements : posez votre question, d'autres développeurs du continent y répondent.",
     "new": "Nouveau sujet",
     "resultsHeading": "Sujets",
     "replies_one": "{{count}} réponse",

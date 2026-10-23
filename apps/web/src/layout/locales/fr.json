@@ -25,8 +25,8 @@
     "email": "Adresse e-mail",
     "language": "Langue de la newsletter",
     "subscribe": "S'abonner",
-    "note": "Double confirmation : un lien vous arrive par e-mail, l'abonnement ne démarre qu'après votre clic. Chaque numéro contient un lien de désinscription en un clic.",
-    "sent": "C'est noté. Si cette adresse peut recevoir le résumé, un lien de confirmation vient de partir : ouvrez-le pour valider l'abonnement.",
+    "note": "Un lien de confirmation vous arrive par e-mail. Désinscription en un clic dans chaque numéro.",
+    "sent": "Si cette adresse peut recevoir le résumé, un lien de confirmation vient de partir : ouvrez-le pour valider l'abonnement.",
     "another": "Inscrire une autre adresse"
   },
   "groups": {

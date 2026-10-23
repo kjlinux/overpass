@@ -4,7 +4,6 @@
     "body": "La piste d'essai rejoue les cas réels : paiement réussi, solde insuffisant, webhook reçu en double ou en retard, délai dépassé. Sans compte marchand.",
     "open": "Ouvrir la piste d'essai",
     "alt": "Piste d'essai : scénarios à gauche, inspecteur avec la réponse JSON d'une session de paiement, puis la livraison du webhook checkout.session.completed.",
-    "caption": "Inspecteur et livraisons, capture de l'application",
     "cases": "Cas rejoués",
     "success": {
       "title": "Paiement réussi",
@@ -23,7 +22,7 @@
       "code": "parti 60 s après le paiement"
     },
     "operators": "Opérateurs simulés",
-    "unofficial": "simulateur non officiel, construit depuis la documentation publique",
+    "unofficial": "Non officiel",
     "loading": "Chargement des opérateurs simulés",
     "category": {
       "payment": "paiement",
@@ -37,7 +36,6 @@
     "title": "Les itinéraires",
     "body": "Chaque fiche dit si la voie est libre, à vérifier ou signalée cassée, avec la date de la dernière vérification.",
     "alt": "Fiche d'itinéraire : code PHP de création d'une session Wave, pièges connus, puis un nid-de-poule signalé par un autre développeur.",
-    "caption": "Code, pièges connus et nids-de-poule d'une fiche, capture de l'application",
     "states": "États d'une fiche",
     "clear": "Vérifiée récemment par un autre développeur.",
     "toVerify": "La dernière vérification date, un essai suffit.",
@@ -46,7 +44,7 @@
   },
   "mcp": {
     "title": "Dans votre assistant de code",
-    "body": "Votre assistant de code lit les fiches. Branchez le serveur MCP d'Overpass dans Claude Code, Cursor ou VS Code avec un jeton personnel, et il écrit l'intégration locale qui marche.",
+    "body": "Branchez le serveur MCP d'Overpass dans Claude Code, Cursor ou VS Code avec un jeton personnel, et il écrit l'intégration locale qui marche.",
     "editors": "Éditeurs pris en charge",
     "claudeCode": "Claude Code",
     "cursor": "Cursor",
@@ -58,7 +56,6 @@
   },
   "community": {
     "title": "Communauté",
-    "intro": "Trois espaces autour des fiches, pour tout ce que la documentation officielle ne dit pas.",
     "discussions": "Carrière, outils, cloud, IA, projets : tout ce qui occupe un développeur africain.",
     "blog": "Actualité tech africaine, tutoriels et portraits.",
     "newsletter": "Newsletter",
@@ -66,7 +63,6 @@
   },
   "countries": {
     "title": "Pays couverts",
-    "intro": "D'après les services référencés et les fiches de la communauté.",
     "loading": "Chargement des pays et des chiffres"
   },
   "figures": {

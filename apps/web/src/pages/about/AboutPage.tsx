@@ -21,7 +21,6 @@ function Product(): JSX.Element {
           </li>
         ))}
       </ul>
-      <p>{t("product.community")}</p>
       <div>
         <ButtonLink variant="primary" href={localizedPath(language, "/sandbox/demo")}>
           {t("product.action")}

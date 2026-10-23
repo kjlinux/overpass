@@ -1,6 +1,6 @@
 {
   "title": "Composants",
-  "intro": "Chaque composant du système de design, avec un contenu d'exemple. Tout fonctionne au clavier, avec un focus visible et des zones tactiles de 44 px.",
+  "intro": "Chaque composant du système de design, avec un contenu d'exemple.",
   "buttons": {
     "title": "Boutons",
     "primary": "Lancer le paiement simulé",

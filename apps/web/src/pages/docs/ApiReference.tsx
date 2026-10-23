@@ -75,7 +75,6 @@ export function ApiReference(): JSX.Element {
   const { state, reload } = useOpenApi();
   return (
     <>
-      <p class="max-w-prose">{t("api.intro")}</p>
       <a class="inline-flex min-h-tap items-center self-start" href={openApiPath} download>
         {t("api.download")}
       </a>

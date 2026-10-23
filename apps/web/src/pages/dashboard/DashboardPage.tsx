@@ -2,7 +2,7 @@ import type { Me, MyCheck, Proposal, RouteSummary } from "@overpass/shared";
 import type { ComponentChildren, JSX } from "preact";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../app/useLanguage";
-import { Button, Skeleton } from "../../components/ui";
+import { ButtonLink, Skeleton } from "../../components/ui";
 import { LoadError } from "../../forms";
 import { Layout } from "../../layout";
 import { localizedPath } from "../../layout/nav";
@@ -78,23 +78,13 @@ function ChecksColumn(): JSX.Element {
   );
 }
 
-/** Shown but disabled, with its reason, until the sandbox module ships its page. */
 function SandboxShortcut(): JSX.Element {
   const { t } = useTranslation("dashboard");
+  const language = useLanguage();
   return (
-    <div class="flex flex-col items-start gap-2">
-      <Button
-        variant="primary"
-        aria-disabled="true"
-        aria-describedby="sandbox-note"
-        class="aria-disabled:cursor-not-allowed aria-disabled:border-rule aria-disabled:bg-surface aria-disabled:text-ink-2"
-      >
-        {t("sandbox")}
-      </Button>
-      <p id="sandbox-note" class="text-caption text-ink-2">
-        {t("sandboxSoon")}
-      </p>
-    </div>
+    <ButtonLink variant="primary" href={localizedPath(language, "/sandbox")}>
+      {t("sandbox")}
+    </ButtonLink>
   );
 }
 

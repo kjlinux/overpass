@@ -16,7 +16,7 @@ export function CommunitySection({ language }: { language: Language }): JSX.Elem
   const tl = useTranslation("layout").t;
   return (
     <section id="community" aria-labelledby="community-title" class={sectionClass}>
-      <SectionHead id="community-title" title={t("community.title")} intro={t("community.intro")} />
+      <SectionHead id="community-title" title={t("community.title")} />
       <div class="grid grid-cols-[minmax(0,1fr)] border-t border-rule lg:grid-cols-2">
         <ul class="py-6 lg:pr-8">
           {spaces.map((space) => (

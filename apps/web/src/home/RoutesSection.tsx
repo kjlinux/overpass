@@ -15,13 +15,7 @@ export function RoutesSection({ language }: { language: Language }): JSX.Element
   const { t } = useTranslation("home");
   const link = <a href={localizedPath(language, "/routes")}>{t("routes.browse")}</a>;
   const figure = (
-    <Capture
-      name="routes"
-      alt={t("routes.alt")}
-      caption={t("routes.caption")}
-      wide={[760, 760]}
-      phone={[360, 640]}
-    />
+    <Capture name="routes" alt={t("routes.alt")} wide={[760, 760]} phone={[360, 640]} />
   );
   return (
     <section id="routes" aria-labelledby="routes-title" class={sectionClass}>

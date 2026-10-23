@@ -30,7 +30,7 @@
     "new": "New password",
     "submit": "Change the password",
     "done": "Password changed. Your other sessions are closed.",
-    "help": "At least 10 characters. A phrase of a few words is both safe and easy to remember."
+    "help": "At least 10 characters."
   },
   "tokens": {
     "heading": "MCP tokens and API keys",

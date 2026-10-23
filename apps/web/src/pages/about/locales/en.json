@@ -1,6 +1,6 @@
 {
   "title": "About",
-  "intro": "Overpass is the exchange for verified African integrations: developers share there what the official documentation does not say.",
+  "intro": "Overpass is the exchange for verified African integrations.",
   "placeholder": "To be completed by the team",
   "product": {
     "heading": "The product",
@@ -16,7 +16,6 @@
       "name": "The MCP server.",
       "text": "It serves the sheets to coding assistants, so that the developer's AI writes the right local integration."
     },
-    "community": "Around this core, discussions, the blog and the newsletter keep the community alive.",
     "action": "Try the demo"
   },
   "team": {

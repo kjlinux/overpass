@@ -1,6 +1,6 @@
 {
   "title": "Components",
-  "intro": "Every component of the design system, with sample content. Everything works with the keyboard, with a visible focus and 44 px touch targets.",
+  "intro": "Every component of the design system, with sample content.",
   "buttons": {
     "title": "Buttons",
     "primary": "Run the simulated payment",

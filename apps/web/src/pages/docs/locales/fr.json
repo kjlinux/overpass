@@ -77,7 +77,6 @@
     }
   },
   "api": {
-    "intro": "Les opérateurs simulés suivent leur documentation publique, sans logo, et sont marqués non officiels. La spécification OpenAPI complète est téléchargeable.",
     "download": "Télécharger la spécification OpenAPI",
     "providers": "Opérateurs simulés",
     "provider": "{{name}} (documentation suivie : {{version}})",

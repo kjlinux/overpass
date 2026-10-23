@@ -79,7 +79,7 @@
   },
   "potholes": {
     "heading": "Potholes",
-    "intro": "Traps reported by other developers. Two unresolved potholes are enough to report the sheet broken.",
+    "intro": "Two unresolved potholes are enough to report the sheet broken.",
     "empty": "No pothole reported yet.",
     "report": "Report a pothole",
     "status": {
@@ -93,7 +93,6 @@
   },
   "checks": {
     "heading": "Checks",
-    "intro": "Each line is a developer who made this sheet work on their side, on that date.",
     "empty": "Nobody has checked it yet.",
     "environment": {
       "test": "test",
@@ -107,7 +106,6 @@
     "environment": "Environment",
     "verifySubmit": "Confirm the check",
     "reportTitle": "Report a pothole",
-    "reportText": "Describe what does not work, as you would have liked to read it before integrating.",
     "description": "What does not work",
     "reportSubmit": "Send the report",
     "cancel": "Cancel"
