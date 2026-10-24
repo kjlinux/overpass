@@ -20,11 +20,11 @@
       "webhook": "3. L'opérateur confirme le paiement",
       "webhookFailed": "3. Confirmation non reçue"
     },
-    "receiver": "vers le serveur de démo",
+    "receiver": "reçu par le serveur de démo, à la place du vôtre",
     "live": {
       "request": "Votre site envoie la demande de paiement.",
       "response": "L'opérateur a répondu {{status}}, le paiement est en cours. La confirmation arrive.",
-      "webhook": "Paiement confirmé, le webhook est arrivé sur le serveur de démo.",
+      "webhook": "Paiement confirmé, le webhook est arrivé sur le serveur de démo, qui joue ici le rôle de votre serveur.",
       "webhookFailed": "La confirmation n'est pas arrivée. Rejouez-la depuis la piste d'essai.",
       "failed": "Le simulateur ne répond pas. Réessayez dans un instant."
     },

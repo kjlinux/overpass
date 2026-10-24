@@ -20,11 +20,11 @@
       "webhook": "3. The operator confirms the payment",
       "webhookFailed": "3. Confirmation not received"
     },
-    "receiver": "to the demo server",
+    "receiver": "received by the demo server, standing in for yours",
     "live": {
       "request": "Your site sends the payment request.",
       "response": "The operator answered {{status}}, the payment is in progress. The confirmation is on its way.",
-      "webhook": "Payment confirmed, the webhook reached the demo server.",
+      "webhook": "Payment confirmed, the webhook reached the demo server, which stands in for your server here.",
       "webhookFailed": "The confirmation did not arrive. Replay it from the test track.",
       "failed": "The simulator is not answering. Try again in a moment."
     },
