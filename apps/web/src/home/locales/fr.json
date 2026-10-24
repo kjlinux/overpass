@@ -229,32 +229,14 @@
       "screen": {
         "title": "Discussions · Intégrations",
         "label": "Une question qui reçoit une réponse acceptée puis devient une fiche",
-        "lines": [
-          {
-            "tone": "code",
-            "text": "Erreur 401 sur le webhook Orange Money"
-          },
-          {
-            "tone": "muted",
-            "text": "posée par fatou, Côte d'Ivoire"
-          },
-          {
-            "tone": "you",
-            "text": "Le jeton expire après une heure, renouvelle-le avant l'appel."
-          },
-          {
-            "tone": "ok",
-            "text": "Réponse acceptée"
-          },
-          {
-            "tone": "muted",
-            "text": "12 développeurs l'ont jugée utile."
-          },
-          {
-            "tone": "accent",
-            "text": "Transformée en fiche d'itinéraire"
-          }
-        ]
+        "thread": {
+          "question": "Erreur 401 sur le webhook Orange Money, une idée ?",
+          "asker": "fatou",
+          "answer": "Le jeton expire après une heure, renouvelle-le avant l'appel.",
+          "answerer": "kofi",
+          "accepted": "Réponse acceptée, 12 développeurs l'ont jugée utile",
+          "route": "Devenue la fiche « Orange Money, renouveler le jeton »"
+        }
       }
     },
     "blog": {
@@ -268,32 +250,15 @@
       "screen": {
         "title": "Blog · @awa",
         "label": "Un article qui reçoit des étoiles et des commentaires",
-        "lines": [
-          {
-            "tone": "muted",
-            "text": "Tutoriel · 6 min de lecture"
-          },
-          {
-            "tone": "code",
-            "text": "Encaisser avec Wave depuis Laravel, du jeton au webhook"
-          },
-          {
-            "tone": "muted",
-            "text": "Le parcours complet, avec les trois pièges qui m'ont coûté une journée."
-          },
-          {
-            "tone": "ok",
-            "text": "★ 24 étoiles"
-          },
-          {
-            "tone": "muted",
-            "text": "8 commentaires · 31 abonnés"
-          },
-          {
-            "tone": "accent",
-            "text": "Dans la newsletter de lundi"
-          }
-        ]
+        "article": {
+          "category": "Tutoriel",
+          "headline": "Encaisser avec Wave depuis Laravel, du jeton au webhook",
+          "author": "awa",
+          "read": "6 min de lecture",
+          "stars": "24 étoiles",
+          "comments": "8 commentaires",
+          "newsletter": "Repris dans la newsletter de lundi"
+        }
       }
     },
     "ranking": {

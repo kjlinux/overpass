@@ -2,6 +2,7 @@ import type { JSX } from "preact";
 import { useTranslation } from "react-i18next";
 import { Screen } from "../Screen";
 import { useSequence } from "../useSequence";
+import { Avatar } from "./Avatar";
 
 type Bar = { label: string; value: number; unit: string };
 
@@ -20,9 +21,10 @@ export function BarsScreen({ block }: { block: string }): JSX.Element {
       <ul class="m-0 grid list-none gap-3 p-0">
         {bars.map((bar, index) => (
           <li key={bar.label} class="grid gap-1">
-            <span class="flex justify-between gap-4 text-caption">
-              <span class="truncate">{bar.label}</span>
-              <span class="font-code text-ink-2">{`${String(bar.value)} ${bar.unit}`}</span>
+            <span class="flex items-center gap-3">
+              <Avatar name={bar.label} size={28} />
+              <span class="min-w-0 flex-1 truncate font-medium">{bar.label}</span>
+              <span class="text-caption text-ink-2">{`${String(bar.value)} ${bar.unit}`}</span>
             </span>
             <span class="tour-track">
               <span

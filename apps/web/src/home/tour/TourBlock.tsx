@@ -2,13 +2,17 @@ import type { Language } from "@overpass/shared";
 import type { JSX } from "preact";
 import { useTranslation } from "react-i18next";
 import { localizedPath } from "../../layout";
+import { ArticleScreen } from "./screens/ArticleScreen";
 import { BarsScreen } from "./screens/BarsScreen";
 import { LineScreen } from "./screens/LineScreen";
+import { ThreadScreen } from "./screens/ThreadScreen";
 import { TrackScreen } from "./screens/TrackScreen";
 import type { TourBlock as Block } from "./blocks";
 
 function ScreenOf({ block }: { block: Block }): JSX.Element {
   if (block.screen === "track") return <TrackScreen />;
+  if (block.screen === "article") return <ArticleScreen />;
+  if (block.screen === "thread") return <ThreadScreen />;
   if (block.screen === "bars") return <BarsScreen block={block.key} />;
   return <LineScreen block={block.key} />;
 }

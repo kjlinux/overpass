@@ -1,4 +1,4 @@
-export type ScreenKind = "lines" | "track" | "bars";
+export type ScreenKind = "lines" | "track" | "bars" | "article" | "thread";
 
 export type TourBlock = { key: string; screen: ScreenKind; links: { key: string; path: string }[] };
 
@@ -22,10 +22,10 @@ export const tourBlocks: readonly TourBlock[] = [
       { key: "token", path: "/settings" },
     ],
   },
-  { key: "discussions", screen: "lines", links: [{ key: "open", path: "/discussions" }] },
+  { key: "discussions", screen: "thread", links: [{ key: "open", path: "/discussions" }] },
   {
     key: "blog",
-    screen: "lines",
+    screen: "article",
     links: [
       { key: "open", path: "/blog" },
       { key: "newsletter", path: "/newsletter" },

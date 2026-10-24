@@ -229,32 +229,14 @@
       "screen": {
         "title": "Discussions · Integrations",
         "label": "A question that gets an accepted answer then becomes a sheet",
-        "lines": [
-          {
-            "tone": "code",
-            "text": "401 error on the Orange Money webhook"
-          },
-          {
-            "tone": "muted",
-            "text": "asked by fatou, Côte d'Ivoire"
-          },
-          {
-            "tone": "you",
-            "text": "The token expires after one hour, renew it before the call."
-          },
-          {
-            "tone": "ok",
-            "text": "Accepted answer"
-          },
-          {
-            "tone": "muted",
-            "text": "12 developers found it useful."
-          },
-          {
-            "tone": "accent",
-            "text": "Turned into an itinerary sheet"
-          }
-        ]
+        "thread": {
+          "question": "401 error on the Orange Money webhook, any idea?",
+          "asker": "fatou",
+          "answer": "The token expires after one hour, renew it before the call.",
+          "answerer": "kofi",
+          "accepted": "Accepted answer, 12 developers found it useful",
+          "route": "Now the sheet “Orange Money, renew the token”"
+        }
       }
     },
     "blog": {
@@ -268,32 +250,15 @@
       "screen": {
         "title": "Blog · @awa",
         "label": "An article getting stars and comments",
-        "lines": [
-          {
-            "tone": "muted",
-            "text": "Tutorial · 6 min read"
-          },
-          {
-            "tone": "code",
-            "text": "Collect with Wave from Laravel, from token to webhook"
-          },
-          {
-            "tone": "muted",
-            "text": "The full path, with the three traps that cost me a day."
-          },
-          {
-            "tone": "ok",
-            "text": "★ 24 stars"
-          },
-          {
-            "tone": "muted",
-            "text": "8 comments · 31 followers"
-          },
-          {
-            "tone": "accent",
-            "text": "In Monday's newsletter"
-          }
-        ]
+        "article": {
+          "category": "Tutorial",
+          "headline": "Collect with Wave from Laravel, from token to webhook",
+          "author": "awa",
+          "read": "6 min read",
+          "stars": "24 stars",
+          "comments": "8 comments",
+          "newsletter": "Featured in Monday's newsletter"
+        }
       }
     },
     "ranking": {

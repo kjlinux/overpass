@@ -56,3 +56,27 @@
     transition: none;
   }
 }
+.tour-packet {
+  transition: transform 900ms var(--ease-out);
+}
+.tour-cover[data-on] .tour-packet {
+  transform: translateX(88px);
+}
+.tour-check {
+  transform-origin: 254px 71px;
+  transform: scale(0.4);
+  opacity: 0.3;
+  transition:
+    transform var(--duration-slow) var(--ease-out) 700ms,
+    opacity var(--duration-slow) var(--ease-out) 700ms;
+}
+.tour-cover[data-on] .tour-check {
+  transform: none;
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .tour-packet,
+  .tour-check {
+    transition: none;
+  }
+}
