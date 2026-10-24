@@ -8,31 +8,25 @@ const optionalText = z.preprocess(
   z.string().min(1).optional(),
 );
 
-const configSchema = z
-  .object({
-    NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
-    API_HOST: z.string().default("127.0.0.1"),
-    API_PORT: z.coerce.number().int().positive().default(3000),
-    LOG_LEVEL: z
-      .enum(["fatal", "error", "warn", "info", "debug", "trace", "silent"])
-      .default("info"),
-    TRUST_PROXY: z.coerce.number().int().min(0).max(5).default(0),
-    DATABASE_URL: z.url(),
-    SESSION_SECRET: z.string().min(32),
-    WEB_ORIGIN: z.url().default("http://127.0.0.1:5173"),
-    SMTP_HOST: optionalText,
-    SMTP_PORT: z.coerce.number().int().positive().default(587),
-    SMTP_SECURE: flag.default(false),
-    SMTP_REQUIRE_TLS: flag.default(true),
-    SMTP_USER: optionalText,
-    SMTP_PASSWORD: optionalText,
-    MAIL_FROM: z.string().min(3).default("Overpass <no-reply@localhost>"),
-    MAIL_OUTBOX_DIR: optionalText,
-    WEB_DIST_DIR: optionalText,
-  })
-  .refine((config) => config.NODE_ENV !== "production" || config.SMTP_HOST !== undefined, {
-    path: ["SMTP_HOST"],
-  });
+const configSchema = z.object({
+  NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
+  API_HOST: z.string().default("127.0.0.1"),
+  API_PORT: z.coerce.number().int().positive().default(3000),
+  LOG_LEVEL: z.enum(["fatal", "error", "warn", "info", "debug", "trace", "silent"]).default("info"),
+  TRUST_PROXY: z.coerce.number().int().min(0).max(5).default(0),
+  DATABASE_URL: z.url(),
+  SESSION_SECRET: z.string().min(32),
+  WEB_ORIGIN: z.url().default("http://127.0.0.1:5173"),
+  SMTP_HOST: optionalText,
+  SMTP_PORT: z.coerce.number().int().positive().default(587),
+  SMTP_SECURE: flag.default(false),
+  SMTP_REQUIRE_TLS: flag.default(true),
+  SMTP_USER: optionalText,
+  SMTP_PASSWORD: optionalText,
+  MAIL_FROM: z.string().min(3).default("Overpass <no-reply@localhost>"),
+  MAIL_OUTBOX_DIR: optionalText,
+  WEB_DIST_DIR: optionalText,
+});
 
 export type Config = z.infer<typeof configSchema>;
 

@@ -20,6 +20,7 @@ export type MailLogger = { info(details: object, message: string): void };
 type SmtpConfig = Partial<
   Pick<
     Config,
+    | "NODE_ENV"
     | "SMTP_HOST"
     | "SMTP_PORT"
     | "SMTP_SECURE"
@@ -56,9 +57,18 @@ export function outboxMailer(directory: string, logger: MailLogger): Mailer {
   };
 }
 
+/** Production without SMTP: every send fails, and the message, a credential for a reset, is never logged. */
+export function disabledMailer(logger: MailLogger): Mailer {
+  logger.info({}, "mails disabled: SMTP_HOST is not set");
+  return {
+    send: () => Promise.reject(new Error("mail not sent: SMTP_HOST is not set")),
+  };
+}
+
 /** Sends through any SMTP server named in the environment; no proprietary API. */
 export function createMailer(config: SmtpConfig, logger: MailLogger): Mailer {
   if (config.SMTP_HOST === undefined) {
+    if (config.NODE_ENV === "production") return disabledMailer(logger);
     return config.MAIL_OUTBOX_DIR === undefined
       ? logMailer(logger)
       : outboxMailer(config.MAIL_OUTBOX_DIR, logger);

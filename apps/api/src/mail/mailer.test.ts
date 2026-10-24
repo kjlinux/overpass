@@ -27,4 +27,13 @@ describe("createMailer without SMTP", () => {
     await mailer.send({ to: "a@b.co", subject: "s", text: "t" });
     expect(logged).toHaveLength(1);
   });
+
+  it("refuses every mail in production and never logs its content", async () => {
+    const logged: unknown[] = [];
+    const mailer = createMailer({ NODE_ENV: "production" }, { info: (d) => logged.push(d) });
+    const message = { to: "a@b.co", subject: "Reset", text: "Link: #token=secret" };
+    await expect(mailer.send(message)).rejects.toThrow(/SMTP_HOST/);
+    expect(JSON.stringify(logged)).not.toContain("secret");
+    expect(JSON.stringify(logged)).not.toContain("a@b.co");
+  });
 });

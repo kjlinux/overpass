@@ -11,8 +11,9 @@ describe("loadConfig", () => {
     expect(loadConfig({ ...base, SMTP_HOST: "" }).SMTP_HOST).toBeUndefined();
   });
 
-  it("requires an SMTP server in production", () => {
-    expect(() => loadConfig({ ...base, NODE_ENV: "production" })).toThrow();
+  it("starts in production without an SMTP server, mails then being disabled", () => {
+    const production = { ...base, NODE_ENV: "production", TRUST_PROXY: "1" };
+    expect(loadConfig({ ...production, SMTP_HOST: "" }).SMTP_HOST).toBeUndefined();
     expect(
       loadConfig({ ...base, NODE_ENV: "production", SMTP_HOST: "smtp.test", TRUST_PROXY: "1" })
         .SMTP_HOST,
