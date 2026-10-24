@@ -34,6 +34,7 @@
 - Build UI with the hallmark skill, then run hallmark audit.
 - Run /code-review and /security-scan before every merge.
 - Log every AI-assisted change in docs/AI_USAGE.md.
+- Deploy to production only by following docs/DEPLOYMENT.md: server layout, routine deploy, CSP hash, seed, rollback.
 
 ## Reference repositories (tools, never product dependencies)
 - ECC (plugin ecc@ecc): method. Run /ecc:plan before coding, the tdd-workflow skill for logic, /code-review and /security-scan before every merge. Rules copied in .claude/rules/ecc/.

@@ -33,6 +33,8 @@ SEED_ADMIN_PASSWORD=... npm run db:seed -- --admin-email equipe@example.africa -
 
 Sans `--content-dir`, seuls les migrations, le compte et les gabarits vides de fiches sont écrits. Le contenu vit dans `apps/api/content` : un fichier Markdown par fiche, sujet ou article, avec ses champs en tête.
 
+La mise en production sur le serveur (getoverpass.app) suit [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
+
 ## Organisation
 
 | Dossier | Contenu |
