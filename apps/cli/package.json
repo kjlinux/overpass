@@ -3,6 +3,20 @@
   "version": "0.1.0",
   "description": "Replays Overpass sandbox webhooks on your local server, without a tunnel or a public URL.",
   "license": "MIT",
+  "keywords": [
+    "webhook",
+    "sandbox",
+    "relay",
+    "mobile-money",
+    "overpass"
+  ],
+  "homepage": "https://github.com/kjlinux/overpass/tree/main/apps/cli#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kjlinux/overpass.git",
+    "directory": "apps/cli"
+  },
+  "bugs": "https://github.com/kjlinux/overpass/issues",
   "type": "module",
   "bin": {
     "overpass": "dist/cli.js"
@@ -16,6 +30,8 @@
     "node": ">=20"
   },
   "scripts": {
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "build": "tsc -b tsconfig.build.json",
+    "prepublishOnly": "tsc -b tsconfig.build.json --clean && npm run build"
   }
 }

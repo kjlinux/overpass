@@ -32,7 +32,7 @@ Quand la documentation ne donne pas un détail, un chemin ou le texte d'un refus
 
 ## Les webhooks sur votre poste
 
-Recevoir un webhook exige d'habitude une URL publique. La commande `npx overpass listen` ouvre une connexion sortante et rejoue chaque livraison sur votre serveur local, sans tunnel ni certificat, en transmettant corps et en-têtes sans les modifier. Les livraisons sont conservées sept jours puis purgées.
+Recevoir un webhook exige d'habitude une URL publique. La commande `npx overpass-cli listen` ouvre une connexion sortante et rejoue chaque livraison sur votre serveur local, sans tunnel ni certificat, en transmettant corps et en-têtes sans les modifier. Les livraisons sont conservées sept jours puis purgées.
 
 ## Et les autres opérateurs
 

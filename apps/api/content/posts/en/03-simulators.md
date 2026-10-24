@@ -32,7 +32,7 @@ When the documentation leaves out a detail, a path or the text of a refusal, the
 
 ## Webhooks on your machine
 
-Receiving a webhook usually requires a public URL. The `npx overpass listen` command opens an outbound connection and replays each delivery on your local server, no tunnel, no certificate, body and headers passed through unchanged. Deliveries are kept seven days, then purged.
+Receiving a webhook usually requires a public URL. The `npx overpass-cli listen` command opens an outbound connection and replays each delivery on your local server, no tunnel, no certificate, body and headers passed through unchanged. Deliveries are kept seven days, then purged.
 
 ## And the other operators
 

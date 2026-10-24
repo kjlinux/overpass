@@ -332,3 +332,10 @@ Both SKILL.md files were read in full before use. Instructions outside the proje
 - **Change:** five drawn covers, one per article group, in the DESIGN.md palette with no text and no people (`scripts/blog-covers/*.svg`, rendered to 1600x900 PNG in `apps/api/content/posts/covers/` by `npx tsx scripts/blog-covers.ts`). Each article file names its cover with `cover: covers/<group>.png`. The content reader refuses a cover outside `posts/covers/`, missing, over 2 MB or not an image before any write, and gives translations one shared buffer; `seedPosts` stores it once through the new `mediaStore` of the media module, owned by the team account so the cover passes the "own image" rule on edit. Articles already seeded without a cover get one on the next run; a cover set since is never replaced.
 - **TDD evidence:** the two `content.test.ts` cases and the two `seed.test.ts` cases were written first and seen failing, then green; `tree.test.ts` now requires a cover on every shipped article.
 
+### 2026-10-24, Claude Code (Claude Opus 5.5), commands shown to visitors that run the right package
+
+- **User request, verbatim summary:** make a plan to fix the CLI and MCP commands shown on the site, then apply it.
+- **Finding:** `overpass` on npm is an unrelated pub/sub package, `overpass-mcp` belongs to a third party (an OpenStreetMap MCP) and the `@overpass` scope is taken. A visitor copying the showcase sample would have handed a personal token to foreign code.
+- **User decisions:** keep the unscoped name `overpass-cli`; the first publish is manual, done by the user. No npm package for the MCP server, which stays the hosted HTTP endpoint.
+- **Change:** the showcase sample is now the `claude mcp add --transport http` line built by `mcp/config.ts`; every `npx overpass listen` in the articles, the Wave route and the spec becomes `npx overpass-cli listen`; `apps/cli` gets npm metadata, a `build` script, a `prepublishOnly` clean build, and a README with flags and environment variables.
+- **Checks:** `npm pack --dry-run -w overpass-cli` lists 19 files (dist, locales, README, LICENSE), no tests. Content and locale edits only, so no new test.

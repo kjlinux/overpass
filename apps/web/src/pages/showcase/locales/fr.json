@@ -78,7 +78,7 @@
   },
   "code": {
     "title": "Bloc de code avec copie",
-    "sample": "npx overpass-mcp --token ovp_pat_7f3a…c91d"
+    "sample": "claude mcp add --transport http overpass \"https://overpass.example/mcp?lang=fr\" --header \"Authorization: Bearer ovp_pat_7f3a…c91d\""
   },
   "states": {
     "title": "Squelette de chargement et état vide",
