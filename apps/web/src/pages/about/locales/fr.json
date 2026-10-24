@@ -1,6 +1,6 @@
 {
   "title": "À propos",
-  "intro": "Overpass est la bourse des intégrations africaines vérifiées. Les développeurs y partagent le code qui marche avec les services africains, paiement mobile, SMS, USSD ou toute autre API, et les pièges que la documentation officielle ne dit pas.",
+  "intro": "Overpass est la bourse des intégrations vérifiées. Les développeurs y partagent le code qui marche avec n'importe quelle API, paiement mobile, SMS, USSD ou autre, et les pièges que la documentation officielle ne dit pas.",
   "placeholder": "À compléter par l'équipe",
   "product": {
     "heading": "Le produit",

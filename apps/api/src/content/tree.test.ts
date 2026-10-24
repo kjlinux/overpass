@@ -39,6 +39,7 @@ describe("the shipped content tree", () => {
     }
     expect(groups.size).toBe(5);
     expect([...groups.values()].every((languages) => languages.size === 2)).toBe(true);
+    expect(content.posts.every((post) => post.cover !== undefined)).toBe(true);
   });
 
   it("seeds on a fresh database once, then creates nothing", async () => {

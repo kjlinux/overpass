@@ -1,15 +1,15 @@
 {
   "site": {
     "name": "Overpass",
-    "promise": "La bourse des intégrations africaines vérifiées",
-    "title": "Overpass, la bourse des intégrations africaines vérifiées",
-    "description": "Des développeurs partagent le code qui marche avec les API africaines, paiement mobile, SMS ou USSD, les pièges connus et des vérifications datées. Une piste d'essai simule un paiement sans compte marchand, et un serveur MCP sert les fiches à votre assistant de code."
+    "promise": "La bourse des intégrations vérifiées",
+    "title": "Overpass, la bourse des intégrations vérifiées",
+    "description": "Des développeurs partagent le code qui marche avec n'importe quelle API, paiement mobile, SMS ou USSD compris, les pièges connus et des vérifications datées. Une piste d'essai simule un paiement sans compte marchand, et un serveur MCP sert les fiches à votre assistant de code."
   },
   "titleTemplate": "{{page}} · Overpass",
   "pages": {
     "home": {
       "title": "Accueil",
-      "description": "Des développeurs partagent le code qui marche avec les API africaines, paiement mobile, SMS ou USSD, les pièges connus et des vérifications datées. Une piste d'essai simule un paiement sans compte marchand, et un serveur MCP sert les fiches à votre assistant de code."
+      "description": "Des développeurs partagent le code qui marche avec n'importe quelle API, paiement mobile, SMS ou USSD compris, les pièges connus et des vérifications datées. Une piste d'essai simule un paiement sans compte marchand, et un serveur MCP sert les fiches à votre assistant de code."
     },
     "routes": {
       "title": "Itinéraires",

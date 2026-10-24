@@ -3,15 +3,11 @@ import { join } from "node:path";
 import { gzipSync } from "node:zlib";
 import {
   checkBudget,
-  checkSceneBudget,
-  chunkClosure,
   homeAssets,
   homeBudget,
   homeLazyRoots,
   homeLoadAssets,
   homeRoots,
-  sceneBudgetBytes,
-  sceneRoot,
 } from "./checks/bundle-budget.ts";
 import type { Manifest } from "./checks/bundle-budget.ts";
 
@@ -29,9 +25,8 @@ const homeImages = (existsSync(imageDir) ? readdirSync(imageDir) : [])
 // The share plugin pre-renders dist/fr/index.html for the home page; plain builds only have index.html.
 const homeHtml = existsSync(join(dist, "fr/index.html")) ? "fr/index.html" : "index.html";
 const firstLoad = [homeHtml, ...homeAssets(manifest, homeRoots)];
-const lazy = homeLoadAssets(manifest, homeLazyRoots, [sceneRoot]);
+const lazy = homeLoadAssets(manifest, homeLazyRoots, []);
 const everything = sizesOf([...new Set([...firstLoad, ...lazy, ...homeImages])]);
-const scene = sizesOf(chunkClosure(manifest, sceneRoot).filter((file) => !(file in everything)));
 
 const print = (title: string, sizes: Record<string, number>): void => {
   console.log(title);
@@ -40,17 +35,15 @@ const print = (title: string, sizes: Record<string, number>): void => {
   }
 };
 print("Home page, first load, lazy chunks and images:", everything);
-print("Scene chunk:", scene);
 const kb = (sizes: Record<string, number>, keep: (file: string) => boolean): string =>
   `${(Object.entries(sizes).reduce((sum, [file, n]) => sum + (keep(file) ? n : 0), 0) / 1024).toFixed(1)} KB`;
 console.log(`First load JS ${kb(sizesOf(firstLoad), (file) => file.endsWith(".js"))}`);
-console.log(`Home in all ${kb(everything, () => true)}, scene ${kb(scene, () => true)}`);
+console.log(`Home in all ${kb(everything, () => true)}`);
 
 const errors = [
   ...checkBudget(sizesOf(firstLoad), { ...homeBudget, totalGzipBytes: Infinity }),
   ...checkBudget(everything, { ...homeBudget, jsGzipBytes: Infinity }),
-  ...checkSceneBudget(scene, sceneBudgetBytes),
 ];
 for (const error of errors) console.error(error);
 if (errors.length > 0) process.exitCode = 1;
-else console.log("Home page and scene within budget.");
+else console.log("Home page within budget.");

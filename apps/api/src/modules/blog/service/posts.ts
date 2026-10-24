@@ -30,8 +30,15 @@ async function translationGroup(
   return other.translationGroup;
 }
 
+/** A cover must be an image its author uploaded; null clears it. */
+async function requireOwnCover(deps: BlogDeps, account: Account, id: string | null | undefined) {
+  if (id === undefined || id === null || (await deps.ownsMedia(id, account.id))) return;
+  throw new AppError("validation_failed", 400, { coverMediaId: "cover_invalid" });
+}
+
 async function create(deps: BlogDeps, account: Account, input: PostCreateInput) {
   await requireWritable(deps, account, input.kind);
+  await requireOwnCover(deps, account, input.coverMediaId);
   const at = deps.now();
   const publishedAt = input.publishAt ?? (input.status === "published" ? at : null);
   try {
@@ -42,6 +49,7 @@ async function create(deps: BlogDeps, account: Account, input: PostCreateInput) 
       title: input.title,
       summary: input.summary,
       content: input.content,
+      coverMediaId: input.coverMediaId,
       status: input.status,
       authorId: account.id,
       translationGroup: await translationGroup(deps, account, input),
@@ -81,6 +89,7 @@ async function editable(deps: BlogDeps, account: Account, id: string): Promise<P
 async function update(deps: BlogDeps, account: Account, id: string, input: PostUpdateInput) {
   const row = await editable(deps, account, id);
   await requireWritable(deps, account, row.kind);
+  await requireOwnCover(deps, account, input.coverMediaId);
   await deps.repository.updatePost(id, patchOf(row, input, deps.now()), deps.now());
   await deps.onContribution([row.authorId]);
   return detailFor(deps, id, account);

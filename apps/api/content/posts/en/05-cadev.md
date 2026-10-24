@@ -4,6 +4,7 @@ kind: news
 category: tech-news
 language: en
 group: cadev
+cover: covers/cadev.png
 summary: "Deliverables, constraints and calendar of the competition Overpass was built for, from the official page."
 publishedAt: 2026-10-23
 ---

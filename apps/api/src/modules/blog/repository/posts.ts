@@ -34,10 +34,10 @@ async function insertOnce(db: Database, post: NewPost): Promise<string> {
   const [row] = await rows<{ id: string }>(
     db,
     sql`insert into posts (kind, author_id, language, translation_group, slug, category, title,
-        summary, content, status, published_at, created_at, updated_at)
+        summary, content, cover_media_id, status, published_at, created_at, updated_at)
       values (${post.kind}, ${post.authorId}, ${post.language},
         coalesce(${group}::uuid, gen_random_uuid()), ${slug}, ${post.category}, ${post.title},
-        ${post.summary}, ${post.content}, ${post.status},
+        ${post.summary}, ${post.content}, ${post.coverMediaId ?? null}, ${post.status},
         ${post.publishedAt === null ? null : at(post.publishedAt)}, ${at(post.at)}, ${at(post.at)})
       returning id`,
   );
@@ -64,6 +64,7 @@ async function updatePost(db: Database, id: string, patch: PostPatch, when: Date
     patch.title === undefined ? undefined : sql`title = ${patch.title}`,
     patch.summary === undefined ? undefined : sql`summary = ${patch.summary}`,
     patch.content === undefined ? undefined : sql`content = ${patch.content}`,
+    patch.coverMediaId === undefined ? undefined : sql`cover_media_id = ${patch.coverMediaId}`,
     patch.status === undefined ? undefined : sql`status = ${patch.status}`,
     patch.publishedAt === undefined
       ? undefined

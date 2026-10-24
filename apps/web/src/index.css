@@ -59,13 +59,6 @@ a {
   border-bottom: 1.75px solid currentColor;
   transform: translateY(-70%) rotate(45deg);
 }
-.badge::before {
-  content: "";
-  width: 6px;
-  height: 6px;
-  background: currentColor;
-  flex: none;
-}
 .skeleton-bar {
   background: var(--color-surface);
   animation: skeleton-pulse 1.5s ease-in-out infinite;

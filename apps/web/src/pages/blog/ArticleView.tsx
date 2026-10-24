@@ -4,6 +4,7 @@ import type { ComponentChildren, JSX } from "preact";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../app/useLanguage";
 import { localizedPath } from "../../layout";
+import { Cover } from "./Cover";
 import { Markdown } from "../../markdown";
 import { formatDate } from "../routes";
 import { ArticleActions } from "./ArticleActions";
@@ -101,6 +102,7 @@ function ArticleHeader({ post }: { post: PostDetail }): JSX.Element {
       </p>
       <h1 class="m-0 text-h1 font-semibold [overflow-wrap:anywhere]">{post.title}</h1>
       <p class="m-0 text-h3 text-ink-2">{post.summary}</p>
+      <Cover src={post.cover} />
       <Byline post={post} />
     </>
   );

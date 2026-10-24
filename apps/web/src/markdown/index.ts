@@ -1,3 +1,3 @@
 export { Markdown } from "./Markdown";
 export { headingsOf, slugify } from "./parse";
-export { safeHref } from "./links";
+export { safeHref, safeImageSrc } from "./links";

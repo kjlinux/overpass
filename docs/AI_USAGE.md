@@ -302,3 +302,40 @@ Both SKILL.md files were read in full before use. Instructions outside the proje
 - **User request, verbatim summary:** put the site online now, without e-mail, while no SMTP account is available.
 - **Change:** `loadConfig` no longer refuses a production start without `SMTP_HOST`; `createMailer` then returns `disabledMailer`, which rejects every send and never logs the message, since a reset link is a credential. Every caller already handles a failed send: sign-up and reset log the error in the background, the newsletter confirmation logs it, newsletter deliveries retry then end as failed. Development keeps logging messages; the file outbox stays refused in production. Tests first in `config.test.ts` and `mailer.test.ts`.
 - **Consequence while SMTP_HOST is empty:** no password reset mail, no newsletter confirmation or issue; set `SMTP_HOST`, `SMTP_USER` and `SMTP_PASSWORD` on the server, then restart the API and the worker, to send them again.
+
+### 2026-10-24, Claude Code (Claude Opus 5.5), a home page that says what the product does
+
+- **User request, verbatim summary:** the home page tells nothing concrete, a visitor cannot learn everything the application does from it.
+- **User decision:** a concrete redesign. Keep the promise and the live demo, list every module, show real content, drop the decorative webhook scene.
+- **Change:** a "what you can do here" grid of eleven modules, each a link with one concrete sentence (`home/features`); the three latest itineraries as real `RouteCard`s, the latest discussions and articles beside the newsletter (`home/latest`, read through the shared page schemas and hidden when the API fails or lists nothing); a hero sentence that names the sheets, the test track and the MCP server. Removed: the scene band and its `three` dependency, the itineraries screenshot, the abstract itineraries and community sections, the scene budget in `scripts/check-budget.ts`. DESIGN.md now describes this layout and no looping motion.
+- **TDD evidence:** `features.test.ts` and `latest.test.ts` written first and seen failing (modules missing), green after the implementation; `e2e/home.spec.ts` replaces the two scene tests with one that finds every module link at 360 px without sideways scroll.
+- **Follow-up the same day, user requests verbatim summary:** remove the "what you can do here" heading; Overpass takes any API, not only African ones; it is Overpass, not "the administration", that validates a proposed service. The grid heading is now read by screen readers only, the promise, the home intro, the share title and description and the about intro no longer restrict the product to Africa, and the "publish" cell says you climb the ranking, since points unlock nothing else.
+
+### 2026-10-24, Claude Code (Claude Opus 5.5), images in articles
+
+- **User request, verbatim summary:** articles cannot even hold images.
+- **User decision:** images uploaded to and hosted by Overpass, plus an optional cover per article; outside image links stay as their alternative text.
+- **API:** migration 0021 adds `media` (bytes in PostgreSQL, so the API stays stateless and needs no shared disk) and `posts.cover_media_id`. Module `media`: `POST /v1/media` takes the raw PNG, JPEG or WebP body of a signed-in member, at most 2 MB, rate limited, and keeps the type read from the file signature, never the declared one (SVG is refused); `GET /v1/media/:id` serves it immutable with nosniff. A post cover must be an image its author uploaded (`cover_invalid` otherwise); posts return `cover` as a media address.
+- **Web:** the Markdown renderer shows an image only when its source is an Overpass media address (`safeImageSrc`), lazily and with its alternative text; the editor gets a cover field with preview and removal, and an "add an image" block that asks for the description first, then inserts the image at the cursor; covers show in the article, the featured post and the list rows. No change to the content security policy, since `'self'` covers the media addresses.
+- **TDD evidence:** `detect.test.ts`, `routes-media.test.ts`, `routes-cover.test.ts`, the migration list, the new Markdown cases and `images.test.ts` were written first and seen failing, then green. `e2e/blog-images.spec.ts` was written but not run here, because the user's own API and web servers held the ports Playwright starts.
+
+### 2026-10-24, Claude Code (Claude Opus 5.5), a home page tour with animated screens
+
+- **User request, verbatim summary:** the home page must show everything the site does, with animations and images, polished enough to attract everyone.
+- **User decisions:** animated mini-screens drawn in code rather than screenshots; richer motion allowed on the home page only; built straight into the app.
+- **Change:** `home/tour` replaces the module grid, the test track section and the assistants section with eight blocks, each with text, links and a framed screen (lines written in turn, a scenario switcher, growing bars) driven by `useSequence`, which plays only while the screen is visible and shows the end state at once under reduced motion. Screen texts live in the home translation files and every screen says "example". The static test track capture is gone. DESIGN.md records the layout and the motion exception.
+- **Tests:** `sequence.test.ts` written first and seen failing; `e2e/home.spec.ts` now checks every tour block and its screen at 360 px. The user asked to leave the full test run for later, so `npm run check` was not run.
+
+### 2026-10-24, Claude Code (Claude Opus 5.5), covers for the seeded articles
+
+- **User request, verbatim summary:** the blog articles seeded in production must have images.
+- **Change:** five drawn covers, one per article group, in the DESIGN.md palette with no text and no people (`scripts/blog-covers/*.svg`, rendered to 1600x900 PNG in `apps/api/content/posts/covers/` by `npx tsx scripts/blog-covers.ts`). Each article file names its cover with `cover: covers/<group>.png`. The content reader refuses a cover outside `posts/covers/`, missing, over 2 MB or not an image before any write, and gives translations one shared buffer; `seedPosts` stores it once through the new `mediaStore` of the media module, owned by the team account so the cover passes the "own image" rule on edit. Articles already seeded without a cover get one on the next run; a cover set since is never replaced.
+- **TDD evidence:** the two `content.test.ts` cases and the two `seed.test.ts` cases were written first and seen failing, then green; `tree.test.ts` now requires a cover on every shipped article.
+
+### 2026-10-24, Claude Code (Claude Opus 5.5), commands shown to visitors that run the right package
+
+- **User request, verbatim summary:** make a plan to fix the CLI and MCP commands shown on the site, then apply it.
+- **Finding:** `overpass` on npm is an unrelated pub/sub package, `overpass-mcp` belongs to a third party (an OpenStreetMap MCP) and the `@overpass` scope is taken. A visitor copying the showcase sample would have handed a personal token to foreign code.
+- **User decisions:** keep the unscoped name `overpass-cli`; the first publish is manual, done by the user. No npm package for the MCP server, which stays the hosted HTTP endpoint.
+- **Change:** the showcase sample is now the `claude mcp add --transport http` line built by `mcp/config.ts`; every `npx overpass listen` in the articles, the Wave route and the spec becomes `npx overpass-cli listen`; `apps/cli` gets npm metadata, a `build` script, a `prepublishOnly` clean build, and a README with flags and environment variables.
+- **Checks:** `npm pack --dry-run -w overpass-cli` lists 19 files (dist, locales, README, LICENSE), no tests. Content and locale edits only, so no new test.

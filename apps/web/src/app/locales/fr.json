@@ -1,56 +1,34 @@
 {
   "app": {
     "name": "Overpass",
-    "tagline": "Intégrez les API africaines sans tâtonner.",
-    "intro": "Paiement mobile, SMS, USSD ou tout autre service africain, d'autres développeurs l'ont déjà branché. Ils partagent ici le code qui marche, les pièges rencontrés et la date de leur dernier essai.",
+    "tagline": "Intégrez n'importe quelle API de paiement sans tâtonner.",
+    "intro": "Overpass rassemble des fiches d'intégration pour toutes les API, paiement mobile, SMS, USSD ou autre, classées par service, pays et stack. Chaque fiche donne le code qui marche, les pièges connus et la date du dernier essai. Une piste d'essai simule les opérateurs sans compte marchand, et un serveur MCP sert les fiches à votre assistant de code.",
     "demo": "Essayer la démo",
     "routes": "Parcourir les itinéraires"
   },
-  "scene": {
-    "label": "Un webhook part d'un opérateur simulé, passe par Overpass et arrive sur localhost.",
-    "departure": "Départ",
-    "relay": "Relais",
-    "arrival": "Arrivée",
-    "caption": "Trajet d'un webhook jusqu'à votre serveur local",
-    "still": "Image fixe",
-    "live": "Boucle lente, en pause hors de l'écran",
-    "operator": "Opérateur",
-    "operatorSub": "Wave, simulé",
-    "operatorShort": "simulé",
-    "overpass": "Overpass",
-    "overpassSub": "relais",
-    "localhost": "localhost",
-    "localhostSub": ":3000/webhooks",
-    "localhostShort": ":3000",
-    "post": "POST /webhooks",
-    "event": "checkout.session.completed",
-    "emitted": "émis par l'opérateur",
-    "signed": "signé, rejoué si refusé",
-    "received": "reçu, 200 OK"
-  },
   "demo": {
     "title": "La démo, ici même",
-    "intro": "Un paiement mobile simulé, chez Wave pour la démo, sans compte ni clé marchande. Un clic, et regardez le webhook arriver.",
+    "intro": "Quand un client paie par mobile money, votre site demande le paiement à l'opérateur, qui accepte la demande, puis confirme quelques secondes plus tard que l'argent est arrivé. Cette confirmation, appelée webhook, est l'étape qui casse le plus souvent. Lancez un paiement simulé chez l'un des opérateurs déjà intégrés, sans compte, et suivez les trois étapes.",
     "run": "Lancer un paiement simulé",
     "rerun": "Relancer le paiement simulé",
     "loading": "Chargement de la démo",
     "pending": "en attente",
     "elapsed": "+{{ms}} ms",
     "stages": {
-      "request": "Requête envoyée",
-      "response": "Réponse reçue",
-      "webhook": "Webhook livré",
-      "webhookFailed": "Webhook non livré"
+      "request": "1. Votre site demande le paiement",
+      "response": "2. L'opérateur accepte la demande",
+      "webhook": "3. L'opérateur confirme le paiement",
+      "webhookFailed": "3. Confirmation non reçue"
     },
-    "receiver": "vers le récepteur intégré",
+    "receiver": "reçu par le serveur de démo, à la place du vôtre",
     "live": {
-      "request": "Requête envoyée.",
-      "response": "Réponse reçue, {{status}}. Le webhook est en route.",
-      "webhook": "Webhook livré au récepteur intégré.",
-      "webhookFailed": "Le webhook n'a pas été livré. Rejouez-le depuis la piste d'essai.",
+      "request": "Votre site envoie la demande de paiement.",
+      "response": "L'opérateur a répondu {{status}}, le paiement est en cours. La confirmation arrive.",
+      "webhook": "Paiement confirmé, le webhook est arrivé sur le serveur de démo, qui joue ici le rôle de votre serveur.",
+      "webhookFailed": "La confirmation n'est pas arrivée. Rejouez-la depuis la piste d'essai.",
       "failed": "Le simulateur ne répond pas. Réessayez dans un instant."
     },
-    "more": "Clés de test, relais local et cinq scénarios sur la",
+    "more": "Pour essayer avec votre propre serveur, créez une clé de test sur la",
     "open": "piste d'essai"
   }
 }

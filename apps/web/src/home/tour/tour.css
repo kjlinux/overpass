@@ -1,0 +1,82 @@
+.tour-screen {
+  box-shadow: 8px 8px 0 var(--color-rule);
+}
+.tour-dots {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  margin-right: 22px;
+  background: var(--color-rule-strong);
+  box-shadow:
+    11px 0 0 var(--color-rule-strong),
+    22px 0 0 var(--color-rule-strong);
+}
+.tour-line {
+  opacity: 0;
+  transform: translateY(6px);
+  transition:
+    opacity var(--duration-slow) var(--ease-out),
+    transform var(--duration-slow) var(--ease-out);
+}
+.tour-line[data-on] {
+  opacity: 1;
+  transform: none;
+}
+.tour-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 16px;
+  padding: 8px 12px;
+  border-left: 3px solid transparent;
+  transition:
+    background-color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out);
+}
+.tour-row[data-active] {
+  background: var(--color-paper);
+  border-left-color: var(--color-accent);
+}
+.tour-track {
+  display: block;
+  height: 8px;
+  background: var(--color-paper);
+  border: 1px solid var(--color-rule);
+}
+.tour-bar {
+  display: block;
+  height: 100%;
+  background: var(--color-accent);
+  transition: width 700ms var(--ease-out);
+}
+@media (prefers-reduced-motion: reduce) {
+  .tour-line,
+  .tour-row,
+  .tour-bar {
+    transition: none;
+  }
+}
+.tour-packet {
+  transition: transform 900ms var(--ease-out);
+}
+.tour-cover[data-on] .tour-packet {
+  transform: translateX(88px);
+}
+.tour-check {
+  transform-origin: 254px 71px;
+  transform: scale(0.4);
+  opacity: 0.3;
+  transition:
+    transform var(--duration-slow) var(--ease-out) 700ms,
+    opacity var(--duration-slow) var(--ease-out) 700ms;
+}
+.tour-cover[data-on] .tour-check {
+  transform: none;
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .tour-packet,
+  .tour-check {
+    transition: none;
+  }
+}

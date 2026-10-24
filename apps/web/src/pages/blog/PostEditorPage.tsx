@@ -10,6 +10,7 @@ import { Layout, localizedPath } from "../../layout";
 import { RequireSession, apiRequest } from "../../session";
 import { useApi } from "../routes";
 import { PostForm } from "./PostForm";
+import { mediaIdOf } from "./images";
 import { toInstant, toLocalInput } from "./postValues";
 import type { PostFormValues } from "./postValues";
 
@@ -23,8 +24,9 @@ const missingLanguages = (post: PostDetail): Language[] =>
 function useSave(existing: PostDetail | null, translationOf: string | null) {
   const { route } = useLocation();
   return async (values: PostFormValues, status: PostStatus) => {
-    const { publishAt, kind, language, ...fields } = values;
+    const { publishAt, kind, language, cover, ...fields } = values;
     const when = toInstant(publishAt);
+    const coverMediaId = mediaIdOf(cover ?? "");
     const result =
       existing === null
         ? await apiRequest<PostDetail>("POST", "/v1/posts", {
@@ -34,11 +36,13 @@ function useSave(existing: PostDetail | null, translationOf: string | null) {
             status,
             ...(when === undefined ? {} : { publishAt: when }),
             ...(translationOf === null ? {} : { translationOf }),
+            ...(coverMediaId === null ? {} : { coverMediaId }),
           })
         : await apiRequest<PostDetail>("PATCH", `/v1/posts/${existing.id}`, {
             ...fields,
             status,
             publishAt: when ?? null,
+            coverMediaId,
           });
     if (result.error !== null) return result.error;
     route(localizedPath(result.data.language, `/blog/${result.data.slug}`));
@@ -74,7 +78,7 @@ function Editor({ me, post }: { me: Me; post: PostDetail | null }): JSX.Element 
           ...(asked === undefined ? {} : { language: asked }),
           ...(kind === undefined ? {} : { kind }),
         }
-      : { ...post, publishAt: toLocalInput(post.publishedAt) };
+      : { ...post, cover: post.cover ?? "", publishAt: toLocalInput(post.publishedAt) };
   const title =
     post !== null
       ? t("editor.editTitle")

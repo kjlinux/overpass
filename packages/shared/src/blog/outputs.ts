@@ -12,6 +12,7 @@ export const postSummarySchema = z.object({
   category: z.enum(postCategories),
   title: z.string(),
   summary: z.string(),
+  cover: z.string().nullable(),
   author: postAuthorSchema.nullable(),
   status: z.enum(postStatuses),
   moderation: z.enum(moderationStatuses),

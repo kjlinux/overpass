@@ -112,7 +112,7 @@
     "language": "Language of the post",
     "kind": "Section",
     "content": "Text in Markdown",
-    "contentHelp": "Headings, lists, links and code blocks. HTML is not interpreted.",
+    "contentHelp": "Headings, lists, links, code blocks and images uploaded here. HTML is not rendered.",
     "write": "Write",
     "preview": "Preview",
     "publishAt": "Publication date",
@@ -122,7 +122,16 @@
     "unpublish": "Back to draft",
     "saved": "Post saved.",
     "translate": "Write the {{language}} version",
-    "slug": "Address of the post: {{path}}"
+    "slug": "Address of the post: {{path}}",
+    "imageAlt": "Image description",
+    "imageAltHelp": "What the image shows, for readers who cannot see it.",
+    "imageFile": "Add an image to the text",
+    "imageHelp": "PNG, JPEG or WebP, 2 MB at most. The image goes where the cursor is.",
+    "imageAltMissing": "Describe the image before adding it.",
+    "imageUploading": "Uploading the image",
+    "cover": "Cover image",
+    "coverHelp": "Optional. It shows at the top of the article and in the lists. PNG, JPEG or WebP, 2 MB at most.",
+    "coverRemove": "Remove the cover"
   },
   "moderation": {
     "heading": "Blog",

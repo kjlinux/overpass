@@ -7,6 +7,7 @@ export const postFormSchema = postCreateInput
   .extend({
     category: postCategorySchema,
     kind: postKindSchema,
+    cover: z.string().optional(),
     publishAt: z
       .string()
       .regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/, { error: "publish_at_invalid" })
@@ -22,6 +23,7 @@ export const emptyPost: Record<keyof PostFormValues, string> = {
   title: "",
   summary: "",
   content: "",
+  cover: "",
   publishAt: "",
 };
 

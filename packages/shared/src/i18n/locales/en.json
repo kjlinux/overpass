@@ -48,7 +48,9 @@
     "suspend_self": "You cannot suspend your own account.",
     "suspend_admin": "An administrator account cannot be suspended.",
     "already_suspended": "This account is already suspended.",
-    "not_suspended": "This account is not suspended."
+    "not_suspended": "This account is not suspended.",
+    "image_invalid": "Send a PNG, JPEG or WebP image.",
+    "image_too_large": "The image is over 2 MB, make it smaller before sending it."
   },
   "fields": {
     "required": "This field is required.",
@@ -113,7 +115,8 @@
     "items_invalid": "Choose at most 15 existing items.",
     "slug_invalid": "This post address is not valid.",
     "report_reason_invalid": "Explain the problem in 3 to 500 characters.",
-    "suspension_reason_invalid": "Give the reason for the suspension in 3 to 500 characters."
+    "suspension_reason_invalid": "Give the reason for the suspension in 3 to 500 characters.",
+    "cover_invalid": "Choose an image you uploaded."
   },
   "template": "## Prerequisites\n\n- The account or API key to obtain.\n- The framework version in use.\n\n## Installation\n\nThe packages to install and the configuration to add.\n\n## Payment\n\nThe code that creates the payment, with its parameters.\n\n```\n\n```\n\n## Webhook\n\nHow to receive and verify the notification from the provider.\n\n```\n\n```\n\n## Known traps\n\n- What the official documentation does not say.\n"
 }

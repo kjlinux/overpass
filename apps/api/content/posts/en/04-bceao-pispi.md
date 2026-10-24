@@ -4,6 +4,7 @@ kind: news
 category: tech-news
 language: en
 group: bceao-pispi
+cover: covers/bceao-pispi.png
 summary: "What the platform changes for a developer in the eight countries of the Union, and how to start without waiting for a certificate."
 publishedAt: 2026-10-23
 ---

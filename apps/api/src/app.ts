@@ -25,6 +25,7 @@ import { rankingModule } from "./modules/ranking/index.js";
 import { registerRequests } from "./modules/requests/index.js";
 import { serviceCatalogue } from "./modules/routes/index.js";
 import { registerShare } from "./modules/share/index.js";
+import { registerMedia } from "./modules/media/index.js";
 import { registerStats } from "./modules/stats/index.js";
 import { registerSimulator } from "./simulator.js";
 import type { SandboxDeps } from "./simulator.js";
@@ -106,6 +107,7 @@ async function registerModules(
   await ranking.register(app);
   await admin.register(app, resolveAccount);
   await registerStats(app, { db, now: clock });
+  await registerMedia(app, { db, resolveAccount });
   await registerShare(app, { db, config, now: clock });
   const community = { db, sender, resolveAccount, webOrigin: config.WEB_ORIGIN, now: clock };
   const ports = { onContribution: ranking.listener, moderationLog: admin.log };

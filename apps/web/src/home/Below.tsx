@@ -1,12 +1,11 @@
 import type { Language } from "@overpass/shared";
 import type { JSX } from "preact";
 import { useRef } from "preact/hooks";
-import { CommunitySection } from "./CommunitySection";
 import { CountriesSection } from "./CountriesSection";
 import { useReveal } from "./hooks/useReveal";
-import { McpSection } from "./McpSection";
-import { RoutesSection } from "./RoutesSection";
-import { TrackSection } from "./TrackSection";
+import { LatestActivity } from "./latest/LatestActivity";
+import { LatestRoutes } from "./latest/LatestRoutes";
+import { Tour } from "./tour/Tour";
 
 /** The sections under the demo, in their own chunk so the first load stays within budget. */
 export function Below({ language }: { language: Language }): JSX.Element {
@@ -14,10 +13,9 @@ export function Below({ language }: { language: Language }): JSX.Element {
   useReveal(root);
   return (
     <div ref={root}>
-      <TrackSection language={language} />
-      <RoutesSection language={language} />
-      <McpSection language={language} />
-      <CommunitySection language={language} />
+      <Tour language={language} />
+      <LatestRoutes language={language} />
+      <LatestActivity language={language} />
       <CountriesSection language={language} />
     </div>
   );

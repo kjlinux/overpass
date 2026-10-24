@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180">
+  <rect width="320" height="180" fill="#E6EBF9" />
+  <g stroke="#7A7A80" stroke-width="2">
+    <line x1="160" y1="90" x2="280" y2="90" />
+    <line x1="160" y1="90" x2="245" y2="134" />
+    <line x1="160" y1="90" x2="160" y2="152" />
+    <line x1="160" y1="90" x2="75" y2="134" />
+    <line x1="160" y1="90" x2="160" y2="28" />
+    <line x1="160" y1="90" x2="75" y2="46" />
+  </g>
+  <g stroke="#213E9E" stroke-width="4">
+    <line x1="160" y1="90" x2="40" y2="90" />
+    <line x1="160" y1="90" x2="245" y2="46" />
+  </g>
+  <g fill="#FBFBF9" stroke="#1A1A1C" stroke-width="3">
+    <rect x="270" y="80" width="20" height="20" />
+    <rect x="235" y="124" width="20" height="20" />
+    <rect x="150" y="142" width="20" height="20" />
+    <rect x="65" y="124" width="20" height="20" />
+    <rect x="150" y="18" width="20" height="20" />
+    <rect x="65" y="36" width="20" height="20" />
+  </g>
+  <rect x="30" y="80" width="20" height="20" fill="#213E9E" stroke="#1A1A1C" stroke-width="3" />
+  <rect x="235" y="36" width="20" height="20" fill="#213E9E" stroke="#1A1A1C" stroke-width="3" />
+  <circle cx="160" cy="90" r="24" fill="#1A1A1C" />
+  <rect x="152" y="82" width="16" height="16" fill="#FBFBF9" />
+  <rect x="96" y="83" width="14" height="14" fill="#213E9E" />
+</svg>

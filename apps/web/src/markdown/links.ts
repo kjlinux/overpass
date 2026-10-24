@@ -10,3 +10,10 @@ export function safeHref(href: string): string | undefined {
     return undefined;
   }
 }
+
+const mediaPath = /^\/v1\/media\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
+
+/** Only images Overpass stores itself; anything else would load from a host the reader never chose. */
+export function safeImageSrc(src: string): string | undefined {
+  return mediaPath.test(src) ? src : undefined;
+}

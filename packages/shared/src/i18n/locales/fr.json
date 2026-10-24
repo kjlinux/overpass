@@ -48,7 +48,9 @@
     "suspend_self": "Vous ne pouvez pas suspendre votre propre compte.",
     "suspend_admin": "Un compte administrateur ne peut pas être suspendu.",
     "already_suspended": "Ce compte est déjà suspendu.",
-    "not_suspended": "Ce compte n'est pas suspendu."
+    "not_suspended": "Ce compte n'est pas suspendu.",
+    "image_invalid": "Envoyez une image PNG, JPEG ou WebP.",
+    "image_too_large": "L'image dépasse 2 Mo, réduisez-la avant de l'envoyer."
   },
   "fields": {
     "required": "Ce champ est obligatoire.",
@@ -113,7 +115,8 @@
     "items_invalid": "Choisissez au plus 15 contenus existants.",
     "slug_invalid": "Cette adresse d'article n'est pas valide.",
     "report_reason_invalid": "Expliquez le problème en 3 à 500 caractères.",
-    "suspension_reason_invalid": "Indiquez le motif de la suspension en 3 à 500 caractères."
+    "suspension_reason_invalid": "Indiquez le motif de la suspension en 3 à 500 caractères.",
+    "cover_invalid": "Choisissez une image que vous avez envoyée."
   },
   "template": "## Prérequis\n\n- Le compte ou la clé d'API à obtenir.\n- La version du framework utilisée.\n\n## Installation\n\nLes paquets à installer et la configuration à ajouter.\n\n## Paiement\n\nLe code qui crée le paiement, avec ses paramètres.\n\n```\n\n```\n\n## Webhook\n\nComment recevoir et vérifier la notification de l'opérateur.\n\n```\n\n```\n\n## Pièges connus\n\n- Ce que la documentation officielle ne dit pas.\n"
 }

@@ -1,56 +1,34 @@
 {
   "app": {
     "name": "Overpass",
-    "tagline": "Integrate African APIs without guesswork.",
-    "intro": "Mobile money, SMS, USSD or any other African service, other developers have already wired it. They share here the code that works, the traps they hit and the date of their last try.",
+    "tagline": "Integrate any payment API without guesswork.",
+    "intro": "Overpass gathers integration sheets for every API, mobile payment, SMS, USSD or anything else, sorted by service, country and stack. Each sheet gives the code that works, the known traps and the date of the last try. A test track simulates the operators without a merchant account, and an MCP server serves the sheets to your code assistant.",
     "demo": "Try the demo",
     "routes": "Browse the itineraries"
   },
-  "scene": {
-    "label": "A webhook leaves a simulated operator, goes through Overpass and lands on localhost.",
-    "departure": "Departure",
-    "relay": "Relay",
-    "arrival": "Arrival",
-    "caption": "A webhook's journey to your local server",
-    "still": "Still image",
-    "live": "Slow loop, paused off screen",
-    "operator": "Operator",
-    "operatorSub": "Wave, simulated",
-    "operatorShort": "simulated",
-    "overpass": "Overpass",
-    "overpassSub": "relay",
-    "localhost": "localhost",
-    "localhostSub": ":3000/webhooks",
-    "localhostShort": ":3000",
-    "post": "POST /webhooks",
-    "event": "checkout.session.completed",
-    "emitted": "sent by the operator",
-    "signed": "signed, replayed if refused",
-    "received": "received, 200 OK"
-  },
   "demo": {
     "title": "The demo, right here",
-    "intro": "A simulated mobile payment, with Wave for the demo, no account or merchant key. One click, and watch the webhook arrive.",
+    "intro": "When a customer pays with mobile money, your site asks the operator for the payment, the operator accepts the request, then confirms a few seconds later that the money arrived. That confirmation, called a webhook, is the step that breaks most often. Start a simulated payment with one of the operators already integrated, no account needed, and follow the three steps.",
     "run": "Start a simulated payment",
     "rerun": "Run the simulated payment again",
     "loading": "Loading the demo",
     "pending": "waiting",
     "elapsed": "+{{ms}} ms",
     "stages": {
-      "request": "Request sent",
-      "response": "Response received",
-      "webhook": "Webhook delivered",
-      "webhookFailed": "Webhook not delivered"
+      "request": "1. Your site asks for the payment",
+      "response": "2. The operator accepts the request",
+      "webhook": "3. The operator confirms the payment",
+      "webhookFailed": "3. Confirmation not received"
     },
-    "receiver": "to the built-in receiver",
+    "receiver": "received by the demo server, standing in for yours",
     "live": {
-      "request": "Request sent.",
-      "response": "Response received, {{status}}. The webhook is on its way.",
-      "webhook": "Webhook delivered to the built-in receiver.",
-      "webhookFailed": "The webhook was not delivered. Replay it from the test track.",
+      "request": "Your site sends the payment request.",
+      "response": "The operator answered {{status}}, the payment is in progress. The confirmation is on its way.",
+      "webhook": "Payment confirmed, the webhook reached the demo server, which stands in for your server here.",
+      "webhookFailed": "The confirmation did not arrive. Replay it from the test track.",
       "failed": "The simulator is not answering. Try again in a moment."
     },
-    "more": "Test keys, local relay and five scenarios on the",
+    "more": "To try it with your own server, create a test key on the",
     "open": "test track"
   }
 }

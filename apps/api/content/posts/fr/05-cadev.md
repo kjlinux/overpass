@@ -4,6 +4,7 @@ kind: news
 category: tech-news
 language: fr
 group: cadev
+cover: covers/cadev.png
 summary: "Livrables, contraintes et calendrier du concours pour lequel Overpass a été construit, d'après la page officielle."
 publishedAt: 2026-10-23
 ---

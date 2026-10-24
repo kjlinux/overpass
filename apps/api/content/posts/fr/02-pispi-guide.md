@@ -4,6 +4,7 @@ kind: news
 category: tutorials
 language: fr
 group: pispi-guide
+cover: covers/pispi-guide.png
 summary: "Obtenir un jeton, créer une demande de paiement, la voir payée et recevoir le webhook sur son poste, en moins de cinq minutes."
 publishedAt: 2026-10-23
 ---
@@ -39,10 +40,10 @@ La piste d'essai répond comme la spécification 1.5.0 le décrit, avec l'identi
 ## 4. Le webhook sur votre poste
 
 ```
-npx overpass listen --forward-to http://localhost:3000/webhooks/pispi
+npx overpass-cli listen --forward-to http://localhost:3000/webhooks/pispi
 ```
 
-La commande ouvre une connexion sortante vers Overpass et rejoue chaque webhook du simulateur sur votre serveur local, corps et en-têtes inchangés. L'inspecteur montre chaque livraison avec le code de réponse et la durée, et un bouton Rejouer.
+La commande ouvre une connexion sortante vers Overpass et rejoue chaque webhook du simulateur sur votre serveur local, corps et en-têtes inchangés. L'inspecteur montre chaque livraison avec le code de réponse et la durée, et un bouton Rejouer. La page du sandbox donne la commande complète, avec votre clé de test et l'adresse de l'API.
 
 ## 5. Avant la production
 

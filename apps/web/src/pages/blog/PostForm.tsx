@@ -7,6 +7,8 @@ import { Button, Field, TextInput } from "../../components/ui";
 import { FormAlert, SelectField, TextField, useForm } from "../../forms";
 import type { Bindable } from "../../forms";
 import { useLanguage } from "../../app/useLanguage";
+import { CoverField } from "./CoverField";
+import { ImageInsert } from "./ImageInsert";
 import { MarkdownPanes } from "./MarkdownPanes";
 import { TextAreaField } from "./TextAreaField";
 import { emptyPost, postFormSchema } from "./postValues";
@@ -119,7 +121,9 @@ export function PostForm({
       <FormAlert error={form.formError} />
       <Texts form={form} />
       <Choices form={form} isAdmin={isAdmin} locked={locked} />
+      <CoverField form={form} />
       <MarkdownPanes form={form} />
+      <ImageInsert form={form} />
       <PublishAt form={form} />
       <Actions busy={busy} published={published} onDraft={() => void save("draft")} />
     </form>

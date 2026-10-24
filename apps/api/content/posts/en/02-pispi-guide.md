@@ -4,6 +4,7 @@ kind: news
 category: tutorials
 language: en
 group: pispi-guide
+cover: covers/pispi-guide.png
 summary: "Get a token, create a payment request, watch it get paid and receive the webhook on your machine, in under five minutes."
 publishedAt: 2026-10-23
 ---
@@ -39,10 +40,10 @@ The test track answers as specification 1.5.0 describes, with the request id and
 ## 4. The webhook on your machine
 
 ```
-npx overpass listen --forward-to http://localhost:3000/webhooks/pispi
+npx overpass-cli listen --forward-to http://localhost:3000/webhooks/pispi
 ```
 
-The command opens an outbound connection to Overpass and replays every simulator webhook on your local server, body and headers unchanged. The inspector shows each delivery with its response code and duration, and a Replay button.
+The command opens an outbound connection to Overpass and replays every simulator webhook on your local server, body and headers unchanged. The inspector shows each delivery with its response code and duration, and a Replay button. The sandbox page gives the full command, with your test key and the API address.
 
 ## 5. Before production
 

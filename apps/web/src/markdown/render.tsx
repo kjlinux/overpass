@@ -1,7 +1,7 @@
 import { h } from "preact";
 import type { ComponentChildren, JSX } from "preact";
 import { CodeBlock, InlineCode } from "../components/ui";
-import { safeHref } from "./links";
+import { safeHref, safeImageSrc } from "./links";
 import { anchorOf, textOf } from "./parse";
 import type { MarkdownNode } from "./parse";
 
@@ -57,6 +57,15 @@ function renderLink({ token, children }: MarkdownNode, key: number): JSX.Element
   );
 }
 
+function renderImage({ token, children }: MarkdownNode, key: number): ComponentChildren {
+  const alt = textOf(children) || token.content;
+  const src = safeImageSrc(token.attrGet("src") ?? "");
+  if (src === undefined) return alt;
+  return (
+    <img key={key} src={src} alt={alt} loading="lazy" decoding="async" class="markdown-image" />
+  );
+}
+
 function renderLeaf(node: MarkdownNode, key: number): ComponentChildren {
   const { token, children } = node;
   switch (token.type) {
@@ -71,7 +80,7 @@ function renderLeaf(node: MarkdownNode, key: number): ComponentChildren {
     case "hr":
       return <hr key={key} />;
     case "image":
-      return textOf(children) || token.content;
+      return renderImage(node, key);
     case "fence":
     case "code_block":
       return renderCode(node, key);

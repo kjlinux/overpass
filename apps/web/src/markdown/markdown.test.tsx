@@ -1,7 +1,7 @@
 import { render } from "preact-render-to-string";
 import { beforeAll, describe, expect, it } from "vitest";
 import { setupTestI18n } from "../i18n/test-i18n";
-import { Markdown, headingsOf, safeHref } from "./index";
+import { Markdown, headingsOf, safeHref, safeImageSrc } from "./index";
 
 beforeAll(async () => {
   await setupTestI18n("fr");
@@ -62,10 +62,29 @@ describe("Markdown sanitising", () => {
     expect(out).toContain('rel="noopener noreferrer nofollow"');
   });
 
-  it("shows images as their alternative text only", () => {
+  it("shows an outside image as its alternative text only", () => {
     const out = html("![Logo de Wave](https://example.com/logo.png)");
     expect(out).not.toContain("example.com");
+    expect(out).not.toContain("<img");
     expect(out).toContain("Logo de Wave");
+  });
+
+  it("shows an image hosted by Overpass, lazily, with its alternative text", () => {
+    const src = "/v1/media/7c7c5d0e-4a8f-4d6a-9b0e-2f1c9d3a1b11";
+    const out = html(`![Capture du tableau de bord](${src})`);
+    expect(out).toContain(`src="${src}"`);
+    expect(out).toContain('alt="Capture du tableau de bord"');
+    expect(out).toContain('loading="lazy"');
+  });
+});
+
+describe("safeImageSrc", () => {
+  it("accepts only an Overpass media address", () => {
+    const id = "7c7c5d0e-4a8f-4d6a-9b0e-2f1c9d3a1b11";
+    expect(safeImageSrc(`/v1/media/${id}`)).toBe(`/v1/media/${id}`);
+    expect(safeImageSrc(`/v1/media/${id}/../../admin`)).toBeUndefined();
+    expect(safeImageSrc(`https://evil.example/v1/media/${id}`)).toBeUndefined();
+    expect(safeImageSrc("data:image/png;base64,AAAA")).toBeUndefined();
   });
 });
 
