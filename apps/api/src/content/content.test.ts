@@ -2,6 +2,7 @@ import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { samplePng } from "../testing-media.js";
 import { parseFrontmatter } from "./frontmatter.js";
 import { readContent } from "./read.js";
 
@@ -105,6 +106,28 @@ describe("readContent", () => {
   it("names the file when a field is invalid", () => {
     write("routes/01-bad.md", route.replace("stack: laravel", "stack: cobol"));
     expect(() => readContent(dir)).toThrow(/01-bad\.md/);
+  });
+
+  it("loads a post cover from the posts folder, one buffer per file", () => {
+    const withCover = post.replace("group: launch", "group: launch\ncover: covers/launch.png");
+    mkdirSync(join(dir, "posts/covers"), { recursive: true });
+    writeFileSync(join(dir, "posts/covers/launch.png"), samplePng);
+    write("posts/fr/01-launch.md", withCover);
+    write("posts/en/01-launch.md", withCover.replace("language: fr", "language: en"));
+    const [first, second] = readContent(dir).posts;
+    expect(first?.cover?.equals(samplePng)).toBe(true);
+    expect(first?.cover).toBe(second?.cover);
+  });
+
+  it("refuses a cover that is not an image or leaves the posts folder", () => {
+    write("posts/covers/fake.png", "not an image");
+    write(
+      "posts/fr/01-launch.md",
+      post.replace("group: launch", "cover: covers/fake.png\ngroup: launch"),
+    );
+    expect(() => readContent(dir)).toThrow(/01-launch\.md/);
+    write("posts/fr/01-launch.md", post.replace("group: launch", "cover: ../x.png\ngroup: launch"));
+    expect(() => readContent(dir)).toThrow(/01-launch\.md/);
   });
 
   it("tolerates a missing folder", () => {

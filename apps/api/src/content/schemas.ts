@@ -31,6 +31,11 @@ export const postSeedSchema = z.object({
   title,
   summary: z.string().min(1).max(300),
   publishedAt: isoDate,
+  /** A file under posts/covers/, shared by the translations of one article. */
+  cover: z
+    .string()
+    .regex(/^covers\/[a-z0-9-]+\.(png|jpg|webp)$/)
+    .optional(),
   content,
 });
 

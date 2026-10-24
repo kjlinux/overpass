@@ -325,3 +325,10 @@ Both SKILL.md files were read in full before use. Instructions outside the proje
 - **User decisions:** animated mini-screens drawn in code rather than screenshots; richer motion allowed on the home page only; built straight into the app.
 - **Change:** `home/tour` replaces the module grid, the test track section and the assistants section with eight blocks, each with text, links and a framed screen (lines written in turn, a scenario switcher, growing bars) driven by `useSequence`, which plays only while the screen is visible and shows the end state at once under reduced motion. Screen texts live in the home translation files and every screen says "example". The static test track capture is gone. DESIGN.md records the layout and the motion exception.
 - **Tests:** `sequence.test.ts` written first and seen failing; `e2e/home.spec.ts` now checks every tour block and its screen at 360 px. The user asked to leave the full test run for later, so `npm run check` was not run.
+
+### 2026-10-24, Claude Code (Claude Opus 5.5), covers for the seeded articles
+
+- **User request, verbatim summary:** the blog articles seeded in production must have images.
+- **Change:** five drawn covers, one per article group, in the DESIGN.md palette with no text and no people (`scripts/blog-covers/*.svg`, rendered to 1600x900 PNG in `apps/api/content/posts/covers/` by `npx tsx scripts/blog-covers.ts`). Each article file names its cover with `cover: covers/<group>.png`. The content reader refuses a cover outside `posts/covers/`, missing, over 2 MB or not an image before any write, and gives translations one shared buffer; `seedPosts` stores it once through the new `mediaStore` of the media module, owned by the team account so the cover passes the "own image" rule on edit. Articles already seeded without a cover get one on the next run; a cover set since is never replaced.
+- **TDD evidence:** the two `content.test.ts` cases and the two `seed.test.ts` cases were written first and seen failing, then green; `tree.test.ts` now requires a cover on every shipped article.
+

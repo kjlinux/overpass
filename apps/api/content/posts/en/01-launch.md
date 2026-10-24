@@ -4,6 +4,7 @@ kind: news
 category: tech-news
 language: en
 group: launch
+cover: covers/launch.png
 summary: "What Overpass offers on launch day, and what depends on you."
 publishedAt: 2026-10-23
 ---

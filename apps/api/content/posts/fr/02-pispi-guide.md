@@ -4,6 +4,7 @@ kind: news
 category: tutorials
 language: fr
 group: pispi-guide
+cover: covers/pispi-guide.png
 summary: "Obtenir un jeton, créer une demande de paiement, la voir payée et recevoir le webhook sur son poste, en moins de cinq minutes."
 publishedAt: 2026-10-23
 ---

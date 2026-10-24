@@ -2,6 +2,7 @@ import { sql } from "drizzle-orm";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { Database } from "../../db/client.js";
 import { createTestDatabase } from "../../db/testing.js";
+import { sampleJpeg, samplePng } from "../../testing-media.js";
 import { ensureAdmin } from "../accounts/index.js";
 import { seedPosts } from "./seed.js";
 
@@ -85,6 +86,39 @@ describe("seedPosts", () => {
       sql`select count(distinct translation_group)::int as count from posts where kind = 'news'`,
     );
     expect(groups[0]?.count).toBe(1);
+  });
+
+  it("stores one cover for both languages of a group", async () => {
+    const cover = samplePng;
+    await seedPosts(
+      db,
+      handle,
+      [
+        { ...launchFr, cover },
+        { ...launchEn, cover },
+      ],
+      at,
+    );
+    const covers = await rows<{ id: string | null }>(sql`select cover_media_id as id from posts`);
+    expect(covers.every((post) => post.id !== null)).toBe(true);
+    expect(new Set(covers.map((post) => post.id)).size).toBe(1);
+  });
+
+  it("adds a cover to an article seeded without one, never replacing one", async () => {
+    const coverOf = async (language: string) =>
+      (
+        await rows<{ id: string | null }>(
+          sql`select cover_media_id as id from posts where language = ${language}`,
+        )
+      )[0]?.id;
+    await seedPosts(db, handle, [launchFr, launchEn], at);
+    const seeded = await seedPosts(db, handle, [{ ...launchFr, cover: samplePng }], at);
+    expect(seeded).toEqual({ created: 0 });
+    const first = await coverOf("fr");
+    expect(first).not.toBeNull();
+    await seedPosts(db, handle, [{ ...launchFr, cover: sampleJpeg }], at);
+    expect(await coverOf("fr")).toBe(first);
+    expect(await coverOf("en")).toBeNull();
   });
 
   it("refuses a handle that is not an admin", async () => {

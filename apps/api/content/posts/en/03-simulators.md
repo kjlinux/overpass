@@ -4,6 +4,7 @@ kind: news
 category: tutorials
 language: en
 group: simulators
+cover: covers/simulators.png
 summary: "Four operators replayed from their public documentation, without logos, marked unofficial: the method and its limits."
 publishedAt: 2026-10-23
 ---

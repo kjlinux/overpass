@@ -4,6 +4,7 @@ kind: news
 category: tutorials
 language: en
 group: pispi-guide
+cover: covers/pispi-guide.png
 summary: "Get a token, create a payment request, watch it get paid and receive the webhook on your machine, in under five minutes."
 publishedAt: 2026-10-23
 ---

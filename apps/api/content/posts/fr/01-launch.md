@@ -4,6 +4,7 @@ kind: news
 category: tech-news
 language: fr
 group: launch
+cover: covers/launch.png
 summary: "Ce qu'Overpass propose le jour de son lancement, et ce qui dépend de vous."
 publishedAt: 2026-10-23
 ---

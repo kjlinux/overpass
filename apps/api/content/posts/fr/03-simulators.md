@@ -4,6 +4,7 @@ kind: news
 category: tutorials
 language: fr
 group: simulators
+cover: covers/simulators.png
 summary: "Quatre opérateurs rejoués depuis leur documentation publique, sans logo, marqués non officiels : la méthode et ses limites."
 publishedAt: 2026-10-23
 ---
