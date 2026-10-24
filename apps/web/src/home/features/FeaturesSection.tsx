@@ -2,7 +2,7 @@ import type { Language } from "@overpass/shared";
 import type { JSX } from "preact";
 import { useTranslation } from "react-i18next";
 import { localizedPath } from "../../layout";
-import { SectionHead, sectionClass } from "../SectionHead";
+import { sectionClass } from "../SectionHead";
 import { features } from "./features";
 
 /** Every module in one ruled grid, each cell a link with one concrete sentence. */
@@ -10,8 +10,10 @@ export function FeaturesSection({ language }: { language: Language }): JSX.Eleme
   const { t } = useTranslation("home");
   return (
     <section id="features" aria-labelledby="features-title" class={sectionClass}>
-      <SectionHead id="features-title" title={t("features.title")} intro={t("features.intro")} />
-      <ul class="home-grid3 grid grid-cols-[minmax(0,1fr)] border-t border-rule">
+      <h2 id="features-title" class="sr-only">
+        {t("features.title")}
+      </h2>
+      <ul class="home-grid3 grid grid-cols-[minmax(0,1fr)]">
         {features.map(({ key, path, icon: Icon }) => (
           <li key={key} class="border-b border-rule">
             <a

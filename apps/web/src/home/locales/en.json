@@ -1,7 +1,6 @@
 {
   "features": {
-    "title": "What you can do here",
-    "intro": "Everything you need to plug in an African API, from the code sheet to the webhook received on your machine. Each cell opens the page it names.",
+    "title": "Overpass modules",
     "items": {
       "routes": {
         "title": "Find an itinerary",
@@ -9,7 +8,7 @@
       },
       "publish": {
         "title": "Publish a sheet",
-        "body": "You plugged an API in production? Write the sheet, other developers check it and you earn points."
+        "body": "You plugged an API in production? Write the sheet, other developers check it and you climb the ranking."
       },
       "track": {
         "title": "Test on the test track",
@@ -41,7 +40,7 @@
       },
       "propose": {
         "title": "Propose a service",
-        "body": "An API is missing from the catalogue? Propose it, the administration validates it."
+        "body": "An API is missing from the catalogue? Propose it, Overpass validates it."
       },
       "simulator": {
         "title": "Request a simulator",

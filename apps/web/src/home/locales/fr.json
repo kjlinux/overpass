@@ -1,7 +1,6 @@
 {
   "features": {
-    "title": "Ce que vous pouvez faire ici",
-    "intro": "Tout ce qu'il faut pour brancher une API africaine, de la fiche de code jusqu'au webhook reçu sur votre machine. Chaque case ouvre la page concernée.",
+    "title": "Les modules d'Overpass",
     "items": {
       "routes": {
         "title": "Trouver un itinéraire",
@@ -9,7 +8,7 @@
       },
       "publish": {
         "title": "Publier une fiche",
-        "body": "Vous avez branché une API en production ? Écrivez la fiche, d'autres développeurs la vérifient et vous gagnez des points."
+        "body": "Vous avez branché une API en production ? Écrivez la fiche, d'autres développeurs la vérifient et vous montez au classement."
       },
       "track": {
         "title": "Tester sur la piste d'essai",
@@ -41,7 +40,7 @@
       },
       "propose": {
         "title": "Proposer un service",
-        "body": "Il manque une API au catalogue ? Proposez-la, l'administration la valide."
+        "body": "Il manque une API au catalogue ? Proposez-la, Overpass la valide."
       },
       "simulator": {
         "title": "Demander un simulateur",
