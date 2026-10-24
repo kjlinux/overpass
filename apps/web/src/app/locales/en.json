@@ -8,7 +8,7 @@
   },
   "demo": {
     "title": "The demo, right here",
-    "intro": "When a customer pays with mobile money, your site asks the operator for the payment, the operator accepts the request, then confirms a few seconds later that the money arrived. That confirmation, called a webhook, is the step that breaks most often. Start a simulated Wave payment, no account needed, and follow the three steps.",
+    "intro": "When a customer pays with mobile money, your site asks the operator for the payment, the operator accepts the request, then confirms a few seconds later that the money arrived. That confirmation, called a webhook, is the step that breaks most often. Start a simulated payment with one of the operators already integrated, no account needed, and follow the three steps.",
     "run": "Start a simulated payment",
     "rerun": "Run the simulated payment again",
     "loading": "Loading the demo",

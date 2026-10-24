@@ -8,7 +8,7 @@
   },
   "demo": {
     "title": "La démo, ici même",
-    "intro": "Quand un client paie par mobile money, votre site demande le paiement à l'opérateur, qui accepte la demande, puis confirme quelques secondes plus tard que l'argent est arrivé. Cette confirmation, appelée webhook, est l'étape qui casse le plus souvent. Lancez un paiement simulé chez Wave, sans compte, et suivez les trois étapes.",
+    "intro": "Quand un client paie par mobile money, votre site demande le paiement à l'opérateur, qui accepte la demande, puis confirme quelques secondes plus tard que l'argent est arrivé. Cette confirmation, appelée webhook, est l'étape qui casse le plus souvent. Lancez un paiement simulé chez l'un des opérateurs déjà intégrés, sans compte, et suivez les trois étapes.",
     "run": "Lancer un paiement simulé",
     "rerun": "Relancer le paiement simulé",
     "loading": "Chargement de la démo",
