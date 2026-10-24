@@ -93,7 +93,7 @@ describe("service catalogue growth migration", () => {
     );
     // Steps back to 0019 whatever migrations come after this one.
     const since = readdirSync(migrationsDirectory).filter(
-      (name) => name.endsWith(".up.sql") && name >= "0020",
+      (name) => /^[0-9]{4}_[a-z0-9_]+[.]up[.]sql$/.test(name) && name >= "0020",
     );
     await migrateDown(executor, migrationsDirectory, since.length);
     expect(await executor.query("select 1 from threads")).toHaveLength(1);
