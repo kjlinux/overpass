@@ -3,6 +3,7 @@ import type { PostDetail, PostSummary } from "@overpass/shared";
 import { AppError } from "../../../http/app-error.js";
 import type { Account } from "../../accounts/index.js";
 import type { ModerationLog } from "../../admin/index.js";
+import { mediaUrl } from "../../media/index.js";
 import type { ContributionListener } from "../../ranking/index.js";
 import type { BlogRepository, PostRow } from "../model.js";
 
@@ -11,6 +12,7 @@ export type BlogDeps = {
   onContribution: ContributionListener;
   log: ModerationLog;
   webOrigin: string;
+  ownsMedia: (id: string, ownerId: string) => Promise<boolean>;
   now: () => Date;
 };
 
@@ -39,6 +41,7 @@ export function toSummary(row: PostRow): PostSummary {
     category: row.category,
     title: row.title,
     summary: row.summary,
+    cover: row.coverMediaId === null ? null : mediaUrl(row.coverMediaId),
     author:
       row.authorHandle === null
         ? null

@@ -5,18 +5,18 @@ import { cx } from "./cx";
 export type RouteStatus = "clear" | "toVerify" | "broken";
 
 const tones: Record<RouteStatus, string> = {
-  clear: "border-success bg-success-surface text-success",
-  toVerify: "border-warning bg-warning-surface text-warning",
-  broken: "border-danger bg-danger-surface text-danger",
+  clear: "text-success",
+  toVerify: "text-warning",
+  broken: "text-danger",
 };
 
-/** The state of an itinerary, with text that carries the meaning. */
+/** The state of an itinerary as coloured words only, no box: the text carries the meaning. */
 export function StatusBadge({ status }: { status: RouteStatus }): JSX.Element {
   const { t } = useTranslation("ui");
   return (
     <span
       class={cx(
-        "badge inline-flex min-h-7 items-center gap-2 whitespace-nowrap border px-2 text-caption font-medium",
+        "inline-flex items-center whitespace-nowrap text-caption font-semibold",
         tones[status],
       )}
     >

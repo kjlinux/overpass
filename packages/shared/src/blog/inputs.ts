@@ -29,6 +29,7 @@ export const postCreateInput = z.strictObject({
   status: postStatusSchema.default("draft"),
   publishAt: publishAtSchema.optional(),
   translationOf: idSchema.optional(),
+  coverMediaId: idSchema.nullable().optional(),
 });
 
 export const postUpdateInput = z
@@ -39,6 +40,7 @@ export const postUpdateInput = z
     content: contentSchema.optional(),
     status: postStatusSchema.optional(),
     publishAt: publishAtSchema.nullable().optional(),
+    coverMediaId: idSchema.nullable().optional(),
   })
   .refine((patch) => Object.values(patch).some((value) => value !== undefined), {
     error: "nothing_to_update",

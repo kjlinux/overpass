@@ -124,7 +124,7 @@ No shadow below the raised level. No glassmorphism, no glow, no inner shadow.
 
 ## Shapes
 
-Every corner is square: `--radius: 0` on buttons, inputs, cards, badges, chips, dialogs, notifications and code blocks. The only circles are avatars and radio buttons. A badge is a rectangle with a 1 px border in its own colour and a 6 px square dot before its text.
+Every corner is square: `--radius: 0` on buttons, inputs, cards, badges, chips, dialogs, notifications and code blocks. The only circles are avatars and radio buttons. An itinerary state is its words alone, semibold caption in its own colour, with no box, border, fill or dot (decided by the user on 2026-10-24).
 
 ## Iconography
 

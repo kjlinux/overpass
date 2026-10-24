@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../app/useLanguage";
 import { Button, ButtonLink, EmptyState } from "../../components/ui";
 import { localizedPath } from "../../layout";
+import { Cover } from "./Cover";
 import { PostMeta } from "./PostMeta";
 
 function Featured({ post }: { post: PostSummary }): JSX.Element {
@@ -13,6 +14,7 @@ function Featured({ post }: { post: PostSummary }): JSX.Element {
   return (
     <article class="flex flex-col gap-3 border-b border-rule pb-8">
       <p class="m-0 text-caption font-semibold text-ink-2">{t("list.featured")}</p>
+      <Cover src={post.cover} />
       <h2 class="m-0 text-h2 font-semibold [overflow-wrap:anywhere]">
         <a href={localizedPath(language, `/blog/${post.slug}`)}>{post.title}</a>
       </h2>
@@ -25,15 +27,18 @@ function Featured({ post }: { post: PostSummary }): JSX.Element {
 function PostRow({ post }: { post: PostSummary }): JSX.Element {
   const language = useLanguage();
   return (
-    <li class="flex flex-col gap-2 border-b border-rule py-4">
-      <a
-        class="text-h3 font-semibold [overflow-wrap:anywhere]"
-        href={localizedPath(language, `/blog/${post.slug}`)}
-      >
-        {post.title}
-      </a>
-      <p class="m-0 max-w-prose text-ink-2">{post.summary}</p>
-      <PostMeta post={post} />
+    <li class="flex flex-col gap-4 border-b border-rule py-4 md:flex-row-reverse md:items-start">
+      <Cover src={post.cover} small />
+      <div class="flex min-w-0 flex-1 flex-col gap-2">
+        <a
+          class="text-h3 font-semibold [overflow-wrap:anywhere]"
+          href={localizedPath(language, `/blog/${post.slug}`)}
+        >
+          {post.title}
+        </a>
+        <p class="m-0 max-w-prose text-ink-2">{post.summary}</p>
+        <PostMeta post={post} />
+      </div>
     </li>
   );
 }

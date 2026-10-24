@@ -1,7 +1,7 @@
 {
   "app": {
     "name": "Overpass",
-    "tagline": "Integrate any API without guesswork.",
+    "tagline": "Integrate any payment API without guesswork.",
     "intro": "Overpass gathers integration sheets for every API, mobile payment, SMS, USSD or anything else, sorted by service, country and stack. Each sheet gives the code that works, the known traps and the date of the last try. A test track simulates the operators without a merchant account, and an MCP server serves the sheets to your code assistant.",
     "demo": "Try the demo",
     "routes": "Browse the itineraries"

@@ -34,3 +34,22 @@ export async function apiRequest<T>(
 }
 
 export type { ApiError };
+
+/** Sends a file as the raw body, typed by the browser; same cookie and failure rules as above. */
+export async function apiUpload<T>(path: string, file: Blob): Promise<Envelope<T>> {
+  try {
+    const response = await fetch(path, {
+      method: "POST",
+      credentials: "same-origin",
+      headers: {
+        accept: "application/json",
+        "accept-language": i18next.language,
+        "content-type": file.type,
+      },
+      body: file,
+    });
+    return (await response.json()) as Envelope<T>;
+  } catch {
+    return networkFailure();
+  }
+}

@@ -22,6 +22,7 @@ export type PostRow = {
   title: string;
   summary: string;
   content: string;
+  coverMediaId: string | null;
   status: PostStatus;
   moderation: ModerationStatus;
   publishedAt: Date | null;
@@ -42,12 +43,14 @@ export type NewPost = {
   title: string;
   summary: string;
   content: string;
+  coverMediaId?: string | null | undefined;
   status: PostStatus;
   publishedAt: Date | null;
   at: Date;
 };
 
-type Editable = "category" | "title" | "summary" | "content" | "status" | "publishedAt";
+type Editable =
+  "category" | "title" | "summary" | "content" | "coverMediaId" | "status" | "publishedAt";
 export type PostPatch = { [Key in Editable]?: PostRow[Key] | undefined };
 
 export type FeedFilters = {

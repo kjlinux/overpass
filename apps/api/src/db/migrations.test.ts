@@ -45,12 +45,14 @@ describe("migrations", () => {
       "0018_cinetpay_simulated",
       "0019_https_webhooks",
       "0020_service_catalogue_growth",
+      "0021_media",
     ]);
     expect(await tables()).toEqual([
       "api_tokens",
       "blog_suspensions",
       "checks",
       "follows",
+      "media",
       "member_points",
       "moderation_actions",
       "newsletter_deliveries",
@@ -91,7 +93,8 @@ describe("migrations", () => {
 
   it("reverts the last migration and can apply it again", async () => {
     await migrateUp(executor, migrationsDirectory);
-    expect(await migrateDown(executor, migrationsDirectory, 20)).toEqual([
+    expect(await migrateDown(executor, migrationsDirectory, 21)).toEqual([
+      "0021_media",
       "0020_service_catalogue_growth",
       "0019_https_webhooks",
       "0018_cinetpay_simulated",
@@ -114,7 +117,7 @@ describe("migrations", () => {
       "0001_accounts",
     ]);
     expect(await tables()).toEqual(["schema_migrations"]);
-    expect(await migrateUp(executor, migrationsDirectory)).toHaveLength(20);
+    expect(await migrateUp(executor, migrationsDirectory)).toHaveLength(21);
   });
 
   it("seeds the six translated discussion themes in their order", async () => {

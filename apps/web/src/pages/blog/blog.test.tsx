@@ -26,6 +26,7 @@ const summary: PostSummary = {
   category: "tutorials",
   title: "Encaisser avec Wave depuis Laravel",
   summary: "Le parcours complet, du jeton au webhook.",
+  cover: null,
   author: { handle: "awa", country: "SN" },
   status: "published",
   moderation: "visible",

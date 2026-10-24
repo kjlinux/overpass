@@ -1,4 +1,4 @@
-export { apiRequest, networkErrorCode } from "./api";
+export { apiRequest, apiUpload, networkErrorCode } from "./api";
 export type { ApiMethod } from "./api";
 export { SessionProvider, useSession } from "./SessionContext";
 export type { SessionState } from "./SessionContext";

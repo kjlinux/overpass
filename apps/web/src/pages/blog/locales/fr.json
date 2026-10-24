@@ -112,7 +112,7 @@
     "language": "Langue de l'article",
     "kind": "Rubrique",
     "content": "Texte en Markdown",
-    "contentHelp": "Titres, listes, liens et blocs de code. Le HTML n'est pas interprété.",
+    "contentHelp": "Titres, listes, liens, blocs de code et images envoyées ici. Le HTML n'est pas interprété.",
     "write": "Écrire",
     "preview": "Aperçu",
     "publishAt": "Date de publication",
@@ -122,7 +122,16 @@
     "unpublish": "Repasser en brouillon",
     "saved": "Article enregistré.",
     "translate": "Écrire la version {{language}}",
-    "slug": "Adresse de l'article : {{path}}"
+    "slug": "Adresse de l'article : {{path}}",
+    "imageAlt": "Description de l'image",
+    "imageAltHelp": "Ce que montre l'image, pour qui ne la voit pas.",
+    "imageFile": "Ajouter une image dans le texte",
+    "imageHelp": "PNG, JPEG ou WebP, 2 Mo au plus. L'image s'insère à l'endroit du curseur.",
+    "imageAltMissing": "Décrivez l'image avant de l'ajouter.",
+    "imageUploading": "Envoi de l'image en cours",
+    "cover": "Image de couverture",
+    "coverHelp": "Facultative. Elle s'affiche en tête de l'article et dans les listes. PNG, JPEG ou WebP, 2 Mo au plus.",
+    "coverRemove": "Retirer la couverture"
   },
   "moderation": {
     "heading": "Blog",

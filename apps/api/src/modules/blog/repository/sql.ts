@@ -35,7 +35,7 @@ export function postColumns(withContent: boolean): SQL {
   return sql`p.id, p.kind, p.author_id as "authorId", u.handle as "authorHandle",
     trim(u.country) as "authorCountry", p.language, p.translation_group as "translationGroup",
     p.slug, p.category, p.title, p.summary, ${withContent ? sql`p.content` : sql`''`} as content,
-    p.status, p.moderation, p.published_at as "publishedAt", p.star_count as "starCount",
+    p.cover_media_id as "coverMediaId", p.status, p.moderation, p.published_at as "publishedAt", p.star_count as "starCount",
     p.comment_count as "commentCount", p.updated_at as "updatedAt",
     ${suspendedAuthor("p")} as suspended, ${translationColumn} as translation`;
 }
