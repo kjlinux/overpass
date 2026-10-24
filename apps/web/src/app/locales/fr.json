@@ -8,27 +8,27 @@
   },
   "demo": {
     "title": "La démo, ici même",
-    "intro": "Un paiement mobile simulé, chez Wave pour la démo, sans compte ni clé marchande. Un clic, et regardez le webhook arriver.",
+    "intro": "Quand un client paie par mobile money, votre site demande le paiement à l'opérateur, qui accepte la demande, puis confirme quelques secondes plus tard que l'argent est arrivé. Cette confirmation, appelée webhook, est l'étape qui casse le plus souvent. Lancez un paiement simulé chez Wave, sans compte, et suivez les trois étapes.",
     "run": "Lancer un paiement simulé",
     "rerun": "Relancer le paiement simulé",
     "loading": "Chargement de la démo",
     "pending": "en attente",
     "elapsed": "+{{ms}} ms",
     "stages": {
-      "request": "Requête envoyée",
-      "response": "Réponse reçue",
-      "webhook": "Webhook livré",
-      "webhookFailed": "Webhook non livré"
+      "request": "1. Votre site demande le paiement",
+      "response": "2. L'opérateur accepte la demande",
+      "webhook": "3. L'opérateur confirme le paiement",
+      "webhookFailed": "3. Confirmation non reçue"
     },
-    "receiver": "vers le récepteur intégré",
+    "receiver": "vers le serveur de démo",
     "live": {
-      "request": "Requête envoyée.",
-      "response": "Réponse reçue, {{status}}. Le webhook est en route.",
-      "webhook": "Webhook livré au récepteur intégré.",
-      "webhookFailed": "Le webhook n'a pas été livré. Rejouez-le depuis la piste d'essai.",
+      "request": "Votre site envoie la demande de paiement.",
+      "response": "L'opérateur a répondu {{status}}, le paiement est en cours. La confirmation arrive.",
+      "webhook": "Paiement confirmé, le webhook est arrivé sur le serveur de démo.",
+      "webhookFailed": "La confirmation n'est pas arrivée. Rejouez-la depuis la piste d'essai.",
       "failed": "Le simulateur ne répond pas. Réessayez dans un instant."
     },
-    "more": "Clés de test, relais local et cinq scénarios sur la",
+    "more": "Pour essayer avec votre propre serveur, créez une clé de test sur la",
     "open": "piste d'essai"
   }
 }

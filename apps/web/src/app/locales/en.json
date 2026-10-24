@@ -8,27 +8,27 @@
   },
   "demo": {
     "title": "The demo, right here",
-    "intro": "A simulated mobile payment, with Wave for the demo, no account or merchant key. One click, and watch the webhook arrive.",
+    "intro": "When a customer pays with mobile money, your site asks the operator for the payment, the operator accepts the request, then confirms a few seconds later that the money arrived. That confirmation, called a webhook, is the step that breaks most often. Start a simulated Wave payment, no account needed, and follow the three steps.",
     "run": "Start a simulated payment",
     "rerun": "Run the simulated payment again",
     "loading": "Loading the demo",
     "pending": "waiting",
     "elapsed": "+{{ms}} ms",
     "stages": {
-      "request": "Request sent",
-      "response": "Response received",
-      "webhook": "Webhook delivered",
-      "webhookFailed": "Webhook not delivered"
+      "request": "1. Your site asks for the payment",
+      "response": "2. The operator accepts the request",
+      "webhook": "3. The operator confirms the payment",
+      "webhookFailed": "3. Confirmation not received"
     },
-    "receiver": "to the built-in receiver",
+    "receiver": "to the demo server",
     "live": {
-      "request": "Request sent.",
-      "response": "Response received, {{status}}. The webhook is on its way.",
-      "webhook": "Webhook delivered to the built-in receiver.",
-      "webhookFailed": "The webhook was not delivered. Replay it from the test track.",
+      "request": "Your site sends the payment request.",
+      "response": "The operator answered {{status}}, the payment is in progress. The confirmation is on its way.",
+      "webhook": "Payment confirmed, the webhook reached the demo server.",
+      "webhookFailed": "The confirmation did not arrive. Replay it from the test track.",
       "failed": "The simulator is not answering. Try again in a moment."
     },
-    "more": "Test keys, local relay and five scenarios on the",
+    "more": "To try it with your own server, create a test key on the",
     "open": "test track"
   }
 }
