@@ -345,3 +345,7 @@ Both SKILL.md files were read in full before use. Instructions outside the proje
 - **User request, verbatim summary:** deploy Overpass on the Ubuntu server behind `ssh overpass` under getoverpass.app, then write a deployment document every session follows.
 - **Done on the server:** system update, swap, ufw, Node 22, Docker, Caddy; `overpass` user and clone in `/srv/overpass`; secrets typed by the operator in `/etc/overpass/overpass.env`; PostgreSQL in Docker, migrations, three systemd services; DNS checked on the authoritative servers before Caddy obtained the certificates; the theme script hash updated in `/etc/caddy/Caddyfile`; seed run with the team content.
 - **Runbook:** `docs/DEPLOYMENT.md` (layout, environment keys without values, routine deploy, CSP hash step, seed, database, rollback, pitfalls met), linked from `CLAUDE.md` and the README.
+
+### 2026-10-24, Claude Code (Claude Opus 5.5), deploy of 8fe0b34
+
+- Shipped `8fe0b34` (PR #1 already live as `d693454`); migration 0021_media was already applied. Manual step: after a dump to `/var/backups/overpass-2026-10-24-1909.sql.gz`, an SQL replace of `npx overpass listen` by `npx overpass-cli listen` in 4 posts and 1 route, plus the sandbox hint in the two PI-SPI guides, since the seed never rewrites an existing article.
