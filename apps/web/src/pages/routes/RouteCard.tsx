@@ -30,11 +30,12 @@ export function RouteCard({ route }: { route: RouteSummary }): JSX.Element {
       </span>
       <h3 class="text-h3 font-semibold [overflow-wrap:anywhere]">{route.title}</h3>
       <p class="text-ink-2">
-        {route.service.name} · {countryName(route.country, language)}
+        {t("card.place", {
+          service: route.service.name,
+          country: countryName(route.country, language),
+        })}
       </p>
-      <p class="text-caption text-ink-2">
-        {checked} · {t("card.by", { author: route.author })}
-      </p>
+      <p class="text-caption text-ink-2">{t("card.meta", { checked, author: route.author })}</p>
       <div class="mt-auto flex flex-wrap gap-2">
         <Chip>{stackName(route.stack)}</Chip>
         <Chip>{languageNames[route.language]}</Chip>

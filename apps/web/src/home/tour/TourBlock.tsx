@@ -30,7 +30,12 @@ export function TourBlock({ block, index, language }: Props): JSX.Element {
       class="tour-block grid items-center gap-8 border-t border-rule py-12 md:py-16 lg:grid-cols-2 lg:gap-16"
     >
       <div class={index % 2 === 1 ? "lg:order-2" : ""}>
-        <p class="m-0 font-code text-caption text-accent">{`${String(index + 1).padStart(2, "0")} · ${t(`tour.${block.key}.kicker`)}`}</p>
+        <p class="m-0 font-code text-caption text-accent">
+          {t("tour.kicker", {
+            n: String(index + 1).padStart(2, "0"),
+            name: t(`tour.${block.key}.kicker`),
+          })}
+        </p>
         <h3 id={`${id}-title`} class="mt-3 text-h2 font-semibold">
           {t(`tour.${block.key}.title`)}
         </h3>

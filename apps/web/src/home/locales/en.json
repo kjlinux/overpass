@@ -69,7 +69,7 @@
         "publish": "Publish a sheet"
       },
       "screen": {
-        "title": "Wave Checkout · Senegal · Laravel",
+        "title": "Wave Checkout in Senegal with Laravel",
         "label": "An itinerary sheet going from to verify to clear road",
         "lines": [
           {
@@ -111,7 +111,7 @@
         "open": "Open the test track"
       },
       "screen": {
-        "title": "Test key · Scenarios",
+        "title": "Test key scenarios",
         "label": "The test track scenarios played one after the other",
         "scenarios": [
           {
@@ -206,7 +206,7 @@
           },
           {
             "tone": "muted",
-            "text": "overpass.search_routes · Wave, Senegal, Laravel"
+            "text": "overpass.search_routes (Wave, Senegal, Laravel)"
           },
           {
             "tone": "ok",
@@ -235,7 +235,7 @@
         "open": "See the discussions"
       },
       "screen": {
-        "title": "Discussions · Integrations",
+        "title": "Integration discussions",
         "label": "A question that gets an accepted answer then becomes a sheet",
         "thread": {
           "question": "401 error on the Orange Money webhook, any idea?",
@@ -256,7 +256,7 @@
         "newsletter": "Get the newsletter"
       },
       "screen": {
-        "title": "Blog · @awa",
+        "title": "@awa's blog",
         "label": "An article getting stars and comments",
         "article": {
           "category": "Tutorial",
@@ -265,7 +265,8 @@
           "read": "6 min read",
           "stars": "24 stars",
           "comments": "8 comments",
-          "newsletter": "Featured in Monday's newsletter"
+          "newsletter": "Featured in Monday's newsletter",
+          "byline": "By @{{author}}, {{read}}"
         }
       }
     },
@@ -277,26 +278,26 @@
         "open": "See the ranking"
       },
       "screen": {
-        "title": "Ranking · October",
+        "title": "October ranking",
         "label": "Developers earning points",
         "bars": [
           {
-            "label": "awa · Senegal",
+            "label": "awa in Senegal",
             "value": 142,
             "unit": "pts"
           },
           {
-            "label": "kofi · Côte d'Ivoire",
+            "label": "kofi in Côte d'Ivoire",
             "value": 118,
             "unit": "pts"
           },
           {
-            "label": "fatou · Côte d'Ivoire",
+            "label": "fatou in Côte d'Ivoire",
             "value": 87,
             "unit": "pts"
           },
           {
-            "label": "moussa · Mali",
+            "label": "moussa in Mali",
             "value": 54,
             "unit": "pts"
           }
@@ -338,6 +339,7 @@
         ]
       }
     },
-    "example": "Example"
+    "example": "Example",
+    "kicker": "{{n}}. {{name}}"
   }
 }

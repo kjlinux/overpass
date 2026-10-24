@@ -26,7 +26,9 @@
   "card": {
     "lastCheck": "Checked on {{date}}",
     "neverChecked": "Never checked",
-    "by": "by {{author}}"
+    "by": "by {{author}}",
+    "place": "{{service}}, for {{country}}",
+    "meta": "{{checked}}, published by {{author}}"
   },
   "detail": {
     "trail": "Breadcrumb",

@@ -69,7 +69,7 @@
         "publish": "Publier une fiche"
       },
       "screen": {
-        "title": "Wave Checkout · Sénégal · Laravel",
+        "title": "Wave Checkout au Sénégal avec Laravel",
         "label": "Une fiche d'itinéraire qui passe de « à vérifier » à « voie libre »",
         "lines": [
           {
@@ -111,7 +111,7 @@
         "open": "Ouvrir la piste d'essai"
       },
       "screen": {
-        "title": "Clé de test · Scénarios",
+        "title": "Scénarios de la clé de test",
         "label": "Les scénarios de la piste d'essai joués l'un après l'autre",
         "scenarios": [
           {
@@ -206,7 +206,7 @@
           },
           {
             "tone": "muted",
-            "text": "overpass.search_routes · Wave, Sénégal, Laravel"
+            "text": "overpass.search_routes (Wave, Sénégal, Laravel)"
           },
           {
             "tone": "ok",
@@ -235,7 +235,7 @@
         "open": "Voir les discussions"
       },
       "screen": {
-        "title": "Discussions · Intégrations",
+        "title": "Discussions sur les intégrations",
         "label": "Une question qui reçoit une réponse acceptée puis devient une fiche",
         "thread": {
           "question": "Erreur 401 sur le webhook Orange Money, une idée ?",
@@ -256,7 +256,7 @@
         "newsletter": "Recevoir la newsletter"
       },
       "screen": {
-        "title": "Blog · @awa",
+        "title": "Blog de @awa",
         "label": "Un article qui reçoit des étoiles et des commentaires",
         "article": {
           "category": "Tutoriel",
@@ -265,7 +265,8 @@
           "read": "6 min de lecture",
           "stars": "24 étoiles",
           "comments": "8 commentaires",
-          "newsletter": "Repris dans la newsletter de lundi"
+          "newsletter": "Repris dans la newsletter de lundi",
+          "byline": "Par @{{author}}, {{read}}"
         }
       }
     },
@@ -277,26 +278,26 @@
         "open": "Voir le classement"
       },
       "screen": {
-        "title": "Classement · Octobre",
+        "title": "Classement d'octobre",
         "label": "Des développeurs qui gagnent des points",
         "bars": [
           {
-            "label": "awa · Sénégal",
+            "label": "awa au Sénégal",
             "value": 142,
             "unit": "pts"
           },
           {
-            "label": "kofi · Côte d'Ivoire",
+            "label": "kofi en Côte d'Ivoire",
             "value": 118,
             "unit": "pts"
           },
           {
-            "label": "fatou · Côte d'Ivoire",
+            "label": "fatou en Côte d'Ivoire",
             "value": 87,
             "unit": "pts"
           },
           {
-            "label": "moussa · Mali",
+            "label": "moussa au Mali",
             "value": 54,
             "unit": "pts"
           }
@@ -338,6 +339,7 @@
         ]
       }
     },
-    "example": "Exemple"
+    "example": "Exemple",
+    "kicker": "{{n}}. {{name}}"
   }
 }

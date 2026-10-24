@@ -28,7 +28,9 @@ export function ArticleScreen(): JSX.Element {
       <p class="m-0 text-h3 font-semibold">{a.headline}</p>
       <div class="flex items-center gap-3">
         <Avatar name={a.author} />
-        <span class="text-caption text-ink-2">{`@${a.author} · ${a.read}`}</span>
+        <span class="text-caption text-ink-2">
+          {t("tour.blog.screen.article.byline", { author: a.author, read: a.read })}
+        </span>
       </div>
       <div class="flex flex-wrap gap-x-6 gap-y-1 text-caption">
         <Line tone="ok" on={step >= 2}>
