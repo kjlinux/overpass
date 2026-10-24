@@ -54,16 +54,24 @@ test("the theme switch is remembered and applied to the root element", async ({ 
   await expect(page.getByRole("button", { name: layout.themeDark })).toBeVisible();
 });
 
-test("the features section links every module, and at 360 px nothing scrolls sideways", async ({
+test("the tour shows every module at work, and at 360 px nothing scrolls sideways", async ({
   page,
 }) => {
-  const home = locale("home");
+  const { tour } = locale("home");
   await page.setViewportSize({ width: 360, height: 780 });
   await page.goto(path("/"));
-  const features = page.getByRole("region", { name: home.features.title });
-  await features.scrollIntoViewIfNeeded();
-  for (const item of Object.values(home.features.items)) {
-    await expect(features.getByRole("link", { name: new RegExp(item.title) })).toBeVisible();
+  const region = page.getByRole("region", { name: tour.title });
+  await region.scrollIntoViewIfNeeded();
+  for (const block of [
+    tour.routes,
+    tour.track,
+    tour.relay,
+    tour.mcp,
+    tour.discussions,
+    tour.blog,
+  ]) {
+    await expect(region.getByRole("heading", { name: block.title })).toBeVisible();
+    await expect(region.getByRole("figure", { name: block.screen.label })).toBeVisible();
   }
   await expectNoSidewaysScroll(page);
 });

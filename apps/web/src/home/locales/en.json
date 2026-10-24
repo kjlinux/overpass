@@ -1,53 +1,4 @@
 {
-  "features": {
-    "title": "Overpass modules",
-    "items": {
-      "routes": {
-        "title": "Find an itinerary",
-        "body": "Search a sheet by service, country and stack. It gives the code that works, the known traps and the date of the last try."
-      },
-      "publish": {
-        "title": "Publish a sheet",
-        "body": "You plugged an API in production? Write the sheet, other developers check it and you climb the ranking."
-      },
-      "track": {
-        "title": "Test on the test track",
-        "body": "Create a test key and replay a payment with a simulated operator, successful, refused, late or duplicated."
-      },
-      "relay": {
-        "title": "Receive webhooks locally",
-        "body": "One command relays the simulated webhooks to your development server, with no tunnel and no public address."
-      },
-      "mcp": {
-        "title": "Plug in your code assistant",
-        "body": "The MCP server serves the verified sheets to Claude Code, Cursor or VS Code with a personal token."
-      },
-      "discussions": {
-        "title": "Ask a question",
-        "body": "Integrations, cloud, tools and AI, career or projects. A good answer can become a sheet."
-      },
-      "blog": {
-        "title": "Read and write articles",
-        "body": "Every member has a blog. Follow authors, comment and give a star to the useful articles."
-      },
-      "newsletter": {
-        "title": "Get the newsletter",
-        "body": "Once a week, the best sheets, discussions and articles in your inbox."
-      },
-      "ranking": {
-        "title": "See the ranking",
-        "body": "The developers and countries that publish and check the most sheets."
-      },
-      "propose": {
-        "title": "Propose a service",
-        "body": "An API is missing from the catalogue? Propose it, Overpass validates it."
-      },
-      "simulator": {
-        "title": "Request a simulator",
-        "body": "Vote for the next service to simulate on the test track."
-      }
-    }
-  },
   "latest": {
     "routes": {
       "title": "The latest published sheets",
@@ -79,26 +30,6 @@
     "broken": "Open potholes, to fix before use."
   },
   "track": {
-    "title": "The test track",
-    "body": "The test track replays with a simulated operator what happens in production. Successful payment, insufficient balance, duplicate or late webhook, timeout. No merchant account.",
-    "open": "Open the test track",
-    "cases": "Replayed cases",
-    "success": {
-      "title": "Successful payment",
-      "code": "checkout.session.completed"
-    },
-    "insufficient": {
-      "title": "Insufficient balance",
-      "code": "checkout.session.payment_failed"
-    },
-    "duplicate": {
-      "title": "Duplicate webhook",
-      "code": "same event, twice"
-    },
-    "late": {
-      "title": "Late webhook",
-      "code": "sent 60 s after the payment"
-    },
     "operators": "Simulated operators",
     "unofficial": "Unofficial",
     "loading": "Loading the simulated operators",
@@ -109,18 +40,6 @@
     },
     "kind_one": "{{category}}, {{count}} country",
     "kind_other": "{{category}}, {{count}} countries"
-  },
-  "mcp": {
-    "title": "In your code assistant",
-    "body": "Plug the Overpass MCP server into Claude Code, Cursor or VS Code with a personal token. Your assistant reads the verified sheets and writes the local integration that works.",
-    "editors": "Supported editors",
-    "claudeCode": "Claude Code",
-    "cursor": "Cursor",
-    "vscode": "VS Code",
-    "caption": ".cursor/mcp.json",
-    "token": "YOUR_TOKEN",
-    "note": "The token is created in your settings. The three configurations are in the",
-    "docs": "documentation"
   },
   "countries": {
     "title": "Countries covered",
@@ -138,5 +57,314 @@
   "signup": {
     "text": "Share what you learned in production.",
     "button": "Create an account"
+  },
+  "tour": {
+    "title": "Everything Overpass does",
+    "routes": {
+      "kicker": "Itineraries",
+      "title": "Code that works, already tested by others",
+      "body": "Each sheet targets one service, country and stack. It gives the code, the known traps and the date of the last try. Once two developers have checked it, the road is clear.",
+      "links": {
+        "browse": "Browse the itineraries",
+        "publish": "Publish a sheet"
+      },
+      "screen": {
+        "title": "Wave Checkout · Senegal · Laravel",
+        "label": "An itinerary sheet going from to verify to clear road",
+        "lines": [
+          {
+            "tone": "warn",
+            "text": "To verify"
+          },
+          {
+            "tone": "code",
+            "text": "$session = Wave::checkout()->create(["
+          },
+          {
+            "tone": "code",
+            "text": "    'amount' => '2500', 'currency' => 'XOF',"
+          },
+          {
+            "tone": "code",
+            "text": "]);"
+          },
+          {
+            "tone": "muted",
+            "text": "Known trap, the amount is sent as a string, not a number."
+          },
+          {
+            "tone": "muted",
+            "text": "Checked by awa in Senegal, then by kofi in Côte d'Ivoire."
+          },
+          {
+            "tone": "ok",
+            "text": "Clear road, last try on Oct 23"
+          }
+        ]
+      }
+    },
+    "track": {
+      "kicker": "Test track",
+      "title": "Replay the cases that break in production",
+      "body": "Create a test key and call a simulated operator like the real one. Successful payment, insufficient balance, duplicate or late webhook, timeout, with no merchant account.",
+      "links": {
+        "open": "Open the test track"
+      },
+      "screen": {
+        "title": "Test key · Scenarios",
+        "label": "The test track scenarios played one after the other",
+        "scenarios": [
+          {
+            "name": "Successful payment",
+            "result": "checkout.session.completed",
+            "tone": "ok"
+          },
+          {
+            "name": "Insufficient balance",
+            "result": "checkout.session.payment_failed",
+            "tone": "warn"
+          },
+          {
+            "name": "Duplicate webhook",
+            "result": "same event, twice",
+            "tone": "warn"
+          },
+          {
+            "name": "Late webhook",
+            "result": "sent 60 s after the payment",
+            "tone": "warn"
+          },
+          {
+            "name": "Timeout",
+            "result": "no answer from the operator",
+            "tone": "danger"
+          }
+        ]
+      }
+    },
+    "relay": {
+      "kicker": "Local relay",
+      "title": "Webhooks reach your machine",
+      "body": "One command opens an outgoing connection to Overpass and replays every webhook on your development server, body and headers intact. No tunnel, no public address.",
+      "links": {
+        "open": "Set up the relay"
+      },
+      "screen": {
+        "title": "Terminal",
+        "label": "The local relay receives webhooks and replays them on localhost",
+        "lines": [
+          {
+            "tone": "accent",
+            "text": "$ npx overpass-cli listen --forward-to http://localhost:3000/webhooks"
+          },
+          {
+            "tone": "muted",
+            "text": "Connected to Overpass, waiting for webhooks."
+          },
+          {
+            "tone": "code",
+            "text": "→ checkout.session.completed   200 OK   38 ms"
+          },
+          {
+            "tone": "code",
+            "text": "→ checkout.session.completed   200 OK   41 ms   (duplicate)"
+          },
+          {
+            "tone": "code",
+            "text": "→ checkout.session.payment_failed   200 OK   35 ms"
+          },
+          {
+            "tone": "ok",
+            "text": "3 webhooks replayed on localhost:3000"
+          }
+        ]
+      }
+    },
+    "mcp": {
+      "kicker": "MCP server",
+      "title": "Your code assistant reads the verified sheets",
+      "body": "Plug the Overpass MCP server into Claude Code, Cursor or VS Code with a personal token. The assistant finds the sheet, reads its traps, then writes the integration that works.",
+      "links": {
+        "docs": "See the configuration",
+        "token": "Create a token"
+      },
+      "screen": {
+        "title": "Code assistant",
+        "label": "A code assistant using Overpass sheets",
+        "lines": [
+          {
+            "tone": "you",
+            "text": "Add Wave payments to my Laravel app."
+          },
+          {
+            "tone": "muted",
+            "text": "overpass.search_routes · Wave, Senegal, Laravel"
+          },
+          {
+            "tone": "ok",
+            "text": "Sheet found, clear road, checked on Oct 23"
+          },
+          {
+            "tone": "muted",
+            "text": "Trap noted, the amount is sent as a string."
+          },
+          {
+            "tone": "code",
+            "text": "Route::post('/webhooks/wave', WaveWebhook::class);"
+          },
+          {
+            "tone": "code",
+            "text": "// signature checked before anything else"
+          }
+        ]
+      }
+    },
+    "discussions": {
+      "kicker": "Discussions",
+      "title": "Ask the question, the answer can become a sheet",
+      "body": "Integrations, cloud, tools and AI, career, projects or events. The author accepts the best answer, and a working solution turns into an itinerary sheet.",
+      "links": {
+        "open": "See the discussions"
+      },
+      "screen": {
+        "title": "Discussions · Integrations",
+        "label": "A question that gets an accepted answer then becomes a sheet",
+        "lines": [
+          {
+            "tone": "code",
+            "text": "401 error on the Orange Money webhook"
+          },
+          {
+            "tone": "muted",
+            "text": "asked by fatou, Côte d'Ivoire"
+          },
+          {
+            "tone": "you",
+            "text": "The token expires after one hour, renew it before the call."
+          },
+          {
+            "tone": "ok",
+            "text": "Accepted answer"
+          },
+          {
+            "tone": "muted",
+            "text": "12 developers found it useful."
+          },
+          {
+            "tone": "accent",
+            "text": "Turned into an itinerary sheet"
+          }
+        ]
+      }
+    },
+    "blog": {
+      "kicker": "Blogs and newsletter",
+      "title": "Every member has a blog",
+      "body": "Tutorials, field notes and tech news, with images and a cover. Follow authors, comment, give a star to useful articles. Every week, the newsletter sums up the best.",
+      "links": {
+        "open": "Read the articles",
+        "newsletter": "Get the newsletter"
+      },
+      "screen": {
+        "title": "Blog · @awa",
+        "label": "An article getting stars and comments",
+        "lines": [
+          {
+            "tone": "muted",
+            "text": "Tutorial · 6 min read"
+          },
+          {
+            "tone": "code",
+            "text": "Collect with Wave from Laravel, from token to webhook"
+          },
+          {
+            "tone": "muted",
+            "text": "The full path, with the three traps that cost me a day."
+          },
+          {
+            "tone": "ok",
+            "text": "★ 24 stars"
+          },
+          {
+            "tone": "muted",
+            "text": "8 comments · 31 followers"
+          },
+          {
+            "tone": "accent",
+            "text": "In Monday's newsletter"
+          }
+        ]
+      }
+    },
+    "ranking": {
+      "kicker": "Ranking",
+      "title": "Every contribution counts",
+      "body": "Publishing a sheet, checking one, confirming a trap, answering usefully or writing an article earns points. The ranking shows the developers and countries moving integrations forward.",
+      "links": {
+        "open": "See the ranking"
+      },
+      "screen": {
+        "title": "Ranking · October",
+        "label": "Developers earning points",
+        "bars": [
+          {
+            "label": "awa · Senegal",
+            "value": 142,
+            "unit": "pts"
+          },
+          {
+            "label": "kofi · Côte d'Ivoire",
+            "value": 118,
+            "unit": "pts"
+          },
+          {
+            "label": "fatou · Côte d'Ivoire",
+            "value": 87,
+            "unit": "pts"
+          },
+          {
+            "label": "moussa · Mali",
+            "value": 54,
+            "unit": "pts"
+          }
+        ]
+      }
+    },
+    "requests": {
+      "kicker": "Catalogue",
+      "title": "An API is missing? Propose it",
+      "body": "Propose a service missing from the catalogue, Overpass validates it. Vote for the next simulator, the test track adds the most requested services first.",
+      "links": {
+        "propose": "Propose a service",
+        "vote": "Vote for a simulator"
+      },
+      "screen": {
+        "title": "Requested simulators",
+        "label": "Votes for the next simulators",
+        "bars": [
+          {
+            "label": "MTN MoMo",
+            "value": 64,
+            "unit": "votes"
+          },
+          {
+            "label": "Orange Money",
+            "value": 51,
+            "unit": "votes"
+          },
+          {
+            "label": "M-Pesa",
+            "value": 37,
+            "unit": "votes"
+          },
+          {
+            "label": "Paystack",
+            "value": 22,
+            "unit": "votes"
+          }
+        ]
+      }
+    },
+    "example": "Example"
   }
 }

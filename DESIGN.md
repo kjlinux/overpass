@@ -102,7 +102,7 @@ Measured contrast, light theme: ink on paper 16.8:1, ink-2 on paper 7.2:1, accen
 ### Grid & Container
 
 - Content container 1200 px, centred, with a 1 px rule on both sides from 1024 px (the page reads as a column of the atlas). Reading container 72ch.
-- Home page (approved by the user on 2026-10-24, replacing proposal B and its webhook scene): the promise across the full container on two lines, a ruled row under it with a sentence that names what the product does and the primary action, then the live demo, then "what you can do here", a ruled grid of every module (three columns from 1024 px, two from 768 px, one at 360 px) where each cell is a link with an icon, a title and one concrete sentence. Then the latest published itineraries as real cards with the three states as a legend, the test track with its capture, cases and operators, the assistants block, recent discussions and articles beside the newsletter, and the countries, figures and sign-up. A block fed by the API hides itself when the call fails or returns nothing.
+- Home page (approved by the user on 2026-10-24): the promise across the full container, a ruled row with a sentence that names what the product does and the primary action, then the live demo. Then "everything Overpass does", a tour of eight blocks (itineraries, test track, local relay, MCP server, discussions, blogs and newsletter, ranking, catalogue requests). Each block puts a numbered kicker, a title, two sentences and its links beside a small framed screen marked "example" that plays the feature at work, sides alternating from 1024 px, stacked text first below. The simulated operators with their unofficial mention close the tour. Then the latest published itineraries, recent discussions and articles beside the newsletter, and the countries, figures and sign-up.
 - Catalogue: filters above the list under 1024 px, filters in a 280 px left column above.
 - Test track: one column under 1024 px (form, then inspector, then webhook log); two columns above (form left, inspector and log right).
 - Tables scroll horizontally inside their container under 768 px; they never break the page width.
@@ -132,7 +132,7 @@ One permissive set: Lucide (ISC), self-hosted as inline SVG components. Stroke 1
 
 ## Motion
 
-- Durations: `--duration-fast` 150 ms for colour and opacity, `--duration-base` 200 ms for position and dialogs, `--duration-slow` 250 ms for panels. Nothing longer, except the home page figure counters (400 ms, once). Nothing loops.
+- Durations: `--duration-fast` 150 ms for colour and opacity, `--duration-base` 200 ms for position and dialogs, `--duration-slow` 250 ms for panels. Nothing longer, except on the home page, where the user allowed more on 2026-10-24. The figure counters run 400 ms once, and each tour screen plays its lines one per 900 ms while it is on screen, holds, then loops; bars grow in 700 ms. With reduced motion every screen shows its end state at once.
 - Easing: `--ease-out: cubic-bezier(0.2, 0, 0, 1)` for entering, `--ease-in: cubic-bezier(0.4, 0, 1, 1)` for leaving.
 - Only `transform` and `opacity` animate. Never layout properties.
 - Under `prefers-reduced-motion: reduce`, every transition drops to 0 ms except a 100 ms opacity crossfade for dialogs and notifications.
@@ -230,7 +230,7 @@ Every component is keyboard operable, shows a visible focus ring (2 px accent, 2
 - No uppercase labels, no letter-spaced kickers, no numbered section eyebrows.
 - No text under 14 px, no running text under 16 px.
 - No shadow outside dialogs, menus and notifications.
-- No motion longer than 250 ms (home page counters excepted, see Motion), no bounce, no animated focus ring.
+- No motion longer than 250 ms (home page counters and tour screens excepted, see Motion), no bounce, no animated focus ring.
 - No text baked into an image.
 - No remote asset: no font CDN, no icon CDN, no hotlinked image.
 - No em dash, anywhere, in any language.

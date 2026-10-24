@@ -1,53 +1,4 @@
 {
-  "features": {
-    "title": "Les modules d'Overpass",
-    "items": {
-      "routes": {
-        "title": "Trouver un itinéraire",
-        "body": "Cherchez une fiche par service, pays et stack. Elle donne le code qui marche, les pièges connus et la date du dernier essai."
-      },
-      "publish": {
-        "title": "Publier une fiche",
-        "body": "Vous avez branché une API en production ? Écrivez la fiche, d'autres développeurs la vérifient et vous montez au classement."
-      },
-      "track": {
-        "title": "Tester sur la piste d'essai",
-        "body": "Créez une clé de test et rejouez un paiement chez un opérateur simulé, réussi, refusé, en retard ou en double."
-      },
-      "relay": {
-        "title": "Recevoir les webhooks en local",
-        "body": "Une commande relaie les webhooks simulés vers votre serveur de développement, sans tunnel ni adresse publique."
-      },
-      "mcp": {
-        "title": "Brancher votre assistant de code",
-        "body": "Le serveur MCP sert les fiches vérifiées à Claude Code, Cursor ou VS Code avec un jeton personnel."
-      },
-      "discussions": {
-        "title": "Poser une question",
-        "body": "Intégrations, cloud, outils et IA, carrière ou projets. Une bonne réponse peut devenir une fiche."
-      },
-      "blog": {
-        "title": "Lire et écrire des articles",
-        "body": "Chaque membre a son blog. Suivez des auteurs, commentez et donnez une étoile aux articles utiles."
-      },
-      "newsletter": {
-        "title": "Recevoir la newsletter",
-        "body": "Une fois par semaine, les meilleures fiches, discussions et articles dans votre boîte."
-      },
-      "ranking": {
-        "title": "Voir le classement",
-        "body": "Les développeurs et les pays qui publient et vérifient le plus de fiches."
-      },
-      "propose": {
-        "title": "Proposer un service",
-        "body": "Il manque une API au catalogue ? Proposez-la, Overpass la valide."
-      },
-      "simulator": {
-        "title": "Demander un simulateur",
-        "body": "Votez pour le prochain service à simuler sur la piste d'essai."
-      }
-    }
-  },
   "latest": {
     "routes": {
       "title": "Les dernières fiches publiées",
@@ -79,26 +30,6 @@
     "broken": "Des nids-de-poule ouverts, à corriger avant usage."
   },
   "track": {
-    "title": "La piste d'essai",
-    "body": "La piste d'essai rejoue chez un opérateur simulé ce qui arrive en production. Paiement réussi, solde insuffisant, webhook en double ou en retard, délai dépassé. Sans compte marchand.",
-    "open": "Ouvrir la piste d'essai",
-    "cases": "Cas rejoués",
-    "success": {
-      "title": "Paiement réussi",
-      "code": "checkout.session.completed"
-    },
-    "insufficient": {
-      "title": "Solde insuffisant",
-      "code": "checkout.session.payment_failed"
-    },
-    "duplicate": {
-      "title": "Webhook en double",
-      "code": "même événement, deux fois"
-    },
-    "late": {
-      "title": "Webhook en retard",
-      "code": "parti 60 s après le paiement"
-    },
     "operators": "Opérateurs simulés",
     "unofficial": "Non officiel",
     "loading": "Chargement des opérateurs simulés",
@@ -109,18 +40,6 @@
     },
     "kind_one": "{{category}}, {{count}} pays",
     "kind_other": "{{category}}, {{count}} pays"
-  },
-  "mcp": {
-    "title": "Dans votre assistant de code",
-    "body": "Branchez le serveur MCP d'Overpass dans Claude Code, Cursor ou VS Code avec un jeton personnel. Votre assistant lit les fiches vérifiées et écrit l'intégration locale qui marche.",
-    "editors": "Éditeurs pris en charge",
-    "claudeCode": "Claude Code",
-    "cursor": "Cursor",
-    "vscode": "VS Code",
-    "caption": ".cursor/mcp.json",
-    "token": "VOTRE_JETON",
-    "note": "Le jeton se crée dans vos paramètres. Les trois configurations sont dans la",
-    "docs": "documentation"
   },
   "countries": {
     "title": "Pays couverts",
@@ -138,5 +57,314 @@
   "signup": {
     "text": "Partagez ce que vous avez appris en production.",
     "button": "Créer un compte"
+  },
+  "tour": {
+    "title": "Tout ce que fait Overpass",
+    "routes": {
+      "kicker": "Itinéraires",
+      "title": "Le code qui marche, déjà testé par d'autres",
+      "body": "Chaque fiche cible un service, un pays et une stack. Elle donne le code, les pièges connus et la date du dernier essai. Dès que deux développeurs l'ont vérifiée, la voie est libre.",
+      "links": {
+        "browse": "Parcourir les itinéraires",
+        "publish": "Publier une fiche"
+      },
+      "screen": {
+        "title": "Wave Checkout · Sénégal · Laravel",
+        "label": "Une fiche d'itinéraire qui passe de « à vérifier » à « voie libre »",
+        "lines": [
+          {
+            "tone": "warn",
+            "text": "À vérifier"
+          },
+          {
+            "tone": "code",
+            "text": "$session = Wave::checkout()->create(["
+          },
+          {
+            "tone": "code",
+            "text": "    'amount' => '2500', 'currency' => 'XOF',"
+          },
+          {
+            "tone": "code",
+            "text": "]);"
+          },
+          {
+            "tone": "muted",
+            "text": "Piège connu, le montant part en chaîne et non en nombre."
+          },
+          {
+            "tone": "muted",
+            "text": "Vérifiée par awa au Sénégal, puis par kofi en Côte d'Ivoire."
+          },
+          {
+            "tone": "ok",
+            "text": "Voie libre, dernier essai le 23 oct."
+          }
+        ]
+      }
+    },
+    "track": {
+      "kicker": "Piste d'essai",
+      "title": "Rejouez les cas qui cassent en production",
+      "body": "Créez une clé de test et appelez un opérateur simulé comme le vrai. Paiement réussi, solde insuffisant, webhook en double ou en retard, délai dépassé, sans compte marchand.",
+      "links": {
+        "open": "Ouvrir la piste d'essai"
+      },
+      "screen": {
+        "title": "Clé de test · Scénarios",
+        "label": "Les scénarios de la piste d'essai joués l'un après l'autre",
+        "scenarios": [
+          {
+            "name": "Paiement réussi",
+            "result": "checkout.session.completed",
+            "tone": "ok"
+          },
+          {
+            "name": "Solde insuffisant",
+            "result": "checkout.session.payment_failed",
+            "tone": "warn"
+          },
+          {
+            "name": "Webhook en double",
+            "result": "même événement, deux fois",
+            "tone": "warn"
+          },
+          {
+            "name": "Webhook en retard",
+            "result": "parti 60 s après le paiement",
+            "tone": "warn"
+          },
+          {
+            "name": "Délai dépassé",
+            "result": "aucune réponse de l'opérateur",
+            "tone": "danger"
+          }
+        ]
+      }
+    },
+    "relay": {
+      "kicker": "Relais local",
+      "title": "Les webhooks arrivent sur votre machine",
+      "body": "Une commande ouvre une connexion sortante vers Overpass et rejoue chaque webhook sur votre serveur de développement, corps et en-têtes intacts. Ni tunnel, ni adresse publique.",
+      "links": {
+        "open": "Configurer le relais"
+      },
+      "screen": {
+        "title": "Terminal",
+        "label": "Le relais local reçoit des webhooks et les rejoue sur localhost",
+        "lines": [
+          {
+            "tone": "accent",
+            "text": "$ npx overpass-cli listen --forward-to http://localhost:3000/webhooks"
+          },
+          {
+            "tone": "muted",
+            "text": "Connecté à Overpass, en attente des webhooks."
+          },
+          {
+            "tone": "code",
+            "text": "→ checkout.session.completed   200 OK   38 ms"
+          },
+          {
+            "tone": "code",
+            "text": "→ checkout.session.completed   200 OK   41 ms   (doublon)"
+          },
+          {
+            "tone": "code",
+            "text": "→ checkout.session.payment_failed   200 OK   35 ms"
+          },
+          {
+            "tone": "ok",
+            "text": "3 webhooks rejoués sur localhost:3000"
+          }
+        ]
+      }
+    },
+    "mcp": {
+      "kicker": "Serveur MCP",
+      "title": "Votre assistant de code lit les fiches vérifiées",
+      "body": "Branchez le serveur MCP d'Overpass dans Claude Code, Cursor ou VS Code avec un jeton personnel. L'assistant cherche la fiche, lit ses pièges, puis écrit l'intégration qui marche.",
+      "links": {
+        "docs": "Voir la configuration",
+        "token": "Créer un jeton"
+      },
+      "screen": {
+        "title": "Assistant de code",
+        "label": "Un assistant de code qui utilise les fiches d'Overpass",
+        "lines": [
+          {
+            "tone": "you",
+            "text": "Branche le paiement Wave dans mon app Laravel."
+          },
+          {
+            "tone": "muted",
+            "text": "overpass.search_routes · Wave, Sénégal, Laravel"
+          },
+          {
+            "tone": "ok",
+            "text": "Fiche trouvée, voie libre, vérifiée le 23 oct."
+          },
+          {
+            "tone": "muted",
+            "text": "Piège noté, le montant part en chaîne."
+          },
+          {
+            "tone": "code",
+            "text": "Route::post('/webhooks/wave', WaveWebhook::class);"
+          },
+          {
+            "tone": "code",
+            "text": "// signature vérifiée avant tout traitement"
+          }
+        ]
+      }
+    },
+    "discussions": {
+      "kicker": "Discussions",
+      "title": "Posez la question, la réponse peut devenir une fiche",
+      "body": "Intégrations, cloud, outils et IA, carrière, projets ou événements. L'auteur accepte la meilleure réponse, et une solution qui marche se transforme en fiche d'itinéraire.",
+      "links": {
+        "open": "Voir les discussions"
+      },
+      "screen": {
+        "title": "Discussions · Intégrations",
+        "label": "Une question qui reçoit une réponse acceptée puis devient une fiche",
+        "lines": [
+          {
+            "tone": "code",
+            "text": "Erreur 401 sur le webhook Orange Money"
+          },
+          {
+            "tone": "muted",
+            "text": "posée par fatou, Côte d'Ivoire"
+          },
+          {
+            "tone": "you",
+            "text": "Le jeton expire après une heure, renouvelle-le avant l'appel."
+          },
+          {
+            "tone": "ok",
+            "text": "Réponse acceptée"
+          },
+          {
+            "tone": "muted",
+            "text": "12 développeurs l'ont jugée utile."
+          },
+          {
+            "tone": "accent",
+            "text": "Transformée en fiche d'itinéraire"
+          }
+        ]
+      }
+    },
+    "blog": {
+      "kicker": "Blogs et newsletter",
+      "title": "Chaque membre a son blog",
+      "body": "Tutoriels, retours d'expérience et actualité tech, avec images et couverture. Suivez des auteurs, commentez, donnez une étoile aux articles utiles. Chaque semaine, la newsletter résume le meilleur.",
+      "links": {
+        "open": "Lire les articles",
+        "newsletter": "Recevoir la newsletter"
+      },
+      "screen": {
+        "title": "Blog · @awa",
+        "label": "Un article qui reçoit des étoiles et des commentaires",
+        "lines": [
+          {
+            "tone": "muted",
+            "text": "Tutoriel · 6 min de lecture"
+          },
+          {
+            "tone": "code",
+            "text": "Encaisser avec Wave depuis Laravel, du jeton au webhook"
+          },
+          {
+            "tone": "muted",
+            "text": "Le parcours complet, avec les trois pièges qui m'ont coûté une journée."
+          },
+          {
+            "tone": "ok",
+            "text": "★ 24 étoiles"
+          },
+          {
+            "tone": "muted",
+            "text": "8 commentaires · 31 abonnés"
+          },
+          {
+            "tone": "accent",
+            "text": "Dans la newsletter de lundi"
+          }
+        ]
+      }
+    },
+    "ranking": {
+      "kicker": "Classement",
+      "title": "Chaque contribution compte",
+      "body": "Publier une fiche, la vérifier, confirmer un piège, répondre utilement ou écrire un article rapporte des points. Le classement montre les développeurs et les pays qui font avancer les intégrations.",
+      "links": {
+        "open": "Voir le classement"
+      },
+      "screen": {
+        "title": "Classement · Octobre",
+        "label": "Des développeurs qui gagnent des points",
+        "bars": [
+          {
+            "label": "awa · Sénégal",
+            "value": 142,
+            "unit": "pts"
+          },
+          {
+            "label": "kofi · Côte d'Ivoire",
+            "value": 118,
+            "unit": "pts"
+          },
+          {
+            "label": "fatou · Côte d'Ivoire",
+            "value": 87,
+            "unit": "pts"
+          },
+          {
+            "label": "moussa · Mali",
+            "value": 54,
+            "unit": "pts"
+          }
+        ]
+      }
+    },
+    "requests": {
+      "kicker": "Catalogue",
+      "title": "Il manque une API ? Proposez-la",
+      "body": "Proposez un service qui manque au catalogue, Overpass le valide. Votez pour le prochain simulateur, la piste d'essai ajoute d'abord les services les plus demandés.",
+      "links": {
+        "propose": "Proposer un service",
+        "vote": "Voter pour un simulateur"
+      },
+      "screen": {
+        "title": "Simulateurs demandés",
+        "label": "Les votes pour les prochains simulateurs",
+        "bars": [
+          {
+            "label": "MTN MoMo",
+            "value": 64,
+            "unit": "votes"
+          },
+          {
+            "label": "Orange Money",
+            "value": 51,
+            "unit": "votes"
+          },
+          {
+            "label": "M-Pesa",
+            "value": 37,
+            "unit": "votes"
+          },
+          {
+            "label": "Paystack",
+            "value": 22,
+            "unit": "votes"
+          }
+        ]
+      }
+    },
+    "example": "Exemple"
   }
 }
