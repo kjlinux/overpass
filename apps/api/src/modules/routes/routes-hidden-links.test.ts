@@ -56,12 +56,12 @@ describe("a thread whose itinerary is hidden", () => {
 });
 
 describe("coverage confirmed by a hidden itinerary", () => {
-  async function confirmGhana(): Promise<string> {
-    const id = await publishRoute(app, author, { country: "GH" });
+  async function confirmAngola(): Promise<string> {
+    const id = await publishRoute(app, author, { country: "AO" });
     for (const cookie of [helper, admin]) {
       await call(app, "POST", `/v1/routes/${id}/checks`, {
         cookie,
-        payload: { country: "GH", environment: "production" },
+        payload: { country: "AO", environment: "production" },
       });
     }
     return id;
@@ -78,15 +78,15 @@ describe("coverage confirmed by a hidden itinerary", () => {
   };
 
   it("stops counting while hidden and comes back on restore", async () => {
-    const id = await confirmGhana();
-    expect(await countries()).toContain("GH");
-    expect(await waveCountries()).toContain("GH");
+    const id = await confirmAngola();
+    expect(await countries()).toContain("AO");
+    expect(await waveCountries()).toContain("AO");
     await moderateRoute(app, admin, id, "hide");
-    expect(await countries()).not.toContain("GH");
-    expect(await waveCountries()).not.toContain("GH");
+    expect(await countries()).not.toContain("AO");
+    expect(await waveCountries()).not.toContain("AO");
     await moderateRoute(app, admin, id, "restore");
-    expect(await countries()).toContain("GH");
-    expect(await waveCountries()).toContain("GH");
+    expect(await countries()).toContain("AO");
+    expect(await waveCountries()).toContain("AO");
   });
 });
 
