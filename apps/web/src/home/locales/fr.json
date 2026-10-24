@@ -1,4 +1,84 @@
 {
+  "features": {
+    "title": "Ce que vous pouvez faire ici",
+    "intro": "Tout ce qu'il faut pour brancher une API africaine, de la fiche de code jusqu'au webhook reçu sur votre machine. Chaque case ouvre la page concernée.",
+    "items": {
+      "routes": {
+        "title": "Trouver un itinéraire",
+        "body": "Cherchez une fiche par service, pays et stack. Elle donne le code qui marche, les pièges connus et la date du dernier essai."
+      },
+      "publish": {
+        "title": "Publier une fiche",
+        "body": "Vous avez branché une API en production ? Écrivez la fiche, d'autres développeurs la vérifient et vous gagnez des points."
+      },
+      "track": {
+        "title": "Tester sur la piste d'essai",
+        "body": "Créez une clé de test et rejouez un paiement chez un opérateur simulé, réussi, refusé, en retard ou en double."
+      },
+      "relay": {
+        "title": "Recevoir les webhooks en local",
+        "body": "Une commande relaie les webhooks simulés vers votre serveur de développement, sans tunnel ni adresse publique."
+      },
+      "mcp": {
+        "title": "Brancher votre assistant de code",
+        "body": "Le serveur MCP sert les fiches vérifiées à Claude Code, Cursor ou VS Code avec un jeton personnel."
+      },
+      "discussions": {
+        "title": "Poser une question",
+        "body": "Intégrations, cloud, outils et IA, carrière ou projets. Une bonne réponse peut devenir une fiche."
+      },
+      "blog": {
+        "title": "Lire et écrire des articles",
+        "body": "Chaque membre a son blog. Suivez des auteurs, commentez et donnez une étoile aux articles utiles."
+      },
+      "newsletter": {
+        "title": "Recevoir la newsletter",
+        "body": "Une fois par semaine, les meilleures fiches, discussions et articles dans votre boîte."
+      },
+      "ranking": {
+        "title": "Voir le classement",
+        "body": "Les développeurs et les pays qui publient et vérifient le plus de fiches."
+      },
+      "propose": {
+        "title": "Proposer un service",
+        "body": "Il manque une API au catalogue ? Proposez-la, l'administration la valide."
+      },
+      "simulator": {
+        "title": "Demander un simulateur",
+        "body": "Votez pour le prochain service à simuler sur la piste d'essai."
+      }
+    }
+  },
+  "latest": {
+    "routes": {
+      "title": "Les dernières fiches publiées",
+      "intro": "Chaque fiche dit si la voie est libre, à vérifier ou signalée cassée, avec la date du dernier essai.",
+      "all": "Voir tout le catalogue",
+      "loading": "Chargement des fiches"
+    },
+    "activity": "Discussions et articles récents",
+    "threads": {
+      "title": "Discussions récentes",
+      "all": "Toutes les discussions",
+      "loading": "Chargement des discussions"
+    },
+    "posts": {
+      "title": "Articles récents",
+      "all": "Tous les articles",
+      "loading": "Chargement des articles"
+    },
+    "replies_one": "{{count}} réponse",
+    "replies_other": "{{count}} réponses",
+    "by": "par {{author}}, le {{date}}",
+    "newsletter": "Chaque semaine, les meilleures fiches, discussions et articles.",
+    "team": "l'équipe Overpass"
+  },
+  "routes": {
+    "states": "États d'une fiche",
+    "clear": "Vérifiée récemment par un autre développeur.",
+    "toVerify": "La dernière vérification date, un essai suffit.",
+    "broken": "Des nids-de-poule ouverts, à corriger avant usage."
+  },
   "track": {
     "title": "La piste d'essai",
     "body": "La piste d'essai rejoue chez un opérateur simulé ce qui arrive en production. Paiement réussi, solde insuffisant, webhook en double ou en retard, délai dépassé. Sans compte marchand.",
@@ -32,16 +112,6 @@
     "kind_one": "{{category}}, {{count}} pays",
     "kind_other": "{{category}}, {{count}} pays"
   },
-  "routes": {
-    "title": "Les itinéraires",
-    "body": "Un itinéraire est une fiche d'intégration pour un service, un pays et une stack. Elle donne le code qui marche et les pièges connus, et dit si la voie est libre, à vérifier ou signalée cassée, avec la date de la dernière vérification.",
-    "alt": "Fiche d'itinéraire, ici une session de paiement Wave en PHP, ses pièges connus, puis un nid-de-poule signalé par un autre développeur.",
-    "states": "États d'une fiche",
-    "clear": "Vérifiée récemment par un autre développeur.",
-    "toVerify": "La dernière vérification date, un essai suffit.",
-    "broken": "Des nids-de-poule ouverts, à corriger avant usage.",
-    "browse": "Parcourir les itinéraires"
-  },
   "mcp": {
     "title": "Dans votre assistant de code",
     "body": "Branchez le serveur MCP d'Overpass dans Claude Code, Cursor ou VS Code avec un jeton personnel. Votre assistant lit les fiches vérifiées et écrit l'intégration locale qui marche.",
@@ -53,13 +123,6 @@
     "token": "VOTRE_JETON",
     "note": "Le jeton se crée dans vos paramètres. Les trois configurations sont dans la",
     "docs": "documentation"
-  },
-  "community": {
-    "title": "Communauté",
-    "discussions": "Carrière, outils, cloud, IA et projets, au-delà des intégrations.",
-    "blog": "Actualité tech africaine, tutoriels et portraits.",
-    "newsletter": "Newsletter",
-    "newsletterBody": "Chaque semaine, les meilleures fiches, discussions et articles."
   },
   "countries": {
     "title": "Pays couverts",

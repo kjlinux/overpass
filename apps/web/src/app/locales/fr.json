@@ -2,31 +2,9 @@
   "app": {
     "name": "Overpass",
     "tagline": "Intégrez les API africaines sans tâtonner.",
-    "intro": "Paiement mobile, SMS, USSD ou tout autre service africain, d'autres développeurs l'ont déjà branché. Ils partagent ici le code qui marche, les pièges rencontrés et la date de leur dernier essai.",
+    "intro": "Overpass rassemble des fiches d'intégration pour les API africaines de paiement mobile, de SMS et d'USSD, classées par service, pays et stack. Chaque fiche donne le code qui marche, les pièges connus et la date du dernier essai. Une piste d'essai simule les opérateurs sans compte marchand, et un serveur MCP sert les fiches à votre assistant de code.",
     "demo": "Essayer la démo",
     "routes": "Parcourir les itinéraires"
-  },
-  "scene": {
-    "label": "Un webhook part d'un opérateur simulé, passe par Overpass et arrive sur localhost.",
-    "departure": "Départ",
-    "relay": "Relais",
-    "arrival": "Arrivée",
-    "caption": "Trajet d'un webhook jusqu'à votre serveur local",
-    "still": "Image fixe",
-    "live": "Boucle lente, en pause hors de l'écran",
-    "operator": "Opérateur",
-    "operatorSub": "Wave, simulé",
-    "operatorShort": "simulé",
-    "overpass": "Overpass",
-    "overpassSub": "relais",
-    "localhost": "localhost",
-    "localhostSub": ":3000/webhooks",
-    "localhostShort": ":3000",
-    "post": "POST /webhooks",
-    "event": "checkout.session.completed",
-    "emitted": "émis par l'opérateur",
-    "signed": "signé, rejoué si refusé",
-    "received": "reçu, 200 OK"
   },
   "demo": {
     "title": "La démo, ici même",

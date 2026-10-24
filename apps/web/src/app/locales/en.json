@@ -2,31 +2,9 @@
   "app": {
     "name": "Overpass",
     "tagline": "Integrate African APIs without guesswork.",
-    "intro": "Mobile money, SMS, USSD or any other African service, other developers have already wired it. They share here the code that works, the traps they hit and the date of their last try.",
+    "intro": "Overpass gathers integration sheets for African mobile payment, SMS and USSD APIs, sorted by service, country and stack. Each sheet gives the code that works, the known traps and the date of the last try. A test track simulates the operators without a merchant account, and an MCP server serves the sheets to your code assistant.",
     "demo": "Try the demo",
     "routes": "Browse the itineraries"
-  },
-  "scene": {
-    "label": "A webhook leaves a simulated operator, goes through Overpass and lands on localhost.",
-    "departure": "Departure",
-    "relay": "Relay",
-    "arrival": "Arrival",
-    "caption": "A webhook's journey to your local server",
-    "still": "Still image",
-    "live": "Slow loop, paused off screen",
-    "operator": "Operator",
-    "operatorSub": "Wave, simulated",
-    "operatorShort": "simulated",
-    "overpass": "Overpass",
-    "overpassSub": "relay",
-    "localhost": "localhost",
-    "localhostSub": ":3000/webhooks",
-    "localhostShort": ":3000",
-    "post": "POST /webhooks",
-    "event": "checkout.session.completed",
-    "emitted": "sent by the operator",
-    "signed": "signed, replayed if refused",
-    "received": "received, 200 OK"
   },
   "demo": {
     "title": "The demo, right here",

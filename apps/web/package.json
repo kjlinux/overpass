@@ -20,12 +20,10 @@
     "react": "npm:@preact/compat@^18.3.2",
     "react-dom": "npm:@preact/compat@^18.3.2",
     "react-i18next": "^17.0.16",
-    "three": "^0.186.1",
     "zod": "^4.6.7"
   },
   "devDependencies": {
     "@types/markdown-it": "^14.2.0",
-    "@types/three": "^0.186.0",
     "postcss": "^8.5.29",
     "preact-render-to-string": "^6.8.0",
     "tailwindcss": "^3.4.19",

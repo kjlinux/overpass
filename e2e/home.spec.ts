@@ -25,7 +25,6 @@ test("the demo button takes the keyboard to the embedded demo, which shows a del
   await expect(page.getByRole("status").filter({ hasText: app.demo.live.webhook })).toBeVisible({
     timeout: 30_000,
   });
-  // The scene also names the event; only the demo section proves the delivery.
   const demo = page.getByRole("region", { name: app.demo.title });
   await expect(demo.getByText("checkout.session.completed").first()).toBeVisible();
 });
@@ -55,18 +54,16 @@ test("the theme switch is remembered and applied to the root element", async ({ 
   await expect(page.getByRole("button", { name: layout.themeDark })).toBeVisible();
 });
 
-test("at 360 px the page never scrolls sideways and shows the still scene", async ({ page }) => {
+test("the features section links every module, and at 360 px nothing scrolls sideways", async ({
+  page,
+}) => {
+  const home = locale("home");
   await page.setViewportSize({ width: 360, height: 780 });
   await page.goto(path("/"));
-  await expect(page.getByRole("img", { name: locale("app").scene.label })).toBeVisible();
-  await expect(page.locator(".home-frame canvas")).toBeHidden();
+  const features = page.getByRole("region", { name: home.features.title });
+  await features.scrollIntoViewIfNeeded();
+  for (const item of Object.values(home.features.items)) {
+    await expect(features.getByRole("link", { name: new RegExp(item.title) })).toBeVisible();
+  }
   await expectNoSidewaysScroll(page);
-});
-
-test("scene=off keeps the still image on a wide screen", async ({ page }) => {
-  await page.setViewportSize({ width: 1280, height: 800 });
-  await page.goto(`${path("/")}?scene=off`);
-  await page.waitForTimeout(1500);
-  await expect(page.locator(".home-frame svg").first()).toBeVisible();
-  await expect(page.locator(".home-frame canvas")).toBeHidden();
 });

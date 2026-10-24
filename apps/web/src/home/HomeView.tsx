@@ -6,9 +6,8 @@ import { DemoSection } from "./demo/DemoSection";
 import { Hero } from "./Hero";
 import { prefersReducedMotion } from "./hooks/idle";
 import { useBelow } from "./hooks/useBelow";
-import { SceneBand } from "./SceneBand";
 
-/** The home page, proposal B: promise, scene band, then ruled sections in the imposed order. */
+/** The home page: promise, live demo, every module, then real sheets and activity. */
 export function HomeView({ language }: { language: Language }): JSX.Element {
   const [focusRequest, setFocusRequest] = useState(0);
   const Below = useBelow();
@@ -20,7 +19,6 @@ export function HomeView({ language }: { language: Language }): JSX.Element {
   return (
     <div class="pb-16 md:pb-24">
       <Hero language={language} onTry={tryDemo} />
-      <SceneBand />
       <DemoSection language={language} focusRequest={focusRequest} />
       {Below === null ? (
         <div class="min-h-screen" aria-busy="true" />

@@ -10,7 +10,6 @@ export type Manifest = Record<string, ManifestChunk>;
 export type Budget = { jsGzipBytes: number; totalGzipBytes: number };
 
 export const homeBudget: Budget = { jsGzipBytes: 80 * 1024, totalGzipBytes: 200 * 1024 };
-export const sceneBudgetBytes = 180 * 1024;
 export const homeRoots = [
   "index.html",
   "src/app/HomePage.tsx",
@@ -18,9 +17,8 @@ export const homeRoots = [
   "src/layout/locales/fr.json",
   "src/components/ui/locales/fr.json",
 ];
-/** Chunks the home page imports on demand; the scene is measured on its own. */
+/** Chunks the home page imports on demand. */
 export const homeLazyRoots = ["src/app/HomePage.tsx", "src/home/locales/fr.json"];
-export const sceneRoot = "src/home/scene/webhookScene.ts";
 
 /** A dynamic entry that other chunks also import is keyed "_Name-hash.js" instead of by its source. */
 function resolveKey(manifest: Manifest, key: string): string | undefined {
@@ -87,10 +85,4 @@ export function checkBudget(sizes: Record<string, number>, budget: Budget): stri
     errors.push(`Home page is ${kb(total)} gzip, budget ${kb(budget.totalGzipBytes)}`);
   }
   return errors;
-}
-
-/** The scene chunk has its own ceiling, outside the home page budget. */
-export function checkSceneBudget(sizes: Record<string, number>, limit: number): string[] {
-  const total = sum(sizes, () => true);
-  return total > limit ? [`Scene chunk is ${kb(total)} gzip, budget ${kb(limit)}`] : [];
 }

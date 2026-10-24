@@ -1,11 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  checkBudget,
-  checkSceneBudget,
-  chunkClosure,
-  homeAssets,
-  homeLoadAssets,
-} from "./bundle-budget.ts";
+import { checkBudget, chunkClosure, homeAssets, homeLoadAssets } from "./bundle-budget.ts";
 
 const manifest = {
   "index.html": { file: "assets/index.js", imports: ["_shared.js"], css: ["assets/index.css"] },
@@ -76,13 +70,6 @@ describe("homeLoadAssets", () => {
       "assets/scene.js",
       "assets/three.js",
     ]);
-  });
-});
-
-describe("checkSceneBudget", () => {
-  it("accepts a scene under its own budget and reports one over it", () => {
-    expect(checkSceneBudget({ "scene.js": 90 }, 100)).toEqual([]);
-    expect(checkSceneBudget({ "scene.js": 60, "three.js": 60 }, 100)).toHaveLength(1);
   });
 });
 

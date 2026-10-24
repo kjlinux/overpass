@@ -1,7 +1,7 @@
 import type { JSX } from "preact";
 import { useTheme } from "../layout";
 
-export type CaptureName = "track" | "routes";
+export type CaptureName = "track";
 type Size = readonly [number, number];
 type Props = {
   name: CaptureName;

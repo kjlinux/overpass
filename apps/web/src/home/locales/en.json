@@ -1,4 +1,84 @@
 {
+  "features": {
+    "title": "What you can do here",
+    "intro": "Everything you need to plug in an African API, from the code sheet to the webhook received on your machine. Each cell opens the page it names.",
+    "items": {
+      "routes": {
+        "title": "Find an itinerary",
+        "body": "Search a sheet by service, country and stack. It gives the code that works, the known traps and the date of the last try."
+      },
+      "publish": {
+        "title": "Publish a sheet",
+        "body": "You plugged an API in production? Write the sheet, other developers check it and you earn points."
+      },
+      "track": {
+        "title": "Test on the test track",
+        "body": "Create a test key and replay a payment with a simulated operator, successful, refused, late or duplicated."
+      },
+      "relay": {
+        "title": "Receive webhooks locally",
+        "body": "One command relays the simulated webhooks to your development server, with no tunnel and no public address."
+      },
+      "mcp": {
+        "title": "Plug in your code assistant",
+        "body": "The MCP server serves the verified sheets to Claude Code, Cursor or VS Code with a personal token."
+      },
+      "discussions": {
+        "title": "Ask a question",
+        "body": "Integrations, cloud, tools and AI, career or projects. A good answer can become a sheet."
+      },
+      "blog": {
+        "title": "Read and write articles",
+        "body": "Every member has a blog. Follow authors, comment and give a star to the useful articles."
+      },
+      "newsletter": {
+        "title": "Get the newsletter",
+        "body": "Once a week, the best sheets, discussions and articles in your inbox."
+      },
+      "ranking": {
+        "title": "See the ranking",
+        "body": "The developers and countries that publish and check the most sheets."
+      },
+      "propose": {
+        "title": "Propose a service",
+        "body": "An API is missing from the catalogue? Propose it, the administration validates it."
+      },
+      "simulator": {
+        "title": "Request a simulator",
+        "body": "Vote for the next service to simulate on the test track."
+      }
+    }
+  },
+  "latest": {
+    "routes": {
+      "title": "The latest published sheets",
+      "intro": "Each sheet says whether the road is clear, to verify or reported broken, with the date of the last try.",
+      "all": "See the whole catalogue",
+      "loading": "Loading the sheets"
+    },
+    "activity": "Recent discussions and articles",
+    "threads": {
+      "title": "Recent discussions",
+      "all": "All discussions",
+      "loading": "Loading the discussions"
+    },
+    "posts": {
+      "title": "Recent articles",
+      "all": "All articles",
+      "loading": "Loading the articles"
+    },
+    "replies_one": "{{count}} reply",
+    "replies_other": "{{count}} replies",
+    "by": "by {{author}}, on {{date}}",
+    "newsletter": "Every week, the best sheets, discussions and articles.",
+    "team": "the Overpass team"
+  },
+  "routes": {
+    "states": "States of a sheet",
+    "clear": "Checked recently by another developer.",
+    "toVerify": "The last check is old, one try is enough.",
+    "broken": "Open potholes, to fix before use."
+  },
   "track": {
     "title": "The test track",
     "body": "The test track replays with a simulated operator what happens in production. Successful payment, insufficient balance, duplicate or late webhook, timeout. No merchant account.",
@@ -32,16 +112,6 @@
     "kind_one": "{{category}}, {{count}} country",
     "kind_other": "{{category}}, {{count}} countries"
   },
-  "routes": {
-    "title": "The itineraries",
-    "body": "An itinerary is an integration sheet for one service, country and stack. It gives the code that works and the known traps, and says whether the road is clear, to verify or reported broken, with the date of the last check.",
-    "alt": "Itinerary sheet, here a Wave payment session in PHP, its known traps, then a pothole reported by another developer.",
-    "states": "States of a sheet",
-    "clear": "Checked recently by another developer.",
-    "toVerify": "The last check is old, one try is enough.",
-    "broken": "Open potholes, to fix before use.",
-    "browse": "Browse the itineraries"
-  },
   "mcp": {
     "title": "In your code assistant",
     "body": "Plug the Overpass MCP server into Claude Code, Cursor or VS Code with a personal token. Your assistant reads the verified sheets and writes the local integration that works.",
@@ -53,13 +123,6 @@
     "token": "YOUR_TOKEN",
     "note": "The token is created in your settings. The three configurations are in the",
     "docs": "documentation"
-  },
-  "community": {
-    "title": "Community",
-    "discussions": "Career, tools, cloud, AI and projects, beyond integrations.",
-    "blog": "African tech news, tutorials and portraits.",
-    "newsletter": "Newsletter",
-    "newsletterBody": "Every week, the best sheets, discussions and articles."
   },
   "countries": {
     "title": "Countries covered",
