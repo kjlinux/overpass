@@ -62,16 +62,16 @@ describe("GET /v1/stats", () => {
   });
 
   it("adds a country confirmed by the community", async () => {
-    const id = await publishRoute(app, author, { country: "GH" });
-    expect((await stats()).data.countries).not.toContain("GH");
+    const id = await publishRoute(app, author, { country: "AO" });
+    expect((await stats()).data.countries).not.toContain("AO");
     for (const email of ["a@example.com", "b@example.com"]) {
       const cookie = await registerAccount(app, email);
       await call(app, "POST", `/v1/routes/${id}/checks`, {
         cookie,
-        payload: { country: "GH", environment: "production" },
+        payload: { country: "AO", environment: "production" },
       });
     }
     await check(id);
-    expect((await stats()).data.countries).toContain("GH");
+    expect((await stats()).data.countries).toContain("AO");
   });
 });

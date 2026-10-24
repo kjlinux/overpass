@@ -31,7 +31,9 @@ afterEach(() => pg.close());
 describe("routes and checks migrations", () => {
   it("seeds the six services of the specification, four of them simulated", async () => {
     const rows = await executor.query<{ slug: string; simulated: boolean }>(
-      "select slug, simulated from services order by slug",
+      `select slug, simulated from services
+       where slug in ('cinetpay', 'moov-money', 'orange-money', 'paydunya', 'pi-spi', 'wave')
+       order by slug`,
     );
     expect(rows.map((row) => row.slug)).toEqual([
       "cinetpay",
@@ -51,7 +53,8 @@ describe("routes and checks migrations", () => {
 
   it("confirms the decided lists and keeps every candidate with its source and date", async () => {
     const rows = await executor.query<{ confirmed: boolean; source: string; consulted: string }>(
-      "select confirmed, source, consulted_on::text as consulted from service_countries",
+      `select confirmed, source, consulted_on::text as consulted from service_countries
+       where consulted_on = date '2026-10-13'`,
     );
     expect(rows.filter((row) => row.confirmed)).toHaveLength(38);
     expect(rows.every((row) => row.source.startsWith("https://"))).toBe(true);

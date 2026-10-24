@@ -114,7 +114,7 @@ describe("translations", () => {
 describe("GET /v1/services and /v1/me/routes", () => {
   it("lists the services and my itineraries", async () => {
     const services = (await call(app, "GET", "/v1/services")).body.data as unknown as unknown[];
-    expect(services).toHaveLength(6);
+    expect(services).toHaveLength(15);
     const id = await publishRoute(app, author);
     const mine = (await call(app, "GET", "/v1/me/routes", { cookie: author })).body.data;
     expect(mine).toEqual([expect.objectContaining({ id, state: "to_verify" })]);

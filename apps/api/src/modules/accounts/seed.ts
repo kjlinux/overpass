@@ -8,6 +8,16 @@ import { createAccountsRepository } from "./repository.js";
 export type AdminSeed = { email: string; password: string; country: string };
 export type AdminSeedResult = "created" | "promoted" | "unchanged";
 
+/** The id behind an admin handle, for seeds that attribute content to the team. */
+export async function adminIdByHandle(db: Database, handle: string): Promise<string> {
+  const result: unknown = await db.execute(
+    sql`select id from users where handle = ${handle} and role = 'admin'`,
+  );
+  const [row] = (result as { rows: { id: string }[] }).rows;
+  if (row === undefined) throw new Error(`no admin account with the handle ${handle}`);
+  return row.id;
+}
+
 /** Creates the team account as admin, or promotes it; an existing password is never replaced. */
 export async function ensureAdmin(db: Database, seed: AdminSeed): Promise<AdminSeedResult> {
   const input = registerInput.parse(seed);

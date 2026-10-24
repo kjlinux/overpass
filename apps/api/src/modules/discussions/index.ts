@@ -9,6 +9,8 @@ import { registerDiscussionsRoutes } from "./routes.js";
 import { createDiscussionsService } from "./service.js";
 
 export type { RouteFacts, RouteLookup } from "./model.js";
+export { seedThreads } from "./seed.js";
+export type { ThreadSeed } from "./seed.js";
 
 /** What other modules may ask about a thread, without mounting any route. */
 export type ThreadDirectory = {

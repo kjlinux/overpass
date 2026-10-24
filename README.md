@@ -25,11 +25,19 @@ npm run dev:mcp           # serveur MCP sur 127.0.0.1:3100
 
 `npm run check` lance le typage, le lint, le formatage, les tests, les règles du dépôt et les budgets de poids ; la CI lance la même commande. `npm run test:e2e` lance les tests Playwright.
 
+Pour une base prête à l'emploi, le seed applique les migrations, crée ou promeut le compte équipe, puis écrit le contenu de départ attribué à ce compte : les dix fiches, un sujet d'accueil par thème et cinq articles, en français et en anglais. Il peut être relancé sans créer de doublon.
+
+```sh
+SEED_ADMIN_PASSWORD=... npm run db:seed -- --admin-email equipe@example.africa --content-dir apps/api/content
+```
+
+Sans `--content-dir`, seuls les migrations, le compte et les gabarits vides de fiches sont écrits. Le contenu vit dans `apps/api/content` : un fichier Markdown par fiche, sujet ou article, avec ses champs en tête.
+
 ## Organisation
 
 | Dossier | Contenu |
 | --- | --- |
-| `apps/api` | API Fastify, modules métier, migrations SQL |
+| `apps/api` | API Fastify, modules métier, migrations SQL, contenu de départ dans `content/` |
 | `apps/web` | Site Preact, bilingue français et anglais |
 | `apps/mcp` | Serveur MCP en lecture seule, qui passe par l'API |
 | `apps/cli` | Relais local des webhooks de la piste d'essai |
