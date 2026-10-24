@@ -46,6 +46,18 @@ describe("ensureAdmin", () => {
     expect(await ensureAdmin(db, admin)).toBe("unchanged");
   });
 
+  it("needs no password once the account exists", async () => {
+    await ensureAdmin(db, admin);
+    const { email, country } = admin;
+    expect(await ensureAdmin(db, { email, country })).toBe("unchanged");
+  });
+
+  it("asks for a password only to create the account", async () => {
+    const { email, country } = admin;
+    await expect(ensureAdmin(db, { email, country })).rejects.toThrow(/SEED_ADMIN_PASSWORD/);
+    expect(await account(admin.email)).toBeUndefined();
+  });
+
   it("refuses a password the sign-up form would refuse", async () => {
     await expect(ensureAdmin(db, { ...admin, password: "short" })).rejects.toThrow();
     expect(await account(admin.email)).toBeUndefined();

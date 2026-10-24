@@ -28,8 +28,10 @@ npm run dev:mcp           # serveur MCP sur 127.0.0.1:3100
 Pour une base prête à l'emploi, le seed applique les migrations, crée ou promeut le compte équipe, puis écrit le contenu de départ attribué à ce compte : les dix fiches, un sujet d'accueil par thème et cinq articles, en français et en anglais. Il peut être relancé sans créer de doublon.
 
 ```sh
-SEED_ADMIN_PASSWORD=... npm run db:seed -- --admin-email equipe@example.africa --content-dir apps/api/content
+npm run db:seed -- --admin-email equipe@example.africa --content-dir apps/api/content
 ```
+
+`SEED_ADMIN_PASSWORD` ne sert qu'au premier lancement, pour créer le compte équipe ; ensuite le seed n'en demande plus.
 
 Sans `--content-dir`, seuls les migrations, le compte et les gabarits vides de fiches sont écrits. Le contenu vit dans `apps/api/content` : un fichier Markdown par fiche, sujet ou article, avec ses champs en tête.
 

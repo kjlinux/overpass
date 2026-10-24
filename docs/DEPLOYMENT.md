@@ -77,7 +77,13 @@ Any other change to `deploy/Caddyfile.example` is also copied by hand to `/etc/c
 
 ## Seed
 
-The seed is idempotent: it applies migrations, creates or promotes the admin account, writes the empty itinerary templates and, with `--content-dir`, the team content from `apps/api/content`. The admin password comes from `SEED_ADMIN_PASSWORD` only, at least 10 characters, typed by the operator, never written in a file or a command line:
+The seed is idempotent: it applies migrations, creates or promotes the admin account, writes the empty itinerary templates and, with `--content-dir`, the team content from `apps/api/content`. The admin account `admin@getoverpass.app` already exists in production, so the seed needs no password:
+
+```bash
+ssh overpass 'sudo -u overpass -H bash -c "cd /srv/overpass && npm run db:seed -- --admin-email admin@getoverpass.app --country CI --content-dir /srv/overpass/apps/api/content --templates-dir /var/lib/overpass/route-templates"'
+```
+
+Only to create a new admin account, `SEED_ADMIN_PASSWORD` is needed: at least 10 characters, typed by the operator, never written in a file or a command line:
 
 ```bash
 read -rsp "Admin password: " PW; echo

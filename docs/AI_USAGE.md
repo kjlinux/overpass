@@ -345,3 +345,10 @@ Both SKILL.md files were read in full before use. Instructions outside the proje
 - **User request, verbatim summary:** deploy Overpass on the Ubuntu server behind `ssh overpass` under getoverpass.app, then write a deployment document every session follows.
 - **Done on the server:** system update, swap, ufw, Node 22, Docker, Caddy; `overpass` user and clone in `/srv/overpass`; secrets typed by the operator in `/etc/overpass/overpass.env`; PostgreSQL in Docker, migrations, three systemd services; DNS checked on the authoritative servers before Caddy obtained the certificates; the theme script hash updated in `/etc/caddy/Caddyfile`; seed run with the team content.
 - **Runbook:** `docs/DEPLOYMENT.md` (layout, environment keys without values, routine deploy, CSP hash step, seed, database, rollback, pitfalls met), linked from `CLAUDE.md` and the README.
+
+### 2026-10-24, Claude Code (Claude Opus 5.5), deploy of the article covers and a seed without password
+
+- **Deploy:** `main` at `d693454` shipped to the server after a database dump, migration `0021_media` applied, the three services restarted, health ok. The content seed then attached the five covers to the ten team articles already in production.
+- **User request, verbatim summary:** no password should be needed to run a seed.
+- **Change:** `SEED_ADMIN_PASSWORD` is optional. `ensureAdmin` looks the account up first and asks for the password only when it must create it, with an error naming the variable. README updated.
+- **TDD evidence:** the two new `accounts/seed.test.ts` cases were seen failing, then green. Other cases of that file time out at random in their database setup while about fifty Node processes from other sessions load the machine; each passed in a run.
