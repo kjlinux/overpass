@@ -132,7 +132,7 @@ One permissive set: Lucide (ISC), self-hosted as inline SVG components. Stroke 1
 
 ## Motion
 
-- Durations: `--duration-fast` 150 ms for colour and opacity, `--duration-base` 200 ms for position and dialogs, `--duration-slow` 250 ms for panels. Nothing longer, except on the home page, where the user allowed more on 2026-10-24. The figure counters run 400 ms once, and each tour screen plays its lines one per 900 ms while it is on screen, holds, then loops; bars grow in 700 ms. With reduced motion every screen shows its end state at once.
+- Durations: `--duration-fast` 150 ms for colour and opacity, `--duration-base` 200 ms for position and dialogs, `--duration-slow` 250 ms for panels. Nothing longer, except on the home page, where the user allowed more on 2026-10-24. The figure counters run 400 ms once, and each tour screen plays its lines one per 700 ms while it is on screen, holds about 3 s, then loops; bars grow in 700 ms. With reduced motion every screen shows its end state at once.
 - Easing: `--ease-out: cubic-bezier(0.2, 0, 0, 1)` for entering, `--ease-in: cubic-bezier(0.4, 0, 1, 1)` for leaving.
 - Only `transform` and `opacity` animate. Never layout properties.
 - Under `prefers-reduced-motion: reduce`, every transition drops to 0 ms except a 100 ms opacity crossfade for dialogs and notifications.

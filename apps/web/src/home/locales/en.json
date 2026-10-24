@@ -155,27 +155,35 @@
         "lines": [
           {
             "tone": "accent",
-            "text": "$ npx overpass-cli listen --forward-to http://localhost:3000/webhooks"
+            "text": "$ export OVERPASS_KEY=ovp_test_Xk3f…"
           },
           {
-            "tone": "muted",
-            "text": "Connected to Overpass, waiting for webhooks."
+            "tone": "accent",
+            "text": "$ export OVERPASS_API_URL={{origin}}"
+          },
+          {
+            "tone": "accent",
+            "text": "$ npx overpass-cli listen --forward-to http://localhost:3000/webhook"
+          },
+          {
+            "tone": "out",
+            "text": "Relay ready for wave, key ovp_test_Xk3f. Webhooks are replayed to http://localhost:3000/webhook. Ctrl+C to stop."
           },
           {
             "tone": "code",
-            "text": "→ checkout.session.completed   200 OK   38 ms"
+            "text": "14:32:07  checkout.session.completed  200 in 38 ms"
           },
           {
             "tone": "code",
-            "text": "→ checkout.session.completed   200 OK   41 ms   (duplicate)"
+            "text": "14:32:07  checkout.session.completed  200 in 41 ms"
           },
           {
             "tone": "code",
-            "text": "→ checkout.session.payment_failed   200 OK   35 ms"
+            "text": "14:33:12  checkout.session.payment_failed  200 in 35 ms"
           },
           {
-            "tone": "ok",
-            "text": "3 webhooks replayed on localhost:3000"
+            "tone": "fail",
+            "text": "14:34:02  checkout.session.completed  failed: local server unreachable"
           }
         ]
       }

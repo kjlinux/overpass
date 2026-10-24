@@ -27,10 +27,12 @@ export function Screen({ title, label, screenRef, children }: Props): JSX.Elemen
   );
 }
 
-export type Tone = "code" | "muted" | "ok" | "warn" | "danger" | "accent" | "you";
+export type Tone = "code" | "out" | "fail" | "muted" | "ok" | "warn" | "danger" | "accent" | "you";
 
 const tones: Record<Tone, string> = {
   code: "whitespace-pre-wrap font-code text-code text-ink [overflow-wrap:anywhere]",
+  out: "whitespace-pre-wrap font-code text-code text-ink-2 [overflow-wrap:anywhere]",
+  fail: "whitespace-pre-wrap font-code text-code text-danger [overflow-wrap:anywhere]",
   muted: "text-caption text-ink-2",
   ok: "text-caption font-semibold text-success",
   warn: "text-caption font-semibold text-warning",

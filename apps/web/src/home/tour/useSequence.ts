@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from "preact/hooks";
 import { prefersReducedMotion } from "../hooks/idle";
 import { nextTick, stepOf } from "./sequence";
 
-const tickMs = 900;
-const holdTicks = 5;
+const tickMs = 700;
+const holdTicks = 4;
 
 /** Plays a screen only while it is on screen; with reduced motion it shows the end state at once. */
 export function useSequence(steps: number) {

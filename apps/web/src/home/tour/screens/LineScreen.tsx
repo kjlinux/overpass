@@ -9,7 +9,10 @@ type ScreenLine = { tone: Tone; text: string };
 /** Lines written one after the other, the way the feature unfolds for real. */
 export function LineScreen({ block }: { block: string }): JSX.Element {
   const { t } = useTranslation("home");
-  const lines = t(`tour.${block}.screen.lines`, { returnObjects: true }) as ScreenLine[];
+  const lines = t(`tour.${block}.screen.lines`, {
+    returnObjects: true,
+    origin: window.location.origin,
+  }) as ScreenLine[];
   const { ref, step } = useSequence(lines.length);
   return (
     <Screen
