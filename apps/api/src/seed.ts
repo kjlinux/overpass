@@ -16,8 +16,8 @@ const country = z
   .string()
   .length(2)
   .parse(argument("--country") ?? "CI");
-// Read from the environment only, so the password never lands in the shell history.
-const password = z.string().min(1).parse(process.env["SEED_ADMIN_PASSWORD"]);
+// Only needed to create the admin account; read from the environment, never from the history.
+const password = z.string().min(1).optional().parse(process.env["SEED_ADMIN_PASSWORD"]);
 const templatesDir = argument("--templates-dir") ?? "route-templates";
 // The team's itineraries, welcome threads and articles; nothing is written without this flag.
 const contentDir = argument("--content-dir");

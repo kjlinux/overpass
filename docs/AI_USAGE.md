@@ -339,3 +339,10 @@ Both SKILL.md files were read in full before use. Instructions outside the proje
 - **User decisions:** keep the unscoped name `overpass-cli`; the first publish is manual, done by the user. No npm package for the MCP server, which stays the hosted HTTP endpoint.
 - **Change:** the showcase sample is now the `claude mcp add --transport http` line built by `mcp/config.ts`; every `npx overpass listen` in the articles, the Wave route and the spec becomes `npx overpass-cli listen`; `apps/cli` gets npm metadata, a `build` script, a `prepublishOnly` clean build, and a README with flags and environment variables.
 - **Checks:** `npm pack --dry-run -w overpass-cli` lists 19 files (dist, locales, README, LICENSE), no tests. Content and locale edits only, so no new test.
+
+### 2026-10-24, Claude Code (Claude Opus 5.5), deploy of the article covers and a seed without password
+
+- **Deploy:** `main` at `d693454` shipped to the server after a database dump, migration `0021_media` applied, the three services restarted, health ok. The content seed then attached the five covers to the ten team articles already in production.
+- **User request, verbatim summary:** no password should be needed to run a seed.
+- **Change:** `SEED_ADMIN_PASSWORD` is optional. `ensureAdmin` looks the account up first and asks for the password only when it must create it, with an error naming the variable. README updated.
+- **TDD evidence:** the two new `accounts/seed.test.ts` cases were seen failing, then green. Other cases of that file time out at random in their database setup while about fifty Node processes from other sessions load the machine; each passed in a run.
