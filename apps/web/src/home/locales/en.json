@@ -82,7 +82,6 @@
     "title": "The test track",
     "body": "The test track replays with a simulated operator what happens in production. Successful payment, insufficient balance, duplicate or late webhook, timeout. No merchant account.",
     "open": "Open the test track",
-    "alt": "Test track with the scenarios on the left, the inspector and the JSON response of a payment session, then the delivery of the checkout.session.completed webhook.",
     "cases": "Replayed cases",
     "success": {
       "title": "Successful payment",

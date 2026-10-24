@@ -2,48 +2,17 @@ import type { Language } from "@overpass/shared";
 import type { JSX } from "preact";
 import { useTranslation } from "react-i18next";
 import { localizedPath } from "../layout";
-import { Capture } from "./Capture";
 import { Operators } from "./operators/Operators";
-import { sectionClass } from "./SectionHead";
+import { SectionHead, sectionClass } from "./SectionHead";
 
 const cases = ["success", "insufficient", "duplicate", "late"] as const;
 
-/** Text left, capture right from 1024 px; the shared shape of the track and itinerary sections. */
-export function Pair(props: {
-  id: string;
-  title: string;
-  body: string;
-  link: JSX.Element;
-  figure: JSX.Element;
-}): JSX.Element {
-  return (
-    <div class="grid grid-cols-[minmax(0,1fr)] lg:grid-cols-[4fr_8fr]">
-      <div class="py-6 lg:pr-8">
-        <h2 id={props.id} class="text-h2 font-semibold">
-          {props.title}
-        </h2>
-        <p class="mt-3">{props.body}</p>
-        <p class="mt-4">{props.link}</p>
-      </div>
-      <div class="pb-6 lg:border-l lg:border-rule lg:py-6 lg:pl-8">{props.figure}</div>
-    </div>
-  );
-}
-
-/** The test track: what it replays, a real capture, the cases and the simulated operators read from the API. */
+/** The test track: what it replays, the cases and the simulated operators read from the API. */
 export function TrackSection({ language }: { language: Language }): JSX.Element {
   const { t } = useTranslation("home");
-  const link = <a href={localizedPath(language, "/sandbox")}>{t("track.open")}</a>;
-  const figure = <Capture name="track" alt={t("track.alt")} wide={[760, 980]} phone={[360, 640]} />;
   return (
     <section id="track" aria-labelledby="track-title" class={sectionClass}>
-      <Pair
-        id="track-title"
-        title={t("track.title")}
-        body={t("track.body")}
-        link={link}
-        figure={figure}
-      />
+      <SectionHead id="track-title" title={t("track.title")} intro={t("track.body")} />
       <ul
         aria-label={t("track.cases")}
         class="home-strip4 grid grid-cols-[minmax(0,1fr)] border-t border-rule"
@@ -56,6 +25,9 @@ export function TrackSection({ language }: { language: Language }): JSX.Element 
         ))}
       </ul>
       <Operators />
+      <p class="border-t border-rule pt-6">
+        <a href={localizedPath(language, "/sandbox")}>{t("track.open")}</a>
+      </p>
     </section>
   );
 }

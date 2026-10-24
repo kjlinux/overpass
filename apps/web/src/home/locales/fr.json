@@ -82,7 +82,6 @@
     "title": "La piste d'essai",
     "body": "La piste d'essai rejoue chez un opérateur simulé ce qui arrive en production. Paiement réussi, solde insuffisant, webhook en double ou en retard, délai dépassé. Sans compte marchand.",
     "open": "Ouvrir la piste d'essai",
-    "alt": "Piste d'essai avec les scénarios à gauche, l'inspecteur et la réponse JSON d'une session de paiement, puis la livraison du webhook checkout.session.completed.",
     "cases": "Cas rejoués",
     "success": {
       "title": "Paiement réussi",
