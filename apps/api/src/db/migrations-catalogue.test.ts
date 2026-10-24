@@ -1,3 +1,4 @@
+import { readdirSync } from "node:fs";
 import { PGlite } from "@electric-sql/pglite";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { migrateDown, migrateUp, migrationsDirectory } from "./migrations.js";
@@ -90,7 +91,11 @@ describe("service catalogue growth migration", () => {
        select $1, 'integrations', 'MTN MoMo sandbox question', 'Body', 'en', id from services where slug = 'mtn-momo'`,
       [userId],
     );
-    await migrateDown(executor, migrationsDirectory);
+    // Steps back to 0019 whatever migrations come after this one.
+    const since = readdirSync(migrationsDirectory).filter(
+      (name) => name.endsWith(".up.sql") && name >= "0020",
+    );
+    await migrateDown(executor, migrationsDirectory, since.length);
     expect(await executor.query("select 1 from threads")).toHaveLength(1);
     const [row] = await executor.query<{ count: number }>(
       "select count(*)::int as count from services",

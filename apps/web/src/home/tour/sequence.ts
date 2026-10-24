@@ -1,4 +1,3 @@
-/** The step a screen shows at a tick: one more line per tick, then the full screen. */
 export function stepOf(tick: number, steps: number): number {
   return Math.min(tick, steps);
 }
