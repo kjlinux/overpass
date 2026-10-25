@@ -1,7 +1,6 @@
 import type { Language } from "@overpass/shared";
 import type { JSX } from "preact";
 import { useTranslation } from "react-i18next";
-import { Flag } from "../../components/ui";
 import { placeCountries } from "./places";
 
 const skeletonTiles = 8;
@@ -30,10 +29,19 @@ export function Atlas({
           style={{ "--c": column, "--r": row }}
           class="flex min-h-12 flex-col items-start gap-1 border-b border-r border-rule bg-paper p-3"
         >
-          <b class="font-code font-medium md:text-h3">{code}</b>
-          <span class="text-caption md:leading-tight">
-            <Flag country={code} name={regionName(code, language)} />
+          <span class="flex items-center gap-2">
+            <b class="font-code font-medium md:text-h3">{code}</b>
+            <img
+              src={`/flags/${code.toLowerCase()}.svg`}
+              alt=""
+              width={24}
+              height={18}
+              loading="lazy"
+              decoding="async"
+              class="h-[18px] w-6 shrink-0 border border-rule object-cover"
+            />
           </span>
+          <span class="text-caption md:leading-tight">{regionName(code, language)}</span>
         </li>
       ))}
     </ul>
