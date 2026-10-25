@@ -128,7 +128,7 @@ Every corner is square: `--radius: 0` on buttons, inputs, cards, badges, chips, 
 
 ## Iconography
 
-One permissive set: Lucide (ISC), self-hosted as inline SVG components. Stroke 1.75, 20 px in text and buttons, 16 px in badges. Icons always sit next to a text label, except in icon-only buttons that carry an `aria-label`. Never an emoji as an icon. Never an icon above a heading as decoration.
+One permissive set: Lucide (ISC), self-hosted as inline SVG components. Stroke 1.75, 20 px in text and buttons, 16 px in badges. Icons always sit next to a text label, except in icon-only buttons that carry an `aria-label`. Never an emoji as an icon. Never an icon above a heading as decoration. One exception, decided on 2026-10-25: the five level emblems of the member badges (Hugin, Ragnar, Thor, Kratos, Odin) are the project's own pixel drawings on a 24 by 24 grid, one solid path each, `shape-rendering: crispEdges`, drawn in `currentColor`.
 
 ## Motion
 
@@ -168,6 +168,17 @@ Every component is keyboard operable, shows a visible focus ring (2 px accent, 2
 
 - **badge**: rectangle with a 1 px border in its own colour, caption size, 500 weight, 28 px tall, padding 0 8 px, 6 px square dot before the label. Three variants mapped to the sheet state: clear road (success on success surface), to verify (warning on warning surface), reported broken (danger on danger surface). The text carries the meaning; the colour is never the only cue.
 - **chip**: rectangle, 1 px control outline, ink-2 text, 28 px tall, for stacks, countries, filters and the "non officiel" mention. Selected chip uses the accent surface and an accent border.
+
+### Member badges
+
+Decided by the user on 2026-10-25: the terminal direction. A member badge reads like an identifier in code.
+
+- **member-badge**: square rectangle, 1 px ink border, 32 px tall, IBM Plex Mono 13 px 500. Three cells split by 1 px rules: a 32 px cell with the badge icon (5 by 5 pixel glyph, 3 px per pixel, accent), the badge name in lower case (`debugger`, `wave`, `sim.builder`), then the level cell with its emblem at 18 px and the level name in 600 weight. Hover and focus use the accent surface.
+- **trust badge** (`mimir`, `heimdall`): the same shape filled with ink, paper text and paper glyph, no level cell. Hover lightens the fill to `#2A2D35`.
+- **Levels**: Hugin, Ragnar, Thor, Kratos, Odin, each with its emblem. Emblems are ink; only Odin, the top level, uses the accent. No bar, no dots, no progress meter: the emblem and the name carry the level.
+- **Avatar ring**: the avatar circle takes a ring from the best level of the member, 1 px rule colour for Hugin up to 3 px ink for Odin, with 3 px of paper between ring and photo. No glow, no second hue.
+- **Author line**: next to the author of an itinerary, thread or simulator, the two best badges, then `+n` in ink-2 for the others. On a simulator, `integre_par @handle` in an accent bordered badge with the author's level cell.
+- Badges are never the only cue: the level name is always written, and each badge has an accessible name such as "debugger, niveau Thor".
 
 ### Tables
 
