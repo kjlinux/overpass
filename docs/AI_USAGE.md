@@ -431,3 +431,16 @@ Both SKILL.md files were read in full before use. Instructions outside the proje
 - **Change:** a visitor with no stored choice now gets the light theme (`index.html`, `layout/theme.ts`, `layout/useTheme.ts`); only an explicit dark choice is remembered. Each atlas tile shows its country flag beside the code, with the name on its own line.
 - **CSP:** the inline theme script changed, so its hash changed to `nGYicizQ+S1TS9WJVFlj199CScajNaTZYbEHh0QCWdk=` in `security-headers.ts` and `deploy/Caddyfile.example`, and by hand in `/etc/caddy/Caddyfile` on the server (backup `Caddyfile.bak`, validated, reloaded).
 - **Deploy:** `main` at `0a7faea`; no migration; services restarted, health ok. Checked in a clean browser context on production: no `data-theme` attribute, light background, the new hash in the CSP header, 30 flags loaded, no country name broken in the middle of a word.
+
+### 2026-10-25, Claude Code (Claude Sonnet 5.5), plan of the demonstration video
+
+- **User request, verbatim summary:** produce the CADEV jury demonstration video (90 s 16:9, 60 s 9:16, French voice and burned-in subtitles, English .srt, thumbnail) from real production recordings, with the scenario adapted to the features that really exist.
+- **Change:** `docs/video-demo-plan.md`, a self-contained plan to run in a Claude cloud session. Scenes for the radar, project roles and developer passport were replaced or removed because the application has no such feature. No video produced yet.
+- **Tools planned:** Playwright (recording), ffmpeg (external tool, not a dependency), huashu-design export scripts without its music or watermark. No music, no synthetic voice unless a permissive local engine with a checked voice licence is used.
+- **Demo account:** creation on production authorised by the user, with the address passed at launch in `DEMO_EMAIL`, never written to a file.
+
+### 2026-10-25, Claude Code (Claude Sonnet 5.5), home title phrases for discussions and blogs
+
+- **User request, verbatim summary:** add phrases about blogs and discussions to the typed phrases of the home title.
+- **Change:** four phrases added to `app.taglines` in the fr and en locale files, two about discussions and two about blogs, in the same "should not" form as the six existing ones. The first phrase is unchanged, so the screen reader text and the reduced motion text stay the same.
+- **Deploy:** static build only, no migration and no restart; `main` pulled and rebuilt on the server.
