@@ -4,7 +4,7 @@ import { FileText } from "lucide-preact";
 import type { JSX } from "preact";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../app/useLanguage";
-import { Chip, EmptyState, Table } from "../../components/ui";
+import { Chip, EmptyState, LevelBadge, Table } from "../../components/ui";
 import type { Column } from "../../components/ui";
 
 type Row = { key: keyof PublicProfile["contributions"]; count: number };
@@ -27,6 +27,25 @@ function Contributions({ profile }: { profile: PublicProfile }): JSX.Element {
   );
 }
 
+/** Badge names read like identifiers in code, so they are never translated. */
+function Badges({ profile }: { profile: PublicProfile }): JSX.Element | null {
+  const { t } = useTranslation("profile");
+  if (profile.badges.length === 0) return null;
+  return (
+    <ul aria-label={t("badges")} class="m-0 mt-4 flex list-none flex-wrap gap-2 p-0">
+      {profile.badges.map(({ badge, level }) => (
+        <li
+          key={badge}
+          class="inline-flex h-8 items-center border border-ink font-mono text-[13px]"
+        >
+          <span class="px-2 font-medium">{badge}</span>
+          {level === null ? null : <LevelBadge level={level} class="border-0 border-l" />}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 /** Handle, country, points and stacks, shared by the profile and the member's blog. */
 export function ProfileSummary({ profile }: { profile: PublicProfile }): JSX.Element {
   const { t } = useTranslation("profile");
@@ -38,6 +57,7 @@ export function ProfileSummary({ profile }: { profile: PublicProfile }): JSX.Ele
     <>
       <h1 class="text-h1 font-semibold">{profile.handle}</h1>
       <p class="mt-2 text-ink-2">{t("memberSince", { date: since })}</p>
+      <Badges profile={profile} />
       {profile.confirmed ? (
         <p class="mt-3">
           <Chip>{t("confirmed")}</Chip>

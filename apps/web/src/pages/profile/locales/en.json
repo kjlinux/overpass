@@ -1,5 +1,6 @@
 {
   "memberSince": "Member since {{date}}",
+  "badges": "Badges",
   "country": "Country",
   "stacks": "Stacks",
   "noStacks": "No stack given.",

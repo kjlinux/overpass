@@ -4,6 +4,7 @@ import { readContent } from "./content/read.js";
 import type { Database } from "./db/client.js";
 import { adminIdByHandle, seedMembers } from "./modules/accounts/index.js";
 import { seedPosts } from "./modules/blog/index.js";
+import { seedChecks } from "./modules/checks/index.js";
 import { seedThreads } from "./modules/discussions/index.js";
 import { rankingModule } from "./modules/ranking/index.js";
 import { seedRoutes } from "./modules/routes/index.js";
@@ -12,6 +13,7 @@ export type SeededContent = {
   members: number;
   routes: number;
   routesUpdated: number;
+  checks: number;
   threads: number;
   posts: number;
 };
@@ -33,6 +35,7 @@ export async function seedContent(
   const at = now();
   const members = await seedMembers(db, content.members);
   const routes = await seedRoutes(db, handle, content.routes, at);
+  const checks = await seedChecks(db, content.members, members.ids, at);
   const threads = await seedThreads(db, handle, content.threads, at, members.ids);
   const posts = await seedPosts(db, handle, content.posts, at, members.ids);
   const everyone = [await adminIdByHandle(db, handle), ...members.ids.values()];
@@ -41,6 +44,7 @@ export async function seedContent(
     members: members.created,
     routes: routes.created,
     routesUpdated: routes.updated,
+    checks: checks.created,
     threads: threads.created,
     posts: posts.created,
   };

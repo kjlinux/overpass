@@ -29,7 +29,13 @@ async function insertMember(db: Database, seed: MemberSeed): Promise<boolean> {
         ${seed.language}, ${at}, ${at})
       on conflict (handle) do nothing returning id`,
   );
-  if (created === undefined) return false;
+  if (created === undefined) {
+    await db.execute(
+      sql`update users set created_at = ${at}, updated_at = ${at}
+        where handle = ${seed.handle} and password_hash = ${lockedPassword} and created_at <> ${at}`,
+    );
+    return false;
+  }
   for (const stack of seed.stacks) {
     await db.execute(
       sql`insert into user_stacks (user_id, stack) values (${created.id}, ${stack})`,

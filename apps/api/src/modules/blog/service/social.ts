@@ -32,7 +32,11 @@ async function unstar(deps: BlogDeps, account: Account, postId: string) {
 }
 
 /** Hidden or blocked text stays with its author and the moderators. */
-function toComment(row: CommentRow, reader: Reader, reported: Set<string>): PostComment {
+function toComment(
+  row: CommentRow,
+  reader: Reader,
+  marks: { reported: Set<string>; liked: Set<string> },
+): PostComment {
   const isAuthor = row.authorId === reader?.id;
   const shown = row.moderation === "visible" || isAuthor || isAdmin(reader);
   return {
@@ -40,10 +44,13 @@ function toComment(row: CommentRow, reader: Reader, reported: Set<string>): Post
     author: row.authorHandle,
     content: shown ? row.content : null,
     moderation: row.moderation,
+    likes: row.likes,
     createdAt: row.createdAt.toISOString(),
-    viewer: { isAuthor, reported: reported.has(row.id) },
+    viewer: { isAuthor, reported: marks.reported.has(row.id), liked: marks.liked.has(row.id) },
   };
 }
+
+const noMarks = () => ({ reported: new Set<string>(), liked: new Set<string>() });
 
 async function comment(
   deps: BlogDeps,
@@ -59,7 +66,7 @@ async function comment(
     input.content,
     deps.now(),
   );
-  return toComment(created, account, new Set());
+  return toComment(created, account, noMarks());
 }
 
 async function comments(
@@ -72,14 +79,17 @@ async function comments(
   const after = cursor === undefined ? undefined : decodeDateCursor(cursor);
   const rows = await deps.repository.comments(postId, after, commentsPerPage);
   const ids = rows.map((row) => row.id);
-  const reported =
+  const marks =
     reader === null
-      ? new Set<string>()
-      : await deps.repository.reportedBy(reader.id, "comment", ids);
+      ? noMarks()
+      : {
+          reported: await deps.repository.reportedBy(reader.id, "comment", ids),
+          liked: await deps.repository.likedBy(reader.id, ids),
+        };
   return pageOf(
     rows,
     commentsPerPage,
-    (row) => toComment(row, reader, reported),
+    (row) => toComment(row, reader, marks),
     (row) => encodeDateCursor({ at: row.createdAt, id: row.id }),
   );
 }

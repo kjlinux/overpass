@@ -73,6 +73,10 @@
     "hidden": "Commentaire masqué en attente d'une décision de l'équipe.",
     "report": "Signaler",
     "reported": "Signalé",
+    "like": "Aimer ce commentaire",
+    "unlike": "Retirer mon like",
+    "likes_one": "{{count}} like",
+    "likes_other": "{{count}} likes",
     "more": "Afficher plus de commentaires"
   },
   "blog": {

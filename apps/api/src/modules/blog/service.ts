@@ -1,5 +1,6 @@
 import type { BlogDeps } from "./service/context.js";
 import { feedService } from "./service/feed.js";
+import { likeService } from "./service/likes.js";
 import { moderationService } from "./service/moderation.js";
 import { postService } from "./service/posts.js";
 import { socialService } from "./service/social.js";
@@ -12,6 +13,7 @@ export function createBlogService(deps: BlogDeps) {
     ...postService(deps),
     ...feedService(deps),
     ...socialService(deps),
+    ...likeService(deps),
     ...moderationService(deps),
   };
 }

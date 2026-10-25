@@ -30,7 +30,8 @@ function postIssues(content: Content, early: Joined): string[] {
       issues.push(`${post.title}: published before ${post.author} joined`);
     }
     for (const comment of post.comments) {
-      if (early(comment.author, comment.at) || comment.at < post.publishedAt) {
+      const fans = comment.likes.some((handle) => early(handle, comment.at));
+      if (early(comment.author, comment.at) || fans || comment.at < post.publishedAt) {
         issues.push(`${post.title}: a comment by ${comment.author} is dated too early`);
       }
     }

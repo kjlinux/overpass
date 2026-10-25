@@ -4,9 +4,10 @@ import { sql } from "drizzle-orm";
 import type { Database } from "../../db/client.js";
 import { adminIdByHandle } from "../accounts/index.js";
 import { mediaStore } from "../media/index.js";
-import type { BlogRepository } from "./model.js";
 import { createBlogRepository } from "./repository.js";
 import { rows } from "./repository/sql.js";
+import { addReactions, idOf, reactOrWithdraw } from "./seed-reactions.js";
+import type { Comment } from "./seed-reactions.js";
 
 export type PostSeed = {
   kind: PostKind;
@@ -23,7 +24,7 @@ export type PostSeed = {
   /** A member's handle; without it the post is the team's. */
   author?: string | undefined;
   stars?: readonly string[] | undefined;
-  comments?: readonly { author: string; at: Date; content: string }[] | undefined;
+  comments?: readonly Comment[] | undefined;
 };
 
 type Authors = ReadonlyMap<string, string>;
@@ -71,40 +72,6 @@ async function groupOf(db: Database, authorId: string, seed: PostSeed, seeds: re
   return undefined;
 }
 
-function idOf(authors: Authors, handle: string): string {
-  const id = authors.get(handle);
-  if (id === undefined) throw new Error(`unknown author in the seed: ${handle}`);
-  return id;
-}
-
-type Reaction = { postId: string; seed: PostSeed; authors: Authors; at: Date };
-
-/** Stars carry no date in the content, so they take the run's: never before a member joined. */
-async function addReactions(repository: BlogRepository, reaction: Reaction): Promise<void> {
-  const { postId, seed, authors, at } = reaction;
-  for (const star of seed.stars ?? []) {
-    await repository.addStar(postId, idOf(authors, star), at);
-  }
-  for (const comment of seed.comments ?? []) {
-    const authorId = idOf(authors, comment.author);
-    await repository.insertComment(postId, authorId, comment.content, comment.at);
-  }
-}
-
-/** A post whose reactions failed is removed, so the next run writes it whole instead of skipping it. */
-async function reactOrWithdraw(
-  db: Database,
-  repository: BlogRepository,
-  reaction: Reaction,
-): Promise<void> {
-  try {
-    await addReactions(repository, reaction);
-  } catch (error) {
-    await db.execute(sql`delete from posts where id = ${reaction.postId}`);
-    throw error;
-  }
-}
-
 /** Publishes the team's articles and the members' posts once; a second run creates nothing. */
 export async function seedPosts(
   db: Database,
@@ -122,6 +89,7 @@ export async function seedPosts(
     const existing = await stored(db, authorId, seed);
     if (existing !== null) {
       await addMissingCover(db, existing, seed, covers);
+      await addReactions(db, repository, { postId: existing.id, seed, authors, at });
       continue;
     }
     const { kind, category, language, title, summary, content, publishedAt } = seed;

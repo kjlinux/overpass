@@ -1,5 +1,6 @@
 {
   "memberSince": "Membre depuis {{date}}",
+  "badges": "Badges",
   "country": "Pays",
   "stacks": "Stacks",
   "noStacks": "Aucune stack renseignée.",

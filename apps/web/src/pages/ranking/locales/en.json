@@ -14,6 +14,7 @@
     "rank": "Rank",
     "country": "Country",
     "developer": "Developer",
+    "level": "Level",
     "points": "Points",
     "developers": "Developers"
   },

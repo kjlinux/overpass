@@ -9,7 +9,7 @@ function namedHandles(content: Content): string[] {
   const fromPosts = content.posts.flatMap((post) => [
     ...(post.author === undefined ? [] : [post.author]),
     ...post.stars,
-    ...post.comments.map((comment) => comment.author),
+    ...post.comments.flatMap((comment) => [comment.author, ...comment.likes]),
   ]);
   return [...fromThreads, ...fromPosts];
 }

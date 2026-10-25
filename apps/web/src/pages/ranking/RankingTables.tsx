@@ -3,7 +3,7 @@ import type { CountryRank, DeveloperRank } from "@overpass/shared";
 import type { JSX } from "preact";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../app/useLanguage";
-import { Flag, Table } from "../../components/ui";
+import { Flag, LevelBadge, Table } from "../../components/ui";
 import type { Column } from "../../components/ui";
 import { localizedPath } from "../../layout";
 
@@ -56,6 +56,11 @@ export function DeveloperTable({ rows }: { rows: DeveloperRank[] }): JSX.Element
       key: "country",
       header: t("columns.country"),
       render: (row) => <Flag country={row.country} name={countryName(row.country, language)} />,
+    },
+    {
+      key: "level",
+      header: t("columns.level"),
+      render: (row) => (row.level === null ? null : <LevelBadge level={row.level} />),
     },
     {
       key: "points",

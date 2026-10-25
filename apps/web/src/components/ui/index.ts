@@ -6,6 +6,7 @@ export { ConfirmDialog } from "./ConfirmDialog";
 export { cx } from "./cx";
 export { EmptyState } from "./EmptyState";
 export { Flag } from "./Flag";
+export { LevelBadge, LevelEmblem } from "./LevelBadge";
 export { Choice, Field, Select, TextInput, Textarea } from "./Field";
 export type { SelectOption } from "./Field";
 export { Notification, NotificationStack } from "./Notification";

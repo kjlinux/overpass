@@ -45,9 +45,12 @@ export const postCommentSchema = z.object({
   author: z.string().nullable(),
   content: z.string().nullable(),
   moderation: z.enum(moderationStatuses),
+  likes: z.number().int(),
   createdAt: z.string(),
-  viewer: z.object({ isAuthor: z.boolean(), reported: z.boolean() }),
+  viewer: z.object({ isAuthor: z.boolean(), reported: z.boolean(), liked: z.boolean() }),
 });
+
+export const commentLikeSchema = z.object({ likes: z.number().int(), liked: z.boolean() });
 
 export const commentPageSchema = z.object({
   items: z.array(postCommentSchema),

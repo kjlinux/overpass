@@ -4,6 +4,13 @@
     "toVerify": "To verify",
     "broken": "Reported broken"
   },
+  "level": {
+    "hugin": "Hugin",
+    "ragnar": "Ragnar",
+    "thor": "Thor",
+    "kratos": "Kratos",
+    "odin": "Odin"
+  },
   "loading": "Loading",
   "copy": "Copy",
   "copied": "Copied",

@@ -37,6 +37,8 @@
     "service_exists": "This service is already in the catalogue.",
     "own_post": "You cannot star your own post.",
     "already_starred": "You have already starred this post.",
+    "own_comment": "You cannot like your own comment.",
+    "already_liked": "You have already liked this comment.",
     "blog_suspended": "This blog is suspended by the moderation team.",
     "not_confirmed": "Publish two routes or make ten checks to open your blog.",
     "own_blog": "You cannot follow your own blog.",

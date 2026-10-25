@@ -26,6 +26,7 @@ export const developerRankSchema = z.object({
   handle: z.string(),
   country: z.string(),
   points: z.number().int(),
+  level: z.enum(["hugin", "ragnar", "thor", "kratos", "odin"]).nullable(),
 });
 
 export const developerRankingQuery = z.object({ country: optionalFilter(countrySchema) });

@@ -9,11 +9,14 @@ import { FormAlert, LoadError, useForm } from "../../forms";
 import { localizedPath } from "../../layout";
 import { Markdown } from "../../markdown";
 import { formatDate } from "../routes";
+import { CommentLike } from "./CommentLike";
+import type { LikeCall } from "./CommentLike";
 import { TextAreaField } from "./TextAreaField";
 
 export type CommentActions = {
   comment: (content: string) => Promise<ApiError | undefined>;
   report: (kind: "post" | "comment", id: string) => Promise<ApiError | undefined>;
+  like: LikeCall;
 };
 
 function CommentItem(props: { item: PostComment; signedIn: boolean; actions: CommentActions }) {
@@ -38,6 +41,12 @@ function CommentItem(props: { item: PostComment; signedIn: boolean; actions: Com
         <Markdown source={item.content} />
       )}
       <FormAlert error={error} />
+      <CommentLike
+        item={item}
+        signedIn={props.signedIn}
+        like={props.actions.like}
+        onError={setError}
+      />
       {item.viewer.reported ? (
         <p class="m-0 text-caption text-ink-2">{t("comments.reported")}</p>
       ) : null}

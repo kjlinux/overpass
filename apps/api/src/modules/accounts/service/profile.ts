@@ -1,4 +1,4 @@
-import { isConfirmed } from "@overpass/shared";
+import { badgesFor, bestLevel, isConfirmed } from "@overpass/shared";
 import type { ProfileUpdateInput, PublicProfile } from "@overpass/shared";
 import { AppError } from "../../../http/app-error.js";
 import { UniqueViolation } from "../model.js";
@@ -36,6 +36,7 @@ export function profileService(ctx: ServiceContext) {
       if (user === null) throw new AppError("not_found", 404);
       const contributions = await ctx.contributions(user.id);
       const points = await ctx.points(user.id);
+      const badges = badgesFor(contributions);
       return {
         handle: user.handle,
         country: user.country,
@@ -43,6 +44,8 @@ export function profileService(ctx: ServiceContext) {
         contributions,
         points,
         confirmed: isConfirmed(points),
+        badges,
+        level: bestLevel(badges),
         memberSince: user.createdAt.toISOString(),
       };
     },

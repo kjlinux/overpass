@@ -8,7 +8,8 @@ import { at, rows, toDate } from "./sql.js";
 type RawComment = Omit<CommentRow, "createdAt"> & { createdAt: Date | string };
 
 const commentColumns = sql`c.id, c.post_id as "postId", c.author_id as "authorId",
-  u.handle as "authorHandle", c.content, c.moderation, c.created_at as "createdAt"`;
+  u.handle as "authorHandle", c.content, c.moderation, c.created_at as "createdAt",
+  (select count(*)::int from comment_likes l where l.comment_id = c.id) as likes`;
 
 const toComment = (raw: RawComment): CommentRow => ({ ...raw, createdAt: toDate(raw.createdAt) });
 

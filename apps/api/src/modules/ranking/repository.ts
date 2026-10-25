@@ -1,9 +1,9 @@
-import type { CountryRank, DeveloperRank, PointsBreakdown } from "@overpass/shared";
+import type { CountryRank, PointsBreakdown } from "@overpass/shared";
 import { sql } from "drizzle-orm";
 import type { SQL } from "drizzle-orm";
 import type { Database } from "../../db/client.js";
 import { listedRouteCondition } from "../routes/index.js";
-import type { RankingRepository } from "./model.js";
+import type { DeveloperRow, RankingRepository } from "./model.js";
 
 async function rows<Row>(db: Database, query: SQL): Promise<Row[]> {
   const result: unknown = await db.execute(query);
@@ -45,7 +45,7 @@ function storeQuery(userId: string, b: PointsBreakdown, points: number, at: Date
 function developersQuery(country: string | undefined, limit: number): SQL {
   const inCountry = country === undefined ? sql`` : sql`and u.country = ${country}`;
   return sql`select rank() over (order by mp.points desc)::int as rank, u.handle,
-      trim(u.country) as country, mp.points
+      trim(u.country) as country, mp.points, mp.checks
     from member_points mp join users u on u.id = mp.user_id
     where mp.points > 0 ${inCountry}
     order by mp.points desc, u.handle limit ${limit}`;
@@ -92,6 +92,6 @@ export function createRankingRepository(db: Database): RankingRepository {
       return (await rows<{ id: string }>(db, query)).map((row) => row.id);
     },
     countries: (limit) => rows<CountryRank>(db, countriesQuery(limit)),
-    developers: (country, limit) => rows<DeveloperRank>(db, developersQuery(country, limit)),
+    developers: (country, limit) => rows<DeveloperRow>(db, developersQuery(country, limit)),
   };
 }

@@ -28,6 +28,10 @@ function useActions(post: PostDetail, reload: () => Promise<void>): ArticleActio
     star: () => then(apiRequest("POST", `${base}/star`, {})),
     unstar: () => then(apiRequest("DELETE", `${base}/star`)),
     comment: (content) => then(apiRequest("POST", `${base}/comments`, { content })),
+    like: (id, liked) =>
+      then(
+        apiRequest(liked ? "POST" : "DELETE", `/v1/comments/${id}/like`, liked ? {} : undefined),
+      ),
     report: (kind, id) =>
       then(apiRequest("POST", `/v1/${kind === "post" ? "posts" : "comments"}/${id}/reports`, {})),
   };

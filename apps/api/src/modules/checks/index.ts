@@ -9,6 +9,8 @@ import { createChecksRepository } from "./repository.js";
 import { registerChecksRoutes } from "./routes.js";
 import { createChecksService } from "./service.js";
 
+export { seedChecks } from "./seed.js";
+export type { CheckSeed } from "./seed.js";
 export type { RouteDirectory } from "./model.js";
 export type { ChecksReader, RouteCommunity } from "./reader.js";
 

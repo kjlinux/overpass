@@ -28,6 +28,13 @@ export const publicProfileSchema = z.object({
   contributions: contributionsSchema,
   points: z.number().int(),
   confirmed: z.boolean(),
+  badges: z.array(
+    z.object({
+      badge: z.enum(["debugger", "first.push"]),
+      level: z.enum(["hugin", "ragnar", "thor", "kratos", "odin"]).nullable(),
+    }),
+  ),
+  level: z.enum(["hugin", "ragnar", "thor", "kratos", "odin"]).nullable(),
   memberSince: z.string(),
 });
 

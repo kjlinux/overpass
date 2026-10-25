@@ -32,6 +32,12 @@ export const memberSeedSchema = z.object({
     .transform((value) => value.split(",").map((part) => part.trim()))
     .pipe(z.array(stack)),
   joinedAt: when,
+  /** How many verifications the member has made since joining. */
+  checks: z
+    .string()
+    .regex(/^\d{1,4}$/)
+    .optional()
+    .transform((value) => (value === undefined ? 0 : Number(value))),
 });
 
 const replySchema = z.strictObject({
@@ -45,7 +51,12 @@ const replySchema = z.strictObject({
   content: content.max(20000),
 });
 
-const commentSchema = z.strictObject({ author: handle, at: when, content: content.max(5000) });
+const commentSchema = z.strictObject({
+  author: handle,
+  at: when,
+  likes: handles.default([]),
+  content: content.max(5000),
+});
 
 export const routeSeedSchema = z.object({
   service: z.string().regex(/^[a-z0-9-]+$/),

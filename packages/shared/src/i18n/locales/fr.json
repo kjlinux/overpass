@@ -37,6 +37,8 @@
     "service_exists": "Ce service existe déjà dans le catalogue.",
     "own_post": "Vous ne pouvez pas donner d'étoile à votre propre article.",
     "already_starred": "Vous avez déjà donné une étoile à cet article.",
+    "own_comment": "Vous ne pouvez pas aimer votre propre commentaire.",
+    "already_liked": "Vous avez déjà aimé ce commentaire.",
     "blog_suspended": "Ce blog est suspendu par l'équipe de modération.",
     "not_confirmed": "Publiez deux itinéraires ou faites dix vérifications pour ouvrir votre blog.",
     "own_blog": "Vous ne pouvez pas suivre votre propre blog.",

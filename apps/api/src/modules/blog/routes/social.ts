@@ -27,6 +27,14 @@ export function socialRoutes({ app, service, resolve }: Context): void {
     const account = await requireAccount(resolve, request);
     return ok(await service.unstar(account, parseInput(idParams, request.params).id));
   });
+  app.post("/v1/comments/:id/like", clicks, async (request) => {
+    const account = await requireAccount(resolve, request);
+    return ok(await service.likeComment(account, parseInput(idParams, request.params).id));
+  });
+  app.delete("/v1/comments/:id/like", clicks, async (request) => {
+    const account = await requireAccount(resolve, request);
+    return ok(await service.unlikeComment(account, parseInput(idParams, request.params).id));
+  });
   app.post("/v1/blogs/:handle/follow", clicks, async (request) => {
     const account = await requireAccount(resolve, request);
     return ok(await service.follow(account, parseInput(handleParams, request.params).handle));

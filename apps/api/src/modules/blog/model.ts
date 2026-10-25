@@ -73,6 +73,7 @@ export type CommentRow = {
   authorHandle: string | null;
   content: string;
   moderation: ModerationStatus;
+  likes: number;
   createdAt: Date;
 };
 
@@ -110,6 +111,13 @@ export type SocialPart = {
   following(followerId: string): Promise<(Member & { followedAt: Date })[]>;
 };
 
+export type LikePart = {
+  /** The new like count, or null when the account had already liked the comment. */
+  addLike(commentId: string, userId: string, at: Date): Promise<number | null>;
+  removeLike(commentId: string, userId: string): Promise<number>;
+  likedBy(userId: string, ids: string[]): Promise<Set<string>>;
+};
+
 export type ModerationPart = {
   /** Inserts the report under a row lock and returns the open reporters, or null if a duplicate. */
   report(kind: BlogContentKind, id: string, userId: string, at: Date): Promise<string[] | null>;
@@ -123,4 +131,5 @@ export type ModerationPart = {
 export type BlogRepository = PostsPart &
   FeedPart &
   SocialPart &
+  LikePart &
   ModerationPart & { atomically: Atomic<BlogRepository> };

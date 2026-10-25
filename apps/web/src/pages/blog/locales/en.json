@@ -73,6 +73,10 @@
     "hidden": "Comment hidden until the team decides.",
     "report": "Report",
     "reported": "Reported",
+    "like": "Like this comment",
+    "unlike": "Remove my like",
+    "likes_one": "{{count}} like",
+    "likes_other": "{{count}} likes",
     "more": "Show more comments"
   },
   "blog": {
