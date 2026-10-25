@@ -7,4 +7,4 @@ export { ArticleView } from "./ArticleView";
 export { FeedTabs } from "./FeedTabs";
 export { PostForm } from "./PostForm";
 export { PostList } from "./PostList";
-export { blogQueryFrom, blogSearch } from "./query";
+export { blogQueryFrom, blogSearch, postsPath } from "./query";

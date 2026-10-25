@@ -56,6 +56,7 @@ export const postListQuery = z.object({
   category: optionalFilter(postCategorySchema),
   author: optionalFilter(authorFilter),
   language: optionalFilter(languageSchema),
+  lang: optionalFilter(languageSchema),
   cursor: optionalFilter(z.string().max(400, { error: "cursor_invalid" })),
   limit: z.coerce
     .number({ error: "limit_invalid" })

@@ -56,6 +56,29 @@ describe("recent feed", () => {
     ]);
     expect(await feedSlugs(app, "?feed=news")).toEqual([]);
   });
+
+  it("shows one version per translation, in the reader's language when it exists", async () => {
+    const french = await daily(ada, "Encaisser avec Wave");
+    await daily(ada, "Collect with Wave", { language: "en", translationOf: french.id });
+    await daily(bob, "Only in English", { language: "en" });
+    expect(await feedSlugs(app, "?lang=fr")).toEqual(["only-in-english", "encaisser-avec-wave"]);
+    expect(await feedSlugs(app, "?lang=en")).toEqual(["only-in-english", "collect-with-wave"]);
+  });
+
+  it("keeps the other version when the reader's one is filtered out", async () => {
+    const french = await daily(ada, "Portrait de Awa", { category: "portraits" });
+    const english = { language: "en", translationOf: french.id, category: "tutorials" };
+    await daily(ada, "Awa explains her stack", english);
+    expect(await feedSlugs(app, "?category=portraits&lang=en")).toEqual(["portrait-de-awa"]);
+    await promoteAdmin(db, "ada@example.com");
+    await promoteAdmin(db, "bob@example.com");
+    const news = { kind: "news", category: "tech-news" };
+    const launch = await daily(ada, "Lancement de PI-SPI", news);
+    await daily(bob, "PI-SPI goes live", { ...news, language: "en", translationOf: launch.id });
+    expect(await feedSlugs(app, `?author=${await handleOf(app, ada)}&feed=news&lang=en`)).toEqual([
+      "lancement-de-pi-spi",
+    ]);
+  });
 });
 
 describe("for me feed", () => {

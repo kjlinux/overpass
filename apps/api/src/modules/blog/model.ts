@@ -56,6 +56,8 @@ export type PostPatch = { [Key in Editable]?: PostRow[Key] | undefined };
 export type FeedFilters = {
   category?: PostCategory | undefined;
   language?: Language | undefined;
+  /** Keeps this version of a translated post and the only version of the others. */
+  preferredLanguage?: Language | undefined;
   authorId?: string | undefined;
   newsOnly?: boolean;
   now: Date;

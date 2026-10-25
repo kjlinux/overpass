@@ -11,6 +11,7 @@ import { ErrorPage } from "../errors";
 import { ProfileSummary } from "../profile";
 import { useApi } from "../routes";
 import { Feed } from "./Feed";
+import { postsPath } from "./query";
 
 function FollowButton({ blog, onChange }: { blog: Blog; onChange: () => Promise<void> }) {
   const { t } = useTranslation("blog");
@@ -66,8 +67,7 @@ export function MemberBlogPage({ handle }: { handle: string }): JSX.Element {
   const language = useLanguage();
   const { state: profile, retry } = usePublicProfile(handle);
   if (profile.status === "notFound") return <ErrorPage kind="notFound" language={language} />;
-  const path = (cursor?: string) =>
-    `/v1/posts?author=${encodeURIComponent(handle)}${cursor === undefined ? "" : `&cursor=${encodeURIComponent(cursor)}`}`;
+  const path = (cursor?: string) => postsPath({ author: handle }, language, cursor);
   return (
     <Layout language={language}>
       <section class="py-12 md:py-16">

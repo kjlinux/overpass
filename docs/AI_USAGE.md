@@ -352,3 +352,10 @@ Both SKILL.md files were read in full before use. Instructions outside the proje
 - **User request, verbatim summary:** no password should be needed to run a seed.
 - **Change:** `SEED_ADMIN_PASSWORD` is optional. `ensureAdmin` looks the account up first and asks for the password only when it must create it, with an error naming the variable. README updated.
 - **TDD evidence:** the two new `accounts/seed.test.ts` cases were seen failing, then green. Other cases of that file time out at random in their database setup while about fifty Node processes from other sessions load the machine; each passed in a run.
+
+### 2026-10-25, Claude Code (Claude Opus 5.5), one version of each article in the reader's language
+
+- **User request, verbatim summary:** the French blog page lists English articles.
+- **Cause:** the blog page asked `/v1/posts` without a language, so both versions of a translated article were listed.
+- **Change:** `GET /v1/posts` takes `lang`: it keeps the version in that language and still lists an article that exists only in the other one, as the spec asks (fallback to the available language). The strict `language` filter, used by RSS, is unchanged. The blog page and a member blog send the interface language through `postsPath`.
+- **TDD evidence:** the `routes-feed.test.ts` case and the `postsPath` case in `blog.test.tsx` were written first and seen failing, then green.
