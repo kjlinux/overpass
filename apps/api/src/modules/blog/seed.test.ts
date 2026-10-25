@@ -151,6 +151,24 @@ describe("seedPosts", () => {
     expect(post).toEqual({ kind: "member", author: "aminata-codes", stars: 2, comments: 1 });
   });
 
+  it("removes a post whose stars could not be written, so a rerun writes it whole", async () => {
+    const seeds = [{ handle: "aminata-codes", country: "SN", language: "fr" as const }];
+    const authors = (
+      await seedMembers(
+        db,
+        seeds.map((s) => ({ ...s, stacks: [], joinedAt: at })),
+      )
+    ).ids;
+    const story = {
+      ...launchFr,
+      kind: "member" as const,
+      author: "aminata-codes",
+      stars: ["ghost"],
+    };
+    await expect(seedPosts(db, handle, [story], at, authors)).rejects.toThrow("ghost");
+    expect(await rows(sql`select 1 from posts`)).toEqual([]);
+  });
+
   it("refuses a handle that is not an admin", async () => {
     await expect(seedPosts(db, "someone", [launchFr], at)).rejects.toThrow("admin");
   });

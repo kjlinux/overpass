@@ -38,11 +38,25 @@ async function insertMember(db: Database, seed: MemberSeed): Promise<boolean> {
   return true;
 }
 
+/** A handle a real person registered must never receive the fictional content. */
+async function refuseRealAccounts(db: Database, seeds: readonly MemberSeed[]): Promise<void> {
+  for (const seed of seeds) {
+    const [taken] = await rows<{ handle: string }>(
+      db,
+      sql`select handle from users where handle = ${seed.handle}
+        and not (password_hash = ${lockedPassword} and email = ${`${seed.handle}@${mailDomain}`})`,
+    );
+    if (taken !== undefined)
+      throw new Error(`the handle ${taken.handle} belongs to a real account`);
+  }
+}
+
 /** Creates the fictional members once, then returns the id of every one of them by handle. */
 export async function seedMembers(
   db: Database,
   seeds: readonly MemberSeed[],
 ): Promise<{ created: number; ids: Map<string, string> }> {
+  await refuseRealAccounts(db, seeds);
   let created = 0;
   for (const seed of seeds) {
     if (await insertMember(db, seed)) created += 1;

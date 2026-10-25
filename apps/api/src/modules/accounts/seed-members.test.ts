@@ -43,6 +43,16 @@ describe("seedMembers", () => {
     expect(stacks.map((row) => row.stack)).toEqual(["laravel", "vue"]);
   });
 
+  it("refuses a handle a real person already uses, before writing anything", async () => {
+    await db.execute(
+      sql`insert into users (email, password_hash, handle, country)
+        values ('real@person.example', 'argon-hash', 'yao-dev', 'CI')`,
+    );
+    const awa = { ...yao, handle: "awa-kone" };
+    await expect(seedMembers(db, [awa, yao])).rejects.toThrow("yao-dev");
+    expect(await rows(sql`select 1 from users where handle = 'awa-kone'`)).toEqual([]);
+  });
+
   it("gives an address that can receive no mail and a password nobody can match", async () => {
     await seedMembers(db, [yao]);
     const [user] = await rows<{ email: string; hash: string }>(

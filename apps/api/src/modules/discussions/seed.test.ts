@@ -111,6 +111,15 @@ describe("seedThreads", () => {
     ]);
   });
 
+  it("writes a thread and its replies together or not at all", async () => {
+    const authors = await members("yao-dev", "serge-tech");
+    const vote = { author: "serge-tech", at, useful: ["ghost"], accepted: false, content: "Oui." };
+    const broken = { ...welcome, author: "yao-dev", replies: [vote] };
+    await expect(seedThreads(db, handle, [broken], at, authors)).rejects.toThrow("ghost");
+    expect(await rows(sql`select 1 from threads`)).toEqual([]);
+    expect(await rows(sql`select 1 from replies`)).toEqual([]);
+  });
+
   it("refuses an author it does not know", async () => {
     const stranger = { ...welcome, author: "nobody-here", replies: [] };
     await expect(seedThreads(db, handle, [stranger], at, new Map())).rejects.toThrow("nobody-here");

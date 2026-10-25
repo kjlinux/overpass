@@ -1,4 +1,5 @@
 import { unknownHandles } from "./content/authors.js";
+import { chronologyIssues } from "./content/chronology.js";
 import { readContent } from "./content/read.js";
 import type { Database } from "./db/client.js";
 import { adminIdByHandle, seedMembers } from "./modules/accounts/index.js";
@@ -21,6 +22,8 @@ export async function seedContent(
   const content = readContent(directory);
   const unknown = unknownHandles(content);
   if (unknown.length > 0) throw new Error(`no file under members/ for: ${unknown.join(", ")}`);
+  const misdated = chronologyIssues(content);
+  if (misdated.length > 0) throw new Error(misdated.join("; "));
   const at = now();
   const members = await seedMembers(db, content.members);
   const routes = await seedRoutes(db, handle, content.routes, at);

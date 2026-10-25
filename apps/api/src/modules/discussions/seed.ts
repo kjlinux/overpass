@@ -81,26 +81,39 @@ export async function seedThreads(
   authors: Authors = new Map(),
 ): Promise<{ created: number }> {
   const teamId = await adminIdByHandle(db, handle);
-  const repository = createDiscussionsRepository(db);
   let created = 0;
   for (const seed of seeds) {
     const authorId = seed.author === undefined ? teamId : idOf(authors, seed.author);
     if (await exists(db, authorId, seed)) continue;
-    const when = seed.at ?? at;
-    const { topic, language, title, content } = seed;
-    const thread = await repository.insertThread({
-      ...{ topic, language, title, content, authorId },
-      errorText: null,
-      codeText: null,
-      country: seed.country ?? null,
-      stack: seed.stack ?? null,
-      routeId: null,
-      serviceId: null,
-      createdAt: when,
-      lastActivityAt: when,
-    });
-    await addReplies(repository, thread.id, seed.replies ?? [], authors);
+    // One transaction per thread: a failed reply must not leave a thread a rerun would skip.
+    await db.transaction((tx) =>
+      openThread(tx as unknown as Database, seed, authorId, at, authors),
+    );
     created += 1;
   }
   return { created };
+}
+
+async function openThread(
+  db: Database,
+  seed: ThreadSeed,
+  authorId: string,
+  at: Date,
+  authors: Authors,
+): Promise<void> {
+  const repository = createDiscussionsRepository(db);
+  const when = seed.at ?? at;
+  const { topic, language, title, content } = seed;
+  const thread = await repository.insertThread({
+    ...{ topic, language, title, content, authorId },
+    errorText: null,
+    codeText: null,
+    country: seed.country ?? null,
+    stack: seed.stack ?? null,
+    routeId: null,
+    serviceId: null,
+    createdAt: when,
+    lastActivityAt: when,
+  });
+  await addReplies(repository, thread.id, seed.replies ?? [], authors);
 }

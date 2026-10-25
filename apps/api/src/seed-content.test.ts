@@ -104,6 +104,15 @@ describe("seedContent", () => {
     expect(points?.points).toBeGreaterThan(0);
   });
 
+  it("stops before writing anything when a reply is older than its thread", async () => {
+    write("members/yao-dev.md", member("yao-dev"));
+    write("members/serge-tech.md", member("serge-tech"));
+    const early = question("useful=yao-dev").replace("at=2026-10-24T09:00", "at=2026-10-24T07:00");
+    write("threads/fr/02-webhook.md", early);
+    await expect(seedContent(db, handle, dir, now)).rejects.toThrow("le webhook ne revient jamais");
+    expect(await rows(sql`select 1 from users where handle = 'yao-dev'`)).toEqual([]);
+  });
+
   it("stops before writing anything when a handle names no member", async () => {
     write("members/yao-dev.md", member("yao-dev"));
     write("members/serge-tech.md", member("serge-tech"));

@@ -77,19 +77,31 @@ function idOf(authors: Authors, handle: string): string {
   return id;
 }
 
-/** Stars and comments come with the post: a post already there keeps the ones it has. */
-async function addReactions(
-  repository: BlogRepository,
-  postId: string,
-  seed: PostSeed,
-  authors: Authors,
-): Promise<void> {
+type Reaction = { postId: string; seed: PostSeed; authors: Authors; at: Date };
+
+/** Stars carry no date in the content, so they take the run's: never before a member joined. */
+async function addReactions(repository: BlogRepository, reaction: Reaction): Promise<void> {
+  const { postId, seed, authors, at } = reaction;
   for (const star of seed.stars ?? []) {
-    await repository.addStar(postId, idOf(authors, star), seed.publishedAt);
+    await repository.addStar(postId, idOf(authors, star), at);
   }
   for (const comment of seed.comments ?? []) {
     const authorId = idOf(authors, comment.author);
     await repository.insertComment(postId, authorId, comment.content, comment.at);
+  }
+}
+
+/** A post whose reactions failed is removed, so the next run writes it whole instead of skipping it. */
+async function reactOrWithdraw(
+  db: Database,
+  repository: BlogRepository,
+  reaction: Reaction,
+): Promise<void> {
+  try {
+    await addReactions(repository, reaction);
+  } catch (error) {
+    await db.execute(sql`delete from posts where id = ${reaction.postId}`);
+    throw error;
   }
 }
 
@@ -122,7 +134,7 @@ export async function seedPosts(
       status: "published",
       at,
     });
-    await addReactions(repository, postId, seed, authors);
+    await reactOrWithdraw(db, repository, { postId, seed, authors, at });
     created += 1;
   }
   return { created };
