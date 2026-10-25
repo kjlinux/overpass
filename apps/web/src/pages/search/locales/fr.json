@@ -1,0 +1,39 @@
+{
+  "dialog": {
+    "title": "Rechercher sur Overpass",
+    "label": "Rechercher des articles, des discussions et des fiches",
+    "hint": "Tapez au moins deux lettres. Les résultats viennent de toutes les langues.",
+    "results_one": "{{count}} résultat",
+    "results_other": "{{count}} résultats",
+    "empty": "Aucun résultat pour « {{q}} ».",
+    "emptyHelp": "Vérifiez l'orthographe ou essayez un mot plus court.",
+    "error": "La recherche n'a pas répondu. Réessayez dans un instant.",
+    "seeAll": "Voir tous les résultats pour « {{q}} »",
+    "close": "Fermer la recherche"
+  },
+  "kinds": {
+    "posts": "Articles",
+    "threads": "Discussions",
+    "routes": "Fiches de route"
+  },
+  "page": {
+    "title": "Recherche",
+    "intro": "Les articles, les discussions et les fiches de route, dans toutes les langues.",
+    "start": "Tapez au moins deux lettres pour lancer la recherche.",
+    "more": "Voir plus de résultats",
+    "moreError": "La suite des résultats n'a pas pu être chargée. Réessayez."
+  },
+  "filters": {
+    "q": "Mots recherchés",
+    "qHelp": "Le moteur reconnaît les pluriels, ignore les accents et rattrape une lettre oubliée dans un titre.",
+    "kind": "Type",
+    "allKinds": "Tous les types",
+    "language": "Langue du contenu",
+    "allLanguages": "Toutes les langues",
+    "category": "Catégorie ou sujet",
+    "allCategories": "Toutes",
+    "categoryHelp": "Choisissez d'abord les articles ou les discussions.",
+    "submit": "Rechercher",
+    "reset": "Effacer les filtres"
+  }
+}

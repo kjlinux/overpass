@@ -17,6 +17,10 @@ const BlogSegmentPage = lazyPage(["blog", "profile"], async () => (await blog())
 const DocsPage = lazyPage(["docs", "mcp"], async () => (await import("../pages/docs")).DocsPage);
 const PricingPage = lazyPage("pricing", async () => (await import("../pages/pricing")).PricingPage);
 const AboutPage = lazyPage("about", async () => (await import("../pages/about")).AboutPage);
+const SearchPage = lazyPage(
+  ["search", "blog"],
+  async () => (await import("../pages/search")).SearchPage,
+);
 const legal = () => import("../pages/legal");
 const LegalPage = lazyPage("legal", async () => (await legal()).LegalPage);
 const PrivacyPage = lazyPage("legal", async () => (await legal()).PrivacyPage);
@@ -36,6 +40,7 @@ export const contentRoutes = [
   ["/docs", DocsPage],
   ["/pricing", PricingPage],
   ["/about", AboutPage],
+  ["/search", SearchPage],
   ["/legal", LegalPage],
   ["/privacy", PrivacyPage],
 ] as const;

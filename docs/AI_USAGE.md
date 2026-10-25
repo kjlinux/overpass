@@ -352,3 +352,11 @@ Both SKILL.md files were read in full before use. Instructions outside the proje
 - **User request, verbatim summary:** no password should be needed to run a seed.
 - **Change:** `SEED_ADMIN_PASSWORD` is optional. `ensureAdmin` looks the account up first and asks for the password only when it must create it, with an error naming the variable. README updated.
 - **TDD evidence:** the two new `accounts/seed.test.ts` cases were seen failing, then green. Other cases of that file time out at random in their database setup while about fifty Node processes from other sessions load the machine; each passed in a run.
+
+### 2026-10-25, Claude Code (Claude Opus 5.5), global search
+
+- **User request, verbatim summary:** a nice and smart search bar for articles and discussions, then the header bar opened with / or Ctrl+K and a results page with filters.
+- **User decisions:** one global bar in the header, results in every language with the interface language ranked first; the blog list keeps its fallback rule.
+- **Change:** migration 0022 adds accent-blind French, English and simple search configurations, a search column on posts, threads, replies and routes, and trigram title indexes; `GET /v1/search` ranks full-text hits, forgives a missing letter in a title, finds a thread through its replies and returns snippets marked by control characters, rendered as text only. The header gets a search button whose dialog loads on first use (combobox, arrows, Enter, Escape); `/fr/search` holds the query and filters in the URL with one section per kind and more pages on demand.
+- **TDD evidence:** the migration, shared schema, API and `query.ts` tests were written first and seen failing, then green. The render tests of the dialog, hits, sections and filters were written after the components.
+- **Left open:** no browser run (Docker was not running), no Playwright spec yet, hallmark audit, /code-review and /security-scan before merge. Two swapped letters (wvae for wave) are not caught by trigrams.

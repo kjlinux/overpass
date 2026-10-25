@@ -3,6 +3,8 @@
   "skipToContent": "Skip to content",
   "mainNavigation": "Main navigation",
   "menu": "Menu",
+  "search": "Search",
+  "searchKey": "/",
   "closeMenu": "Close menu",
   "themeDark": "Dark theme",
   "themeLight": "Light theme",

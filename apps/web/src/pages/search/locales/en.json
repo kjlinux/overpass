@@ -1,0 +1,39 @@
+{
+  "dialog": {
+    "title": "Search Overpass",
+    "label": "Search articles, discussions and itineraries",
+    "hint": "Type at least two letters. Results come from every language.",
+    "results_one": "{{count}} result",
+    "results_other": "{{count}} results",
+    "empty": "No results for \"{{q}}\".",
+    "emptyHelp": "Check the spelling or try a shorter word.",
+    "error": "Search did not answer. Try again in a moment.",
+    "seeAll": "See all results for \"{{q}}\"",
+    "close": "Close search"
+  },
+  "kinds": {
+    "posts": "Articles",
+    "threads": "Discussions",
+    "routes": "Itineraries"
+  },
+  "page": {
+    "title": "Search",
+    "intro": "Articles, discussions and itineraries, in every language.",
+    "start": "Type at least two letters to start searching.",
+    "more": "See more results",
+    "moreError": "The next results could not be loaded. Try again."
+  },
+  "filters": {
+    "q": "Words to find",
+    "qHelp": "Search knows plurals, ignores accents and catches a missing letter in a title.",
+    "kind": "Type",
+    "allKinds": "All types",
+    "language": "Content language",
+    "allLanguages": "All languages",
+    "category": "Category or topic",
+    "allCategories": "All",
+    "categoryHelp": "Choose articles or discussions first.",
+    "submit": "Search",
+    "reset": "Clear filters"
+  }
+}

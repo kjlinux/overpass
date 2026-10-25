@@ -7,6 +7,7 @@ import { Button, cx } from "../components/ui";
 import { AccountLinks } from "./AccountLinks";
 import { LanguageSelect } from "./LanguageSelect";
 import { localizedPath, navItems } from "./nav";
+import { SearchTrigger } from "./SearchTrigger";
 import { ThemeSwitch } from "./ThemeSwitch";
 
 const frame = "mx-auto max-w-frame px-4 md:px-6 lg:px-8";
@@ -75,6 +76,7 @@ export function Header({ language }: Props): JSX.Element {
           {t("wordmark")}
         </a>
         <div class="flex items-center gap-2">
+          <SearchTrigger language={language} />
           <LanguageSelect language={language} />
           <AccountLinks language={language} inMenu={false} />
           <Button
