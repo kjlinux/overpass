@@ -7,7 +7,11 @@
       "Receiving a webhook should not require a tunnel.",
       "Your code assistant should not have to guess an API.",
       "An integration should not break in silence.",
-      "A mobile money payment should not take three weeks."
+      "A mobile money payment should not take three weeks.",
+      "An integration question should not go unanswered.",
+      "A good tip about a payment should not get lost in a WhatsApp group.",
+      "A lesson learned in production should not stay in a drawer.",
+      "Writing about your integration should not require setting up a blog."
     ],
     "typingPause": "Pause the title",
     "typingPlay": "Play the title",

@@ -7,7 +7,11 @@
       "Recevoir un webhook ne devrait pas exiger un tunnel.",
       "Votre assistant de code ne devrait pas deviner une API.",
       "Une intégration ne devrait pas casser en silence.",
-      "Un paiement mobile money ne devrait pas prendre trois semaines."
+      "Un paiement mobile money ne devrait pas prendre trois semaines.",
+      "Une question d'intégration ne devrait pas rester sans réponse.",
+      "Un bon conseil sur un paiement ne devrait pas se perdre dans un groupe WhatsApp.",
+      "Une leçon apprise en production ne devrait pas rester dans un tiroir.",
+      "Écrire sur son intégration ne devrait pas demander de monter un blog."
     ],
     "typingPause": "Mettre le titre en pause",
     "typingPlay": "Relancer le titre",
