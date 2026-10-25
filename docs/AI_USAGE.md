@@ -444,3 +444,8 @@ Both SKILL.md files were read in full before use. Instructions outside the proje
 - **User request, verbatim summary:** add phrases about blogs and discussions to the typed phrases of the home title.
 - **Change:** four phrases added to `app.taglines` in the fr and en locale files, two about discussions and two about blogs, in the same "should not" form as the six existing ones. The first phrase is unchanged, so the screen reader text and the reduced motion text stay the same.
 - **Deploy:** static build only, no migration and no restart; `main` pulled and rebuilt on the server.
+
+### 2026-10-25, Claude Code (Claude Sonnet 5.5), README trimmed
+
+- **User request, verbatim summary:** remove the rules section and the remaining work section from the GitHub README, and anything else that shows a weakness.
+- **Change:** both sections removed, plus the bullet on pinned Vite and Tailwind versions and the sentence about the team of two. Documentation only.

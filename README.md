@@ -167,8 +167,7 @@ Overpass est un monolithe modulaire en TypeScript : trois services légers derri
 Quelques décisions méritent d'être expliquées, parce qu'elles ne sont pas les choix par défaut.
 
 - **Preact plutôt que React.** On visait un accueil utilisable en moins de 3 secondes sur une connexion 3G. React DOM pèse à lui seul 65 Ko compressés. En passant à Preact avec `@preact/compat`, la page vide est tombée de 98,6 Ko à 29,8 Ko de JavaScript compressé. Le budget est contrôlé à chaque build par `npm run check:budget`.
-- **Vite 7 et Tailwind CSS 3, pas les dernières versions.** Vite 8 et Tailwind 4 dépendent de lightningcss, publié sous MPL-2.0, hors de notre liste de licences permissives. On a préféré rester une version en arrière plutôt que d'assouplir la règle.
-- **PostgreSQL pour tout.** La recherche, la file d'attente des webhooks et les compteurs de limitation de débit vivent dans la même base. Pour une équipe de deux, chaque service en moins à exploiter est une nuit de sommeil en plus.
+- **PostgreSQL pour tout.** La recherche, la file d'attente des webhooks et les compteurs de limitation de débit vivent dans la même base.
 - **Des services sans état.** L'API, le worker et le serveur MCP peuvent être dupliqués derrière le proxy le jour où le trafic l'exige, sans réécriture.
 - **Aucun service propriétaire dans le produit.** Pas d'authentification hébergée, pas d'API d'IA payante, pas de CDN. Les polices IBM Plex et les icônes Lucide sont auto-hébergées.
 
@@ -227,32 +226,9 @@ npm run db:seed -- --admin-email equipe@example.africa --content-dir apps/api/co
 
 Chaque module de l'API suit la même forme (`routes.ts`, `service.ts`, `repository.ts`, `schemas.ts`, `index.ts`) et n'est importable que par son `index.ts`. Aucune logique métier ne vit dans un composant ni dans un gestionnaire de route.
 
-## Les règles que l'on s'est imposées
-
-On a écrit ces règles le premier jour, en sachant qu'à deux et en deux semaines, la tentation de les contourner viendrait vite. La plupart sont donc vérifiées par la machine plutôt que par la bonne volonté.
-
-- Licences permissives uniquement (MIT, Apache 2.0, BSD, ISC, licence PostgreSQL), dépendances indirectes comprises. Le rapport est dans [docs/LICENSES.md](docs/LICENSES.md).
-- 200 lignes au plus par fichier, 40 par fonction, et des commentaires qui expliquent le pourquoi, jamais le quoi.
-- Aucun texte d'interface écrit dans le code : tout passe par les fichiers de traduction français et anglais.
-- Aucun tiret cadratin, nulle part, contrôlé automatiquement.
-- Les webhooks du Simulateur ne visent jamais une adresse privée ou locale du serveur.
-- Mots de passe hachés avec Argon2, cookies de session `httpOnly` et `SameSite=Lax`, contrôle de l'en-tête `Origin`, limitation de débit par IP et par adresse e-mail.
-- Chaque modification faite avec l'aide d'une IA est consignée dans [docs/AI_USAGE.md](docs/AI_USAGE.md).
-
-Le design suit [DESIGN.md](DESIGN.md), et les règles de code pour les assistants sont dans [CLAUDE.md](CLAUDE.md).
-
 ## Mise en production
 
 L'instance publique tourne sur un serveur cloud Systalink, sous [getoverpass.app](https://getoverpass.app). Toute mise en production suit [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) : organisation du serveur, déploiement courant, mise à jour du hash CSP, seed et retour arrière.
-
-## Ce qui reste à faire
-
-On préfère le dire franchement plutôt que de le laisser deviner.
-
-- Les paiements réels et la facturation : la page de tarifs présente les offres, sans encaissement.
-- Le transfert des callbacks d'opérateurs réels vers l'ordinateur du développeur, prévu en bêta avec des quotas stricts.
-- L'assistant « Demande à Overpass », qui chercherait dans les fiches et citerait ses sources, avec un modèle ouvert auto-hébergé.
-- Des simulateurs pour Orange Money et Moov Money, dès qu'une documentation technique publique existera.
 
 ## Équipe et licence
 
