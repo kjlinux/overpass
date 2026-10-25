@@ -80,7 +80,7 @@ Overpass sert quatre profils, et chacun doit atteindre son but en moins de trois
 
 ## 4. Périmètre fonctionnel
 
-Le périmètre tient en dix modules, dont quatre sont indispensables à la soumission, complétés par les ajouts décidés le 13 octobre 2026 décrits plus bas.
+Le périmètre tient en douze modules, dont quatre sont indispensables à la soumission, complétés par les ajouts décidés le 13 et le 25 octobre 2026 décrits plus bas.
 
 | Module | Priorité | Contenu |
 | --- | --- | --- |
@@ -93,7 +93,9 @@ Le périmètre tient en dix modules, dont quatre sont indispensables à la soumi
 | Newsletter | P1 | Inscription avec confirmation par e-mail, choix de la langue, numéro hebdomadaire, désinscription en un clic |
 | Classement | P1 | Points par contribution, statut de membre confirmé, classement par pays et par développeur |
 | Serveur MCP | P1 | Outils en lecture seule : chercher une fiche, la lire, lister les pièges |
-| Administration | P1 | Modération des fiches, des sujets et des signalements, rédaction des articles, suspension d'un compte |
+| Administration | P1 | Modération des fiches, des sujets et des signalements, rédaction des articles, suspension d'un compte, revue des simulateurs communautaires, badges de confiance |
+| Simulateurs communautaires | P1 | Description déclarative, brouillon, revue, publication avec son auteur, versions (ajout 7) |
+| Badges | P1 | Trois familles, cinq niveaux de Hugin à Odin, contour de la photo de profil (ajout 8) |
 
 **Scénarios du Simulateur (P0)**
 
@@ -128,7 +130,7 @@ Documentations suivies, consultées le 12 octobre 2026 : [Wave Checkout API](htt
 - Les intégrations restent le produit phare : l'accueil met le Simulateur et les fiches en premier, les discussions et le blog ensuite.
 - Quand une discussion aboutit à une solution d'intégration, son auteur peut la transformer en fiche en un clic.
 - Points : réponse acceptée 5, réponse jugée utile 1, article publié 10.
-- Tout sujet ou réponse peut être signalé. Deux signalements le masquent jusqu'à la décision d'un modérateur. Le signalement d'un membre confirmé compte pour deux.
+- Tout sujet ou réponse peut être signalé. Il est masqué jusqu'à la décision d'un modérateur dès que ses signalements atteignent 3 points (règle de l'ajout 8).
 - Un article passe par un brouillon et une relecture de l'équipe avant publication.
 - La newsletter n'est envoyée qu'aux adresses confirmées, et chaque numéro porte un lien de désinscription.
 
@@ -140,7 +142,7 @@ Documentations suivies, consultées le 12 octobre 2026 : [Wave Checkout API](htt
 
 **3. Démo guidée PI-SPI (P0 si PI-SPI est livré).** Un parcours pas à pas dans le Simulateur : obtenir un jeton, créer une demande de paiement, la voir payée, recevoir le webhook sur son poste local. Chaque étape affiche la requête à copier et la réponse obtenue. Le simulateur complète le sandbox officiel de la BCEAO avec les scénarios d'échec et un accès sans certificat, et renvoie vers lui.
 
-**4. Actualités, blogs des membres et abonnements (P1).** Les actualités sont une rubrique tenue par l'administration seule. Chaque membre dispose de son blog, à une adresse du type /blog/@pseudo, et y publie ses articles en Markdown, sans relecture préalable. Tout membre connecté peut commenter un article et lui donner une étoile, une par compte et par article. Un membre peut suivre un auteur : son fil « Pour moi » affiche d'abord les articles des auteurs suivis, puis les articles récents les mieux notés. L'administration peut masquer ou bloquer un article ou un commentaire et suspendre un blog. Deux signalements masquent un contenu en attendant une décision, et le signalement d'un membre confirmé compte pour deux. Seul un membre confirmé peut publier un article. Tables ajoutées : follows, post_comments, post_stars. Le fil est une requête PostgreSQL, sans base en graphe. Points : étoile reçue 1.
+**4. Actualités, blogs des membres et abonnements (P1).** Les actualités sont une rubrique tenue par l'administration seule. Chaque membre dispose de son blog, à une adresse du type /blog/@pseudo, et y publie ses articles en Markdown, sans relecture préalable. Tout membre connecté peut commenter un article et lui donner une étoile, une par compte et par article. Un membre peut suivre un auteur : son fil « Pour moi » affiche d'abord les articles des auteurs suivis, puis les articles récents les mieux notés. L'administration peut masquer ou bloquer un article ou un commentaire et suspendre un blog. Un contenu signalé est masqué en attendant une décision selon la règle de l'ajout 8. Seul un membre confirmé peut publier un article. Tables ajoutées : follows, post_comments, post_stars. Le fil est une requête PostgreSQL, sans base en graphe. Points : étoile reçue 1.
 
 **5. Entraide autour des API (P1).** Les fiches et les questions viennent des membres, l'équipe ne code que les opérateurs simulés. Sur une fiche, un bouton « Ça ne marche pas chez moi » ouvre une discussion déjà rattachée à la fiche, au service et au pays. Le formulaire de question a un champ pour le message d'erreur et un pour le code, et masque avant publication les clés, jetons et secrets collés par mégarde. Un membre peut proposer un service absent de la liste, que l'administration valide. Sur un service sans simulateur, un bouton « Je veux un simulateur » permet un vote par compte, avec un classement public des demandes.
 
@@ -148,12 +150,66 @@ Documentations suivies, consultées le 12 octobre 2026 : [Wave Checkout API](htt
 
 **Membre confirmé (décidé le 25 octobre 2026)**
 
-- Les points servent à l'émulation et à la confiance. Un membre devient confirmé à partir de 20 points, soit deux fiches publiées ou dix vérifications.
-- Le signalement d'un membre confirmé compte pour deux. Un seul suffit donc à masquer un sujet, une réponse, un article ou un commentaire jusqu'à la décision d'un modérateur.
-- Seul un membre confirmé peut publier un article sur son blog. Un nouveau compte commence par des fiches et des vérifications, ce qui freine le spam.
+- Les points servent à l'émulation et ouvrent un statut d'entrée, Membre confirmé ; les badges (ajout 8) disent le reste de la confiance. Un membre devient confirmé à partir de 20 points, soit deux fiches publiées ou dix vérifications.
+- Le signalement d'un membre confirmé vaut 2 points sur les 3 qui masquent un contenu (règle de l'ajout 8). Seul, il ne suffit donc pas.
+- Seul un membre confirmé peut publier un article sur son blog ou créer un simulateur communautaire. Un nouveau compte commence par des fiches et des vérifications, ce qui freine le spam.
 - Un membre confirmé a des quotas d'écriture trois fois plus larges pour les sujets, les réponses, les articles, les fiches, les vérifications et les pièges.
 - Le statut est recalculé à chaque lecture à partir des points. Un membre qui repasse sous le seuil perd ses droits. L'administration garde tous ses droits.
 - Le profil public affiche la mention « Membre confirmé », et le tableau de bord montre la progression vers le seuil.
+
+**7. Simulateurs communautaires (P1, décidé le 25 octobre 2026).** Les membres ajoutent eux-mêmes un simulateur pour une API que l'équipe ne simule pas. C'est ce qui permet de tenir la promesse « Intégrez n'importe quelle API sans tâtonner ». Un membre décrit le simulateur dans un formulaire ; il n'écrit jamais de code, et aucun code de membre n'est exécuté sur le serveur. Le moteur d'Overpass transforme la description en opérateur simulé, avec le même contrat que les opérateurs de l'équipe (section 10).
+
+- Qui peut en créer : un membre à l'e-mail confirmé qui a le statut Membre confirmé (20 points). Trois brouillons au plus par membre.
+- Ce que contient la description : les points d'entrée (méthode et chemin) ; les champs attendus, chacun d'un type choisi dans une liste fermée (texte, nombre, montant, téléphone, e-mail, énumération, UUID, date) ; la réponse de chacun des cinq scénarios ; la forme du webhook ; sa signature, choisie dans une liste fermée (HMAC-SHA256 ou HMAC-SHA512 du corps brut dans un en-tête nommé, jeton fixe dans un en-tête, aucune) ; le lien vers la documentation publique suivie.
+- Les réponses sont des gabarits à variables simples, du type `{{request.body.amount}}` ou `{{object.id}}`. Aucune expression, aucune expression régulière écrite par le membre, aucun accès hors de la requête et de l'objet simulé.
+- Limites : 20 points d'entrée, 64 Ko par description, 16 Ko par réponse, profondeur JSON de 8 au plus.
+- Un fichier OpenAPI 3 peut pré-remplir la description (coupé en premier en cas de retard).
+- Brouillon : seule la clé de test de son auteur l'atteint, dans le Simulateur comme avec `overpass listen`.
+- Revue : l'auteur soumet. Un admin compare la description avec la documentation publique, vérifie l'absence de logo et de prétention d'être officiel, lance les cinq scénarios en un clic, puis accepte, refuse ou demande une correction, toujours avec un motif inscrit au journal.
+- Publication : le simulateur s'affiche avec « intégré par @pseudo » et le niveau du badge `sim.builder` de son auteur. Un avertissement « simulateur non officiel, construit depuis la documentation publique » s'affiche avant tout essai. Il reste distinct des opérateurs de l'équipe.
+- Vie du simulateur : les membres le vérifient (« ça marche pour moi ») et signalent les écarts avec la vraie API. Son état suit les règles des fiches : voie libre, à vérifier, signalé cassé. Chaque nouvelle version repasse par la revue, sauf une petite correction (message, champ facultatif, exemple) faite par un détenteur du badge `mimir` : elle est publiée tout de suite, relue ensuite et annulable.
+- Les webhooks d'un simulateur communautaire suivent la règle de tout le Simulateur : jamais d'adresse privée ou locale.
+- Points : simulateur accepté 20.
+
+**8. Badges des membres (P1, décidé le 25 octobre 2026).** Les points mesurent l'activité ; les badges disent pourquoi on peut faire confiance à quelqu'un. On juge d'abord un simulateur ou une fiche sur ses propres preuves (validation, vérifications datées, signalements) ; le badge de son auteur vient en second.
+
+| Famille | Badges | Comment on les obtient |
+| --- | --- | --- |
+| Activité | `first.push` (unique), `debugger`, `uptime`, `sim.builder` | Première fiche publiée ; vérifications faites ; mois civils avec au moins une contribution ; simulateurs acceptés |
+| Compétence | Un badge par service ou par stack : `wave`, `orange.money`, `laravel`… | Seulement par les vérifications que des comptes distincts ont faites sur ses fiches de ce service ou de cette stack. Le badge recule si ces fiches sont retirées ou signalées cassées |
+| Confiance | `mimir`, `heimdall`, sans niveau | Accordés et retirés par un admin, inscrits au journal. Le site n'affiche pas qui les accorde |
+
+- Cinq niveaux, du plus faible au plus fort : Hugin, Ragnar, Thor, Kratos, Odin. Chacun a son emblème en pixels. Les noms viennent des légendes nordiques et grecques, libres de droits ; aucun visuel de jeu ou de série (God of War, Marvel, Vikings) n'est repris.
+- Seuils, réglés à un seul endroit du code :
+
+| Badge | Hugin | Ragnar | Thor | Kratos | Odin |
+| --- | --- | --- | --- | --- | --- |
+| `debugger` (vérifications) | 1 | 10 | 50 | 150 | 500 |
+| Compétence (vérifications par des comptes distincts) | 1 | 3 | 10 | 25 | 60 |
+| `sim.builder` (simulateurs acceptés) | 1 | 2 | 4 | 8 | 15 |
+| `uptime` (mois actifs) | 1 | 3 | 6 | 12 | 24 |
+
+- Droits : `mimir` publie les petites corrections d'un simulateur sans attendre la revue ; `heimdall` masque un contenu par un seul signalement. Les autres badges ne donnent aucun droit.
+- Masquage d'un contenu signalé (sujet, réponse, article, commentaire, fiche, simulateur) : il est masqué en attendant une décision dès que ses signalements atteignent 3 points. Un nouveau compte vaut 1, un Membre confirmé 2, un détenteur de `heimdall` 3. Cette règle remplace « deux signalements masquent ».
+- Les badges d'activité et de compétence sont calculés à chaque lecture, comme les points, jamais saisis. Seuls les badges de confiance sont stockés.
+- Affichage : le profil public montre tous les badges ; à côté de l'auteur d'une fiche, d'un sujet ou d'un simulateur, ses deux meilleurs badges et le nombre des autres ; le tableau de bord montre ce qui manque pour le niveau suivant. Le contour de la photo de profil prend le niveau du meilleur badge du membre.
+
+**9. Catégories de services (décidé le 25 octobre 2026).** Un service appartient à une catégorie, filtrable dans le catalogue, le Simulateur et les demandes de simulateur.
+
+| Catégorie | Clé |
+| --- | --- |
+| Paiement mobile et carte | `payment` |
+| Envoi de SMS | `sms` |
+| Menus USSD | `ussd` |
+| Vérification d'identité (KYC) | `kyc` |
+| Messagerie WhatsApp et chat | `messaging` |
+| Crédit et forfaits téléphoniques | `airtime` |
+| Paiement de factures | `bills` |
+| Transferts et versements | `payout` |
+| Livraison et suivi de colis | `delivery` |
+| Facture électronique et impôts | `einvoice` |
+
+Le formulaire de proposition d'un service offre aussi « Aucune de ces catégories », avec une description obligatoire ; l'administration crée la catégorie quand la même demande revient.
 
 **Règles de couverture des opérateurs (13 octobre 2026)**
 
@@ -210,12 +266,14 @@ L'inscription à la newsletter apparaît aussi dans le pied de page et à la fin
 
 | Page | Contenu obligatoire |
 | --- | --- |
-| Tableau de bord | Mes fiches, mes vérifications, mes points, raccourci vers le Simulateur |
+| Tableau de bord | Mes fiches, mes vérifications, mes points, mes badges et ce qui manque pour le niveau suivant, mes simulateurs communautaires, raccourci vers le Simulateur |
 | Éditeur de fiche | Modèle pré-rempli, aperçu en direct, choix de la langue de la fiche |
-| Simulateur | Opérateur, scénario, clés de test, inspecteur, journal des webhooks |
-| Profil public | Pays, stacks, contributions, points |
+| Éditeur de simulateur communautaire | Points d'entrée, champs, réponses des cinq scénarios, webhook et signature, lien vers la documentation, essai du brouillon, soumission |
+| Page d'un simulateur communautaire | Auteur et son niveau, état, versions, vérifications, signalements, bouton « Tester », avertissement « non officiel » |
+| Simulateur | Opérateur (équipe ou communauté), filtre par catégorie, scénario, clés de test, inspecteur, journal des webhooks |
+| Profil public | Pays, stacks, contributions, points, mention « Membre confirmé », badges, contour de la photo au niveau du meilleur badge |
 | Paramètres | Langue, mot de passe, jetons MCP et clés d'API, suppression du compte |
-| Administration | File de modération, signalements, comptes |
+| Administration | File de modération, signalements, comptes, revue des simulateurs, badges de confiance |
 
 **Éléments communs.** En-tête avec sélecteur de langue, pied de page, états vides illustrés, messages d'erreur rédigés, confirmations avant toute action destructive.
 
@@ -373,7 +431,7 @@ Ces tables suffisent à la première version : chacune appartient à un seul mod
 | --- | --- | --- |
 | `users` | accounts | e-mail, mot de passe haché, nom public, pays, langue, rôle, version de session, date du consentement newsletter, date de création |
 | `user_stacks` | accounts | utilisateur, stack |
-| `services` | routes | identifiant court, nom, catégorie (paiement, SMS, USSD), opérateur simulé ou non |
+| `services` | routes | identifiant court, nom, catégorie (une des dix clés de l'ajout 9), opérateur simulé ou non |
 | `service_countries` | routes | service, pays, confirmé, base (source ou communauté), source, date de consultation, fiche qui a confirmé, date de confirmation |
 | `routes` | routes | auteur, service, pays, stack, langue, titre, contenu Markdown, version, groupe de traduction, date de suppression |
 | `route_versions` | routes | fiche, numéro, titre, contenu, auteur, date |
@@ -395,10 +453,19 @@ Ces tables suffisent à la première version : chacune appartient à un seul mod
 | `newsletter_subscribers` | newsletter | e-mail, langue, jeton de confirmation, date de confirmation, date de désinscription |
 | `newsletter_issues` | newsletter | numéro, langue, objet, contenu, date d'envoi, nombre de destinataires |
 
+| Table | Module | Champs principaux |
+| --- | --- | --- |
+| `community_simulators` | simulators | service, auteur, identifiant court, état (brouillon, soumis, à corriger, publié, refusé, retiré), version publiée, dates |
+| `simulator_versions` | simulators | simulateur, numéro, description JSON validée, lien vers la documentation, petite correction ou non, décision, motif, admin, dates |
+| `simulator_checks` | simulators | simulateur, version, utilisateur, date |
+| `simulator_reports` | simulators | simulateur, version, utilisateur, écart décrit, statut (ouvert, résolu), date |
+| `badge_grants` | accounts | utilisateur, badge de confiance (`mimir` ou `heimdall`), admin, motif, date d'attribution, date de retrait |
+
 **Règles**
 
 - Identifiants en UUID, dates en UTC, suppression logique pour les fiches.
-- Les points du classement sont calculés à partir des fiches, des vérifications, des pièges confirmés, des réponses acceptées, des votes « utile », des articles publiés et des étoiles reçues, puis mis en cache dans `member_points`. Ils ne sont jamais saisis. Le statut de membre confirmé en découle à chaque lecture.
+- Les points du classement sont calculés à partir des fiches, des vérifications, des pièges confirmés, des réponses acceptées, des votes « utile », des articles publiés, des étoiles reçues et des simulateurs communautaires acceptés, puis mis en cache dans `member_points`. Ils ne sont jamais saisis. Le statut de membre confirmé en découle à chaque lecture.
+- Les badges d'activité et de compétence ne sont pas stockés : ils sont calculés à chaque lecture à partir des mêmes tables que les points. Seuls les badges de confiance vivent dans `badge_grants`.
 - L'état d'une fiche (voie libre, à vérifier, signalée cassée) n'est pas stocké : il est calculé à chaque lecture à partir de `checks` et `potholes`. Les versions française et anglaise d'une fiche partagent un groupe de traduction, une seule fiche par langue.
 - Les événements du Simulateur sont purgés après 7 jours.
 - Chaque migration est versionnée et réversible.
@@ -428,6 +495,9 @@ L'API REST est le seul point d'accès aux données : l'interface, le serveur MCP
 | Discussions | `GET /v1/threads`, `POST /v1/threads`, `GET /v1/threads/:id`, `POST /v1/threads/:id/replies`, `POST /v1/replies/:id/useful`, `POST /v1/threads/:id/accept` |
 | Blog | `GET /v1/posts`, `GET /v1/posts/:slug`, `POST /v1/posts`, `PATCH /v1/posts/:id`, `GET /v1/posts/feed.xml` |
 | Newsletter | `POST /v1/newsletter/subscribe`, `GET /v1/newsletter/confirm`, `GET /v1/newsletter/unsubscribe`, `POST /v1/newsletter/issues` |
+| Simulateurs communautaires | `GET /v1/simulators`, `GET /v1/simulators/:slug`, `POST /v1/simulators`, `PATCH /v1/simulators/:id`, `POST /v1/simulators/:id/submit`, `POST /v1/simulators/:id/checks`, `POST /v1/simulators/:id/reports`, `GET /v1/me/simulators`, `POST /v1/simulators/import-openapi` |
+| Badges | `GET /v1/users/:handle/badges`, `GET /v1/me/badges` |
+| Administration | `GET /v1/admin/simulators`, `POST /v1/admin/simulators/:id/decision`, `POST /v1/admin/badges`, `DELETE /v1/admin/badges/:id` |
 
 **Contrat d'un opérateur simulé**
 
@@ -439,6 +509,8 @@ Chaque opérateur est un dossier dans `packages/providers/` qui fournit quatre �
 4. une fiche d'identité : nom, pays, version de la documentation suivie, mention « non officiel ».
 
 Le moteur du simulateur ne connaît aucun opérateur. Ajouter un opérateur ne modifie ni l'API ni l'interface.
+
+Un simulateur communautaire (ajout 7) fournit les mêmes quatre éléments, mais sous forme de description JSON validée, que le moteur compile en opérateur au chargement. Le Simulateur tient donc un registre dynamique : les opérateurs de l'équipe, les simulateurs publiés, et les brouillons, visibles seulement par la clé de leur auteur.
 
 **Outils du serveur MCP (lecture seule)**
 
@@ -594,6 +666,14 @@ Le code est gelé le 24 octobre, ce qui laisse une journée de marge avant la cl
 * [ ] Le blog affiche au moins trois articles, en français et en anglais.
 * [ ] Une adresse s'abonne à la newsletter, confirme, reçoit un numéro et se désabonne en un clic.
 
+* [ ] Un Membre confirmé décrit un simulateur et le teste en brouillon ; aucun autre compte ne l'atteint.
+* [ ] Un admin le valide ; il apparaît dans le Simulateur avec « intégré par @pseudo » et l'avertissement « non officiel ».
+* [ ] Un autre membre lance ses cinq scénarios et reçoit les webhooks sur son poste avec `overpass listen`.
+* [ ] Une description qui contient une expression, dépasse une limite ou vise une adresse privée est refusée avec un message clair.
+* [ ] Un badge de compétence n'apparaît qu'après la vérification d'un autre compte, et recule quand la fiche est retirée.
+* [ ] Le contour de la photo suit le niveau du meilleur badge, sur un écran de 360 px et au clavier seul.
+* [ ] Un contenu signalé est masqué à 3 points, et un Membre confirmé seul ne suffit pas.
+
 **Points ouverts**
 
 - Texte exact de la règle open source : licences permissives uniquement, ou toute licence libre ?
@@ -605,6 +685,8 @@ Le code est gelé le 24 octobre, ce qui laisse une journée de marge avant la cl
 - Lecture retenue pour les commentaires : 20 % est un plafond, pas un quota à atteindre.
 - Newsletter (16 octobre 2026, à valider) : les liens de confirmation et de désinscription ouvrent une page qui appelle `POST /v1/newsletter/confirm` et `POST /v1/newsletter/unsubscribe`, au lieu des `GET` de la section 10, pour que les antivirus de messagerie qui suivent les liens ne confirment ni ne désinscrivent à la place du lecteur ; chaque numéro porte aussi les en-têtes `List-Unsubscribe` et `List-Unsubscribe-Post` (RFC 8058). Une table `newsletter_deliveries` (file d'envoi par lots) s'ajoute à la section 9.
 - Blog (16 octobre 2026) : les routes de la section 10 sont complétées par les commentaires, les étoiles, les abonnements, les signalements, la modération et `GET /v1/blogs/:handle` ; les tables `post_reports` et `blog_suspensions` s'ajoutent à celles de la mise à jour du 13 octobre.
+
+- Simulateurs communautaires et badges (25 octobre 2026) : ils s'appuient sur le statut Membre confirmé, à 20 points. Sa première règle, « le signalement d'un Membre confirmé compte double, un seul suffit à masquer », cède la place à la règle des 3 points de l'ajout 8. Ordre de coupe propre à ces ajouts : l'import OpenAPI, puis le badge `uptime`, puis la publication sans revue des petites corrections par `mimir`.
 
 **Sources**
 
