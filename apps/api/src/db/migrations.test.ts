@@ -1,8 +1,8 @@
 import { readdirSync } from "node:fs";
-import { PGlite } from "@electric-sql/pglite";
+import type { PGlite } from "@electric-sql/pglite";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { migrateDown, migrateUp, migrationsDirectory } from "./migrations.js";
-import { pgliteExecutor } from "./testing.js";
+import { pgliteExecutor, testPglite } from "./testing.js";
 import type { SqlExecutor } from "./migrations.js";
 
 let pg: PGlite;
@@ -15,8 +15,8 @@ async function tables(): Promise<string[]> {
   return rows.map((row) => row.name);
 }
 
-beforeEach(() => {
-  pg = new PGlite();
+beforeEach(async () => {
+  pg = await testPglite();
   executor = pgliteExecutor(pg);
 });
 afterEach(() => pg.close());
@@ -46,6 +46,7 @@ describe("migrations", () => {
       "0019_https_webhooks",
       "0020_service_catalogue_growth",
       "0021_media",
+      "0022_search",
     ]);
     expect(await tables()).toEqual([
       "api_tokens",
@@ -93,7 +94,8 @@ describe("migrations", () => {
 
   it("reverts the last migration and can apply it again", async () => {
     await migrateUp(executor, migrationsDirectory);
-    expect(await migrateDown(executor, migrationsDirectory, 21)).toEqual([
+    expect(await migrateDown(executor, migrationsDirectory, 22)).toEqual([
+      "0022_search",
       "0021_media",
       "0020_service_catalogue_growth",
       "0019_https_webhooks",
@@ -117,7 +119,7 @@ describe("migrations", () => {
       "0001_accounts",
     ]);
     expect(await tables()).toEqual(["schema_migrations"]);
-    expect(await migrateUp(executor, migrationsDirectory)).toHaveLength(21);
+    expect(await migrateUp(executor, migrationsDirectory)).toHaveLength(22);
   });
 
   it("seeds the six translated discussion themes in their order", async () => {

@@ -1,7 +1,7 @@
-import { PGlite } from "@electric-sql/pglite";
+import type { PGlite } from "@electric-sql/pglite";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { migrateUp, migrationsDirectory } from "./migrations.js";
-import { pgliteExecutor } from "./testing.js";
+import { pgliteExecutor, testPglite } from "./testing.js";
 import type { SqlExecutor } from "./migrations.js";
 
 let pg: PGlite;
@@ -27,7 +27,7 @@ async function rejects(sql: string, params: unknown[] = []): Promise<boolean> {
 }
 
 beforeEach(async () => {
-  pg = new PGlite();
+  pg = await testPglite();
   executor = pgliteExecutor(pg);
   await migrateUp(executor, migrationsDirectory);
   await executor.query(

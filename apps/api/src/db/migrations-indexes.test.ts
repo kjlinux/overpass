@@ -1,8 +1,8 @@
 import { readdirSync } from "node:fs";
-import { PGlite } from "@electric-sql/pglite";
+import type { PGlite } from "@electric-sql/pglite";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { migrateDown, migrateUp, migrationsDirectory } from "./migrations.js";
-import { pgliteExecutor } from "./testing.js";
+import { pgliteExecutor, testPglite } from "./testing.js";
 import type { SqlExecutor } from "./migrations.js";
 
 let pg: PGlite;
@@ -32,8 +32,8 @@ async function indexes(): Promise<string[]> {
   return rows.map((row) => row.name);
 }
 
-beforeEach(() => {
-  pg = new PGlite();
+beforeEach(async () => {
+  pg = await testPglite();
   executor = pgliteExecutor(pg);
 });
 afterEach(() => pg.close());

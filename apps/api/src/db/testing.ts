@@ -1,4 +1,6 @@
 import { PGlite } from "@electric-sql/pglite";
+import { pg_trgm } from "@electric-sql/pglite/contrib/pg_trgm";
+import { unaccent } from "@electric-sql/pglite/contrib/unaccent";
 import { drizzle } from "drizzle-orm/pglite";
 import type { Database } from "./client.js";
 import { migrateUp, migrationsDirectory } from "./migrations.js";
@@ -14,9 +16,14 @@ export function pgliteExecutor(pg: PGlite): SqlExecutor {
   };
 }
 
+/** An in-process PostgreSQL with the extensions the search migration creates. */
+export function testPglite(): Promise<PGlite> {
+  return PGlite.create({ extensions: { pg_trgm, unaccent } });
+}
+
 /** A migrated, throw-away PostgreSQL for tests, with no server to run. */
 export async function createTestDatabase(): Promise<{ db: Database; close: () => Promise<void> }> {
-  const pg = new PGlite();
+  const pg = await testPglite();
   await migrateUp(pgliteExecutor(pg), migrationsDirectory);
   return { db: drizzle(pg) as unknown as Database, close: () => pg.close() };
 }

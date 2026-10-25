@@ -1,16 +1,16 @@
 import { readdirSync } from "node:fs";
-import { PGlite } from "@electric-sql/pglite";
+import type { PGlite } from "@electric-sql/pglite";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { migrateDown, migrateUp, migrationsDirectory } from "./migrations.js";
-import { pgliteExecutor } from "./testing.js";
+import { pgliteExecutor, testPglite } from "./testing.js";
 import type { SqlExecutor } from "./migrations.js";
 
 let pg: PGlite;
 let executor: SqlExecutor;
 const userId = "00000000-0000-4000-8000-000000000001";
 
-beforeEach(() => {
-  pg = new PGlite();
+beforeEach(async () => {
+  pg = await testPglite();
   executor = pgliteExecutor(pg);
 });
 afterEach(() => pg.close());

@@ -1,7 +1,7 @@
-import { PGlite } from "@electric-sql/pglite";
+import type { PGlite } from "@electric-sql/pglite";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { migrateUp, migrationsDirectory } from "./migrations.js";
-import { pgliteExecutor } from "./testing.js";
+import { pgliteExecutor, testPglite } from "./testing.js";
 import type { SqlExecutor } from "./migrations.js";
 
 let pg: PGlite;
@@ -10,7 +10,7 @@ const actorId = "00000000-0000-4000-8000-000000000001";
 const targetId = "00000000-0000-4000-8000-000000000002";
 
 beforeEach(async () => {
-  pg = new PGlite();
+  pg = await testPglite();
   executor = pgliteExecutor(pg);
   await migrateUp(executor, migrationsDirectory);
   await executor.query(
