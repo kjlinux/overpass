@@ -77,7 +77,7 @@ Any other change to `deploy/Caddyfile.example` is also copied by hand to `/etc/c
 
 ## Seed
 
-The seed is idempotent: it applies migrations, creates or promotes the admin account, writes the empty itinerary templates and, with `--content-dir`, the team content from `apps/api/content`. The admin account `admin@getoverpass.app` already exists in production, so the seed needs no password:
+The seed is idempotent: it applies migrations, creates or promotes the admin account, writes the empty itinerary templates and, with `--content-dir`, the team content from `apps/api/content`. A team itinerary still at version 1 takes the text of its file as version 2; one that anyone edited is left as it is. The admin account `admin@getoverpass.app` already exists in production, so the seed needs no password:
 
 ```bash
 ssh overpass 'sudo -u overpass -H bash -c "cd /srv/overpass && npm run db:seed -- --admin-email admin@getoverpass.app --country CI --content-dir /srv/overpass/apps/api/content --templates-dir /var/lib/overpass/route-templates"'

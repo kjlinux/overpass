@@ -76,6 +76,7 @@
     "content_required": "Write the content of the itinerary.",
     "content_too_long": "The content must not exceed 50,000 characters.",
     "state_invalid": "Choose one of the offered states.",
+    "potholes_invalid": "Only potholes=open is accepted, to keep the itineraries with an unresolved trap.",
     "environment_invalid": "Choose the environment: test or production.",
     "description_invalid": "Describe the trap in 10 to 2,000 characters.",
     "status_invalid": "Choose a status: confirmed or resolved.",

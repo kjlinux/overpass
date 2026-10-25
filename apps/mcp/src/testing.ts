@@ -51,7 +51,8 @@ export async function startLocalApi() {
   const revoke = async () => {
     await api.app.inject({ method: "DELETE", url: `/v1/tokens/${id}`, headers });
   };
-  return { ...seeded, baseUrl, token, revoke, close: api.close };
+  const publish = (overrides: Record<string, unknown>) => publishRoute(api.app, author, overrides);
+  return { ...seeded, baseUrl, token, revoke, publish, close: api.close };
 }
 
 /** An MCP client connected in memory to a server that calls the given API. */

@@ -42,12 +42,15 @@ export async function updateRoute(
   patch: RoutePatch,
   editorId: string,
   at: Date,
+  onlyVersion?: number,
 ): Promise<boolean> {
+  // The seed passes the version it read, so an edit made in between is never overwritten.
+  const sameVersion = onlyVersion === undefined ? undefined : eq(routes.version, onlyVersion);
   return db.transaction(async (tx) => {
     const [row] = await tx
       .update(routes)
       .set({ ...patch, version: sql`${routes.version} + 1`, updatedAt: at })
-      .where(and(eq(routes.id, id), isNull(routes.deletedAt)))
+      .where(and(eq(routes.id, id), isNull(routes.deletedAt), sameVersion))
       .returning({ version: routes.version, title: routes.title, content: routes.content });
     if (row === undefined) return false;
     await tx.insert(routeVersions).values({

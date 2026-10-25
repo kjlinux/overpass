@@ -76,6 +76,7 @@
     "content_required": "Rédigez le contenu de la fiche.",
     "content_too_long": "Le contenu ne doit pas dépasser 50 000 caractères.",
     "state_invalid": "Choisissez un état proposé.",
+    "potholes_invalid": "Seule la valeur potholes=open est acceptée, pour garder les itinéraires avec un piège non résolu.",
     "environment_invalid": "Choisissez l'environnement : test ou production.",
     "description_invalid": "Décrivez le piège en 10 à 2 000 caractères.",
     "status_invalid": "Choisissez un statut : confirmé ou résolu.",

@@ -22,7 +22,13 @@ WAVE_WEBHOOK_SECRET=wave_whs_xxxxxxxx
 WAVE_BASE=https://api.wave.com
 ```
 
-Dans `app/Http/Middleware/VerifyCsrfToken.php`, excluez `webhooks/wave`.
+Wave n'envoie pas de jeton CSRF : sans exclusion, Laravel répond 419 à chaque webhook. Depuis Laravel 11, l'exclusion se déclare dans `bootstrap/app.php`, car le fichier `app/Http/Middleware/VerifyCsrfToken.php` n'existe plus.
+
+```php
+->withMiddleware(function (Middleware $middleware) {
+    $middleware->validateCsrfTokens(except: ['webhooks/wave']);
+})
+```
 
 ## Paiement
 

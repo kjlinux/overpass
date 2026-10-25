@@ -2,6 +2,7 @@
 import { parseArgs } from "./args.js";
 import { describeEvent, detectLanguage, messagesFor } from "./messages.js";
 import { startRelay } from "./relay.js";
+import { readVersion } from "./version.js";
 
 const locale = Intl.DateTimeFormat().resolvedOptions().locale;
 const text = messagesFor(detectLanguage(process.env, locale));
@@ -10,6 +11,8 @@ const print = (line: string) => process.stdout.write(`${line}\n`);
 
 if (parsed.command === "help") {
   print(text.help);
+} else if (parsed.command === "version") {
+  print(readVersion(new URL("../package.json", import.meta.url)));
 } else if (parsed.command === "error") {
   process.stderr.write(`${text.errors[parsed.error]}\n`);
   process.exitCode = 2;

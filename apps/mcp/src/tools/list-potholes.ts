@@ -20,12 +20,11 @@ function readRoute(ctx: ToolContext, id: string): Promise<RouteDetail> {
 /** All MCP traffic shares the server's IP budget on the API, so a call reads few routes. */
 const maxRoutes = 10;
 
-/** The API has no pothole listing: the routes that carry some are read one by one, capped. */
+/** The API lists only routes with an open pothole, so the cap never hides one behind clean routes. */
 async function routesOf(ctx: ToolContext, service: string, country: string) {
-  const query = { service, country, limit: maxRoutes };
+  const query = { service, country, potholes: "open", limit: maxRoutes };
   const page = await ctx.client.get("/v1/routes", routePageSchema, query);
-  const withPotholes = page.items.filter((item) => item.unresolvedPotholes > 0);
-  const routes = await Promise.all(withPotholes.map((item) => readRoute(ctx, item.id)));
+  const routes = await Promise.all(page.items.map((item) => readRoute(ctx, item.id)));
   return { routes, truncated: page.nextCursor !== null };
 }
 

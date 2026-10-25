@@ -5,6 +5,7 @@ import type { Server } from "node:http";
 import { connect } from "node:net";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { startHttp } from "./http.js";
+import { messagesFor } from "./messages.js";
 import { startLocalApi } from "./testing.js";
 
 let api: Awaited<ReturnType<typeof startLocalApi>>;
@@ -58,6 +59,25 @@ describe("mcp over http", () => {
     expect(http.headersTimeout).toBe(10_000);
   });
 
+  it("explains each refusal instead of blaming the API", async () => {
+    const auth = { authorization: `Bearer ${api.token}` };
+    const message = async (response: Response) =>
+      ((await response.json()) as { error: { message: string } }).error.message;
+    const texts = [
+      await message(await post(JSON.stringify(list), { ...auth, origin: "https://evil.example" })),
+      await message(await fetch(url, { headers: auth })),
+      await message(await post(JSON.stringify([list, list]), auth)),
+      await message(await post("{}", auth, url.replace("/mcp", "/other"))),
+    ];
+    const { errors } = messagesFor("en");
+    expect(texts).toEqual([
+      errors.http_origin,
+      errors.http_method,
+      errors.http_body,
+      errors.http_path,
+    ]);
+  });
+
   it("only serves POST on /mcp", async () => {
     const auth = { authorization: `Bearer ${api.token}` };
     expect((await fetch(url, { headers: auth })).status).toBe(405);
@@ -87,10 +107,19 @@ describe("mcp over http", () => {
     await expect(startHttp(options)).rejects.toThrow();
   });
 
-  it("rejects an oversized or malformed body", async () => {
+  it("rejects an oversized or malformed body, each with its own message", async () => {
     const auth = { authorization: `Bearer ${api.token}` };
-    expect((await post("x".repeat(70_000), auth)).status).toBe(413);
-    expect((await post("{not json", auth)).status).toBe(400);
+    const { errors } = messagesFor("en");
+    const oversized = await post("x".repeat(70_000), auth);
+    expect(oversized.status).toBe(413);
+    expect(((await oversized.json()) as { error: { message: string } }).error.message).toBe(
+      errors.http_too_large,
+    );
+    const malformed = await post("{not json", auth);
+    expect(malformed.status).toBe(400);
+    expect(((await malformed.json()) as { error: { message: string } }).error.message).toBe(
+      errors.http_body,
+    );
   });
 
   it("runs a tool for the developer whose token is in the editor configuration", async () => {

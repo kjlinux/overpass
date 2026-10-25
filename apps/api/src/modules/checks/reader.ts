@@ -4,7 +4,7 @@ import type { AnyColumn } from "drizzle-orm";
 import type { Account, HandleDirectory } from "../accounts/index.js";
 import type { ChecksRepository } from "./model.js";
 import { toCheck, toPothole } from "./service/context.js";
-import { stateColumns, stateCondition } from "./state.js";
+import { openPotholesCondition, stateColumns, stateCondition } from "./state.js";
 
 const detailChecksLimit = 50;
 
@@ -48,6 +48,7 @@ export function createChecksReader(deps: ChecksReaderDeps) {
     stateColumns: (routeId: AnyColumn) => stateColumns(routeId, deps.now()),
     stateCondition: (routeId: AnyColumn, state: RouteState) =>
       stateCondition(routeId, deps.now(), state),
+    openPotholesCondition,
     community: async (
       routeId: string,
       authorId: string | null,

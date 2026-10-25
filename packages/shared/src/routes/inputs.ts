@@ -8,6 +8,7 @@ import {
   optionalFilter,
   pageSizeDefault,
   pageSizeMax,
+  potholesFilterSchema,
   routeStateSchema,
   serviceSlugSchema,
   stackSchema,
@@ -44,6 +45,7 @@ export const routeListQuery = z.object({
   stack: optionalFilter(stackSchema),
   language: optionalFilter(languageSchema),
   state: optionalFilter(routeStateSchema),
+  potholes: optionalFilter(potholesFilterSchema),
   cursor: optionalFilter(z.string().max(400, { error: "cursor_invalid" })),
   limit: z.coerce
     .number({ error: "limit_invalid" })

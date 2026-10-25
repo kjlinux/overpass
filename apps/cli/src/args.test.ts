@@ -53,6 +53,12 @@ describe("parseArgs", () => {
     },
   );
 
+  it("shows the version with --version or -v, whatever comes with it", () => {
+    expect(parseArgs(["--version"], {})).toEqual({ command: "version" });
+    expect(parseArgs(["-v"], {})).toEqual({ command: "version" });
+    expect(parseArgs(["listen", "--version"], {})).toEqual({ command: "version" });
+  });
+
   it("shows help without arguments or with --help", () => {
     expect(parseArgs([], {})).toEqual({ command: "help" });
     expect(parseArgs(["listen", "--help"], {})).toEqual({ command: "help" });

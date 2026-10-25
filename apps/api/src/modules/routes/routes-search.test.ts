@@ -86,5 +86,22 @@ describe("GET /v1/routes", () => {
   it("rejects a forged cursor and an unknown state", async () => {
     expect((await call(app, "GET", "/v1/routes?cursor=forged")).status).toBe(400);
     expect((await call(app, "GET", "/v1/routes?state=open")).status).toBe(400);
+    expect((await call(app, "GET", "/v1/routes?potholes=all")).status).toBe(400);
+  });
+
+  it("keeps only itineraries with an unresolved trap when potholes=open", async () => {
+    const page = (await call(app, "GET", "/v1/routes?stack=laravel")).body.data;
+    const [route] = page?.items as { id: string }[];
+    const reporter = await registerAccount(app, "reporter@example.com");
+    const payload = { description: "Le webhook arrive deux fois sans signature." };
+    const path = `/v1/routes/${route?.id ?? ""}/potholes`;
+    const pothole = (await call(app, "POST", path, { cookie: reporter, payload })).body.data;
+    expect(await titles("?potholes=open")).toEqual(["Encaisser un paiement Wave depuis Laravel"]);
+    const resolved = { status: "resolved" };
+    await call(app, "PATCH", `/v1/potholes/${String(pothole?.id)}`, {
+      cookie: author,
+      payload: resolved,
+    });
+    expect(await titles("?potholes=open")).toEqual([]);
   });
 });

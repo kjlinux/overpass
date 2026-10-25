@@ -72,14 +72,9 @@ describe("tripOf", () => {
 });
 
 describe("relayCommand", () => {
-  it("prints a copyable command with the key and the API origin", () => {
+  it("prints one line, which bash, zsh, PowerShell and cmd all accept as pasted", () => {
     expect(relayCommand({ origin: "https://overpass.example", key: "ovp_test_abc" })).toBe(
-      [
-        "npx overpass-cli listen \\",
-        "  --forward-to http://localhost:3000/webhook \\",
-        "  --key ovp_test_abc \\",
-        "  --api https://overpass.example",
-      ].join("\n"),
+      "npx overpass-cli listen --forward-to http://localhost:3000/webhook --key ovp_test_abc --api https://overpass.example",
     );
   });
 });

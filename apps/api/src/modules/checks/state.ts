@@ -29,6 +29,10 @@ export function stateColumns(routeId: AnyColumn, now: Date): StateColumns {
   };
 }
 
+export function openPotholesCondition(routeId: AnyColumn): SQL {
+  return sql`${unresolvedSql(routeId)} > 0`;
+}
+
 /** The same rule as routeState, in SQL, so the catalogue can filter on it. */
 export function stateCondition(routeId: AnyColumn, now: Date, state: RouteState): SQL {
   const since = freshnessStart(now).toISOString();

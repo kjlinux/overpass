@@ -1,5 +1,5 @@
 {
-  "help": "Usage : overpass listen --forward-to <url> --key <clé de test> --api <url de l'API Overpass>\n\nRejoue sur votre serveur local les webhooks simulés par la piste d'essai Overpass.\nConnexion sortante uniquement : ni tunnel, ni URL publique, ni port ouvert.\n\nOptions :\n  --forward-to  URL de votre serveur local, par exemple http://localhost:3000/webhook\n  --key         clé de test Overpass (ou variable OVERPASS_KEY)\n  --api         URL de l'API Overpass (ou variable OVERPASS_API_URL)\n  --help        affiche cette aide\n",
+  "help": "Usage : overpass listen --forward-to <url> --key <clé de test> --api <url de l'API Overpass>\n\nRejoue sur votre serveur local les webhooks simulés par la piste d'essai Overpass.\nConnexion sortante uniquement : ni tunnel, ni URL publique, ni port ouvert.\n\nOptions :\n  --forward-to  URL de votre serveur local, par exemple http://localhost:3000/webhook\n  --key         clé de test Overpass (ou variable OVERPASS_KEY)\n  --api         URL de l'API Overpass (ou variable OVERPASS_API_URL)\n  --help        affiche cette aide\n  --version     affiche la version\n",
   "ready": "Relais prêt pour {provider}, clé {keyPrefix}. Webhooks rejoués vers {forwardTo}. Ctrl+C pour arrêter.",
   "forwarded": "{time}  {eventType}  {status} en {duration} ms",
   "forward_failed": "{time}  {eventType}  échec : {error}",
