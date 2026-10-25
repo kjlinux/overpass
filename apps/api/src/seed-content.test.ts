@@ -75,8 +75,10 @@ afterEach(async () => {
 
 describe("seedContent", () => {
   it("seeds the three kinds of content once and recomputes the team's points", async () => {
-    expect(await seedContent(db, handle, dir, now)).toEqual({ routes: 1, threads: 1, posts: 1 });
-    expect(await seedContent(db, handle, dir, now)).toEqual({ routes: 0, threads: 0, posts: 0 });
+    const once = { members: 0, routes: 1, threads: 1, posts: 1 };
+    expect(await seedContent(db, handle, dir, now)).toEqual(once);
+    const twice = { members: 0, routes: 0, threads: 0, posts: 0 };
+    expect(await seedContent(db, handle, dir, now)).toEqual(twice);
     const [points] = await rows<{ points: number }>(
       sql`select points from member_points p join users u on u.id = p.user_id
         where u.handle = ${handle}`,
@@ -89,4 +91,46 @@ describe("seedContent", () => {
     await expect(seedContent(db, handle, dir, now)).rejects.toThrow("02-bad.md");
     expect(await rows(sql`select 1 from routes`)).toEqual([]);
   });
+
+  it("gives the members their points once their question gets a useful answer", async () => {
+    write("members/yao-dev.md", member("yao-dev"));
+    write("members/serge-tech.md", member("serge-tech"));
+    write("threads/fr/02-webhook.md", question("useful=yao-dev"));
+    expect(await seedContent(db, handle, dir, now)).toMatchObject({ members: 2, threads: 2 });
+    const [points] = await rows<{ points: number }>(
+      sql`select points from member_points p join users u on u.id = p.user_id
+        where u.handle = 'serge-tech'`,
+    );
+    expect(points?.points).toBeGreaterThan(0);
+  });
+
+  it("stops before writing anything when a handle names no member", async () => {
+    write("members/yao-dev.md", member("yao-dev"));
+    write("members/serge-tech.md", member("serge-tech"));
+    write("threads/fr/02-webhook.md", question("useful=ghost-member"));
+    await expect(seedContent(db, handle, dir, now)).rejects.toThrow("ghost-member");
+    expect(await rows(sql`select 1 from users where handle = 'yao-dev'`)).toEqual([]);
+    expect(await rows(sql`select 1 from routes`)).toEqual([]);
+  });
 });
+
+function member(name: string): string {
+  return ["---", `handle: ${name}`, "country: CI", "language: fr", "stacks: laravel"]
+    .concat(["joinedAt: 2026-10-23", "---"])
+    .join("\n");
+}
+
+function question(votes: string): string {
+  return [
+    "---",
+    'title: "Wave CI : le webhook ne revient jamais"',
+    "topic: integrations",
+    "language: fr",
+    "author: yao-dev",
+    "at: 2026-10-24T08:00",
+    "---",
+    "Le webhook n'arrive jamais.",
+    `@@ author=serge-tech at=2026-10-24T09:00 ${votes} accepted @@`,
+    "Vérifiez l'URL publique.",
+  ].join("\n");
+}

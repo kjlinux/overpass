@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { Database } from "../../db/client.js";
 import { createTestDatabase } from "../../db/testing.js";
 import { sampleJpeg, samplePng } from "../../testing-media.js";
-import { ensureAdmin } from "../accounts/index.js";
+import { ensureAdmin, seedMembers } from "../accounts/index.js";
 import { seedPosts } from "./seed.js";
 
 let db: Database;
@@ -119,6 +119,36 @@ describe("seedPosts", () => {
     await seedPosts(db, handle, [{ ...launchFr, cover: sampleJpeg }], at);
     expect(await coverOf("fr")).toBe(first);
     expect(await coverOf("en")).toBeNull();
+  });
+
+  it("publishes a member's story with its stars and comments, once", async () => {
+    const seeds = ["aminata-codes", "yao-dev", "kofi-builds"].map((name) => ({
+      handle: name,
+      country: "SN",
+      language: "fr" as const,
+      stacks: [],
+      joinedAt: at,
+    }));
+    const authors = (await seedMembers(db, seeds)).ids;
+    const story = {
+      ...launchFr,
+      kind: "member" as const,
+      category: "portraits" as const,
+      group: "salons",
+      title: "Je vous présente mon SaaS pour les salons",
+      author: "aminata-codes",
+      stars: ["yao-dev", "kofi-builds"],
+      comments: [
+        { author: "yao-dev", at: new Date("2026-10-24T12:00:00.000Z"), content: "Bravo !" },
+      ],
+    };
+    expect(await seedPosts(db, handle, [story], at, authors)).toEqual({ created: 1 });
+    expect(await seedPosts(db, handle, [story], at, authors)).toEqual({ created: 0 });
+    const [post] = await rows<{ kind: string; author: string; stars: number; comments: number }>(
+      sql`select p.kind, u.handle as author, p.star_count as stars, p.comment_count as comments
+        from posts p join users u on u.id = p.author_id`,
+    );
+    expect(post).toEqual({ kind: "member", author: "aminata-codes", stars: 2, comments: 1 });
   });
 
   it("refuses a handle that is not an admin", async () => {

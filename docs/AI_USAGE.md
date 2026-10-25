@@ -352,3 +352,12 @@ Both SKILL.md files were read in full before use. Instructions outside the proje
 - **User request, verbatim summary:** no password should be needed to run a seed.
 - **Change:** `SEED_ADMIN_PASSWORD` is optional. `ensureAdmin` looks the account up first and asks for the password only when it must create it, with an error naming the variable. README updated.
 - **TDD evidence:** the two new `accounts/seed.test.ts` cases were seen failing, then green. Other cases of that file time out at random in their database setup while about fifty Node processes from other sessions load the machine; each passed in a run.
+
+### 2026-10-25, Claude Code (Claude Opus 5.5), a living community in the seed
+
+- **User request, verbatim summary:** blog posts where members share their life and projects point by point, and discussion threads where someone describes a problem, others answer and like, under fictional usernames, so the site feels alive.
+- **User decisions:** no "demo" mention on these members; eight members, six personal posts, eight help threads; mostly French with some English.
+- **Content:** `apps/api/content/members/` (handle, country, language, stacks, join date), member posts and threads with `author:` and `at:`, and their replies, useful votes, accepted answer, comments and stars written as `@@ author=... at=... useful=... accepted @@` blocks in the Markdown body (`content/sections.ts`). The whole tree is validated before any write, including every handle it names (`content/authors.ts`).
+- **Safety:** seeded members get a password hash that matches nothing and an address under the reserved `.invalid` domain, no newsletter consent, so nobody can sign in as them and no mail can reach a real person.
+- **Seed:** `seedMembers` (accounts), `seedThreads` with replies, votes and accepted answer through the discussions repository, `seedPosts` with stars and comments through the blog repository, so every counter stays consistent; points are recomputed for every member. A thread or post already in the database is left as it is.
+- **TDD evidence:** `sections.test.ts`, the new `content.test.ts`, `seed-members.test.ts`, `discussions/seed.test.ts`, `blog/seed.test.ts` and `seed-content.test.ts` cases were seen failing, then green; `tree.test.ts` also checks that nothing is dated before its author joined or its thread opened.

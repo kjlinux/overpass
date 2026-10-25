@@ -4,6 +4,7 @@ import { sql } from "drizzle-orm";
 import type { Database } from "../../db/client.js";
 import { adminIdByHandle } from "../accounts/index.js";
 import { mediaStore } from "../media/index.js";
+import type { BlogRepository } from "./model.js";
 import { createBlogRepository } from "./repository.js";
 import { rows } from "./repository/sql.js";
 
@@ -19,7 +20,13 @@ export type PostSeed = {
   content: string;
   /** Translations share one buffer, so they share one stored image. */
   cover?: Buffer | undefined;
+  /** A member's handle; without it the post is the team's. */
+  author?: string | undefined;
+  stars?: readonly string[] | undefined;
+  comments?: readonly { author: string; at: Date; content: string }[] | undefined;
 };
+
+type Authors = ReadonlyMap<string, string>;
 
 type Stored = { id: string; translation_group: string; cover: string | null };
 type CoverStore = (cover: Buffer | undefined) => Promise<string | undefined>;
@@ -64,25 +71,49 @@ async function groupOf(db: Database, authorId: string, seed: PostSeed, seeds: re
   return undefined;
 }
 
-/** Publishes the team's articles once; a second run creates nothing. */
+function idOf(authors: Authors, handle: string): string {
+  const id = authors.get(handle);
+  if (id === undefined) throw new Error(`unknown author in the seed: ${handle}`);
+  return id;
+}
+
+/** Stars and comments come with the post: a post already there keeps the ones it has. */
+async function addReactions(
+  repository: BlogRepository,
+  postId: string,
+  seed: PostSeed,
+  authors: Authors,
+): Promise<void> {
+  for (const star of seed.stars ?? []) {
+    await repository.addStar(postId, idOf(authors, star), seed.publishedAt);
+  }
+  for (const comment of seed.comments ?? []) {
+    const authorId = idOf(authors, comment.author);
+    await repository.insertComment(postId, authorId, comment.content, comment.at);
+  }
+}
+
+/** Publishes the team's articles and the members' posts once; a second run creates nothing. */
 export async function seedPosts(
   db: Database,
   handle: string,
   seeds: readonly PostSeed[],
   at: Date,
+  authors: Authors = new Map(),
 ): Promise<{ created: number }> {
-  const authorId = await adminIdByHandle(db, handle);
+  const teamId = await adminIdByHandle(db, handle);
   const repository = createBlogRepository(db);
-  const covers = coverStore(db, authorId);
+  const covers = coverStore(db, teamId);
   let created = 0;
   for (const seed of seeds) {
+    const authorId = seed.author === undefined ? teamId : idOf(authors, seed.author);
     const existing = await stored(db, authorId, seed);
     if (existing !== null) {
       await addMissingCover(db, existing, seed, covers);
       continue;
     }
     const { kind, category, language, title, summary, content, publishedAt } = seed;
-    await repository.insertPost({
+    const postId = await repository.insertPost({
       ...{ kind, category, language, title, summary, content, publishedAt },
       coverMediaId: await covers(seed.cover),
       authorId,
@@ -91,6 +122,7 @@ export async function seedPosts(
       status: "published",
       at,
     });
+    await addReactions(repository, postId, seed, authors);
     created += 1;
   }
   return { created };
