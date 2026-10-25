@@ -8,11 +8,19 @@ import { at, fromPosts, listed, postColumns, posts, rows, toPost } from "./sql.j
 
 const day = 86_400_000;
 
+function preferred(language: FeedFilters["preferredLanguage"], now: Date): SQL | undefined {
+  if (language === undefined) return undefined;
+  return sql`(p.language = ${language} or not exists (select 1 from posts t
+    where t.translation_group = p.translation_group and t.language = ${language}
+    and ${listed("t", at(now))}))`;
+}
+
 function filtersOf(filters: FeedFilters): SQL {
   const parts = [
     listed("p", at(filters.now)),
     filters.category === undefined ? undefined : sql`p.category = ${filters.category}`,
     filters.language === undefined ? undefined : sql`p.language = ${filters.language}`,
+    preferred(filters.preferredLanguage, filters.now),
     filters.authorId === undefined ? undefined : sql`p.author_id = ${filters.authorId}`,
     filters.newsOnly === true ? sql`p.kind = 'news'` : undefined,
   ].filter((part) => part !== undefined);

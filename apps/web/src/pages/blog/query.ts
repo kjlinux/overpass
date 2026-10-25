@@ -1,5 +1,5 @@
 import { postCategories, postFeeds } from "@overpass/shared";
-import type { PostCategory, PostFeed } from "@overpass/shared";
+import type { Language, PostCategory, PostFeed } from "@overpass/shared";
 
 export type BlogQuery = { feed?: PostFeed; category?: PostCategory };
 
@@ -27,4 +27,16 @@ export function blogSearch(query: BlogQuery, cursor?: string): string {
   if (cursor !== undefined) params.set("cursor", cursor);
   const search = params.toString();
   return search === "" ? "" : `?${search}`;
+}
+
+/** The reader's language picks one version of each translated post, the others come as written. */
+export function postsPath(
+  query: BlogQuery & { author?: string },
+  language: Language,
+  cursor?: string,
+): string {
+  const params = new URLSearchParams(query.author === undefined ? {} : { author: query.author });
+  for (const [key, value] of new URLSearchParams(blogSearch(query, cursor))) params.set(key, value);
+  params.set("lang", language);
+  return `/v1/posts?${params.toString()}`;
 }

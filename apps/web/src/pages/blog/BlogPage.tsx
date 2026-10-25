@@ -7,7 +7,7 @@ import { Layout, localizedPath } from "../../layout";
 import { useSession } from "../../session";
 import { CategoryLinks, FeedTabs } from "./FeedTabs";
 import { Feed } from "./Feed";
-import { blogQueryFrom, blogSearch } from "./query";
+import { blogQueryFrom, postsPath } from "./query";
 
 function Header(): JSX.Element {
   const { t } = useTranslation("blog");
@@ -41,7 +41,7 @@ export function BlogPage(): JSX.Element {
   const language = useLanguage();
   const { url } = useLocation();
   const query = blogQueryFrom(url.includes("?") ? url.slice(url.indexOf("?") + 1) : "");
-  const path = (cursor?: string) => `/v1/posts${blogSearch(query, cursor)}`;
+  const path = (cursor?: string) => postsPath(query, language, cursor);
   return (
     <Layout language={language}>
       <section class="py-12 md:py-16">

@@ -56,6 +56,14 @@ describe("recent feed", () => {
     ]);
     expect(await feedSlugs(app, "?feed=news")).toEqual([]);
   });
+
+  it("shows one version per translation, in the reader's language when it exists", async () => {
+    const french = await daily(ada, "Encaisser avec Wave");
+    await daily(ada, "Collect with Wave", { language: "en", translationOf: french.id });
+    await daily(bob, "Only in English", { language: "en" });
+    expect(await feedSlugs(app, "?lang=fr")).toEqual(["only-in-english", "encaisser-avec-wave"]);
+    expect(await feedSlugs(app, "?lang=en")).toEqual(["only-in-english", "collect-with-wave"]);
+  });
 });
 
 describe("for me feed", () => {

@@ -8,7 +8,15 @@ import { setupTestI18n } from "../../i18n/test-i18n";
 import ui from "../../components/ui/locales/fr.json";
 import fr from "./locales/fr.json";
 import { emptyPost, postFormSchema } from "./postValues";
-import { ArticleView, FeedTabs, PostForm, PostList, blogQueryFrom, blogSearch } from "./index";
+import {
+  ArticleView,
+  FeedTabs,
+  PostForm,
+  PostList,
+  blogQueryFrom,
+  blogSearch,
+  postsPath,
+} from "./index";
 
 beforeAll(async () => {
   await setupTestI18n("fr");
@@ -75,6 +83,13 @@ describe("feed query in the URL", () => {
     });
     expect(blogQueryFrom("feed=trending")).toEqual({});
     expect(blogSearch({ category: "tutorials" }, "abc")).toBe("?category=tutorials&cursor=abc");
+  });
+
+  it("asks the API for the reader's language, an author's posts included", () => {
+    expect(postsPath({ feed: "news" }, "fr")).toBe("/v1/posts?feed=news&lang=fr");
+    expect(postsPath({ author: "ada-k" }, "en", "abc")).toBe(
+      "/v1/posts?author=ada-k&cursor=abc&lang=en",
+    );
   });
 });
 

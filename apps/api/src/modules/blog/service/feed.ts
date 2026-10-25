@@ -47,6 +47,7 @@ async function filtersOf(deps: BlogDeps, query: PostListQuery): Promise<FeedFilt
   return {
     category: query.category,
     language: query.language,
+    preferredLanguage: query.lang,
     authorId: member?.id,
     newsOnly: query.feed === "news",
     now: deps.now(),
