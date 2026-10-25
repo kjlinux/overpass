@@ -19,6 +19,7 @@ import type { AccountResolver } from "./modules/accounts/index.js";
 import { adminModule } from "./modules/admin/index.js";
 import type { ModerationLog } from "./modules/admin/index.js";
 import { registerBlog } from "./modules/blog/index.js";
+import { registerSearch } from "./modules/search/index.js";
 import type { ContributionListener } from "./modules/ranking/index.js";
 import { newsletterModule } from "./modules/newsletter/index.js";
 import { rankingModule } from "./modules/ranking/index.js";
@@ -109,6 +110,7 @@ async function registerModules(
   await registerStats(app, { db, now: clock });
   await registerMedia(app, { db, resolveAccount });
   await registerShare(app, { db, config, now: clock });
+  registerSearch(app, { db, now: clock });
   const community = { db, sender, resolveAccount, webOrigin: config.WEB_ORIGIN, now: clock };
   const ports = { onContribution: ranking.listener, moderationLog: admin.log };
   await registerCommunity(app, { ...community, ...ports, newsletter });

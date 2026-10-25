@@ -1,6 +1,7 @@
 import { desc, eq, sql } from "drizzle-orm";
 import type { SQL } from "drizzle-orm";
 import type { Database } from "../../../db/client.js";
+import { textQuery } from "../../../db/search.js";
 import type { ChecksReader } from "../../checks/index.js";
 import type { ListedRow, ListFilters } from "../model.js";
 import { routes, services } from "../tables.js";
@@ -8,11 +9,6 @@ import { rowSelection } from "./select.js";
 import { listedRoute } from "./visibility.js";
 
 const searchColumn = sql`"routes"."search"`;
-
-/** A query matched in every configuration, since a reader searches across languages. */
-function textQuery(q: string): SQL {
-  return sql`(websearch_to_tsquery('french', ${q}) || websearch_to_tsquery('english', ${q}) || websearch_to_tsquery('simple', ${q}))`;
-}
 
 function filterConditions(checks: ChecksReader, filters: ListFilters): (SQL | undefined)[] {
   return [

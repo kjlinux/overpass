@@ -18,6 +18,7 @@ export * from "./ranking/index.js";
 export * from "./redact/index.js";
 export * from "./requests/index.js";
 export * from "./blog/index.js";
+export * from "./search/index.js";
 export * from "./newsletter/index.js";
 export * from "./admin/index.js";
 export * from "./stats/index.js";
