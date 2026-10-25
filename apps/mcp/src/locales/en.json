@@ -18,7 +18,13 @@
     "not_found": "Nothing was found with this identifier.",
     "potholes_target": "Give either routeId, or both service and country.",
     "rate_limited": "Too many requests reached Overpass in the last minute. Wait a minute, then try again.",
-    "other": "The Overpass API refused the request (code {code})."
+    "other": "The Overpass API refused the request (code {code}).",
+    "http_origin": "A web page may not call the Overpass MCP server. Connect it from a code editor instead.",
+    "http_method": "The Overpass MCP server only accepts POST requests.",
+    "http_body": "The Overpass MCP server cannot read this request. Send a single JSON-RPC message in valid JSON.",
+    "http_too_large": "This request is too large for the Overpass MCP server. Send a shorter message.",
+    "http_path": "The Overpass MCP server only answers on /mcp. Check the address in the editor configuration.",
+    "http_internal": "The Overpass MCP server failed on this request. Try again in a moment."
   },
   "tools": {
     "search_routes": {

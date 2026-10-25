@@ -62,12 +62,14 @@ describe("the shipped content tree", () => {
     expect(await seedContent(db, handle, tree, now)).toEqual({
       members: 8,
       routes: 10,
+      routesUpdated: 0,
       threads: 20,
       posts: 16,
     });
     expect(await seedContent(db, handle, tree, now)).toEqual({
       members: 0,
       routes: 0,
+      routesUpdated: 0,
       threads: 0,
       posts: 0,
     });

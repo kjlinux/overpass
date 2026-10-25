@@ -75,9 +75,9 @@ afterEach(async () => {
 
 describe("seedContent", () => {
   it("seeds the three kinds of content once and recomputes the team's points", async () => {
-    const once = { members: 0, routes: 1, threads: 1, posts: 1 };
+    const once = { members: 0, routes: 1, routesUpdated: 0, threads: 1, posts: 1 };
     expect(await seedContent(db, handle, dir, now)).toEqual(once);
-    const twice = { members: 0, routes: 0, threads: 0, posts: 0 };
+    const twice = { members: 0, routes: 0, routesUpdated: 0, threads: 0, posts: 0 };
     expect(await seedContent(db, handle, dir, now)).toEqual(twice);
     const [points] = await rows<{ points: number }>(
       sql`select points from member_points p join users u on u.id = p.user_id

@@ -18,7 +18,13 @@
     "not_found": "Rien ne correspond à cet identifiant.",
     "potholes_target": "Donnez soit routeId, soit service et country ensemble.",
     "rate_limited": "Overpass a reçu trop de requêtes dans la dernière minute. Attendez une minute, puis réessayez.",
-    "other": "L'API Overpass a refusé la requête (code {code})."
+    "other": "L'API Overpass a refusé la requête (code {code}).",
+    "http_origin": "Une page web ne peut pas appeler le serveur MCP d'Overpass. Branchez-le depuis un éditeur de code.",
+    "http_method": "Le serveur MCP d'Overpass n'accepte que les requêtes POST.",
+    "http_body": "Le serveur MCP d'Overpass ne peut pas lire cette requête. Envoyez un seul message JSON-RPC, en JSON valide.",
+    "http_too_large": "Cette requête est trop volumineuse pour le serveur MCP d'Overpass. Envoyez un message plus court.",
+    "http_path": "Le serveur MCP d'Overpass ne répond que sur /mcp. Vérifiez l'adresse dans la configuration de l'éditeur.",
+    "http_internal": "Le serveur MCP d'Overpass a échoué sur cette requête. Réessayez dans un instant."
   },
   "tools": {
     "search_routes": {

@@ -52,11 +52,11 @@ async function route(options: HttpOptions, request: IncomingMessage, response: S
   const text = messagesFor(language);
   const token = bearerPattern.exec(request.headers.authorization ?? "")?.[1];
   if (url.pathname !== "/mcp") {
-    reject(response, 404, text.errors.not_found);
+    reject(response, 404, text.errors.http_path);
   } else if (request.headers.origin !== undefined) {
-    reject(response, 403, text.errors.bad_response);
+    reject(response, 403, text.errors.http_origin);
   } else if (request.method !== "POST") {
-    reject(response, 405, text.errors.bad_response);
+    reject(response, 405, text.errors.http_method);
   } else if (token === undefined) {
     reject(response, 401, text.errors.token_rejected);
   } else {
@@ -66,14 +66,20 @@ async function route(options: HttpOptions, request: IncomingMessage, response: S
 
 /** Nothing a client sends may reject this promise: one bad request must not stop the server. */
 function handler(options: HttpOptions) {
-  const fallback = messagesFor(options.language).errors.bad_response;
+  const { errors } = messagesFor(options.language);
   return async (request: IncomingMessage, response: ServerResponse) => {
     try {
       await route(options, request, response);
     } catch (error) {
       const status =
         error instanceof BodyError ? error.status : error instanceof TypeError ? 400 : 500;
-      if (!response.headersSent) reject(response, status, fallback);
+      const message =
+        status === 413
+          ? errors.http_too_large
+          : status < 500
+            ? errors.http_body
+            : errors.http_internal;
+      if (!response.headersSent) reject(response, status, message);
       else response.end();
     }
   };

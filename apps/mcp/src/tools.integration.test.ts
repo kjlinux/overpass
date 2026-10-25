@@ -75,6 +75,15 @@ describe("mcp tools against the local API", () => {
     expect(result.text).toContain(api.trapId);
   });
 
+  it("list_potholes by service and country looks past newer routes without traps", async () => {
+    for (let index = 0; index < 10; index += 1) {
+      await api.publish({ title: `Encaisser Wave sans piège, variante ${String(index)}` });
+    }
+    const result = await text("list_potholes", { service: "wave", country: "CI" });
+    expect(result.text).toContain(api.openPothole);
+    expect(result.text).not.toContain("Only the first");
+  });
+
   it("list_potholes refuses a call without a route or a service and country", async () => {
     const result = await text("list_potholes", { service: "wave" });
     expect(result.isError).toBe(true);

@@ -62,6 +62,7 @@ export type ListFilters = {
   stack?: string | undefined;
   language?: Language | undefined;
   state?: RouteState | undefined;
+  potholes?: "open" | undefined;
   after?: Cursor | undefined;
   limit: number;
 };

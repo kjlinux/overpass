@@ -78,7 +78,7 @@ Route::post('/webhooks/orange-money', function (Request $request) {
         $order->update(['paid_at' => now(), 'om_txnid' => $request->input('txnid')]);
     }
     return response()->noContent();
-})->withoutMiddleware([VerifyCsrfToken::class]);
+})->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\ValidateCsrfToken::class]);
 ```
 
 Avant de livrer, confirmez le statut côté serveur avec `POST /orange-money-webpay/ci/v1/transactionstatus` et les trois champs `order_id`, `amount`, `pay_token`. Le retour `SUCCESS` fait foi.

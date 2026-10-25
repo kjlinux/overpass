@@ -21,6 +21,7 @@ function filterConditions(checks: ChecksReader, filters: ListFilters): (SQL | un
     filters.stack === undefined ? undefined : eq(routes.stack, filters.stack),
     filters.language === undefined ? undefined : eq(routes.language, filters.language),
     filters.state === undefined ? undefined : checks.stateCondition(routes.id, filters.state),
+    filters.potholes === undefined ? undefined : checks.openPotholesCondition(routes.id),
   ];
 }
 

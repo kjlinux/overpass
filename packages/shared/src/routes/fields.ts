@@ -33,6 +33,8 @@ export const idSchema = z.uuid({ error: codeOr("id_invalid") });
 
 export const routeStateSchema = z.enum(routeStates, { error: codeOr("state_invalid") });
 
+export const potholesFilterSchema = z.enum(["open"], { error: codeOr("potholes_invalid") });
+
 export const environmentSchema = z.enum(["test", "production"], {
   error: codeOr("environment_invalid"),
 });

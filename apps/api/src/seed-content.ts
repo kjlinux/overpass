@@ -8,7 +8,13 @@ import { seedThreads } from "./modules/discussions/index.js";
 import { rankingModule } from "./modules/ranking/index.js";
 import { seedRoutes } from "./modules/routes/index.js";
 
-export type SeededContent = { members: number; routes: number; threads: number; posts: number };
+export type SeededContent = {
+  members: number;
+  routes: number;
+  routesUpdated: number;
+  threads: number;
+  posts: number;
+};
 
 const stderr = { error: (...args: unknown[]) => process.stderr.write(`${JSON.stringify(args)}\n`) };
 
@@ -34,6 +40,7 @@ export async function seedContent(
   return {
     members: members.created,
     routes: routes.created,
+    routesUpdated: routes.updated,
     threads: threads.created,
     posts: posts.created,
   };

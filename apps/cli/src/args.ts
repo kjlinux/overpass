@@ -10,6 +10,7 @@ export type ArgError =
 export type Parsed =
   | { command: "listen"; forwardTo: string; key: string; api: string }
   | { command: "help" }
+  | { command: "version" }
   | { command: "error"; error: ArgError };
 
 type Env = Record<string, string | undefined>;
@@ -46,6 +47,7 @@ const fail = (error: ArgError): Parsed => ({ command: "error", error });
 /** overpass listen --forward-to <url> [--key <key>] [--api <url>] */
 export function parseArgs(argv: readonly string[], env: Env): Parsed {
   const [command, ...rest] = argv;
+  if (argv.includes("--version") || argv.includes("-v")) return { command: "version" };
   if (command === undefined || argv.includes("--help") || argv.includes("-h"))
     return { command: "help" };
   if (command !== "listen") return fail("unknown_command");
