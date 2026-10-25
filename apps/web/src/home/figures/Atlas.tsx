@@ -28,7 +28,7 @@ export function Atlas({
         <li
           key={code}
           style={{ "--c": column, "--r": row }}
-          class="flex min-h-12 flex-wrap items-center gap-x-3 gap-y-1 border-b border-r border-rule bg-paper p-3"
+          class="flex min-h-12 flex-col items-start gap-1 border-b border-r border-rule bg-paper p-3"
         >
           <b class="font-code font-medium md:text-h3">{code}</b>
           <span class="text-caption md:leading-tight">
