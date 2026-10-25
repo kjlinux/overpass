@@ -8,35 +8,54 @@ import { at, fromPosts, listed, postColumns, posts, rows, toPost } from "./sql.j
 
 const day = 86_400_000;
 
-function preferred(language: FeedFilters["preferredLanguage"], now: Date): SQL | undefined {
-  if (language === undefined) return undefined;
-  return sql`(p.language = ${language} or not exists (select 1 from posts t
-    where t.translation_group = p.translation_group and t.language = ${language}
-    and ${listed("t", at(now))}))`;
-}
+type Alias = "p" | "t";
+/** Where a post may show in the feed being read, beyond the shared filters. */
+type Scope = (alias: Alias) => SQL;
 
-function filtersOf(filters: FeedFilters): SQL {
+const anywhere: Scope = () => sql`true`;
+
+function matching(filters: FeedFilters, alias: Alias): SQL {
+  const a = sql.raw(alias);
   const parts = [
-    listed("p", at(filters.now)),
-    filters.category === undefined ? undefined : sql`p.category = ${filters.category}`,
-    filters.language === undefined ? undefined : sql`p.language = ${filters.language}`,
-    preferred(filters.preferredLanguage, filters.now),
-    filters.authorId === undefined ? undefined : sql`p.author_id = ${filters.authorId}`,
-    filters.newsOnly === true ? sql`p.kind = 'news'` : undefined,
+    listed(alias, at(filters.now)),
+    filters.category === undefined ? undefined : sql`${a}.category = ${filters.category}`,
+    filters.language === undefined ? undefined : sql`${a}.language = ${filters.language}`,
+    filters.authorId === undefined ? undefined : sql`${a}.author_id = ${filters.authorId}`,
+    filters.newsOnly === true ? sql`${a}.kind = 'news'` : undefined,
   ].filter((part) => part !== undefined);
   return sql.join(parts, sql` and `);
 }
 
-const followedBy = (viewerId: string) =>
-  sql`p.author_id in (select followee_id from follows where follower_id = ${viewerId})`;
+// The other version hides this one only if it would show in the same feed, or the article vanishes.
+function filtersOf(filters: FeedFilters, scope: Scope): SQL {
+  const language = filters.preferredLanguage;
+  if (language === undefined) return matching(filters, "p");
+  return sql`${matching(filters, "p")} and (p.language = ${language} or not exists (
+    select 1 from posts t where t.translation_group = p.translation_group
+    and t.language = ${language} and ${matching(filters, "t")} and ${scope("t")}))`;
+}
+
+const followedBy = (alias: Alias, viewerId: string) =>
+  sql`${sql.raw(alias)}.author_id in (select followee_id from follows where follower_id = ${viewerId})`;
+
+function forMeScope(filters: FeedFilters, viewerId: string | null): Scope {
+  const since = new Date(filters.now.getTime() - blogRules.recentDays * day);
+  return (alias) => {
+    const recentEnough = sql`${sql.raw(alias)}.published_at >= ${at(since)}`;
+    return viewerId === null
+      ? recentEnough
+      : sql`(${followedBy(alias, viewerId)} or ${recentEnough})`;
+  };
+}
 
 /** Followed authors, newest first; skipped once the cursor has reached the second tier. */
 function followedBranch(filters: FeedFilters, viewerId: string | null, after?: FeedCursor): SQL {
-  const active = viewerId === null || after?.tier === 1 ? sql`false` : followedBy(viewerId);
+  const active = viewerId === null || after?.tier === 1 ? sql`false` : followedBy("p", viewerId);
   const page =
     after === undefined ? sql`true` : sql`(p.published_at, p.id) < (${at(after.at)}, ${after.id})`;
+  const where = filtersOf(filters, forMeScope(filters, viewerId));
   return sql`select ${postColumns(false)}, 0 as tier, 0 as rank ${fromPosts}
-    where ${active} and ${filtersOf(filters)} and ${page}
+    where ${active} and ${where} and ${page}
     order by p.published_at desc, p.id desc limit ${filters.limit + 1}`;
 }
 
@@ -44,13 +63,16 @@ function followedBranch(filters: FeedFilters, viewerId: string | null, after?: F
 function topRatedBranch(filters: FeedFilters, viewerId: string | null, after?: FeedCursor): SQL {
   const since = new Date(filters.now.getTime() - blogRules.recentDays * day);
   const others =
-    viewerId === null ? sql`true` : sql`(p.author_id is null or not (${followedBy(viewerId)}))`;
+    viewerId === null
+      ? sql`true`
+      : sql`(p.author_id is null or not (${followedBy("p", viewerId)}))`;
   const page =
     after?.tier === 1
       ? sql`(p.star_count, p.published_at, p.id) < (${after.stars}, ${at(after.at)}, ${after.id})`
       : sql`true`;
+  const where = filtersOf(filters, forMeScope(filters, viewerId));
   return sql`select ${postColumns(false)}, 1 as tier, p.star_count as rank ${fromPosts}
-    where ${filtersOf(filters)} and p.published_at >= ${at(since)} and ${others} and ${page}
+    where ${where} and p.published_at >= ${at(since)} and ${others} and ${page}
     order by p.star_count desc, p.published_at desc, p.id desc limit ${filters.limit + 1}`;
 }
 
@@ -73,7 +95,7 @@ function recent(db: Database, filters: FeedFilters, after?: DateCursor) {
     after === undefined ? sql`true` : sql`(p.published_at, p.id) < (${at(after.at)}, ${after.id})`;
   return posts(
     db,
-    sql`select ${postColumns(false)} ${fromPosts} where ${filtersOf(filters)} and ${page}
+    sql`select ${postColumns(false)} ${fromPosts} where ${filtersOf(filters, anywhere)} and ${page}
       order by p.published_at desc, p.id desc limit ${filters.limit + 1}`,
   );
 }

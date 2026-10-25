@@ -20,12 +20,17 @@ export function blogQueryFrom(search: string): BlogQuery {
   };
 }
 
-export function blogSearch(query: BlogQuery, cursor?: string): string {
+function feedParams(query: BlogQuery & { author?: string }, cursor?: string): URLSearchParams {
   const params = new URLSearchParams();
+  if (query.author !== undefined) params.set("author", query.author);
   if (query.feed !== undefined) params.set("feed", query.feed);
   if (query.category !== undefined) params.set("category", query.category);
   if (cursor !== undefined) params.set("cursor", cursor);
-  const search = params.toString();
+  return params;
+}
+
+export function blogSearch(query: BlogQuery, cursor?: string): string {
+  const search = feedParams(query, cursor).toString();
   return search === "" ? "" : `?${search}`;
 }
 
@@ -35,8 +40,7 @@ export function postsPath(
   language: Language,
   cursor?: string,
 ): string {
-  const params = new URLSearchParams(query.author === undefined ? {} : { author: query.author });
-  for (const [key, value] of new URLSearchParams(blogSearch(query, cursor))) params.set(key, value);
+  const params = feedParams(query, cursor);
   params.set("lang", language);
   return `/v1/posts?${params.toString()}`;
 }
