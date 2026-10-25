@@ -10,7 +10,8 @@
   "checks": "Checks",
   "potholes": "Confirmed potholes",
   "points": "Points",
-  "pointsCaption": "Published itinerary 10, check 2, confirmed pothole 5.",
+  "pointsCaption": "Published itinerary 10, published article 10, confirmed pothole 5, accepted reply 5, check 2, useful reply 1, star received 1.",
+  "confirmed": "Confirmed member",
   "emptyTitle": "No contribution yet",
   "emptyText": "This member's itineraries, checks and potholes will appear here.",
   "retry": "Try again"

@@ -1,6 +1,8 @@
 import { ok } from "@overpass/shared";
 import type { FastifyInstance } from "fastify";
 import { parseInput } from "../../http/validate.js";
+import { writeLimit } from "../../limits/index.js";
+import type { RequestTrust } from "../../limits/index.js";
 import { requireAccount } from "../accounts/index.js";
 import type { AccountResolver } from "../accounts/index.js";
 import {
@@ -27,7 +29,12 @@ const limits = {
   report: { max: 30, timeWindow: hour },
 };
 
-type Context = { app: FastifyInstance; service: RoutesService; resolve: AccountResolver };
+type Context = {
+  app: FastifyInstance;
+  service: RoutesService;
+  resolve: AccountResolver;
+  confirmed: RequestTrust;
+};
 
 function readRoutes({ app, service, resolve }: Context): void {
   app.get("/v1/services", async () => ok(await service.services()));
@@ -44,8 +51,9 @@ function readRoutes({ app, service, resolve }: Context): void {
   );
 }
 
-function writeRoutes({ app, service, resolve }: Context): void {
-  app.post("/v1/routes", { config: { rateLimit: limits.create } }, async (request, reply) => {
+function writeRoutes({ app, service, resolve, confirmed }: Context): void {
+  const createOptions = { config: { rateLimit: writeLimit(limits.create, confirmed) } };
+  app.post("/v1/routes", createOptions, async (request, reply) => {
     const account = await requireAccount(resolve, request);
     const id = await service.create(account, parseInput(routeCreateInput, request.body));
     return reply.code(201).send(ok(await service.read(id, account)));
@@ -79,11 +87,13 @@ export function registerRoutesRoutes(
   app: FastifyInstance,
   service: RoutesService,
   resolve: AccountResolver,
+  confirmed: RequestTrust,
 ): void {
   app.addHook("onSend", async (_request, reply) => {
     reply.header("cache-control", "no-store");
   });
-  readRoutes({ app, service, resolve });
-  writeRoutes({ app, service, resolve });
-  reportRoutes({ app, service, resolve });
+  const context = { app, service, resolve, confirmed };
+  readRoutes(context);
+  writeRoutes(context);
+  reportRoutes(context);
 }

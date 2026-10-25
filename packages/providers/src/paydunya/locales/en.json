@@ -7,7 +7,7 @@
     "The hash is the SHA-512 of the MasterKey, as documented. In the IPN, the MasterKey is the secret shown on the track for your key; send that secret in PAYDUNYA-MASTER-KEY so confirm returns the same hash.",
     "The IPN is posted as application/x-www-form-urlencoded, fields under data with brackets (data[invoice][token]), as the documentation's PHP example reads them; the exact encoding is not described there.",
     "Scenarios give the documented statuses: completed for success, failed for insufficient funds (empty fail_reason, the documentation only fills it for card payments), pending with no IPN for the timeout.",
-    "The IPN goes to the target chosen on the test track, not to actions.callback_url.",
+    "The IPN goes to the target chosen on the Simulator, not to actions.callback_url.",
     "The documentation only describes the success code 00: the simulator's refusals carry codes OVP-400, OVP-401, OVP-404 and OVP-429, which are not PayDunya's.",
     "receipt_url points to a simulator page, not a PDF receipt; the default customer is made up.",
     "Payment and redistribution (direct-pay/credit-account) is not simulated."

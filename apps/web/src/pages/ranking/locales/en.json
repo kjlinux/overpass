@@ -31,6 +31,8 @@
     "accepted": "Accepted reply",
     "useful": "Reply found useful",
     "articles": "Published article",
+    "stars": "Star received on an article",
+    "trust": "From {{count}} points on, you become a confirmed member. You can then write on your blog, your report counts twice and your writing quotas are three times larger. The status follows your points.",
     "points_one": "{{count}} point",
     "points_other": "{{count}} points"
   }

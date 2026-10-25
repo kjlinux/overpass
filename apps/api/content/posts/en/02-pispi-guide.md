@@ -1,5 +1,5 @@
 ---
-title: "PI-SPI step by step on the test track"
+title: "PI-SPI step by step on the Simulator"
 kind: news
 category: tutorials
 language: en
@@ -9,11 +9,11 @@ summary: "Get a token, create a payment request, watch it get paid and receive t
 publishedAt: 2026-10-23
 ---
 
-PI-SPI is the interoperable instant payment platform of the BCEAO, shared by the eight WAEMU countries. Its official sandbox requires a client certificate: the Overpass test track reproduces the same routes without a certificate, with failure scenarios added, so you can write your integration today and point it at the official sandbox tomorrow.
+PI-SPI is the interoperable instant payment platform of the BCEAO, shared by the eight WAEMU countries. Its official sandbox requires a client certificate: the Overpass Simulator reproduces the same routes without a certificate, with failure scenarios added, so you can write your integration today and point it at the official sandbox tomorrow.
 
 ## 1. A test key
 
-Open the test track, pick PI-SPI and create a key. It acts as the OAuth 2 client id and secret for the simulator. No sign-up is needed for a first try.
+Open the Simulator, pick PI-SPI and create a key. It acts as the OAuth 2 client id and secret for the simulator. No sign-up is needed for a first try.
 
 ## 2. The token
 
@@ -35,7 +35,7 @@ authorization: Bearer <token>
 { "amount": 2500, "currency": "XOF", "payerAlias": "+221770000000", "reference": "CMD-1042" }
 ```
 
-The test track answers as specification 1.5.0 describes, with the request id and its initial state. Scenarios are triggered by the amount or the alias: each scenario page gives the value to use to get a refusal, an expiry or a success.
+The Simulator answers as specification 1.5.0 describes, with the request id and its initial state. Scenarios are triggered by the amount or the alias: each scenario page gives the value to use to get a refusal, an expiry or a success.
 
 ## 4. The webhook on your machine
 

@@ -31,7 +31,9 @@
   },
   "editors": {
     "intro": "The configurations below hold a placeholder token. Once you create a token, settings show the same configurations with your real token.",
-    "readOnly": "The server is read-only and embeds no AI model: your assistant brings its own. It reads Overpass only through the API, with your token; a revoked token is refused on the very next call."
+    "readOnly": "The server is read-only and embeds no AI model: your assistant brings its own. It reads Overpass only through the API, with your token; a revoked token is refused on the very next call.",
+    "guide": "The Simulator repeats these steps at the bottom of its page, next to the guide that brings webhooks to your computer with overpass-cli.",
+    "guideLink": "See the Simulator guides"
   },
   "tools": {
     "caption": "The four MCP server tools",

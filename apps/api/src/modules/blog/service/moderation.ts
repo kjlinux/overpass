@@ -1,4 +1,9 @@
-import { blogReportEligibility, statusAfterAction, statusAfterPostReports } from "@overpass/shared";
+import {
+  blogReportEligibility,
+  reportWeight,
+  statusAfterAction,
+  statusAfterPostReports,
+} from "@overpass/shared";
 import type { BlogContentKind, ModerationAction, ModerationStatus } from "@overpass/shared";
 import { AppError } from "../../../http/app-error.js";
 import type { Account } from "../../accounts/index.js";
@@ -27,6 +32,12 @@ async function reportable(deps: BlogDeps, account: Account, kind: BlogContentKin
   return target;
 }
 
+/** Open reports summed by weight, so one confirmed member is enough to hide content. */
+async function weightOf(deps: BlogDeps, reporters: string[]): Promise<number> {
+  const confirmed = await deps.trust.confirmedAmong(reporters);
+  return reporters.reduce((total, userId) => total + reportWeight(confirmed.has(userId)), 0);
+}
+
 async function report(deps: BlogDeps, account: Account, kind: BlogContentKind, id: string) {
   const target = await reportable(deps, account, kind, id);
   const eligibility = blogReportEligibility({
@@ -40,7 +51,7 @@ async function report(deps: BlogDeps, account: Account, kind: BlogContentKind, i
   if (eligibility === "already_reported" || open === null) {
     throw new AppError("already_reported", 409);
   }
-  const moderation = statusAfterPostReports(target.moderation, open);
+  const moderation = statusAfterPostReports(target.moderation, await weightOf(deps, open));
   if (moderation !== target.moderation) {
     await deps.repository.setModeration(kind, id, moderation);
     await deps.onContribution([target.earner]);

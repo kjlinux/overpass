@@ -1,6 +1,8 @@
 import { ok } from "@overpass/shared";
 import type { FastifyInstance } from "fastify";
 import { parseInput } from "../../http/validate.js";
+import { writeLimit } from "../../limits/index.js";
+import type { RequestTrust } from "../../limits/index.js";
 import { requireAccount } from "../accounts/index.js";
 import type { AccountResolver } from "../accounts/index.js";
 import { checkCreateInput, idParams, potholeCreateInput, potholeUpdateInput } from "./schemas.js";
@@ -15,10 +17,15 @@ const limits = {
   statuses: { max: 60, timeWindow: hour },
 };
 
-type Context = { app: FastifyInstance; service: ChecksService; resolve: AccountResolver };
+type Context = {
+  app: FastifyInstance;
+  service: ChecksService;
+  resolve: AccountResolver;
+  confirmed: RequestTrust;
+};
 
-function checkRoutes({ app, service, resolve }: Context): void {
-  const options = { config: { rateLimit: limits.checks } };
+function checkRoutes({ app, service, resolve, confirmed }: Context): void {
+  const options = { config: { rateLimit: writeLimit(limits.checks, confirmed) } };
   app.post("/v1/routes/:id/checks", options, async (request, reply) => {
     const account = await requireAccount(resolve, request);
     const { id } = parseInput(idParams, request.params);
@@ -30,8 +37,8 @@ function checkRoutes({ app, service, resolve }: Context): void {
   );
 }
 
-function potholeRoutes({ app, service, resolve }: Context): void {
-  const reportOptions = { config: { rateLimit: limits.potholes } };
+function potholeRoutes({ app, service, resolve, confirmed }: Context): void {
+  const reportOptions = { config: { rateLimit: writeLimit(limits.potholes, confirmed) } };
   app.post("/v1/routes/:id/potholes", reportOptions, async (request, reply) => {
     const account = await requireAccount(resolve, request);
     const { id } = parseInput(idParams, request.params);
@@ -52,10 +59,11 @@ export function registerChecksRoutes(
   app: FastifyInstance,
   service: ChecksService,
   resolve: AccountResolver,
+  confirmed: RequestTrust,
 ): void {
   app.addHook("onSend", async (_request, reply) => {
     reply.header("cache-control", "no-store");
   });
-  checkRoutes({ app, service, resolve });
-  potholeRoutes({ app, service, resolve });
+  checkRoutes({ app, service, resolve, confirmed });
+  potholeRoutes({ app, service, resolve, confirmed });
 }

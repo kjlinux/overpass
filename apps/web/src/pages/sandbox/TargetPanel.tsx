@@ -23,6 +23,9 @@ function Relay({ item, secret, origin }: Pick<Props, "item" | "secret" | "origin
     <div class="mt-4 space-y-3">
       <CodeBlock code={relayCommand({ origin, key })} language={caption} />
       <p class="text-caption text-ink-2">{t("target.relayHelp")}</p>
+      <a class="inline-flex min-h-tap items-center" href="#sandbox-tools-cli">
+        {t("target.guide")}
+      </a>
     </div>
   );
 }

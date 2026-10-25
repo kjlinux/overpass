@@ -31,7 +31,9 @@
   },
   "editors": {
     "intro": "Les configurations ci-dessous contiennent un jeton fictif. Après la création d'un jeton, les paramètres affichent les mêmes configurations avec votre vrai jeton.",
-    "readOnly": "Le serveur est en lecture seule et n'embarque aucun modèle d'IA : c'est votre assistant qui apporte le sien. Il lit Overpass uniquement à travers l'API, avec votre jeton ; un jeton révoqué est refusé dès l'appel suivant."
+    "readOnly": "Le serveur est en lecture seule et n'embarque aucun modèle d'IA : c'est votre assistant qui apporte le sien. Il lit Overpass uniquement à travers l'API, avec votre jeton ; un jeton révoqué est refusé dès l'appel suivant.",
+    "guide": "Le Simulateur reprend ces étapes en bas de sa page, à côté du guide qui fait arriver les webhooks sur votre ordinateur avec overpass-cli.",
+    "guideLink": "Voir les guides du Simulateur"
   },
   "tools": {
     "caption": "Les quatre outils du serveur MCP",

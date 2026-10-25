@@ -11,7 +11,7 @@ Source : spécification PI-SPI API Business 1.5.0 sur developer.pispi.bceao.int,
 ## Prérequis
 
 - Un enregistrement « business » auprès d'un participant PI-SPI (banque, établissement de monnaie électronique) qui vous remet un identifiant et un secret OAuth 2.
-- Sur le bac à sable officiel, un certificat client : l'accès est en TLS mutuel. La piste d'essai Overpass reproduit les mêmes routes sans certificat, pour commencer tout de suite.
+- Sur le bac à sable officiel, un certificat client : l'accès est en TLS mutuel. Le Simulateur Overpass reproduit les mêmes routes sans certificat, pour commencer tout de suite.
 - Node.js 20 ou plus.
 
 ## Installation
@@ -63,7 +63,7 @@ export async function requestPayment(order, payerAlias) {
 }
 ```
 
-Les noms exacts des champs dépendent de la version de la spécification que votre participant expose : vérifiez-les dans le document 1.5.0 et dans la piste d'essai, qui les cite.
+Les noms exacts des champs dépendent de la version de la spécification que votre participant expose : vérifiez-les dans le document 1.5.0 et dans le Simulateur, qui les cite.
 
 ## Webhook
 
@@ -79,7 +79,7 @@ app.post("/webhooks/pispi", express.json(), async (request, response) => {
 
 ## Pièges connus
 
-- Le TLS mutuel du bac à sable officiel bloque la plupart des développeurs le premier jour. Commencez sur la piste d'essai Overpass, puis demandez le certificat à votre participant.
+- Le TLS mutuel du bac à sable officiel bloque la plupart des développeurs le premier jour. Commencez sur le Simulateur Overpass, puis demandez le certificat à votre participant.
 - Les alias (numéro de téléphone, identifiant marchand) ont une limite de création : l'API répond « Dépassement de limite de création d'alias ». Ne créez pas un alias par commande.
 - Confirmer ou annuler deux fois la même demande renvoie une erreur explicite (« déjà confirmée », « déjà annulée »). Traitez-la comme un succès idempotent.
 - Le quota d'appels renvoie 429. Mettez le jeton en cache et ne sondez pas l'état plus d'une fois toutes les quelques secondes.

@@ -11,3 +11,4 @@ export { relayCommand } from "./command";
 export { tripOf } from "./trip";
 export { GuidedDemo } from "./GuidedDemo";
 export { curlOf } from "./command";
+export { ToolsSection } from "./ToolsSection";

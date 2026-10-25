@@ -11,6 +11,7 @@ export const pointsBreakdownSchema = z.object({
   accepted: z.number().int(),
   useful: z.number().int(),
   articles: z.number().int(),
+  stars: z.number().int(),
 });
 
 export const countryRankSchema = z.object({

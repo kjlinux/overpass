@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import type { Page } from "@playwright/test";
 import { locale, path } from "./i18n.js";
-import { promoteAdmin, resetRateLimits } from "./admin.js";
+import { confirmMember, promoteAdmin, resetRateLimits } from "./admin.js";
 import { stampOf } from "./itineraries.js";
 import { handleOf, newMember } from "./members.js";
 
@@ -62,6 +62,7 @@ test("publish, follow, comment, star, lead the For me feed, then the admin hides
   const stamp = stampOf(test.info().project.name);
   const title = `Encaisser avec Wave ${stamp}`;
   const author = await newMember(browser, `blog-author-${stamp}`);
+  await confirmMember(`blog-author-${stamp}`);
   await publish(author, title);
   const articleUrl = author.url();
   const reader = await newMember(browser, `blog-reader-${stamp}`);

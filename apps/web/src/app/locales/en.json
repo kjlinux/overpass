@@ -1,8 +1,17 @@
 {
   "app": {
     "name": "Overpass",
-    "tagline": "Integrate any API without guesswork.",
-    "intro": "Overpass gathers integration sheets for every API, mobile payment, SMS, USSD or anything else, sorted by service, country and stack. Each sheet gives the code that works, the known traps and the date of the last try. A test track simulates the operators without a merchant account, and an MCP server serves the sheets to your code assistant.",
+    "taglines": [
+      "Plugging in an API should not take a week.",
+      "Testing a payment should not require a merchant account.",
+      "Receiving a webhook should not require a tunnel.",
+      "Your code assistant should not have to guess an API.",
+      "An integration should not break in silence.",
+      "A mobile money payment should not take three weeks."
+    ],
+    "typingPause": "Pause the title",
+    "typingPlay": "Play the title",
+    "intro": "Overpass gathers integration sheets for every API, mobile payment, SMS, USSD or anything else, sorted by service, country and stack. Each sheet gives the code that works, the known traps and the date of the last try. A simulator reproduces the operators without a merchant account, and an MCP server serves the sheets to your code assistant.",
     "demo": "Try the demo",
     "routes": "Browse the itineraries"
   },
@@ -25,10 +34,10 @@
       "request": "Your site sends the payment request.",
       "response": "The operator answered {{status}}, the payment is in progress. The confirmation is on its way.",
       "webhook": "Payment confirmed, the webhook reached the demo server, which stands in for your server here.",
-      "webhookFailed": "The confirmation did not arrive. Replay it from the test track.",
+      "webhookFailed": "The confirmation did not arrive. Replay it from the Simulator.",
       "failed": "The simulator is not answering. Try again in a moment."
     },
     "more": "To try it with your own server, create a test key on the",
-    "open": "test track"
+    "open": "Simulator"
   }
 }

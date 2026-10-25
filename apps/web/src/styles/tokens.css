@@ -1,14 +1,14 @@
 :root {
-  --color-paper: #fbfbf9;
-  --color-surface: #f3f3f0;
-  --color-surface-raised: #fdfdfb;
-  --color-rule: #d4d4d0;
+  --color-paper: #fcfcfd;
+  --color-surface: #f2f2f4;
+  --color-surface-raised: #ffffff;
+  --color-rule: #d4d4d8;
   --color-rule-strong: #7a7a80;
   --color-ink: #1a1a1c;
   --color-ink-2: #55555a;
   --color-accent: #213e9e;
   --color-accent-active: #1a3283;
-  --color-accent-ink: #fbfbf9;
+  --color-accent-ink: #fcfcfd;
   --color-accent-surface: #e6ebf9;
   --color-success: #1d6b3a;
   --color-success-surface: #e3f2e7;

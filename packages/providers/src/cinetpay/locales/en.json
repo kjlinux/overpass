@@ -11,7 +11,7 @@
     "The notification is a JSON POST carrying notify_token, merchant_transaction_id, transaction_id and status, with no signature header. Compare notify_token with the one kept at creation, in constant time, then check the payment with GET /v1/payment/{id}: never trust the status received.",
     "Scenarios give the README's statuses: SUCCESS for success, INSUFFICIENT_BALANCE for insufficient funds, PENDING with no notification for the timeout. A duplicate notification carries the same transaction_id, the README's deduplication key.",
     "The status is settled at creation: GET /v1/payment/{id} already returns it, even before a late notification arrives.",
-    "The notification goes to the target chosen on the test track, not to notify_url. Answer it with HTTP 200 within 10 seconds, as the README asks.",
+    "The notification goes to the target chosen on the Simulator, not to notify_url. Answer it with HTTP 200 within 10 seconds, as the README asks.",
     "Refusals carry code, status and message; the README only names INVALID_TOKEN and EXPIRED_TOKEN, the other statuses are the simulator's. Amounts in responses are strings, as the README says.",
     "Transfers and the balance, described in the README, are not simulated."
   ],

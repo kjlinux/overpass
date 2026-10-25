@@ -1,5 +1,6 @@
 import type { FastifyInstance } from "fastify";
 import type { Database } from "../../db/client.js";
+import type { RequestTrust } from "../../limits/index.js";
 import type { AccountResolver, HandleDirectory } from "../accounts/index.js";
 import type { ChecksReader, RouteDirectory } from "../checks/index.js";
 import type { RouteLookup, ThreadDirectory } from "../discussions/index.js";
@@ -22,6 +23,7 @@ export type RoutesOptions = {
   checks: ChecksReader;
   handles: HandleDirectory;
   resolveAccount: AccountResolver;
+  confirmed: RequestTrust;
   threads: ThreadDirectory;
   onContribution: ContributionListener;
   now: () => Date;
@@ -75,7 +77,7 @@ export async function registerRoutes(app: FastifyInstance, options: RoutesOption
     now: options.now,
   });
   await app.register((scope) => {
-    registerRoutesRoutes(scope, service, options.resolveAccount);
+    registerRoutesRoutes(scope, service, options.resolveAccount, options.confirmed);
     return Promise.resolve();
   });
 }

@@ -9,7 +9,7 @@
       "text": "Des fiches d'intégration pour un service, un pays et une stack, avec le code qui marche, les pièges connus et des vérifications datées par d'autres développeurs."
     },
     "track": {
-      "name": "La piste d'essai.",
+      "name": "Le Simulateur.",
       "text": "Un simulateur qui rejoue chez un opérateur simulé les cas réels d'un paiement mobile, pour tester sans compte marchand."
     },
     "mcp": {

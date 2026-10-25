@@ -22,7 +22,7 @@ afterEach(() => {
 describe("App", () => {
   it("renders the home page under a language prefix, inside the layout", async () => {
     const { html } = await renderAt("/fr");
-    expect(html).toContain(fr.app.tagline);
+    expect(html).toContain(fr.app.taglines[0]);
     expect(html).toContain('aria-label="Navigation principale"');
     expect(html).toContain("<footer");
   });

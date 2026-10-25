@@ -12,7 +12,7 @@ Source : developers.paydunya.com, section Checkout Invoice et IPN, consultée le
 
 - Un compte PayDunya avec une boutique en Côte d'Ivoire ; quatre valeurs dans le tableau de bord : clé maître, clé privée, clé publique, jeton.
 - Django 5, Python 3.11 ou plus, le paquet `requests`.
-- Une URL publique en HTTPS pour l'IPN. En développement, le relais local d'Overpass rejoue l'IPN du simulateur sur votre poste.
+- Une URL publique en HTTPS pour l'IPN. En développement, la commande overpass-cli fait arriver l'IPN du Simulateur Overpass sur votre ordinateur.
 
 ## Installation
 

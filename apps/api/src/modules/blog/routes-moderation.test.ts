@@ -1,7 +1,7 @@
 import type { FastifyInstance } from "fastify";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { Database } from "../../db/client.js";
-import { feedSlugs, rss, writePost } from "../../testing-blog.js";
+import { confirmMember, feedSlugs, rss, writePost } from "../../testing-blog.js";
 import type { WrittenPost } from "../../testing-blog.js";
 import { promoteAdmin } from "../../testing-discussions.js";
 import { call, testClock } from "../../testing-routes.js";
@@ -19,6 +19,7 @@ let post: WrittenPost;
 beforeEach(async () => {
   ({ app, db, close } = await createTestApp({ now: testClock().now }));
   author = await registerAccount(app, "author@example.com");
+  await confirmMember(app, author);
   first = await registerAccount(app, "first@example.com");
   second = await registerAccount(app, "second@example.com");
   admin = await registerAccount(app, "admin@example.com");
@@ -86,10 +87,10 @@ describe("admin decisions", () => {
     const asAuthor = await call(app, "GET", `/v1/posts/${post.slug}?lang=fr`, { cookie: author });
     expect(asAuthor.status).toBe(404);
     const handle = await handleOf(app, author);
-    expect((await call(app, "GET", `/v1/users/${handle}`)).body.data?.points).toBe(0);
+    expect((await call(app, "GET", `/v1/users/${handle}`)).body.data?.points).toBe(20);
     await moderate(admin, "restore");
     expect(await everywhere()).toEqual({ feed: [post.slug], blog: [post.slug], rss: true });
-    expect((await call(app, "GET", `/v1/users/${handle}`)).body.data?.points).toBe(10);
+    expect((await call(app, "GET", `/v1/users/${handle}`)).body.data?.points).toBe(30);
   });
 
   it("suspends a blog: its posts vanish and its author cannot publish", async () => {

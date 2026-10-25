@@ -17,7 +17,9 @@ test("the demo button takes the keyboard to the embedded demo, which shows a del
 }) => {
   const app = locale("app");
   await page.goto(path("/"));
-  await expect(page.getByRole("heading", { level: 1, name: app.app.tagline })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { level: 1, name: app.app.taglines[0] ?? "" }),
+  ).toBeVisible();
   await page.getByRole("button", { name: app.app.demo }).click();
   const run = page.getByRole("button", { name: app.demo.run });
   await expect(run).toBeFocused();

@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { fileURLToPath } from "node:url";
 import { locale, path } from "./i18n.js";
-import { resetRateLimits } from "./admin.js";
+import { confirmMember, resetRateLimits } from "./admin.js";
 import { stampOf } from "./itineraries.js";
 import { newMember } from "./members.js";
 
@@ -15,7 +15,9 @@ test("an author adds a cover and an image to an article, and readers see both", 
   test.setTimeout(90_000);
   const { editor } = locale("blog");
   const title = `Capture du simulateur ${stampOf(test.info().project.name)}`;
-  const author = await newMember(browser, `blog-images-${stampOf(test.info().project.name)}`);
+  const name = `blog-images-${stampOf(test.info().project.name)}`;
+  const author = await newMember(browser, name);
+  await confirmMember(name);
   await author.goto(path("/blog/write"));
   const main = author.getByRole("main");
   await main.getByLabel(editor.title, { exact: true }).fill(title);

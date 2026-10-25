@@ -1,4 +1,5 @@
 import type { FastifyInstance } from "fastify";
+import type { RequestTrust } from "../../limits/index.js";
 import type { AccountResolver } from "../accounts/index.js";
 import { moderationRoutes } from "./routes/moderation.js";
 import { readRoutes, writeRoutes } from "./routes/posts.js";
@@ -10,11 +11,12 @@ export function registerBlogRoutes(
   app: FastifyInstance,
   service: BlogService,
   resolve: AccountResolver,
+  confirmed: RequestTrust,
 ): void {
   app.addHook("onSend", async (_request, reply) => {
     if (!reply.hasHeader("cache-control")) reply.header("cache-control", "no-store");
   });
-  const context = { app, service, resolve };
+  const context = { app, service, resolve, confirmed };
   readRoutes(context);
   writeRoutes(context);
   socialRoutes(context);

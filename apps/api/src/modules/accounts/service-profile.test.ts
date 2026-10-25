@@ -80,6 +80,7 @@ describe("publicProfile", () => {
       stacks: ["django"],
       contributions: { routes: 0, checks: 0, potholes: 0 },
       points: 0,
+      confirmed: false,
       memberSince: awa.createdAt.toISOString(),
     });
     expect(JSON.stringify(profile)).not.toContain("awa@example.com");

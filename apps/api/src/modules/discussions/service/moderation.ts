@@ -1,4 +1,9 @@
-import { reportEligibility, statusAfterDecision, statusAfterReports } from "@overpass/shared";
+import {
+  reportEligibility,
+  reportWeight,
+  statusAfterDecision,
+  statusAfterReports,
+} from "@overpass/shared";
 import type { ContentKind, ContentStatus, ModerationDecision } from "@overpass/shared";
 import { AppError } from "../../../http/app-error.js";
 import type { Account } from "../../accounts/index.js";
@@ -24,6 +29,13 @@ async function targetOf(deps: DiscussionsDeps, kind: ContentKind, id: string): P
   return { authorId: thread.authorId, status: thread.status, earners: [accepted?.authorId] };
 }
 
+/** Open reports summed by weight, so one confirmed member is enough to hide content. */
+async function weightOf(deps: DiscussionsDeps, kind: ContentKind, id: string): Promise<number> {
+  const reporters = await deps.repository.openReporters(kind, id);
+  const confirmed = await deps.trust.confirmedAmong(reporters);
+  return reporters.reduce((total, userId) => total + reportWeight(confirmed.has(userId)), 0);
+}
+
 function requireAdmin(account: Account): void {
   if (account.role !== "admin") throw new AppError("admin_only", 403);
 }
@@ -40,7 +52,7 @@ async function report(deps: DiscussionsDeps, account: Account, kind: ContentKind
   if (eligibility === "unavailable") throw new AppError("content_unavailable", 409);
   const inserted = await repository.insertReport(kind, id, account.id, deps.now());
   if (eligibility === "already_reported" || !inserted) throw new AppError("already_reported", 409);
-  const status = statusAfterReports(target.status, await repository.openReports(kind, id));
+  const status = statusAfterReports(target.status, await weightOf(deps, kind, id));
   if (status !== target.status) {
     await repository.setStatus(kind, id, status);
     await deps.onContribution(target.earners);

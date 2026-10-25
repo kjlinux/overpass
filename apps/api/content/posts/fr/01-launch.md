@@ -15,7 +15,7 @@ Overpass est la bourse des intégrations africaines vérifiées. Les développeu
 
 **Les itinéraires.** Des fiches classées par service, pays et stack. Chaque fiche affiche son état : voie libre quand des membres l'ont vérifiée récemment, à vérifier quand personne ne l'a confirmée, signalée cassée quand un piège ouvert la bloque. L'état n'est jamais saisi : il se calcule à partir des vérifications.
 
-**La piste d'essai.** Un simulateur qui rejoue les cas réels d'un paiement mobile money sans compte marchand : Wave, PayDunya, CinetPay et PI-SPI pour commencer. Les webhooks signés arrivent sur votre poste avec une seule commande, sans tunnel ni certificat.
+**Le Simulateur.** Un simulateur qui rejoue les cas réels d'un paiement mobile money sans compte marchand : Wave, PayDunya, CinetPay et PI-SPI pour commencer. Les webhooks signés arrivent sur votre poste avec une seule commande, sans tunnel ni certificat.
 
 **Le serveur MCP.** Il sert les fiches aux assistants de code, pour que l'IA de votre éditeur écrive la bonne intégration locale au lieu d'une intégration imaginaire.
 

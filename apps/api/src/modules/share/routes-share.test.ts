@@ -6,7 +6,7 @@ import type { FastifyInstance } from "fastify";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import type { Database } from "../../db/client.js";
 import { moderateRoute, registerAdmin } from "../../testing-admin.js";
-import { writePost } from "../../testing-blog.js";
+import { confirmMember, writePost } from "../../testing-blog.js";
 import { call, publishRoute, testClock } from "../../testing-routes.js";
 import { createTestApp, registerAccount, webOrigin } from "../../testing.js";
 
@@ -39,6 +39,7 @@ beforeEach(async () => {
   const config = { WEB_DIST_DIR: dist };
   ({ app, db, close } = await createTestApp({ now: testClock().now, config }));
   author = await registerAccount(app, "author@example.com");
+  await confirmMember(app, author);
 });
 afterEach(() => close());
 

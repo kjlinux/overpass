@@ -1,12 +1,12 @@
 import type { FastifyBaseLogger, FastifyInstance } from "fastify";
 import type { Database } from "../../db/client.js";
 import type { DeletionEffects } from "../accounts/index.js";
-import type { ContributionListener, PointsSource } from "./model.js";
+import type { ContributionListener, PointsSource, TrustSource } from "./model.js";
 import { createRankingRepository } from "./repository.js";
 import { registerRankingRoutes } from "./routes.js";
 import { createRankingService } from "./service.js";
 
-export type { ContributionListener, PointsSource } from "./model.js";
+export type { ContributionListener, PointsSource, TrustSource } from "./model.js";
 
 type Logger = Pick<FastifyBaseLogger, "error">;
 
@@ -23,6 +23,10 @@ export function rankingModule(db: Database, now: () => Date, log: Logger) {
     }
   };
   const points: PointsSource = (userId) => service.pointsOf(userId);
+  const trust: TrustSource = {
+    isConfirmed: (userId) => service.isConfirmed(userId),
+    confirmedAmong: (userIds) => service.confirmedAmong(userIds),
+  };
   const deletion: DeletionEffects = {
     affected: (userId) => repository.voteRecipients(userId),
     done: (userIds) => listener(userIds),
@@ -33,5 +37,5 @@ export function rankingModule(db: Database, now: () => Date, log: Logger) {
       return Promise.resolve();
     });
   };
-  return { listener, points, deletion, register };
+  return { listener, points, trust, deletion, register };
 }

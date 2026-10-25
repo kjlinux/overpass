@@ -2,7 +2,7 @@ import type { FastifyInstance } from "fastify";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { Database } from "../../db/client.js";
 import type { MailMessage } from "../../mail/mailer.js";
-import { star, writePost } from "../../testing-blog.js";
+import { confirmMember, star, writePost } from "../../testing-blog.js";
 import { openThread, promoteAdmin, replyTo } from "../../testing-discussions.js";
 import { sampleIssue, sendIssue, subscribe, subscribeConfirmed } from "../../testing-newsletter.js";
 import { call, publishRoute, testClock } from "../../testing-routes.js";
@@ -24,6 +24,7 @@ beforeEach(async () => {
   admin = await registerAccount(app, "admin@example.com");
   await promoteAdmin(db, "admin@example.com");
   member = await registerAccount(app, "member@example.com", "SN");
+  await confirmMember(app, member);
 });
 afterEach(() => close());
 

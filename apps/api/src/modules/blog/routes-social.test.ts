@@ -1,6 +1,6 @@
 import type { FastifyInstance } from "fastify";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { follow, star, writePost } from "../../testing-blog.js";
+import { confirmMember, follow, star, writePost } from "../../testing-blog.js";
 import type { WrittenPost } from "../../testing-blog.js";
 import { call, testClock } from "../../testing-routes.js";
 import { createTestApp, handleOf, registerAccount } from "../../testing.js";
@@ -16,6 +16,7 @@ beforeEach(async () => {
   clock = testClock();
   ({ app, close } = await createTestApp({ now: clock.now }));
   ada = await registerAccount(app, "ada@example.com");
+  await confirmMember(app, ada);
   bob = await registerAccount(app, "bob@example.com", "SN");
   post = await writePost(app, ada);
 });
@@ -32,11 +33,11 @@ const detail = async (cookie?: string) =>
 
 describe("stars", () => {
   it("gives one star per account and one point to the author", async () => {
-    expect(await points(ada)).toBe(10);
+    expect(await points(ada)).toBe(30);
     expect((await star(app, bob, post.id)).body.data).toEqual({ stars: 1, starred: true });
     expect((await star(app, bob, post.id)).body.error).toMatchObject({ code: "already_starred" });
     expect(await detail(bob)).toMatchObject({ stars: 1, viewer: { starred: true } });
-    expect(await points(ada)).toBe(11);
+    expect(await points(ada)).toBe(31);
   });
 
   it("refuses a star on one's own post and takes a star back", async () => {
@@ -44,7 +45,7 @@ describe("stars", () => {
     await star(app, bob, post.id);
     const removed = await call(app, "DELETE", `/v1/posts/${post.id}/star`, { cookie: bob });
     expect(removed.body.data).toEqual({ stars: 0, starred: false });
-    expect(await points(ada)).toBe(10);
+    expect(await points(ada)).toBe(30);
   });
 });
 
@@ -93,7 +94,7 @@ describe("account deletion", () => {
       cookie: bob,
       payload: { password: "correct horse battery" },
     });
-    expect(await points(ada)).toBe(10);
+    expect(await points(ada)).toBe(30);
     expect(await detail()).toMatchObject({ stars: 0, comments: 0 });
     await call(app, "DELETE", "/v1/me", {
       cookie: ada,

@@ -13,5 +13,5 @@
   "webhookLimit": "Un business peut configurer maximum 20 webhooks",
   "simulatorInvalidField": "Valeur invalide pour ce champ (texte du simulateur)",
   "simulatorPayerName": "Client simulé Overpass",
-  "simulatorSecretNote": "Secret visible sur la piste d'essai Overpass, pour la clé de test utilisée (texte du simulateur)"
+  "simulatorSecretNote": "Secret visible sur le Simulateur Overpass, pour la clé de test utilisée (texte du simulateur)"
 }

@@ -1,6 +1,6 @@
 import type { FastifyInstance } from "fastify";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { samplePost, writePost } from "../../testing-blog.js";
+import { confirmMember, samplePost, writePost } from "../../testing-blog.js";
 import { samplePng, upload } from "../../testing-media.js";
 import { call } from "../../testing-routes.js";
 import { createTestApp, registerAccount } from "../../testing.js";
@@ -13,6 +13,7 @@ let bob: string;
 beforeEach(async () => {
   ({ app, close } = await createTestApp());
   ada = await registerAccount(app, "ada@example.com");
+  await confirmMember(app, ada);
   bob = await registerAccount(app, "bob@example.com", "SN");
 });
 afterEach(() => close());

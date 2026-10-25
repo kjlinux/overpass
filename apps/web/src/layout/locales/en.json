@@ -14,7 +14,7 @@
   "signOut": "Log out",
   "nav": {
     "routes": "Itineraries",
-    "sandbox": "Test track",
+    "sandbox": "Simulator",
     "discussions": "Discussions",
     "blog": "Blog",
     "docs": "Docs",
@@ -36,7 +36,7 @@
   },
   "links": {
     "routes": "Itineraries",
-    "sandbox": "Test track",
+    "sandbox": "Simulator",
     "pricing": "Pricing",
     "docs": "Documentation",
     "discussions": "Discussions",

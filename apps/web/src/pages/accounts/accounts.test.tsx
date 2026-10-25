@@ -59,6 +59,7 @@ describe("public profile", () => {
     stacks: ["laravel"],
     contributions: { routes: 0, checks: 0, potholes: 0 },
     points: 0,
+    confirmed: false,
     memberSince: "2026-10-12T10:00:00.000Z",
   };
 

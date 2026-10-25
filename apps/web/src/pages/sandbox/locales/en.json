@@ -1,14 +1,14 @@
 {
-  "title": "Test track",
+  "title": "Simulator",
   "intro": "Call a simulated provider with a test key, choose what should go wrong, then read the request, the response and every webhook. No merchant account, no real money.",
   "openapi": "Simulator OpenAPI reference",
   "noProviders": {
     "title": "No simulated provider yet",
-    "text": "The test track opens as soon as an administrator publishes a first simulated provider."
+    "text": "The Simulator opens as soon as an administrator publishes a first simulated provider."
   },
   "visitor": {
     "heading": "A test key is waiting for you",
-    "body": "Sign in to create a key, call the simulator from your code and receive the webhooks on your machine.",
+    "body": "Sign in to create a key, call the simulated providers from your code and receive the webhooks on your computer.",
     "signIn": "Sign in",
     "demo": "Try the demo without an account"
   },
@@ -20,9 +20,9 @@
     "version": "Version",
     "consulted": "Consulted on",
     "countries": "Countries",
-    "choices": "What the simulator decides where the documentation is silent",
+    "choices": "What the Simulator decides where the documentation is silent",
     "officialSandbox": "The provider's official sandbox",
-    "unavailable": "This provider has no simulator yet. Here are the ones that do."
+    "unavailable": "This provider is not simulated yet. Here are the ones that are."
   },
   "scenario": {
     "heading": "Scenario",
@@ -58,7 +58,7 @@
     "use": "Use",
     "revoke": "Revoke",
     "revokeTitle": "Revoke this key?",
-    "revokeBody": "Calls and relays using it are refused at once. Its history stays visible for 7 days.",
+    "revokeBody": "Calls and overpass-cli commands using it are refused at once. Its history stays visible for 7 days.",
     "revokeConfirm": "Revoke the key",
     "secret": "Webhook secret",
     "secretHelp": "Check the webhook signature with this secret, as you would with the provider's.",
@@ -71,8 +71,8 @@
       "help": "Read every webhook here, nothing to install."
     },
     "relay": {
-      "label": "Local relay on my machine",
-      "help": "For your development server: no public URL, no tunnel."
+      "label": "On my computer, with overpass-cli",
+      "help": "Webhooks reach your development server, with no public URL and no tunnel."
     },
     "url": {
       "label": "My public URL",
@@ -80,7 +80,8 @@
     },
     "terminal": "Terminal, your key is already in",
     "terminalPrefix": "Terminal: replace the key prefix with your full key",
-    "relayHelp": "The command opens an outgoing connection to Overpass and replays each webhook on your server, body and headers untouched.",
+    "relayHelp": "Run in your terminal, this command connects to Overpass and passes each webhook to your local server, body and headers untouched.",
+    "guide": "See the step-by-step guide",
     "urlLabel": "URL that receives the webhooks",
     "urlHelp": "Overpass checks it again before each delivery and follows no redirect.",
     "save": "Save the URL",
@@ -104,7 +105,7 @@
     "headers": "Headers",
     "last": "Last call, {{time}}",
     "emptyTitle": "No call yet",
-    "emptyBody": "Run a simulated payment, or call the simulator from your code with this key."
+    "emptyBody": "Run a simulated payment, or call the simulated provider from your code with this key."
   },
   "deliveries": {
     "heading": "Deliveries",
@@ -118,7 +119,7 @@
     "trip": "Webhook trip",
     "stops": {
       "overpass": "Overpass",
-      "relay": "Local relay",
+      "relay": "overpass-cli on your computer",
       "internet": "Internet",
       "server": "Your server",
       "url": "Your URL",
@@ -137,33 +138,75 @@
     }
   },
   "demo": {
-    "title": "Test track demo",
+    "title": "Simulator demo",
     "intro": "A simulated Wave payment, no account needed: pick a scenario, run it, and watch the webhook arrive.",
     "scenarios": "Demo scenario",
     "button": "Run the demo",
     "waiting": "The webhook is on its way.",
     "done": "Webhook received.",
-    "more": "For your own calls and the local relay, create a test key.",
+    "more": "To run your own calls and receive the webhooks on your computer, create a test key in the",
     "failed": "The demo could not start. Try again in a moment."
   },
   "launchPage": {
     "title": "Simulated payment",
     "body": "This page stands in for the {{provider}} payment page during your tests. Your key's scenario decides the outcome: there is nothing to pay here.",
     "session": "Session",
-    "back": "Back to the test track"
+    "back": "Back to the Simulator"
   },
   "errors": {
-    "load": "The test track could not load your keys. Try again in a moment.",
+    "load": "The Simulator could not load your keys. Try again in a moment.",
     "action": "The action did not go through. Try again in a moment."
   },
   "guided": {
     "heading": "Guided demo",
-    "intro": "{{count}} steps, from the token to the webhook received on your machine. Copy each command into your terminal, or play the step from this page: the response shows in the inspector.",
+    "intro": "{{count}} steps, from the token to the webhook received on your computer. Copy each command into your terminal, or play the step from this page: the response shows in the inspector.",
     "step": "Step {{number}}",
     "copy": "Command to copy",
     "play": "Play the step",
     "result": "Response {{status}}",
-    "webhookTitle": "Webhook received locally",
-    "webhook": "Start the local relay, then replay the step that creates the payment: the webhook reaches your server, signed with the provider's scheme."
+    "webhookTitle": "Webhook received on your computer",
+    "webhook": "Start the overpass-cli command, then replay the step that creates the payment. The webhook reaches your server, signed with the provider's scheme."
+  },
+  "tools": {
+    "heading": "Tools",
+    "intro": "The first guide brings the Simulator's webhooks to your computer. The second plugs your code assistant into the verified Overpass routes.",
+    "cli": {
+      "heading": "Receive the webhooks on your computer",
+      "intro": "The overpass-cli command connects to Overpass from your computer and passes each webhook to your development server. It needs no public URL, no tunnel and no open port, only Node.js 20 or later.",
+      "terminal": "Terminal",
+      "key": {
+        "title": "Create a test key",
+        "text": "In the Test key block, create a key and copy it at once, since it is shown only once."
+      },
+      "target": {
+        "title": "Choose your computer",
+        "text": "In Where webhooks go, choose On my computer, with overpass-cli. The command then shows with your key already in."
+      },
+      "run": {
+        "title": "Run the command",
+        "text": "Put your key in place of ovp_test_... and your local server address after --forward-to, then run the command in a terminal. Leave it running, Ctrl+C stops it."
+      },
+      "check": {
+        "title": "Run a payment and check",
+        "text": "Run the simulated payment. The webhook reaches your server and Deliveries shows its status and duration. Check the signature with the webhook secret, then replay the delivery as often as you need."
+      }
+    },
+    "mcp": {
+      "heading": "Plug your code assistant into the routes",
+      "intro": "The Overpass MCP server gives Claude Code, Cursor or VS Code the verified routes, their state and their potholes. It is read-only and needs a personal token, which is not the test key.",
+      "token": {
+        "title": "Create a personal token",
+        "text": "In the settings, Tokens tab, create a token for the MCP server use. It is shown only once.",
+        "link": "Open the tokens"
+      },
+      "config": {
+        "title": "Paste the configuration",
+        "text": "Pick your editor, copy its configuration and put your token in place of the placeholder token."
+      },
+      "ask": {
+        "title": "Ask your question",
+        "text": "Ask your assistant, for example, to integrate a Wave payment in your Laravel project by following the Overpass route. It finds the route, reads its state and writes the code from it."
+      }
+    }
   }
 }

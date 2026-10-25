@@ -3,6 +3,7 @@ import type { JSX } from "preact";
 import { useTranslation } from "react-i18next";
 import { Button } from "../components/ui";
 import { localizedPath } from "../layout";
+import { TypedPromise } from "./typing/TypedPromise";
 
 type Props = { language: Language; onTry: () => void };
 
@@ -12,7 +13,7 @@ export function Hero({ language, onTry }: Props): JSX.Element {
   return (
     <div>
       <div class="pb-8 pt-10 lg:pb-9 lg:pt-12">
-        <h1 class="home-promise">{t("app.tagline")}</h1>
+        <TypedPromise phrases={t("app.taglines", { returnObjects: true }) as string[]} />
       </div>
       <div class="grid border-t border-rule md:grid-cols-[7fr_5fr]">
         <p class="max-w-[60ch] py-5 text-[18px] leading-[1.55] md:pr-8">{t("app.intro")}</p>

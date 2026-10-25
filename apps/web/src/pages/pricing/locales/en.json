@@ -15,8 +15,8 @@
       "action": "Create a free account",
       "features": {
         "catalogue": "The catalogue of integration sheets, to read, publish and check",
-        "track": "The test track: test keys, replayable scenarios, inspector and webhook log",
-        "relay": "The local webhook relay to your machine",
+        "track": "The Simulator, with its test keys, replayable scenarios, inspector and webhook log",
+        "relay": "The overpass-cli command, which brings webhooks to your computer",
         "mcp": "The read-only MCP server, with your personal tokens",
         "community": "Discussions, the blog, the newsletter and the ranking"
       }

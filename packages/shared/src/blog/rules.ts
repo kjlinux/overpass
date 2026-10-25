@@ -19,12 +19,10 @@ export function isListed(post: ListingFacts, now: Date): boolean {
   );
 }
 
-export function statusAfterPostReports(
-  status: ModerationStatus,
-  distinctReports: number,
-): ModerationStatus {
+/** The weight is the sum of the open reports, where a confirmed member counts twice. */
+export function statusAfterPostReports(status: ModerationStatus, weight: number): ModerationStatus {
   if (status !== "visible") return status;
-  return distinctReports >= blogRules.hideAfterReports ? "hidden" : "visible";
+  return weight >= blogRules.hideAfterReports ? "hidden" : "visible";
 }
 
 export function statusAfterAction(action: ModerationAction): ModerationStatus {
@@ -32,15 +30,17 @@ export function statusAfterAction(action: ModerationAction): ModerationStatus {
   return action === "block" ? "blocked" : "visible";
 }
 
-export type WriteEligibility = "allowed" | "admin_only" | "blog_suspended";
+export type WriteEligibility = "allowed" | "admin_only" | "blog_suspended" | "not_confirmed";
 
 export function writeEligibility(facts: {
   kind: PostKind;
   role: "member" | "admin";
   suspended: boolean;
+  confirmed: boolean;
 }): WriteEligibility {
   if (facts.kind === "news") return facts.role === "admin" ? "allowed" : "admin_only";
-  return facts.suspended ? "blog_suspended" : "allowed";
+  if (facts.suspended) return "blog_suspended";
+  return facts.confirmed || facts.role === "admin" ? "allowed" : "not_confirmed";
 }
 
 export type StarEligibility = "allowed" | "own_post" | "already_starred" | "unavailable";

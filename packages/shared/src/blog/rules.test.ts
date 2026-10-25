@@ -57,16 +57,21 @@ describe("statusAfterAction", () => {
 });
 
 describe("writeEligibility", () => {
+  const member = { kind: "member", role: "member", suspended: false, confirmed: true } as const;
+
   it("reserves news to admins", () => {
-    expect(writeEligibility({ kind: "news", role: "member", suspended: false })).toBe("admin_only");
-    expect(writeEligibility({ kind: "news", role: "admin", suspended: false })).toBe("allowed");
+    expect(writeEligibility({ ...member, kind: "news" })).toBe("admin_only");
+    expect(writeEligibility({ ...member, kind: "news", role: "admin" })).toBe("allowed");
   });
 
-  it("lets any member write on an active blog", () => {
-    expect(writeEligibility({ kind: "member", role: "member", suspended: false })).toBe("allowed");
-    expect(writeEligibility({ kind: "member", role: "member", suspended: true })).toBe(
-      "blog_suspended",
-    );
+  it("lets a confirmed member write on an active blog", () => {
+    expect(writeEligibility(member)).toBe("allowed");
+    expect(writeEligibility({ ...member, suspended: true })).toBe("blog_suspended");
+  });
+
+  it("asks a new member to earn trust first", () => {
+    expect(writeEligibility({ ...member, confirmed: false })).toBe("not_confirmed");
+    expect(writeEligibility({ ...member, confirmed: false, role: "admin" })).toBe("allowed");
   });
 });
 

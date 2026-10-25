@@ -9,7 +9,7 @@ summary: "Quatre opérateurs rejoués depuis leur documentation publique, sans l
 publishedAt: 2026-10-23
 ---
 
-La piste d'essai d'Overpass rejoue Wave, PayDunya, CinetPay et PI-SPI. Voici comment chaque simulateur est fait, et ce qu'il ne prétend pas être.
+Le Simulateur d'Overpass rejoue Wave, PayDunya, CinetPay et PI-SPI. Voici comment chaque simulateur est fait, et ce qu'il ne prétend pas être.
 
 ## Une seule source : la documentation publique
 

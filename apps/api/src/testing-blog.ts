@@ -1,5 +1,5 @@
 import type { FastifyInstance } from "fastify";
-import { call } from "./testing-routes.js";
+import { call, publishRoute } from "./testing-routes.js";
 import type { Body } from "./testing-routes.js";
 
 export const samplePost = {
@@ -12,6 +12,12 @@ export const samplePost = {
 };
 
 export type WrittenPost = { id: string; slug: string };
+
+/** Two published routes earn the 20 points of a confirmed member, who may then write posts. */
+export async function confirmMember(app: FastifyInstance, cookie: string): Promise<void> {
+  await publishRoute(app, cookie, { title: "Encaisser avec Wave, premier essai" });
+  await publishRoute(app, cookie, { title: "Encaisser avec Wave, second essai" });
+}
 
 /** Writes a post, published by default, and returns its id and slug. */
 export async function writePost(

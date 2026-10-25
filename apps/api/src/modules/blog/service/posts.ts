@@ -9,9 +9,16 @@ import type { BlogDeps, Reader } from "./context.js";
 
 const ownPostsShown = 100;
 
-async function requireWritable(deps: BlogDeps, account: Account, kind: PostKind): Promise<void> {
+/** Only a new post needs a confirmed member; an existing one stays editable below the threshold. */
+async function requireWritable(
+  deps: BlogDeps,
+  account: Account,
+  post: { kind: PostKind; isNew: boolean },
+): Promise<void> {
+  const { kind } = post;
   const suspended = kind === "member" && (await deps.repository.isSuspended(account.id));
-  const eligibility = writeEligibility({ kind, role: account.role, suspended });
+  const confirmed = !post.isNew || (await deps.trust.isConfirmed(account.id));
+  const eligibility = writeEligibility({ kind, role: account.role, suspended, confirmed });
   if (eligibility !== "allowed") throw new AppError(eligibility, 403);
 }
 
@@ -37,7 +44,7 @@ async function requireOwnCover(deps: BlogDeps, account: Account, id: string | nu
 }
 
 async function create(deps: BlogDeps, account: Account, input: PostCreateInput) {
-  await requireWritable(deps, account, input.kind);
+  await requireWritable(deps, account, { kind: input.kind, isNew: true });
   await requireOwnCover(deps, account, input.coverMediaId);
   const at = deps.now();
   const publishedAt = input.publishAt ?? (input.status === "published" ? at : null);
@@ -88,7 +95,7 @@ async function editable(deps: BlogDeps, account: Account, id: string): Promise<P
 
 async function update(deps: BlogDeps, account: Account, id: string, input: PostUpdateInput) {
   const row = await editable(deps, account, id);
-  await requireWritable(deps, account, row.kind);
+  await requireWritable(deps, account, { kind: row.kind, isNew: false });
   await requireOwnCover(deps, account, input.coverMediaId);
   await deps.repository.updatePost(id, patchOf(row, input, deps.now()), deps.now());
   await deps.onContribution([row.authorId]);

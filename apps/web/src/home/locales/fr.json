@@ -104,15 +104,15 @@
       }
     },
     "track": {
-      "kicker": "Piste d'essai",
+      "kicker": "Simulateur",
       "title": "Rejouez les cas qui cassent en production",
       "body": "Créez une clé de test et appelez un opérateur simulé comme le vrai. Paiement réussi, solde insuffisant, webhook en double ou en retard, délai dépassé, sans compte marchand.",
       "links": {
-        "open": "Ouvrir la piste d'essai"
+        "open": "Ouvrir le Simulateur"
       },
       "screen": {
         "title": "Scénarios de la clé de test",
-        "label": "Les scénarios de la piste d'essai joués l'un après l'autre",
+        "label": "Les scénarios du Simulateur joués l'un après l'autre",
         "scenarios": [
           {
             "name": "Paiement réussi",
@@ -143,15 +143,15 @@
       }
     },
     "relay": {
-      "kicker": "Relais local",
+      "kicker": "overpass-cli",
       "title": "Les webhooks arrivent sur votre machine",
       "body": "Une commande ouvre une connexion sortante vers Overpass et rejoue chaque webhook sur votre serveur de développement, corps et en-têtes intacts. Ni tunnel, ni adresse publique.",
       "links": {
-        "open": "Configurer le relais"
+        "open": "Configurer overpass-cli"
       },
       "screen": {
         "title": "Terminal",
-        "label": "Le relais local reçoit des webhooks et les rejoue sur localhost",
+        "label": "La commande overpass-cli reçoit des webhooks et les rejoue sur localhost",
         "lines": [
           {
             "tone": "accent",
@@ -167,7 +167,7 @@
           },
           {
             "tone": "out",
-            "text": "Relais prêt pour wave, clé ovp_test_Xk3f. Webhooks rejoués vers http://localhost:3000/webhook. Ctrl+C pour arrêter."
+            "text": "Prêt pour wave, clé ovp_test_Xk3f. Webhooks transmis à http://localhost:3000/webhook. Ctrl+C pour arrêter."
           },
           {
             "tone": "code",
@@ -307,7 +307,7 @@
     "requests": {
       "kicker": "Catalogue",
       "title": "Il manque une API ? Proposez-la",
-      "body": "Proposez un service qui manque au catalogue, Overpass le valide. Votez pour le prochain simulateur, la piste d'essai ajoute d'abord les services les plus demandés.",
+      "body": "Proposez un service qui manque au catalogue, Overpass le valide. Votez pour le prochain simulateur, le Simulateur ajoute d'abord les services les plus demandés.",
       "links": {
         "propose": "Proposer un service",
         "vote": "Voter pour un simulateur"

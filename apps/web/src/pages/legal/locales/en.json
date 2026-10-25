@@ -27,8 +27,8 @@
     "repository": "Public repository",
     "licence": "Code licence",
     "licenceValue": "MIT, Ghostapi (Jude Koffi and Bradi)",
-    "cliTerm": "Local relay",
-    "cli": "The webhook relay command (apps/cli) is under the MIT licence.",
+    "cliTerm": "overpass-cli",
+    "cli": "The overpass-cli command (apps/cli), which brings webhooks to your computer, is under the MIT licence.",
     "fonts": "The IBM Plex Sans and IBM Plex Mono fonts are served by Overpass itself, under the SIL Open Font License 1.1.",
     "fontLicence": "Licence text, {{font}}"
   },
@@ -76,9 +76,9 @@
       "kept": "Until you delete your account. The next section says what stays published without an author name."
     },
     "sandbox": {
-      "title": "Test track",
+      "title": "Simulator",
       "what": "Test keys (hash, prefix, scenario, chosen webhook address), simulated requests and responses, simulated objects, webhook deliveries (body, headers, response code, duration).",
-      "why": "Running the test track, its inspector and the local relay.",
+      "why": "Running the Simulator, its inspector and the overpass-cli command.",
       "kept": "History is erased after 7 days. A test key expires after 30 days, a demo key after one hour."
     },
     "newsletter": {

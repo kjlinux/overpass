@@ -10,7 +10,7 @@ import { registerHealth } from "./http/health.js";
 import { redactedHeaders, requestSerializer } from "./http/log-request.js";
 import { registerOriginCheck } from "./http/origin.js";
 import { registerSecurityHeaders } from "./http/security-headers.js";
-import { postgresCounters, registerRateLimits } from "./limits/index.js";
+import { confirmedRequests, postgresCounters, registerRateLimits } from "./limits/index.js";
 import { createMailer } from "./mail/mailer.js";
 import type { Mailer } from "./mail/mailer.js";
 import { itineraries } from "./itineraries.js";
@@ -19,7 +19,7 @@ import type { AccountResolver } from "./modules/accounts/index.js";
 import { adminModule } from "./modules/admin/index.js";
 import type { ModerationLog } from "./modules/admin/index.js";
 import { registerBlog } from "./modules/blog/index.js";
-import type { ContributionListener } from "./modules/ranking/index.js";
+import type { ContributionListener, TrustSource } from "./modules/ranking/index.js";
 import { newsletterModule } from "./modules/newsletter/index.js";
 import { rankingModule } from "./modules/ranking/index.js";
 import { registerRequests } from "./modules/requests/index.js";
@@ -61,11 +61,12 @@ async function registerCommunity(
     webOrigin: string;
     now: () => Date;
     onContribution: ContributionListener;
+    trust: TrustSource;
     moderationLog: ModerationLog;
     newsletter: ReturnType<typeof newsletterModule>;
   },
 ): Promise<void> {
-  const { db, sender, onContribution, moderationLog, newsletter, ...rest } = deps;
+  const { db, sender, onContribution, trust, moderationLog, newsletter, ...rest } = deps;
   await registerRequests(app, {
     ...rest,
     db,
@@ -76,7 +77,8 @@ async function registerCommunity(
     log: app.log,
     moderationLog,
   });
-  await registerBlog(app, { ...rest, db, onContribution, log: moderationLog });
+  const confirmed = confirmedRequests(rest.resolveAccount, trust);
+  await registerBlog(app, { ...rest, db, onContribution, trust, confirmed, log: moderationLog });
   await newsletter.register(app, rest.resolveAccount);
 }
 
@@ -90,7 +92,8 @@ async function registerModules(
   await registerRateLimits(app, counters);
   const ranking = rankingModule(db, clock, app.log);
   const admin = adminModule({ db, onContribution: ranking.listener, now: clock });
-  const catalogue = itineraries(db, clock, { onContribution: ranking.listener, log: admin.log });
+  const { listener, trust } = ranking;
+  const catalogue = itineraries(db, clock, { onContribution: listener, log: admin.log, trust });
   const sender = mailer ?? createMailer(config, app.log);
   const signing = { db, mailer: sender, secret: config.SESSION_SECRET, now: clock };
   const newsletter = newsletterModule({ ...signing, webOrigin: config.WEB_ORIGIN, log: app.log });
@@ -110,7 +113,7 @@ async function registerModules(
   await registerMedia(app, { db, resolveAccount });
   await registerShare(app, { db, config, now: clock });
   const community = { db, sender, resolveAccount, webOrigin: config.WEB_ORIGIN, now: clock };
-  const ports = { onContribution: ranking.listener, moderationLog: admin.log };
+  const ports = { onContribution: listener, trust, moderationLog: admin.log };
   await registerCommunity(app, { ...community, ...ports, newsletter });
   await registerSimulator(app, { config, db, counters, sandbox, resolveAccount, now: clock });
 }

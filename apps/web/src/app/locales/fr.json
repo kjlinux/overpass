@@ -1,8 +1,17 @@
 {
   "app": {
     "name": "Overpass",
-    "tagline": "Intégrez n'importe quelle API sans tâtonner.",
-    "intro": "Overpass rassemble des fiches d'intégration pour toutes les API, paiement mobile, SMS, USSD ou autre, classées par service, pays et stack. Chaque fiche donne le code qui marche, les pièges connus et la date du dernier essai. Une piste d'essai simule les opérateurs sans compte marchand, et un serveur MCP sert les fiches à votre assistant de code.",
+    "taglines": [
+      "Brancher une API ne devrait pas prendre une semaine.",
+      "Tester un paiement ne devrait pas exiger un compte marchand.",
+      "Recevoir un webhook ne devrait pas exiger un tunnel.",
+      "Votre assistant de code ne devrait pas deviner une API.",
+      "Une intégration ne devrait pas casser en silence.",
+      "Un paiement mobile money ne devrait pas prendre trois semaines."
+    ],
+    "typingPause": "Mettre le titre en pause",
+    "typingPlay": "Relancer le titre",
+    "intro": "Overpass rassemble des fiches d'intégration pour toutes les API, paiement mobile, SMS, USSD ou autre, classées par service, pays et stack. Chaque fiche donne le code qui marche, les pièges connus et la date du dernier essai. Un simulateur reproduit les opérateurs sans compte marchand, et un serveur MCP sert les fiches à votre assistant de code.",
     "demo": "Essayer la démo",
     "routes": "Parcourir les itinéraires"
   },
@@ -25,10 +34,10 @@
       "request": "Votre site envoie la demande de paiement.",
       "response": "L'opérateur a répondu {{status}}, le paiement est en cours. La confirmation arrive.",
       "webhook": "Paiement confirmé, le webhook est arrivé sur le serveur de démo, qui joue ici le rôle de votre serveur.",
-      "webhookFailed": "La confirmation n'est pas arrivée. Rejouez-la depuis la piste d'essai.",
+      "webhookFailed": "La confirmation n'est pas arrivée. Rejouez-la depuis le Simulateur.",
       "failed": "Le simulateur ne répond pas. Réessayez dans un instant."
     },
-    "more": "Pour essayer avec votre propre serveur, créez une clé de test sur la",
-    "open": "piste d'essai"
+    "more": "Pour essayer avec votre propre serveur, créez une clé de test sur le",
+    "open": "Simulateur"
   }
 }

@@ -6,7 +6,7 @@
     "Votre clé de test Overpass va dans l'en-tête x-api-key ; le simulateur accepte tout client_id et client_secret sur /oauth/token.",
     "Le payeur virtuel répond aussitôt : demande acceptée (IRREVOCABLE) ou rejetée avec le motif du scénario, AM04 pour le solde insuffisant, AB03 pour le délai dépassé.",
     "Les adresses suivent le serveur de la spécification : /piz/v1/... ; le jeton s'obtient sur /oauth/token.",
-    "Les webhooks partent vers la cible choisie sur la piste d'essai ; POST /webhooks enregistre la déclaration telle que documentée, sans changer cette cible.",
+    "Les webhooks partent vers la cible choisie sur le Simulateur ; POST /webhooks enregistre la déclaration telle que documentée, sans changer cette cible.",
     "La signature X-Signature utilise le secret affiché sur la piste pour votre clé de test.",
     "Reprises : cinq tentatives sur environ 37 minutes ; la spécification n'en donne pas le calendrier.",
     "Le code participant des end2endId (CIB001) et le nom du payeur sont fictifs."
@@ -33,6 +33,6 @@
     "token": "Obtenir un jeton OAuth2 par client_credentials, avec votre clé de test dans x-api-key.",
     "request": "Envoyer une demande de paiement de 15 000 XOF avec ce jeton.",
     "read": "Relire la demande : le payeur virtuel l'a payée selon le scénario.",
-    "webhook": "Recevoir le webhook sur votre poste avec le relais local."
+    "webhook": "Recevoir le webhook sur votre ordinateur avec overpass-cli."
   }
 }

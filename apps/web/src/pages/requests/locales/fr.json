@@ -10,8 +10,8 @@
     "noCountry": "Aucun pays confirmé pour l'instant : un pays le devient dès qu'une fiche y atteint la voie libre.",
     "routes": "Voir les itinéraires de ce service",
     "simulator": "Simulateur",
-    "simulated": "Ce service a un simulateur non officiel sur la piste d'essai.",
-    "track": "Ouvrir la piste d'essai",
+    "simulated": "Ce service est simulé, de façon non officielle, sur le Simulateur.",
+    "track": "Ouvrir le Simulateur",
     "noSimulator": "{{service}} n'a pas encore de simulateur. Les demandes les plus votées passent en premier."
   },
   "vote": {

@@ -4,12 +4,13 @@ import { AppError } from "../../../http/app-error.js";
 import type { Account } from "../../accounts/index.js";
 import type { ModerationLog } from "../../admin/index.js";
 import { mediaUrl } from "../../media/index.js";
-import type { ContributionListener } from "../../ranking/index.js";
+import type { ContributionListener, TrustSource } from "../../ranking/index.js";
 import type { BlogRepository, PostRow } from "../model.js";
 
 export type BlogDeps = {
   repository: BlogRepository;
   onContribution: ContributionListener;
+  trust: TrustSource;
   log: ModerationLog;
   webOrigin: string;
   ownsMedia: (id: string, ownerId: string) => Promise<boolean>;

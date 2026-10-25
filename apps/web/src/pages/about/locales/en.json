@@ -9,7 +9,7 @@
       "text": "Integration sheets for one service, country and stack, with the code that works, the known traps and dated checks by other developers."
     },
     "track": {
-      "name": "The test track.",
+      "name": "The Simulator.",
       "text": "A simulator that replays with a simulated operator the real cases of a mobile payment, to test without a merchant account."
     },
     "mcp": {

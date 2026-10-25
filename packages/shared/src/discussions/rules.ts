@@ -7,10 +7,10 @@ export type ContentStatus = (typeof contentStatuses)[number];
 export const moderationDecisions = ["restore", "remove"] as const;
 export type ModerationDecision = (typeof moderationDecisions)[number];
 
-/** Two reports from distinct accounts hide content until a moderator decides. */
-export function statusAfterReports(status: ContentStatus, distinctReports: number): ContentStatus {
+/** A report weight of two hides content until a moderator decides; a confirmed member weighs two. */
+export function statusAfterReports(status: ContentStatus, weight: number): ContentStatus {
   if (status !== "visible") return status;
-  return distinctReports >= discussionRules.hideAfterReports ? "hidden" : "visible";
+  return weight >= discussionRules.hideAfterReports ? "hidden" : "visible";
 }
 
 export function statusAfterDecision(decision: ModerationDecision): ContentStatus {

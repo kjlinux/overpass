@@ -15,8 +15,8 @@
       "action": "Créer un compte gratuit",
       "features": {
         "catalogue": "Le catalogue des fiches d'intégration, à lire, publier et vérifier",
-        "track": "La piste d'essai : clés de test, scénarios rejouables, inspecteur et journal des webhooks",
-        "relay": "Le relais local des webhooks vers votre poste",
+        "track": "Le Simulateur, avec ses clés de test, ses scénarios rejouables, son inspecteur et son journal des webhooks",
+        "relay": "La commande overpass-cli, qui fait arriver les webhooks sur votre ordinateur",
         "mcp": "Le serveur MCP en lecture seule, avec vos jetons personnels",
         "community": "Les discussions, le blog, la newsletter et le classement"
       }

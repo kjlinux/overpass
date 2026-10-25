@@ -6,7 +6,7 @@
     "Your Overpass test key goes in the x-api-key header; the simulator accepts any client_id and client_secret on /oauth/token.",
     "The virtual payer answers at once: request accepted (IRREVOCABLE) or rejected with the scenario's reason, AM04 for insufficient funds, AB03 for a timeout.",
     "Paths follow the specification's server: /piz/v1/...; the token comes from /oauth/token.",
-    "Webhooks go to the target chosen on the test track; POST /webhooks records the registration as documented, without changing that target.",
+    "Webhooks go to the target chosen on the Simulator; POST /webhooks records the registration as documented, without changing that target.",
     "The X-Signature uses the secret shown on the track for your test key.",
     "Retries: five attempts over about 37 minutes; the specification gives no schedule.",
     "The participant code in end2endId values (CIB001) and the payer's name are made up."
@@ -33,6 +33,6 @@
     "token": "Get an OAuth2 token with client_credentials, your test key in x-api-key.",
     "request": "Send a 15,000 XOF payment request with that token.",
     "read": "Read the request again: the virtual payer paid it according to the scenario.",
-    "webhook": "Receive the webhook on your machine with the local relay."
+    "webhook": "Receive the webhook on your computer with overpass-cli."
   }
 }

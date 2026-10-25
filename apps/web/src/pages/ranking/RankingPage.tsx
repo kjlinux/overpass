@@ -1,4 +1,4 @@
-import { pointRules, pointSources } from "@overpass/shared";
+import { pointRules, pointSources, trustRules } from "@overpass/shared";
 import type { CountryRank, DeveloperRank } from "@overpass/shared";
 import { Trophy } from "lucide-preact";
 import type { ComponentChildren, JSX } from "preact";
@@ -88,6 +88,7 @@ function PointRules(): JSX.Element {
           </li>
         ))}
       </ul>
+      <p class="mt-6 max-w-prose">{t("rules.trust", { count: trustRules.confirmedMinPoints })}</p>
     </section>
   );
 }

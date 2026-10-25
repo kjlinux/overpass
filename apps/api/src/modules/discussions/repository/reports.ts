@@ -1,12 +1,12 @@
 import type { ContentKind } from "@overpass/shared";
-import { and, count, eq, inArray, isNull } from "drizzle-orm";
+import { and, eq, inArray, isNull } from "drizzle-orm";
 import type { Database } from "../../../db/client.js";
 import type { DiscussionsRepository } from "../model.js";
 import { replies, reports, threads } from "../tables.js";
 
 type ReportPart = Pick<
   DiscussionsRepository,
-  "insertReport" | "openReports" | "reportedBy" | "setStatus" | "resolveReports"
+  "insertReport" | "openReporters" | "reportedBy" | "setStatus" | "resolveReports"
 >;
 
 const openOn = (kind: ContentKind, targetId: string) =>
@@ -22,9 +22,10 @@ export function reportQueries(db: Database): ReportPart {
         .returning({ id: reports.id });
       return inserted.length > 0;
     },
-    openReports: async (kind, targetId) => {
-      const [row] = await db.select({ n: count() }).from(reports).where(openOn(kind, targetId));
-      return row?.n ?? 0;
+    openReporters: async (kind, targetId) => {
+      const open = openOn(kind, targetId);
+      const rows = await db.select({ id: reports.userId }).from(reports).where(open);
+      return rows.map((row) => row.id);
     },
     reportedBy: async (userId, kind, ids) => {
       if (ids.length === 0) return new Set();

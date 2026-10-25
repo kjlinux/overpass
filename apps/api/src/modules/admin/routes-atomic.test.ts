@@ -3,7 +3,7 @@ import type { FastifyInstance } from "fastify";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { Database } from "../../db/client.js";
 import { moderateRoute, registerAdmin, userIdOf } from "../../testing-admin.js";
-import { writePost } from "../../testing-blog.js";
+import { confirmMember, writePost } from "../../testing-blog.js";
 import { openThread } from "../../testing-discussions.js";
 import { call, publishRoute, testClock } from "../../testing-routes.js";
 import { createTestApp, handleOf, registerAccount } from "../../testing.js";
@@ -17,6 +17,7 @@ let admin: string;
 beforeEach(async () => {
   ({ app, db, close } = await createTestApp({ now: testClock().now }));
   member = await registerAccount(app, "member@example.com");
+  await confirmMember(app, member);
   admin = await registerAdmin(app, db, "admin@example.com");
 });
 afterEach(() => close());

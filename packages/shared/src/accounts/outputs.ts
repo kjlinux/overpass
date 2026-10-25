@@ -27,6 +27,7 @@ export const publicProfileSchema = z.object({
   stacks: z.array(z.string()),
   contributions: contributionsSchema,
   points: z.number().int(),
+  confirmed: z.boolean(),
   memberSince: z.string(),
 });
 

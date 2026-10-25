@@ -371,3 +371,39 @@ Both SKILL.md files were read in full before use. Instructions outside the proje
 - **Real use:** `overpass-cli@0.1.0` installed globally from npm with an empty cache in an isolated prefix, run under Node 22 and Node 20, in bash and PowerShell; a simulated Wave payment reached a local server with a valid signature, the inspector recorded 200, 500 and unreachable, missed deliveries arrived after a restart. A real Claude Code session, configured with the HTTP setup the settings page generates, answered a developer question through `search_routes`, `get_route` and `list_potholes`.
 - **Follow-up, same day:** `overpass --version` (and `-v`) prints the version read from the shipped `package.json`; the package moves to 0.1.1, published on npm by the user (passkey login) and checked with `npx overpass-cli --version` from an empty cache. The team itineraries Wave SN Laravel and Orange Money CI Laravel had a CSRF exclusion that fails on Laravel 11 and 12 (a file removed since Laravel 11, and a class name used without its namespace); both now follow the framework source (`validateCsrfTokens(except: ...)`, `ValidateCsrfToken` with its full name). The content seed now brings a team itinerary still at version 1 up to its file, as version 2 with its history; an itinerary anyone edited is left as it is. TDD evidence: the two new CLI cases and the two new seed cases were seen failing, then green.
 - **Deploy:** `main` at `874b77e` shipped; no migration to apply; the three services restarted, health ok. The content seed reported `routesUpdated: 2`, so the Wave SN and Orange Money CI Laravel itineraries are at version 2 in production with the CSRF fix.
+
+### 2026-10-25, Claude Code (Claude Opus 5.5), README rewritten for GitHub
+
+- **User request, verbatim summary:** write a professional README at the root, shown on GitHub, with the Overpass image, covering everything the app does with examples and links, no em dash.
+- **Change:** `README.md` now opens with `apps/web/public/share/overpass-fr.png`, explains why the project exists, then each feature (itineraries and states, checks, sandbox with providers, scenarios and a curl call, local webhook relay, MCP tools and setup, community spaces), the reasons behind the stack choices, setup, commands, repository layout, rules, deployment and what is left to do. Facts come from the spec and the code; no team anecdote was invented.
+- **Checks:** `npm run check:repo` passed, `prettier --check README.md` clean, no em dash.
+
+### 2026-10-25, Claude Code (Claude Opus 5.5), light theme on a near pure white
+
+- **User request, verbatim summary:** the light mode uses an off white; use a pure white leaning very slightly towards grey.
+- **Change:** `apps/web/src/styles/tokens.css` and `DESIGN.md` move the light paper from `#FBFBF9` to `#FCFCFD`, surface to `#F2F2F4`, raised surface to `#FFFFFF`, rule to `#D4D4D8` and accent ink to `#FCFCFD`, all neutral instead of warm. The newsletter e-mail in `apps/api/src/modules/newsletter/service/mail.ts` follows. Contrast figures in `DESIGN.md` recomputed, every pair still above 4.5:1.
+
+### 2026-10-25, Claude Code (Claude Opus 5.5), points become a trust signal
+
+- **User request, verbatim summary:** decide what points are for, otherwise remove them; the user chose to turn them into trust.
+- **Spec first:** `docs/cahier-des-charges.md` gains the "Membre confirmé" rules. From 20 points a member is confirmed, their report counts twice, only a confirmed member may publish a new article, and their write quotas are three times larger. The status is recomputed at each read and lost below the threshold. The data rule now names every source of points.
+- **Change:** `packages/shared/src/ranking/trust.ts` holds the threshold and the rules. The ranking module exports a `TrustSource` port, injected into the discussions and blog services and into `limits/write.ts`, where a confirmed member gets a wider per-IP budget on the write routes. Report repositories return the open reporters, and the services sum their weights. The public profile carries `confirmed`; the profile, dashboard and ranking pages show it, and a missing `stars` label is fixed.
+- **Tests:** `trust.test.ts`, new `writeEligibility` cases, and `ranking/routes-trust.test.ts`, covering status gained and lost, one confirmed report hiding a thread or a post, the 403 `not_confirmed`, an existing post editable below the threshold, and the wider quota. Blog test authors are confirmed with two real routes, so their expected points shift by 20. The e2e blog authors get a SQL fixture, like `promoteAdmin`.
+
+### 2026-10-25, Claude Code (Claude Opus 5.5), home title typed phrase after phrase
+
+- **User request, verbatim summary:** replace the home tagline with several catchy phrases, picked 1, 2, 6, 7, 8 and 9 from the proposed list, shown in turn with a typing animation.
+- **Change:** `app.tagline` becomes `app.taglines` (six phrases, fr and en) with pause and play labels. `apps/web/src/home/typing/` holds the pure loop (`typing.ts`, tested first), the timer hook and `TypedPromise.tsx`, used by `Hero.tsx`. Screen readers get the first phrase only, hidden copies keep the height so the page does not jump, a pause button meets WCAG 2.2.2, and reduced motion shows the first phrase without caret. The app and e2e tests read the first phrase.
+- **Checks:** web tests pass (258), lint and format clean on the touched files. `npm run check` stops on a type error in `apps/cli/src/args.ts` and `check:repo` on comment density in `apps/api/src/modules/ranking/model.ts`, both from work already in progress on the branch.
+
+### 2026-10-25, Claude Code (Claude Opus 5.5), link preview shows the logo
+
+- **User request, verbatim summary:** when someone shares the Overpass link, the preview should show the Overpass logo.
+- **Change:** `apps/web/src/share/share-image.html` now draws the site mark (the `favicon.svg` drawing, 176 px) beside the wordmark on the dark theme, with the promise below. `scripts/share-image.ts` redrew `apps/web/public/share/overpass-fr.png` and `overpass-en.png`; tags, paths and size (1200x630) are unchanged.
+
+### 2026-10-25, Claude Code (Claude Opus 5.5), the Simulator and its Tools guides
+
+- **User request, verbatim summary:** put the step-by-step guides for overpass-cli and the MCP server on the test track page, rename "Piste d'essai" (chosen name: "Simulateur"), and replace "relais local" with explicit words.
+- **Change:** `pages/sandbox/ToolsSection.tsx` and `Guide.tsx` add a Tools section at the bottom of `/sandbox`, visible without an account. It holds two numbered guides, overpass-cli (four steps, the command with a placeholder key) and the MCP server (three steps, link to the tokens, the shared `McpConfigTabs`). The "On my computer" target links to it, and the documentation page links to `#sandbox-tools`. "Piste d'essai" and "Test track" become "Simulateur" and "Simulator" in the fr and en files of the web, CLI, MCP, providers, shared errors, OpenAPI summaries, routes and posts content, README, specification and DESIGN.md. "Relais local" becomes "Sur mon ordinateur, avec overpass-cli" or "la commande overpass-cli"; the CLI ready and stopped lines follow. The `/sandbox` path and code identifiers are unchanged.
+- **Tests:** `pages/sandbox/tools.test.tsx`, written first, covers the anchor, the two step lists, the command, the token link, the editor configurations and the link from the documentation page.
+- **Note:** routes and posts bodies changed in `apps/api/content`, but the seed skips rows that exist, so production keeps the old wording there until those rows are edited. The PI-SPI post titles keep "piste d'essai" and "test track" because the blog seed finds a post by its title, and a new title would create a duplicate.

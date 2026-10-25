@@ -25,3 +25,13 @@ export function resetRateLimits(): Promise<void> {
 export function forgetPastMembers(): Promise<void> {
   return run("delete from users where email like 'e2e-%@example.com'");
 }
+
+/** Lets a fresh member write a post; the cache entry holds until their next contribution. */
+export function confirmMember(name: string): Promise<void> {
+  return run(
+    `insert into member_points (user_id, routes, points)
+      select id, 2, 20 from users where email = $1
+      on conflict (user_id) do update set routes = 2, points = 20`,
+    [`e2e-${name}@example.com`],
+  );
+}

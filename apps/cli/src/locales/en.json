@@ -1,12 +1,12 @@
 {
-  "help": "Usage: overpass listen --forward-to <url> --key <test key> --api <Overpass API url>\n\nReplays the webhooks simulated by the Overpass sandbox on your local server.\nOutgoing connection only: no tunnel, no public URL, no open port.\n\nOptions:\n  --forward-to  your local server, for example http://localhost:3000/webhook\n  --key         Overpass test key (or the OVERPASS_KEY variable)\n  --api         Overpass API URL (or the OVERPASS_API_URL variable)\n  --help        shows this help\n  --version     shows the version\n",
-  "ready": "Relay ready for {provider}, key {keyPrefix}. Webhooks are replayed to {forwardTo}. Ctrl+C to stop.",
+  "help": "Usage: overpass listen --forward-to <url> --key <test key> --api <Overpass API url>\n\nReplays the webhooks simulated by the Overpass Simulator on your local server.\nOutgoing connection only: no tunnel, no public URL, no open port.\n\nOptions:\n  --forward-to  your local server, for example http://localhost:3000/webhook\n  --key         Overpass test key (or the OVERPASS_KEY variable)\n  --api         Overpass API URL (or the OVERPASS_API_URL variable)\n  --help        shows this help\n  --version     shows the version\n",
+  "ready": "Ready for {provider}, key {keyPrefix}. Webhooks are passed to {forwardTo}. Ctrl+C to stop.",
   "forwarded": "{time}  {eventType}  {status} in {duration} ms",
   "forward_failed": "{time}  {eventType}  failed: {error}",
   "reconnecting": "Connection lost. Retrying in {seconds} s.",
   "report_failed": "The result of this delivery could not be sent to Overpass.",
-  "unauthorized": "Test key refused. Check that it is active and copied in full from the sandbox page.",
-  "stopped": "Relay stopped.",
+  "unauthorized": "Test key refused. Check that it is active and copied in full from the Simulator.",
+  "stopped": "overpass-cli stopped.",
   "errors": {
     "missing_forward": "Give your local server with --forward-to, for example http://localhost:3000/webhook.",
     "missing_key": "Give your test key with --key or the OVERPASS_KEY variable.",

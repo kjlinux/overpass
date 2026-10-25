@@ -6,7 +6,7 @@ stack: nodejs
 language: fr
 ---
 
-Source : docs.wave.com, pages Checkout API et Webhooks, consultées le 23 octobre 2026. Exemple avec Express 5 et Node 22 ; la piste d'essai Overpass rejoue cette API.
+Source : docs.wave.com, pages Checkout API et Webhooks, consultées le 23 octobre 2026. Exemple avec Express 5 et Node 22 ; le Simulateur Overpass rejoue cette API.
 
 ## Prérequis
 
@@ -81,5 +81,5 @@ app.post("/webhooks/wave", express.raw({ type: "*/*" }), (request, response) => 
 - `wave_launch_url` ouvre l'application Wave sur mobile et une page web sur ordinateur : ne l'ouvrez pas dans une iframe.
 - Les numéros ivoiriens ont dix chiffres depuis 2021 (ARTCI). Si vous affichez le numéro du payeur reçu dans l'événement, ne le tronquez pas à huit.
 - Le même événement peut être livré deux fois : `markPaid` doit être idempotent.
-- Avec le relais local d'Overpass (`npx overpass-cli listen --forward-to http://localhost:3000/webhooks/wave`), les en-têtes et le corps arrivent inchangés, la vérification ci-dessus fonctionne donc telle quelle.
+- Avec la commande overpass-cli (`npx overpass-cli listen --forward-to http://localhost:3000/webhooks/wave`), les en-têtes et le corps arrivent inchangés, la vérification ci-dessus fonctionne donc telle quelle.
 - Pendant une rotation de secret, l'en-tête porte plusieurs valeurs `v1` : acceptez la requête si l'une d'elles correspond. Wave réessaie jusqu'à trois jours en l'absence de réponse 2xx.

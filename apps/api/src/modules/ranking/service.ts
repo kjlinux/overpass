@@ -1,4 +1,4 @@
-import { pointsFor, rankingSizeMax } from "@overpass/shared";
+import { isConfirmed, pointsFor, rankingSizeMax, trustRules } from "@overpass/shared";
 import type { DeveloperRankingQuery } from "@overpass/shared";
 import type { RankingRepository } from "./model.js";
 
@@ -12,13 +12,17 @@ export function createRankingService({ repository, now }: RankingDeps) {
     await repository.store(userId, breakdown, points, now());
     return points;
   };
+  const pointsOf = async (userId: string): Promise<number> =>
+    (await repository.cachedPoints(userId)) ?? recomputeOne(userId);
   return {
     recompute: async (userIds: readonly (string | null | undefined)[]): Promise<void> => {
       const unique = new Set(userIds.filter((id): id is string => typeof id === "string"));
       for (const userId of unique) await recomputeOne(userId);
     },
-    pointsOf: async (userId: string): Promise<number> =>
-      (await repository.cachedPoints(userId)) ?? recomputeOne(userId),
+    pointsOf,
+    isConfirmed: async (userId: string): Promise<boolean> => isConfirmed(await pointsOf(userId)),
+    confirmedAmong: (userIds: readonly string[]): Promise<Set<string>> =>
+      repository.reaching([...new Set(userIds)], trustRules.confirmedMinPoints),
     countries: () => repository.countries(rankingSizeMax),
     developers: (query: DeveloperRankingQuery) =>
       repository.developers(query.country, rankingSizeMax),

@@ -53,7 +53,8 @@ export type DiscussionsRepository = {
   setAccepted(threadId: string, replyId: string): Promise<void>;
   /** False when the account already has an open report on that content. */
   insertReport(kind: ContentKind, targetId: string, userId: string, at: Date): Promise<boolean>;
-  openReports(kind: ContentKind, targetId: string): Promise<number>;
+  /** Accounts with an open report on that content. */
+  openReporters(kind: ContentKind, targetId: string): Promise<string[]>;
   reportedBy(userId: string, kind: ContentKind, ids: string[]): Promise<Set<string>>;
   setStatus(kind: ContentKind, id: string, status: ContentStatus): Promise<void>;
   resolveReports(kind: ContentKind, id: string, at: Date): Promise<void>;

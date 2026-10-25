@@ -1,4 +1,5 @@
-import type { Me, MyCheck, Proposal, RouteSummary } from "@overpass/shared";
+import { trustRules } from "@overpass/shared";
+import type { Me, MyCheck, Proposal, PublicProfile, RouteSummary } from "@overpass/shared";
 import type { ComponentChildren, JSX } from "preact";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../app/useLanguage";
@@ -21,6 +22,16 @@ function Column({ heading, children }: { heading: string; children: ComponentChi
   );
 }
 
+function TrustNote({ profile }: { profile: PublicProfile }): JSX.Element {
+  const { t } = useTranslation("dashboard");
+  const missing = Math.max(0, trustRules.confirmedMinPoints - profile.points);
+  return (
+    <p class="mt-2">
+      {profile.confirmed ? t("points.confirmed") : t("points.missing", { count: missing })}
+    </p>
+  );
+}
+
 function PointsColumn({ handle }: { handle: string }): JSX.Element {
   const { t } = useTranslation("dashboard");
   const language = useLanguage();
@@ -28,7 +39,10 @@ function PointsColumn({ handle }: { handle: string }): JSX.Element {
   return (
     <Column heading={t("points.heading")}>
       {state.status === "ready" ? (
-        <p class="text-display font-bold tabular-nums">{state.profile.points}</p>
+        <>
+          <p class="text-display font-bold tabular-nums">{state.profile.points}</p>
+          <TrustNote profile={state.profile} />
+        </>
       ) : state.status === "error" ? (
         <LoadError error={state.error} onRetry={() => void retry()} />
       ) : (

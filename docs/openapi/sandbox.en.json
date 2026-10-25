@@ -5929,7 +5929,7 @@
     },
     "/v1/sandbox/listen": {
       "get": {
-        "summary": "Receive your key's webhooks on your machine (local relay, SSE stream)",
+        "summary": "Receive your key's webhooks on your computer with overpass-cli (SSE stream)",
         "description": "Opens an outgoing connection that carries each webhook with its raw body and headers. After a disconnection, send Last-Event-ID to receive the webhooks you missed.",
         "tags": [
           "Overpass"

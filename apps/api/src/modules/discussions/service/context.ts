@@ -2,7 +2,7 @@ import type { ThreadState, ThreadSummary, TopicSlug } from "@overpass/shared";
 import { AppError } from "../../../http/app-error.js";
 import type { Account, HandleDirectory } from "../../accounts/index.js";
 import type { ModerationLog } from "../../admin/index.js";
-import type { ContributionListener } from "../../ranking/index.js";
+import type { ContributionListener, TrustSource } from "../../ranking/index.js";
 import type { DiscussionsRepository, RouteLookup, ThreadRecord, ThreadRow } from "../model.js";
 
 export type DiscussionsDeps = {
@@ -10,6 +10,7 @@ export type DiscussionsDeps = {
   routes: RouteLookup;
   handles: HandleDirectory;
   onContribution: ContributionListener;
+  trust: TrustSource;
   log: ModerationLog;
   now: () => Date;
 };

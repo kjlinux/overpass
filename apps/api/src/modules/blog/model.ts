@@ -111,8 +111,8 @@ export type SocialPart = {
 };
 
 export type ModerationPart = {
-  /** Inserts the report under a row lock and returns the open reports, or null if a duplicate. */
-  report(kind: BlogContentKind, id: string, userId: string, at: Date): Promise<number | null>;
+  /** Inserts the report under a row lock and returns the open reporters, or null if a duplicate. */
+  report(kind: BlogContentKind, id: string, userId: string, at: Date): Promise<string[] | null>;
   reportedBy(userId: string, kind: BlogContentKind, ids: string[]): Promise<Set<string>>;
   setModeration(kind: BlogContentKind, id: string, status: ModerationStatus): Promise<void>;
   resolveReports(kind: BlogContentKind, id: string, at: Date): Promise<void>;

@@ -9,7 +9,7 @@ summary: "Four operators replayed from their public documentation, without logos
 publishedAt: 2026-10-23
 ---
 
-The Overpass test track replays Wave, PayDunya, CinetPay and PI-SPI. Here is how each simulator is made, and what it does not claim to be.
+The Overpass Simulator replays Wave, PayDunya, CinetPay and PI-SPI. Here is how each simulator is made, and what it does not claim to be.
 
 ## One source: public documentation
 

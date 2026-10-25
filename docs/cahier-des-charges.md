@@ -9,7 +9,7 @@ Overpass est la bourse des intégrations africaines vérifiées : les développe
 Le produit répond au thème du Systalink Challenge, « Construire la plateforme d'échange africaine, pour les devs, par les devs ». Il repose sur trois briques.
 
 - **Les itinéraires.** Des fiches d'intégration classées par service, pays et stack (Wave, Orange Money, MTN MoMo, SMS, USSD). Chaque fiche contient le code qui marche, les pièges connus et des vérifications datées par d'autres développeurs.
-- **La piste d'essai.** Un simulateur qui rejoue les cas réels d'un paiement mobile money, pour tester une intégration en 30 secondes sans compte marchand.
+- **Le Simulateur.** Un simulateur qui rejoue les cas réels d'un paiement mobile money, pour tester une intégration en 30 secondes sans compte marchand.
 - **Le serveur MCP.** Il sert les fiches aux assistants de code (Claude Code, Cursor, VS Code), pour que l'IA du développeur écrive la bonne intégration locale.
 
 Autour de ce cœur, trois espaces font vivre la communauté au quotidien.
@@ -65,7 +65,7 @@ Overpass sert quatre profils, et chacun doit atteindre son but en moins de trois
 1. **Découvrir.** Accueil, puis démo sans inscription : choisir un opérateur, lancer un paiement simulé, voir la requête, la réponse et le webhook.
 2. **S'inscrire.** E-mail et mot de passe, puis pays et stacks utilisées. Trois champs, une seule étape.
 3. **Trouver.** Recherche par service, pays et stack. La fiche affiche son état : « voie libre », « à vérifier » ou « signalée cassée ».
-4. **Tester.** Depuis la fiche, ouvrir la piste d'essai avec le scénario pré-rempli.
+4. **Tester.** Depuis la fiche, ouvrir le Simulateur avec le scénario pré-rempli.
 5. **Contribuer.** Vérifier une fiche en un clic, signaler un piège, ou publier une nouvelle fiche à partir d'un modèle.
 6. **Brancher son IA.** Créer un jeton, copier la configuration, poser la question à son assistant.
 
@@ -76,7 +76,7 @@ Overpass sert quatre profils, et chacun doit atteindre son but en moins de trois
 | Itinéraire | Fiche d'intégration |
 | Nid-de-poule | Piège signalé sur une intégration |
 | Voie libre | Intégration vérifiée récemment |
-| Piste d'essai | Simulateur |
+| Simulateur | Simulateur |
 
 ## 4. Périmètre fonctionnel
 
@@ -87,15 +87,15 @@ Le périmètre tient en dix modules, dont quatre sont indispensables à la soumi
 | Comptes | P0 | Inscription, connexion, mot de passe oublié, profil public avec pays et stacks, choix de la langue |
 | Itinéraires | P0 | Création à partir d'un modèle, édition en Markdown avec blocs de code, recherche et filtres (service, pays, stack, état), versions |
 | Vérifications | P0 | Bouton « ça marche chez moi » daté par pays, signalement d'un piège, calcul de l'état de la fiche selon la fraîcheur |
-| Piste d'essai | P0 | Clés de test, scénarios rejouables, inspecteur de requêtes, envoi de webhooks vers une URL fournie ou un récepteur intégré |
+| Simulateur | P0 | Clés de test, scénarios rejouables, inspecteur de requêtes, envoi de webhooks vers une URL fournie ou un récepteur intégré |
 | Discussions | P1 | Sujets classés par thème, réponses, vote « utile », réponse acceptée par l'auteur, étiquettes pays et stack, lien possible vers une fiche |
 | Blog | P1 | Articles bilingues en Markdown, catégories, brouillon puis publication, auteur invité, flux RSS |
 | Newsletter | P1 | Inscription avec confirmation par e-mail, choix de la langue, numéro hebdomadaire, désinscription en un clic |
-| Classement | P1 | Points par contribution, classement par pays et par développeur |
+| Classement | P1 | Points par contribution, statut de membre confirmé, classement par pays et par développeur |
 | Serveur MCP | P1 | Outils en lecture seule : chercher une fiche, la lire, lister les pièges |
 | Administration | P1 | Modération des fiches, des sujets et des signalements, rédaction des articles, suspension d'un compte |
 
-**Scénarios de la piste d'essai (P0)**
+**Scénarios du Simulateur (P0)**
 
 - Paiement réussi
 - Solde insuffisant
@@ -125,26 +125,35 @@ Documentations suivies, consultées le 12 octobre 2026 : [Wave Checkout API](htt
 
 **Règles des discussions, du blog et de la newsletter**
 
-- Les intégrations restent le produit phare : l'accueil met la piste d'essai et les fiches en premier, les discussions et le blog ensuite.
+- Les intégrations restent le produit phare : l'accueil met le Simulateur et les fiches en premier, les discussions et le blog ensuite.
 - Quand une discussion aboutit à une solution d'intégration, son auteur peut la transformer en fiche en un clic.
 - Points : réponse acceptée 5, réponse jugée utile 1, article publié 10.
-- Tout sujet ou réponse peut être signalé. Deux signalements le masquent jusqu'à la décision d'un modérateur.
+- Tout sujet ou réponse peut être signalé. Deux signalements le masquent jusqu'à la décision d'un modérateur. Le signalement d'un membre confirmé compte pour deux.
 - Un article passe par un brouillon et une relecture de l'équipe avant publication.
 - La newsletter n'est envoyée qu'aux adresses confirmées, et chaque numéro porte un lien de désinscription.
 
 **Ajouts décidés le 13 octobre 2026**
 
-**1. Relais local des webhooks (P0).** Recevoir un callback exige d'habitude une URL publique en HTTPS, ce qui bloque quiconque développe sur son poste. Overpass fournit une commande, du type « npx overpass-cli listen --forward-to http://localhost:3000/webhook », qui ouvre une connexion sortante vers Overpass et rejoue chaque webhook simulé sur le serveur local du développeur. Aucun tunnel, aucun certificat, aucune ouverture de port. Le relais transmet le corps et les en-têtes sans les modifier, pour que la vérification de signature fonctionne comme en production. L'inspecteur montre chaque livraison : envoyée, reçue en local, code de réponse, durée, bouton Rejouer. La commande s'authentifie avec une clé de test et ne reçoit que les webhooks de cette clé. Elle vit dans apps/cli, sous licence MIT.
+**1. Recevoir les webhooks sur son ordinateur avec overpass-cli (P0).** Recevoir un callback exige d'habitude une URL publique en HTTPS, ce qui bloque quiconque développe sur son poste. Overpass fournit une commande, du type « npx overpass-cli listen --forward-to http://localhost:3000/webhook », qui ouvre une connexion sortante vers Overpass et rejoue chaque webhook simulé sur le serveur local du développeur. Aucun tunnel, aucun certificat, aucune ouverture de port. La commande transmet le corps et les en-têtes sans les modifier, pour que la vérification de signature fonctionne comme en production. L'inspecteur montre chaque livraison : envoyée, reçue en local, code de réponse, durée, bouton Rejouer. La commande s'authentifie avec une clé de test et ne reçoit que les webhooks de cette clé. Elle vit dans apps/cli, sous licence MIT.
 
-**2. Relais des callbacks réels (P1, bêta).** Overpass attribue au développeur une URL publique en HTTPS à déclarer chez l'opérateur réel. Les callbacks reçus sont rejoués sur son poste par la même commande. Limites : usage de développement uniquement, quotas stricts, rien n'est conservé au-delà de 24 heures, mention claire que des données de paiement réelles transitent par Overpass.
+**2. Transfert des callbacks réels vers l'ordinateur du développeur (P1, bêta).** Overpass attribue au développeur une URL publique en HTTPS à déclarer chez l'opérateur réel. Les callbacks reçus sont rejoués sur son poste par la même commande. Limites : usage de développement uniquement, quotas stricts, rien n'est conservé au-delà de 24 heures, mention claire que des données de paiement réelles transitent par Overpass.
 
-**3. Démo guidée PI-SPI (P0 si PI-SPI est livré).** Un parcours pas à pas dans la piste d'essai : obtenir un jeton, créer une demande de paiement, la voir payée, recevoir le webhook sur son poste local. Chaque étape affiche la requête à copier et la réponse obtenue. Le simulateur complète le sandbox officiel de la BCEAO avec les scénarios d'échec et un accès sans certificat, et renvoie vers lui.
+**3. Démo guidée PI-SPI (P0 si PI-SPI est livré).** Un parcours pas à pas dans le Simulateur : obtenir un jeton, créer une demande de paiement, la voir payée, recevoir le webhook sur son poste local. Chaque étape affiche la requête à copier et la réponse obtenue. Le simulateur complète le sandbox officiel de la BCEAO avec les scénarios d'échec et un accès sans certificat, et renvoie vers lui.
 
-**4. Actualités, blogs des membres et abonnements (P1).** Les actualités sont une rubrique tenue par l'administration seule. Chaque membre dispose de son blog, à une adresse du type /blog/@pseudo, et y publie ses articles en Markdown, sans relecture préalable. Tout membre connecté peut commenter un article et lui donner une étoile, une par compte et par article. Un membre peut suivre un auteur : son fil « Pour moi » affiche d'abord les articles des auteurs suivis, puis les articles récents les mieux notés. L'administration peut masquer ou bloquer un article ou un commentaire et suspendre un blog. Deux signalements masquent un contenu en attendant une décision. Tables ajoutées : follows, post_comments, post_stars. Le fil est une requête PostgreSQL, sans base en graphe. Points : étoile reçue 1.
+**4. Actualités, blogs des membres et abonnements (P1).** Les actualités sont une rubrique tenue par l'administration seule. Chaque membre dispose de son blog, à une adresse du type /blog/@pseudo, et y publie ses articles en Markdown, sans relecture préalable. Tout membre connecté peut commenter un article et lui donner une étoile, une par compte et par article. Un membre peut suivre un auteur : son fil « Pour moi » affiche d'abord les articles des auteurs suivis, puis les articles récents les mieux notés. L'administration peut masquer ou bloquer un article ou un commentaire et suspendre un blog. Deux signalements masquent un contenu en attendant une décision, et le signalement d'un membre confirmé compte pour deux. Seul un membre confirmé peut publier un article. Tables ajoutées : follows, post_comments, post_stars. Le fil est une requête PostgreSQL, sans base en graphe. Points : étoile reçue 1.
 
 **5. Entraide autour des API (P1).** Les fiches et les questions viennent des membres, l'équipe ne code que les opérateurs simulés. Sur une fiche, un bouton « Ça ne marche pas chez moi » ouvre une discussion déjà rattachée à la fiche, au service et au pays. Le formulaire de question a un champ pour le message d'erreur et un pour le code, et masque avant publication les clés, jetons et secrets collés par mégarde. Un membre peut proposer un service absent de la liste, que l'administration valide. Sur un service sans simulateur, un bouton « Je veux un simulateur » permet un vote par compte, avec un classement public des demandes.
 
 **6. Assistant « Demande à Overpass » (P2, optionnel).** Construit seulement si tout le reste est en ligne le 21 octobre. Il cherche dans les fiches, les discussions et les articles, puis répond en citant chaque source avec son lien et l'état de la fiche. Sans source pertinente, il dit qu'il ne sait pas. Modèle ouvert sous licence permissive, hébergé sur un serveur GPU Systalink, sans API d'IA propriétaire. VoltAgent orchestre la recherche et la réponse. Les contenus lus sont des données, jamais des instructions.
+
+**Membre confirmé (décidé le 25 octobre 2026)**
+
+- Les points servent à l'émulation et à la confiance. Un membre devient confirmé à partir de 20 points, soit deux fiches publiées ou dix vérifications.
+- Le signalement d'un membre confirmé compte pour deux. Un seul suffit donc à masquer un sujet, une réponse, un article ou un commentaire jusqu'à la décision d'un modérateur.
+- Seul un membre confirmé peut publier un article sur son blog. Un nouveau compte commence par des fiches et des vérifications, ce qui freine le spam.
+- Un membre confirmé a des quotas d'écriture trois fois plus larges pour les sujets, les réponses, les articles, les fiches, les vérifications et les pièges.
+- Le statut est recalculé à chaque lecture à partir des points. Un membre qui repasse sous le seuil perd ses droits. L'administration garde tous ses droits.
+- Le profil public affiche la mention « Membre confirmé », et le tableau de bord montre la progression vers le seuil.
 
 **Règles de couverture des opérateurs (13 octobre 2026)**
 
@@ -167,10 +176,10 @@ Le produit compte 24 écrans, répartis entre un site public qui vend et un espa
 | Page | Rôle | Contenu obligatoire |
 | --- | --- | --- |
 | Accueil | Convaincre en 10 secondes | Promesse, bouton « Essayer la démo », les trois briques, carte des pays couverts, chiffres d'usage réels, appel à l'inscription |
-| Démo | Montrer sans compte | Piste d'essai limitée à un opérateur et trois scénarios |
+| Démo | Montrer sans compte | Simulateur limité à un opérateur et trois scénarios |
 | Catalogue | Explorer | Recherche, filtres, cartes de fiches avec état et pays |
 | Détail d'une fiche | Lire et agir | Contenu, pièges, vérifications datées, bouton « Tester », bouton « Vérifier » |
-| Classement | Créer l'émulation | Pays, puis développeurs |
+| Classement | Créer l'émulation et la confiance | Pays, puis développeurs, et à quoi servent les points |
 | Tarifs | Rendre le produit vendable | Offre gratuite, offre Équipe, offre Entreprise, mention « bientôt » sur le paiement |
 | Documentation | Brancher le MCP et l'API | Démarrage rapide, configuration par éditeur, référence de l'API |
 | À propos, mentions légales, confidentialité | Rassurer | Équipe, licences, traitement des données |
@@ -201,9 +210,9 @@ L'inscription à la newsletter apparaît aussi dans le pied de page et à la fin
 
 | Page | Contenu obligatoire |
 | --- | --- |
-| Tableau de bord | Mes fiches, mes vérifications, mes points, raccourci vers la piste d'essai |
+| Tableau de bord | Mes fiches, mes vérifications, mes points, raccourci vers le Simulateur |
 | Éditeur de fiche | Modèle pré-rempli, aperçu en direct, choix de la langue de la fiche |
-| Piste d'essai | Opérateur, scénario, clés de test, inspecteur, journal des webhooks |
+| Simulateur | Opérateur, scénario, clés de test, inspecteur, journal des webhooks |
 | Profil public | Pays, stacks, contributions, points |
 | Paramètres | Langue, mot de passe, jetons MCP et clés d'API, suppression du compte |
 | Administration | File de modération, signalements, comptes |
@@ -346,7 +355,7 @@ overpass/
   CLAUDE.md
 ```
 
-**Modules de l'API.** `accounts`, `routes` (les itinéraires), `checks` (vérifications et pièges), `sandbox` (piste d'essai), `ranking`, `admin`. Chaque module expose ses routes, son service et son accès aux données, et n'importe rien d'un autre module en dehors de son interface publique.
+**Modules de l'API.** `accounts`, `routes` (les itinéraires), `checks` (vérifications et pièges), `sandbox` (Simulateur), `ranking`, `admin`. Chaque module expose ses routes, son service et son accès aux données, et n'importe rien d'un autre module en dehors de son interface publique.
 
 Trois modules s'ajoutent pour la communauté : `discussions`, `blog` et `newsletter`. Les e-mails partent par SMTP avec Nodemailer (MIT), depuis le service Email Pro de Systalink ou un serveur de messagerie libre. Aucun service d'envoi propriétaire.
 
@@ -373,7 +382,7 @@ Ces tables suffisent à la première version : chacune appartient à un seul mod
 | `sandbox_keys` | sandbox | utilisateur, opérateur, clé hachée, quota, date d'expiration |
 | `sandbox_events` | sandbox | clé, scénario, requête, réponse, webhooks envoyés, date |
 | `sandbox_objects` | sandbox | clé, opérateur, type (session, demande de paiement), identifiant, état, date |
-| `sandbox_deliveries` | sandbox | clé, événement, cible (URL, relais local, récepteur intégré), corps brut, en-têtes, tentatives, prochaine tentative, code de réponse, durée, état |
+| `sandbox_deliveries` | sandbox | clé, événement, cible (URL, ordinateur du développeur avec overpass-cli, récepteur intégré), corps brut, en-têtes, tentatives, prochaine tentative, code de réponse, durée, état |
 | `api_tokens` | accounts | utilisateur, nom, usage (MCP ou API), jeton haché, dernière utilisation, date de révocation |
 | `rate_limit_counters` | infrastructure | clé (route et adresse), nombre de requêtes, fin de la fenêtre |
 
@@ -389,9 +398,9 @@ Ces tables suffisent à la première version : chacune appartient à un seul mod
 **Règles**
 
 - Identifiants en UUID, dates en UTC, suppression logique pour les fiches.
-- Les points du classement sont calculés à partir de `routes`, `checks` et `potholes`, puis mis en cache. Ils ne sont jamais saisis.
+- Les points du classement sont calculés à partir des fiches, des vérifications, des pièges confirmés, des réponses acceptées, des votes « utile », des articles publiés et des étoiles reçues, puis mis en cache dans `member_points`. Ils ne sont jamais saisis. Le statut de membre confirmé en découle à chaque lecture.
 - L'état d'une fiche (voie libre, à vérifier, signalée cassée) n'est pas stocké : il est calculé à chaque lecture à partir de `checks` et `potholes`. Les versions française et anglaise d'une fiche partagent un groupe de traduction, une seule fiche par langue.
-- Les événements de la piste d'essai sont purgés après 7 jours.
+- Les événements du Simulateur sont purgés après 7 jours.
 - Chaque migration est versionnée et réversible.
 
 ## 10. API, simulateur et serveur MCP
@@ -410,7 +419,7 @@ L'API REST est le seul point d'accès aux données : l'interface, le serveur MCP
 | Comptes | `POST /v1/auth/register`, `POST /v1/auth/login`, `POST /v1/auth/logout`, `POST /v1/auth/forgot`, `POST /v1/auth/reset`, `GET` et `PATCH /v1/me`, `PUT /v1/me/password`, `DELETE /v1/me`, `GET /v1/users/:handle` |
 | Fiches | `GET /v1/services`, `GET /v1/routes`, `GET /v1/routes/:id`, `POST /v1/routes`, `PATCH /v1/routes/:id`, `DELETE /v1/routes/:id`, `GET /v1/me/routes` |
 | Vérifications | `POST /v1/routes/:id/checks`, `POST /v1/routes/:id/potholes`, `PATCH /v1/potholes/:id`, `GET /v1/me/checks` |
-| Piste d'essai | `POST /v1/sandbox/keys`, `GET /v1/sandbox/events`, `GET /v1/sandbox/listen`, `POST /v1/sandbox/deliveries/:id/replay`, toutes méthodes sur `/v1/sandbox/:provider/*` (réponses au format de l'opérateur, hors enveloppe) |
+| Simulateur | `POST /v1/sandbox/keys`, `GET /v1/sandbox/events`, `GET /v1/sandbox/listen`, `POST /v1/sandbox/deliveries/:id/replay`, toutes méthodes sur `/v1/sandbox/:provider/*` (réponses au format de l'opérateur, hors enveloppe) |
 | Classement | `GET /v1/ranking/countries`, `GET /v1/ranking/developers` |
 | Jetons | `GET /v1/tokens`, `POST /v1/tokens`, `DELETE /v1/tokens/:id` |
 
@@ -497,7 +506,7 @@ Claude Code s'appuie sur cinq dépôts, tous sous licence MIT à la date de ce d
 **Ordre d'utilisation par écran**
 
 1. `/ecc:plan` pour découper la fonctionnalité, puis validation du plan par un membre de l'équipe.
-2. Prototype rapide avec huashu-design pour les écrans à fort enjeu : accueil, piste d'essai, détail d'une fiche.
+2. Prototype rapide avec huashu-design pour les écrans à fort enjeu : accueil, Simulateur, détail d'une fiche.
 3. Construction avec Hallmark, en respectant le `DESIGN.md` du dépôt.
 4. Skill `tdd-workflow` d'ECC pour la logique : test en échec, code, test vert.
 5. `hallmark audit` sur la page, puis `/code-review` et `/security-scan` avant fusion.
@@ -566,7 +575,7 @@ Le code est gelé le 24 octobre, ce qui laisse une journée de marge avant la cl
 7. **23 octobre.** Audit des licences, tests de bout en bout, sécurité, vidéo de 90 secondes.
 8. **24 octobre.** Gel du code et soumission.
 
-**Ordre de coupe en cas de retard.** PayDunya, puis PI-SPI, puis envoi automatique de la newsletter (l'inscription reste), puis serveur MCP, puis classement, puis blog, puis discussions. Le simulateur avec Wave et le relais local, les fiches et les vérifications ne se coupent pas.
+**Ordre de coupe en cas de retard.** PayDunya, puis PI-SPI, puis envoi automatique de la newsletter (l'inscription reste), puis serveur MCP, puis classement, puis blog, puis discussions. Le Simulateur avec Wave et la commande overpass-cli, les fiches et les vérifications ne se coupent pas.
 
 **Critères d'acceptation**
 

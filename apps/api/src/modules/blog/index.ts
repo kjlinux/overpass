@@ -1,9 +1,10 @@
 import type { FastifyInstance } from "fastify";
 import type { Database } from "../../db/client.js";
+import type { RequestTrust } from "../../limits/index.js";
 import type { AccountResolver } from "../accounts/index.js";
 import type { ModerationLog } from "../admin/index.js";
 import { mediaOwnership } from "../media/index.js";
-import type { ContributionListener } from "../ranking/index.js";
+import type { ContributionListener, TrustSource } from "../ranking/index.js";
 import { createBlogRepository } from "./repository.js";
 import { registerBlogRoutes } from "./routes.js";
 import { createBlogService } from "./service.js";
@@ -12,6 +13,8 @@ export type BlogOptions = {
   db: Database;
   resolveAccount: AccountResolver;
   onContribution: ContributionListener;
+  trust: TrustSource;
+  confirmed: RequestTrust;
   log: ModerationLog;
   webOrigin: string;
   now: () => Date;
@@ -22,13 +25,14 @@ export async function registerBlog(app: FastifyInstance, options: BlogOptions): 
   const service = createBlogService({
     repository: createBlogRepository(options.db),
     onContribution: options.onContribution,
+    trust: options.trust,
     log: options.log,
     webOrigin: options.webOrigin,
     ownsMedia: mediaOwnership(options.db),
     now: options.now,
   });
   await app.register((scope) => {
-    registerBlogRoutes(scope, service, options.resolveAccount);
+    registerBlogRoutes(scope, service, options.resolveAccount, options.confirmed);
     return Promise.resolve();
   });
 }

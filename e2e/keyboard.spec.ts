@@ -21,7 +21,9 @@ test.afterAll(() => {
 async function discover(page: Page): Promise<void> {
   const app = locale("app");
   await page.goto(path("/"));
-  await expect(page.getByRole("heading", { level: 1, name: app.app.tagline })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { level: 1, name: app.app.taglines[0] ?? "" }),
+  ).toBeVisible();
   await tabTo(page, app.app.demo);
   await press(page, "Enter");
   expect((await focusState(page)).name).toBe(app.demo.run);

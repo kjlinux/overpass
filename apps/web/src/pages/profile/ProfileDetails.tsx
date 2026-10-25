@@ -38,6 +38,11 @@ export function ProfileSummary({ profile }: { profile: PublicProfile }): JSX.Ele
     <>
       <h1 class="text-h1 font-semibold">{profile.handle}</h1>
       <p class="mt-2 text-ink-2">{t("memberSince", { date: since })}</p>
+      {profile.confirmed ? (
+        <p class="mt-3">
+          <Chip>{t("confirmed")}</Chip>
+        </p>
+      ) : null}
       <dl class="mt-8 grid border-y border-rule md:grid-cols-3 md:divide-x md:divide-rule">
         <div class="py-4 md:pr-6">
           <dt class="text-caption font-medium text-ink-2">{t("country")}</dt>

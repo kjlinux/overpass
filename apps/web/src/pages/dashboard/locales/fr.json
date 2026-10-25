@@ -1,7 +1,7 @@
 {
   "title": "Tableau de bord",
   "greeting": "Connecté en tant que {{handle}}.",
-  "sandbox": "Ouvrir la piste d'essai",
+  "sandbox": "Ouvrir le Simulateur",
   "routes": {
     "heading": "Mes itinéraires",
     "emptyTitle": "Aucun itinéraire publié",
@@ -22,6 +22,9 @@
   "points": {
     "heading": "Mes points",
     "caption": "Calculés à partir de vos contributions, jamais saisis.",
+    "confirmed": "Vous êtes membre confirmé. Vous pouvez écrire sur votre blog, votre signalement compte double et vos quotas sont plus larges.",
+    "missing_one": "Encore {{count}} point pour devenir membre confirmé et ouvrir votre blog.",
+    "missing_other": "Encore {{count}} points pour devenir membre confirmé et ouvrir votre blog.",
     "profile": "Voir mon profil public"
   },
   "proposals": {

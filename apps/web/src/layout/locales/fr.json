@@ -14,7 +14,7 @@
   "signOut": "Se déconnecter",
   "nav": {
     "routes": "Itinéraires",
-    "sandbox": "Piste d'essai",
+    "sandbox": "Simulateur",
     "discussions": "Discussions",
     "blog": "Blog",
     "docs": "Docs",
@@ -36,7 +36,7 @@
   },
   "links": {
     "routes": "Itinéraires",
-    "sandbox": "Piste d'essai",
+    "sandbox": "Simulateur",
     "pricing": "Tarifs",
     "docs": "Documentation",
     "discussions": "Discussions",

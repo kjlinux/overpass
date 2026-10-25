@@ -10,8 +10,8 @@
     "noCountry": "No confirmed country yet: a country becomes confirmed once a route there reaches a clear road.",
     "routes": "See the itineraries of this service",
     "simulator": "Simulator",
-    "simulated": "This service has an unofficial simulator on the test track.",
-    "track": "Open the test track",
+    "simulated": "This service is simulated, unofficially, on the Simulator.",
+    "track": "Open the Simulator",
     "noSimulator": "{{service}} has no simulator yet. The most requested ones come first."
   },
   "vote": {

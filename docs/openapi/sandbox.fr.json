@@ -5929,7 +5929,7 @@
     },
     "/v1/sandbox/listen": {
       "get": {
-        "summary": "Recevoir les webhooks de sa clé sur son poste (relais local, flux SSE)",
+        "summary": "Recevoir les webhooks de sa clé sur son ordinateur avec overpass-cli (flux SSE)",
         "description": "Ouvre une connexion sortante qui transmet chaque webhook avec son corps brut et ses en-têtes. Après une coupure, envoyez Last-Event-ID pour recevoir les webhooks manqués.",
         "tags": [
           "Overpass"

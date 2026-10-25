@@ -3,20 +3,20 @@
     "name": "Overpass",
     "promise": "The exchange for verified integrations",
     "title": "Overpass, the exchange for verified integrations",
-    "description": "Developers share the code that works with any API, mobile money, SMS or USSD included, the known traps and dated checks. A test track simulates a payment without a merchant account, and an MCP server serves the sheets to your coding assistant."
+    "description": "Developers share the code that works with any API, mobile money, SMS or USSD included, the known traps and dated checks. A simulator reproduces a payment without a merchant account, and an MCP server serves the sheets to your coding assistant."
   },
   "titleTemplate": "{{page}} · Overpass",
   "pages": {
     "home": {
       "title": "Home",
-      "description": "Developers share the code that works with any API, mobile money, SMS or USSD included, the known traps and dated checks. A test track simulates a payment without a merchant account, and an MCP server serves the sheets to your coding assistant."
+      "description": "Developers share the code that works with any API, mobile money, SMS or USSD included, the known traps and dated checks. A simulator reproduces a payment without a merchant account, and an MCP server serves the sheets to your coding assistant."
     },
     "routes": {
       "title": "Itineraries",
       "description": "Integration sheets by service, country and stack, with the code that works, the known traps and dated checks by other developers."
     },
     "sandbox": {
-      "title": "Test track",
+      "title": "Simulator",
       "description": "Simulate a mobile payment and its real cases, success, insufficient funds, operator timeout, duplicate or late webhook."
     },
     "demo": {

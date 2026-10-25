@@ -6,7 +6,7 @@ stack: php
 language: fr
 ---
 
-Source : developers.paydunya.com, section Checkout Invoice et IPN, consultée le 23 octobre 2026. La piste d'essai Overpass rejoue la création, la confirmation et l'IPN.
+Source : developers.paydunya.com, section Checkout Invoice et IPN, consultée le 23 octobre 2026. Le Simulateur Overpass rejoue la création, la confirmation et l'IPN.
 
 ## Prérequis
 

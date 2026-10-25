@@ -6,7 +6,7 @@ stack: laravel
 language: fr
 ---
 
-Source : docs.wave.com, pages Checkout API et Webhooks, consultées le 23 octobre 2026. La piste d'essai Overpass rejoue cette API, signature comprise.
+Source : docs.wave.com, pages Checkout API et Webhooks, consultées le 23 octobre 2026. Le Simulateur Overpass rejoue cette API, signature comprise.
 
 ## Prérequis
 

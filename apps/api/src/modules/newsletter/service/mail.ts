@@ -59,19 +59,19 @@ function htmlOf(mail: IssueMail): string {
   const paragraphs = mail.intro.split(/\n{2,}/).map((part) => `<p>${escape(part)}</p>`);
   const items = mail.items.map(
     (item) =>
-      `<div style="border-top:1px solid #D4D4D0;padding:16px 0">` +
+      `<div style="border-top:1px solid #D4D4D8;padding:16px 0">` +
       `<p style="margin:0;font-size:13px">${escape(copy.kinds[item.kind])}</p>` +
       `<h2 style="margin:4px 0;font-size:18px">${escape(item.title)}</h2>` +
       `<p style="margin:0 0 8px">${escape(item.summary)}</p>` +
       `<a href="${escape(linkOf(mail, item))}" style="color:#213E9E">${escape(copy.read)}</a></div>`,
   );
   const footer =
-    `<p style="border-top:1px solid #D4D4D0;padding-top:16px;font-size:13px">${escape(copy.why)} ` +
+    `<p style="border-top:1px solid #D4D4D8;padding-top:16px;font-size:13px">${escape(copy.why)} ` +
     `<a href="${escape(mail.unsubscribePage)}" style="color:#213E9E">${escape(copy.unsubscribe)}</a></p>` +
     `<p>${escape(copy.signature)}</p>`;
   return (
     `<!doctype html><html lang="${mail.language}"><body style="margin:0;padding:24px;` +
-    `background:#FBFBF9;color:#1A1A1C;font-family:Arial,sans-serif;line-height:1.5">` +
+    `background:#FCFCFD;color:#1A1A1C;font-family:Arial,sans-serif;line-height:1.5">` +
     `<div style="max-width:600px;margin:0 auto">${[...paragraphs, ...items, footer].join("")}` +
     `</div></body></html>`
   );

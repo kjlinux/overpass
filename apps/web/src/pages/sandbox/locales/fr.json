@@ -1,14 +1,14 @@
 {
-  "title": "Piste d'essai",
+  "title": "Simulateur",
   "intro": "Appelez un opérateur simulé avec une clé de test, choisissez ce qui doit mal tourner, puis lisez la requête, la réponse et chaque webhook. Aucun compte marchand, aucun argent réel.",
-  "openapi": "Référence OpenAPI du simulateur",
+  "openapi": "Référence OpenAPI du Simulateur",
   "noProviders": {
     "title": "Aucun prestataire simulé pour l'instant",
-    "text": "La piste d'essai ouvre dès qu'un administrateur publie un premier prestataire simulé."
+    "text": "Le Simulateur ouvre dès qu'un administrateur publie un premier prestataire simulé."
   },
   "visitor": {
     "heading": "Une clé de test vous attend",
-    "body": "Connectez-vous pour créer une clé, appeler le simulateur depuis votre code et recevoir les webhooks sur votre poste.",
+    "body": "Connectez-vous pour créer une clé, appeler les opérateurs simulés depuis votre code et recevoir les webhooks sur votre ordinateur.",
     "signIn": "Se connecter",
     "demo": "Essayer la démo sans compte"
   },
@@ -20,9 +20,9 @@
     "version": "Version",
     "consulted": "Consultée le",
     "countries": "Pays",
-    "choices": "Ce que le simulateur choisit quand la documentation ne dit rien",
+    "choices": "Ce que le Simulateur choisit quand la documentation ne dit rien",
     "officialSandbox": "Sandbox officiel de l'opérateur",
-    "unavailable": "Le simulateur de cet opérateur n'est pas encore disponible. Voici ceux qui le sont."
+    "unavailable": "Cet opérateur n'est pas encore simulé. Voici ceux qui le sont."
   },
   "scenario": {
     "heading": "Scénario",
@@ -58,7 +58,7 @@
     "use": "Utiliser",
     "revoke": "Révoquer",
     "revokeTitle": "Révoquer cette clé ?",
-    "revokeBody": "Les appels et le relais qui l'utilisent seront refusés aussitôt. Son historique reste visible 7 jours.",
+    "revokeBody": "Les appels et la commande overpass-cli qui l'utilisent seront refusés aussitôt. Son historique reste visible 7 jours.",
     "revokeConfirm": "Révoquer la clé",
     "secret": "Secret des webhooks",
     "secretHelp": "Vérifiez la signature des webhooks avec ce secret, comme avec celui de l'opérateur.",
@@ -71,8 +71,8 @@
       "help": "Vous lisez chaque webhook ici, sans rien installer."
     },
     "relay": {
-      "label": "Relais local sur mon poste",
-      "help": "Pour votre serveur en développement : ni URL publique, ni tunnel."
+      "label": "Sur mon ordinateur, avec overpass-cli",
+      "help": "Les webhooks arrivent sur votre serveur de développement, sans URL publique ni tunnel."
     },
     "url": {
       "label": "Mon URL publique",
@@ -80,7 +80,8 @@
     },
     "terminal": "Terminal, votre clé est déjà insérée",
     "terminalPrefix": "Terminal : remplacez le début de clé par votre clé complète",
-    "relayHelp": "La commande ouvre une connexion sortante vers Overpass et rejoue chaque webhook sur votre serveur, corps et en-têtes intacts.",
+    "relayHelp": "Lancée dans votre terminal, cette commande se connecte à Overpass et transmet chaque webhook à votre serveur local, corps et en-têtes intacts.",
+    "guide": "Voir le guide pas à pas",
     "urlLabel": "URL qui reçoit les webhooks",
     "urlHelp": "Overpass la vérifie de nouveau à chaque envoi et ne suit aucune redirection.",
     "save": "Enregistrer l'URL",
@@ -104,7 +105,7 @@
     "headers": "En-têtes",
     "last": "Dernier appel, {{time}}",
     "emptyTitle": "Aucun appel pour l'instant",
-    "emptyBody": "Lancez un paiement simulé, ou appelez le simulateur depuis votre code avec cette clé."
+    "emptyBody": "Lancez un paiement simulé, ou appelez l'opérateur simulé depuis votre code avec cette clé."
   },
   "deliveries": {
     "heading": "Livraisons",
@@ -118,7 +119,7 @@
     "trip": "Trajet du webhook",
     "stops": {
       "overpass": "Overpass",
-      "relay": "Relais local",
+      "relay": "overpass-cli sur votre ordinateur",
       "internet": "Internet",
       "server": "Votre serveur",
       "url": "Votre URL",
@@ -137,33 +138,75 @@
     }
   },
   "demo": {
-    "title": "Démo de la piste d'essai",
+    "title": "Démo du Simulateur",
     "intro": "Un paiement Wave simulé, sans compte : choisissez un scénario, lancez, et regardez le webhook arriver.",
     "scenarios": "Scénario de la démo",
     "button": "Lancer la démo",
     "waiting": "Le webhook est en route.",
     "done": "Webhook reçu.",
-    "more": "Pour vos propres appels et le relais local, créez une clé de test.",
+    "more": "Pour lancer vos propres appels et recevoir les webhooks sur votre ordinateur, créez une clé de test sur le",
     "failed": "La démo n'a pas pu démarrer. Réessayez dans un instant."
   },
   "launchPage": {
     "title": "Paiement simulé",
     "body": "Cette page remplace la page de paiement de {{provider}} pendant vos tests. Le scénario de votre clé décide de l'issue : il n'y a rien à payer ici.",
     "session": "Session",
-    "back": "Retour à la piste d'essai"
+    "back": "Retour au Simulateur"
   },
   "errors": {
-    "load": "La piste d'essai n'a pas pu charger vos clés. Réessayez dans un instant.",
+    "load": "Le Simulateur n'a pas pu charger vos clés. Réessayez dans un instant.",
     "action": "L'action n'a pas abouti. Réessayez dans un instant."
   },
   "guided": {
     "heading": "Démo guidée",
-    "intro": "{{count}} étapes, du jeton au webhook reçu sur votre poste. Copiez chaque commande dans votre terminal, ou jouez l'étape depuis cette page : la réponse s'affiche dans l'inspecteur.",
+    "intro": "{{count}} étapes, du jeton au webhook reçu sur votre ordinateur. Copiez chaque commande dans votre terminal, ou jouez l'étape depuis cette page : la réponse s'affiche dans l'inspecteur.",
     "step": "Étape {{number}}",
     "copy": "Commande à copier",
     "play": "Jouer l'étape",
     "result": "Réponse {{status}}",
-    "webhookTitle": "Webhook reçu en local",
-    "webhook": "Lancez le relais local, puis rejouez l'étape qui crée le paiement : le webhook arrive sur votre serveur, signé selon le schéma de l'opérateur."
+    "webhookTitle": "Webhook reçu sur votre ordinateur",
+    "webhook": "Lancez la commande overpass-cli, puis rejouez l'étape qui crée le paiement. Le webhook arrive sur votre serveur, signé selon le schéma de l'opérateur."
+  },
+  "tools": {
+    "heading": "Outils",
+    "intro": "Le premier guide fait arriver les webhooks du Simulateur sur votre ordinateur. Le second branche votre assistant de code sur les fiches vérifiées d'Overpass.",
+    "cli": {
+      "heading": "Recevoir les webhooks sur votre ordinateur",
+      "intro": "La commande overpass-cli se connecte à Overpass depuis votre ordinateur et transmet chaque webhook à votre serveur de développement. Il ne faut ni URL publique, ni tunnel, ni port ouvert, seulement Node.js 20 ou plus.",
+      "terminal": "Terminal",
+      "key": {
+        "title": "Créer une clé de test",
+        "text": "Dans le bloc Clé de test, créez une clé et copiez-la tout de suite, car elle ne s'affiche qu'une fois."
+      },
+      "target": {
+        "title": "Choisir votre ordinateur",
+        "text": "Dans Où envoyer les webhooks, choisissez Sur mon ordinateur, avec overpass-cli. La commande apparaît alors avec votre clé déjà insérée."
+      },
+      "run": {
+        "title": "Lancer la commande",
+        "text": "Mettez votre clé à la place de ovp_test_... et l'adresse de votre serveur local après --forward-to, puis lancez la commande dans un terminal. Laissez-la tourner, Ctrl+C l'arrête."
+      },
+      "check": {
+        "title": "Lancer un paiement et vérifier",
+        "text": "Lancez le paiement simulé. Le webhook arrive sur votre serveur et Livraisons montre son statut et sa durée. Vérifiez la signature avec le secret des webhooks, puis rejouez la livraison autant de fois qu'il le faut."
+      }
+    },
+    "mcp": {
+      "heading": "Brancher votre assistant de code sur les fiches",
+      "intro": "Le serveur MCP d'Overpass donne à Claude Code, Cursor ou VS Code les fiches vérifiées, leur état et leurs pièges. Il est en lecture seule et demande un jeton personnel, différent de la clé de test.",
+      "token": {
+        "title": "Créer un jeton personnel",
+        "text": "Dans les paramètres, onglet Jetons, créez un jeton d'usage Serveur MCP. Il ne s'affiche qu'une fois.",
+        "link": "Ouvrir les jetons"
+      },
+      "config": {
+        "title": "Coller la configuration",
+        "text": "Choisissez votre éditeur, copiez sa configuration et mettez votre jeton à la place de ovp_VOTRE_JETON."
+      },
+      "ask": {
+        "title": "Poser votre question",
+        "text": "Demandez par exemple à votre assistant d'intégrer un paiement Wave dans votre projet Laravel en suivant la fiche Overpass. Il cherche la fiche, lit son état et écrit le code à partir d'elle."
+      }
+    }
   }
 }

@@ -1,5 +1,6 @@
 import { ok, pickLanguage } from "@overpass/shared";
 import { parseInput } from "../../../http/validate.js";
+import { writeLimit } from "../../../limits/index.js";
 import { requireAccount } from "../../accounts/index.js";
 import {
   feedQuery,
@@ -39,8 +40,8 @@ export function readRoutes({ app, service, resolve }: Context): void {
   });
 }
 
-export function writeRoutes({ app, service, resolve }: Context): void {
-  const options = { config: { rateLimit: limits.publish } };
+export function writeRoutes({ app, service, resolve, confirmed }: Context): void {
+  const options = { config: { rateLimit: writeLimit(limits.publish, confirmed) } };
   app.post("/v1/posts", options, async (request, reply) => {
     const account = await requireAccount(resolve, request);
     const input = parseInput(postCreateInput, request.body);

@@ -10,7 +10,8 @@
   "checks": "Vérifications",
   "potholes": "Pièges confirmés",
   "points": "Points",
-  "pointsCaption": "Itinéraire publié 10, vérification 2, piège confirmé 5.",
+  "pointsCaption": "Itinéraire publié 10, article publié 10, piège confirmé 5, réponse acceptée 5, vérification 2, réponse utile 1, étoile reçue 1.",
+  "confirmed": "Membre confirmé",
   "emptyTitle": "Pas encore de contribution",
   "emptyText": "Les itinéraires, vérifications et pièges de ce membre apparaîtront ici.",
   "retry": "Réessayer"

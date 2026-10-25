@@ -20,11 +20,11 @@ function report(db: Database, kind: BlogContentKind, id: string, userId: string,
         values (${kind}, ${id}, ${userId}, ${at(when)}) on conflict do nothing returning id`,
     );
     if (inserted.length === 0) return null;
-    const [row] = await rows<{ n: number }>(
+    const open = await rows<{ id: string }>(
       scoped,
-      sql`select count(*)::int as n from post_reports where ${openOn(kind, id)}`,
+      sql`select user_id as id from post_reports where ${openOn(kind, id)}`,
     );
-    return row?.n ?? 0;
+    return open.map((row) => row.id);
   });
 }
 

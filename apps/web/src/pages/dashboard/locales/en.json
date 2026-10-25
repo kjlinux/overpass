@@ -1,7 +1,7 @@
 {
   "title": "Dashboard",
   "greeting": "Logged in as {{handle}}.",
-  "sandbox": "Open the test track",
+  "sandbox": "Open the Simulator",
   "routes": {
     "heading": "My itineraries",
     "emptyTitle": "No itinerary published",
@@ -22,6 +22,9 @@
   "points": {
     "heading": "My points",
     "caption": "Computed from your contributions, never entered by hand.",
+    "confirmed": "You are a confirmed member. You can write on your blog, your report counts twice and your quotas are larger.",
+    "missing_one": "{{count}} more point to become a confirmed member and open your blog.",
+    "missing_other": "{{count}} more points to become a confirmed member and open your blog.",
     "profile": "See my public profile"
   },
   "proposals": {

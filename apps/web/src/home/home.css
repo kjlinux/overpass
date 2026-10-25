@@ -148,3 +148,31 @@
     border-left: 1px solid var(--color-rule);
   }
 }
+.typed-stack {
+  display: grid;
+}
+.typed-stack > * {
+  grid-area: 1 / 1;
+}
+.typed-ghost {
+  visibility: hidden;
+}
+.typed-caret {
+  display: inline-block;
+  width: 0.06em;
+  height: 0.85em;
+  margin-left: 0.04em;
+  vertical-align: -0.05em;
+  background: var(--color-accent);
+  animation: typed-blink 1s steps(1) infinite;
+}
+@keyframes typed-blink {
+  50% {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .typed-caret {
+    display: none;
+  }
+}

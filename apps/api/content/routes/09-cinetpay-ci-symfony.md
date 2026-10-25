@@ -6,7 +6,7 @@ stack: symfony
 language: fr
 ---
 
-Source : docs.cinetpay.com, API de paiement et notification, et le README du SDK PHP officiel 3.0.1 sur GitHub, consultés le 23 octobre 2026. La piste d'essai Overpass rejoue le flux du SDK PHP (connexion, paiement, lecture) ; en production, l'API HTTP décrite ici est celle que vous appelez.
+Source : docs.cinetpay.com, API de paiement et notification, et le README du SDK PHP officiel 3.0.1 sur GitHub, consultés le 23 octobre 2026. Le Simulateur Overpass rejoue le flux du SDK PHP (connexion, paiement, lecture) ; en production, l'API HTTP décrite ici est celle que vous appelez.
 
 ## Prérequis
 

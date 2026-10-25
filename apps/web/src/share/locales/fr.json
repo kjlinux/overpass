@@ -3,20 +3,20 @@
     "name": "Overpass",
     "promise": "La bourse des intégrations vérifiées",
     "title": "Overpass, la bourse des intégrations vérifiées",
-    "description": "Des développeurs partagent le code qui marche avec n'importe quelle API, paiement mobile, SMS ou USSD compris, les pièges connus et des vérifications datées. Une piste d'essai simule un paiement sans compte marchand, et un serveur MCP sert les fiches à votre assistant de code."
+    "description": "Des développeurs partagent le code qui marche avec n'importe quelle API, paiement mobile, SMS ou USSD compris, les pièges connus et des vérifications datées. Un simulateur reproduit un paiement sans compte marchand, et un serveur MCP sert les fiches à votre assistant de code."
   },
   "titleTemplate": "{{page}} · Overpass",
   "pages": {
     "home": {
       "title": "Accueil",
-      "description": "Des développeurs partagent le code qui marche avec n'importe quelle API, paiement mobile, SMS ou USSD compris, les pièges connus et des vérifications datées. Une piste d'essai simule un paiement sans compte marchand, et un serveur MCP sert les fiches à votre assistant de code."
+      "description": "Des développeurs partagent le code qui marche avec n'importe quelle API, paiement mobile, SMS ou USSD compris, les pièges connus et des vérifications datées. Un simulateur reproduit un paiement sans compte marchand, et un serveur MCP sert les fiches à votre assistant de code."
     },
     "routes": {
       "title": "Itinéraires",
       "description": "Les fiches d'intégration par service, pays et stack, avec le code qui marche, les pièges connus et des vérifications datées par d'autres développeurs."
     },
     "sandbox": {
-      "title": "Piste d'essai",
+      "title": "Simulateur",
       "description": "Simulez un paiement mobile et ses cas réels, succès, solde insuffisant, délai dépassé, webhook en double ou en retard."
     },
     "demo": {

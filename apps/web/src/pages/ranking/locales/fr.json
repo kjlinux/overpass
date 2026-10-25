@@ -31,6 +31,8 @@
     "accepted": "Réponse acceptée",
     "useful": "Réponse jugée utile",
     "articles": "Article publié",
+    "stars": "Étoile reçue sur un article",
+    "trust": "À partir de {{count}} points, vous devenez membre confirmé. Vous pouvez alors écrire sur votre blog, votre signalement compte double et vos quotas d'écriture sont trois fois plus larges. Ce statut se recalcule avec vos points.",
     "points_one": "{{count}} point",
     "points_other": "{{count}} points"
   }

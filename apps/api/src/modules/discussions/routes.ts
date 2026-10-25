@@ -1,6 +1,8 @@
 import { ok, pickLanguage } from "@overpass/shared";
 import type { FastifyInstance } from "fastify";
 import { parseInput } from "../../http/validate.js";
+import { writeLimit } from "../../limits/index.js";
+import type { RequestTrust } from "../../limits/index.js";
 import { requireAccount } from "../accounts/index.js";
 import type { AccountResolver } from "../accounts/index.js";
 import {
@@ -26,7 +28,12 @@ const limits = {
   click: { max: 120, timeWindow: hour },
 };
 
-type Context = { app: FastifyInstance; service: DiscussionsService; resolve: AccountResolver };
+type Context = {
+  app: FastifyInstance;
+  service: DiscussionsService;
+  resolve: AccountResolver;
+  confirmed: RequestTrust;
+};
 
 function readRoutes({ app, service, resolve }: Context): void {
   const options = { config: { rateLimit: limits.read } };
@@ -47,13 +54,14 @@ function readRoutes({ app, service, resolve }: Context): void {
   });
 }
 
-function writeRoutes({ app, service, resolve }: Context): void {
-  app.post("/v1/threads", { config: { rateLimit: limits.thread } }, async (request, reply) => {
+function writeRoutes({ app, service, resolve, confirmed }: Context): void {
+  const threadOptions = { config: { rateLimit: writeLimit(limits.thread, confirmed) } };
+  app.post("/v1/threads", threadOptions, async (request, reply) => {
     const account = await requireAccount(resolve, request);
     const input = parseInput(threadCreateInput, request.body);
     return reply.code(201).send(ok(await service.create(account, input)));
   });
-  const replyOptions = { config: { rateLimit: limits.reply } };
+  const replyOptions = { config: { rateLimit: writeLimit(limits.reply, confirmed) } };
   app.post("/v1/threads/:id/replies", replyOptions, async (request, reply) => {
     const account = await requireAccount(resolve, request);
     const { id } = parseInput(idParams, request.params);
@@ -97,11 +105,12 @@ export function registerDiscussionsRoutes(
   app: FastifyInstance,
   service: DiscussionsService,
   resolve: AccountResolver,
+  confirmed: RequestTrust,
 ): void {
   app.addHook("onSend", async (_request, reply) => {
     reply.header("cache-control", "no-store");
   });
-  const context = { app, service, resolve };
+  const context = { app, service, resolve, confirmed };
   readRoutes(context);
   writeRoutes(context);
   clickRoutes(context);

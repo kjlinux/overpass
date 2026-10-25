@@ -15,6 +15,7 @@ import { ProviderPanel } from "./ProviderPanel";
 import { Results } from "./Results";
 import { ScenarioPanel } from "./ScenarioPanel";
 import { TargetPanel } from "./TargetPanel";
+import { ToolsSection } from "./ToolsSection";
 import { useTrack } from "./useTrack";
 
 function Visitor(): JSX.Element {
@@ -172,6 +173,7 @@ export function TrackPage(): JSX.Element {
           <LoadError error={providers.error} onRetry={() => void reload()} />
         </div>
       ) : null}
+      <ToolsSection />
     </Layout>
   );
 }

@@ -2,7 +2,7 @@
   "openapi": {
     "title": "API du simulateur Overpass",
     "description": "Opérateurs simulés à partir de leur documentation publique, sans lien avec les opérateurs réels : chaque opérateur est non officiel. Authentifiez-vous avec une clé de test Overpass, là où l'opérateur attend son identifiant. L'en-tête Overpass-Scenario choisit le scénario d'un appel.",
-    "listen": "Recevoir les webhooks de sa clé sur son poste (relais local, flux SSE)",
+    "listen": "Recevoir les webhooks de sa clé sur son ordinateur avec overpass-cli (flux SSE)",
     "listenDescription": "Ouvre une connexion sortante qui transmet chaque webhook avec son corps brut et ses en-têtes. Après une coupure, envoyez Last-Event-ID pour recevoir les webhooks manqués.",
     "result": "Signaler ce qu'a répondu le serveur local",
     "keyScheme": "Clé de test Overpass",

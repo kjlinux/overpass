@@ -1,5 +1,5 @@
 ---
-title: "PI-SPI pas à pas sur la piste d'essai"
+title: "PI-SPI pas à pas sur le Simulateur"
 kind: news
 category: tutorials
 language: fr
@@ -9,11 +9,11 @@ summary: "Obtenir un jeton, créer une demande de paiement, la voir payée et re
 publishedAt: 2026-10-23
 ---
 
-PI-SPI est la plateforme interopérable de paiement instantané de la BCEAO, commune aux huit pays de l'UEMOA. Son bac à sable officiel demande un certificat client : la piste d'essai Overpass reproduit les mêmes routes sans certificat, avec les scénarios d'échec en plus, pour que vous puissiez écrire votre intégration aujourd'hui et la pointer sur le bac à sable officiel demain.
+PI-SPI est la plateforme interopérable de paiement instantané de la BCEAO, commune aux huit pays de l'UEMOA. Son bac à sable officiel demande un certificat client : le Simulateur Overpass reproduit les mêmes routes sans certificat, avec les scénarios d'échec en plus, pour que vous puissiez écrire votre intégration aujourd'hui et la pointer sur le bac à sable officiel demain.
 
 ## 1. Une clé de test
 
-Ouvrez la piste d'essai, choisissez PI-SPI et créez une clé. Elle sert d'identifiant et de secret OAuth 2 pour le simulateur. Aucune inscription n'est nécessaire pour un premier essai.
+Ouvrez le Simulateur, choisissez PI-SPI et créez une clé. Elle sert d'identifiant et de secret OAuth 2 pour le simulateur. Aucune inscription n'est nécessaire pour un premier essai.
 
 ## 2. Le jeton
 
@@ -35,7 +35,7 @@ authorization: Bearer <jeton>
 { "amount": 2500, "currency": "XOF", "payerAlias": "+221770000000", "reference": "CMD-1042" }
 ```
 
-La piste d'essai répond comme la spécification 1.5.0 le décrit, avec l'identifiant de la demande et son état initial. Les scénarios se déclenchent par le montant ou l'alias : la page de chaque scénario indique la valeur à utiliser pour obtenir un refus, une expiration ou un succès.
+Le Simulateur répond comme la spécification 1.5.0 le décrit, avec l'identifiant de la demande et son état initial. Les scénarios se déclenchent par le montant ou l'alias : la page de chaque scénario indique la valeur à utiliser pour obtenir un refus, une expiration ou un succès.
 
 ## 4. Le webhook sur votre poste
 

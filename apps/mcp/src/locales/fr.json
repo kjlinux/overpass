@@ -52,7 +52,7 @@
     },
     "list_services": {
       "title": "Lister les services couverts",
-      "description": "Liste les services couverts par Overpass (paiement, SMS, USSD), les pays de chacun et l'existence d'un simulateur dans la piste d'essai.",
+      "description": "Liste les services couverts par Overpass (paiement, SMS, USSD), les pays de chacun et s'ils sont disponibles sur le Simulateur.",
       "country": "Seulement les services disponibles dans ce pays (code ISO 3166-1 alpha-2)."
     }
   }

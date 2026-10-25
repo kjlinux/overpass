@@ -13,7 +13,7 @@ Source : Orange Money Web Payment API sur developer.orange.com (apis/om-webpay),
 - Un compte marchand Orange Money Côte d'Ivoire et une application créée sur developer.orange.com avec l'API « Orange Money Web Payment » activée pour le pays CI.
 - Trois valeurs tirées du portail : l'en-tête d'autorisation (Basic), la clé marchande et le code pays (ici `ci`).
 - Laravel 11 ou 12, PHP 8.2 ou plus, l'extension `curl` active.
-- Une URL publique en HTTPS pour la notification. En développement, le relais local d'Overpass rejoue les webhooks du simulateur sur votre poste.
+- Une URL publique en HTTPS pour la notification. En développement, la commande overpass-cli fait arriver les webhooks du Simulateur Overpass sur votre ordinateur.
 
 ## Installation
 

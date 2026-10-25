@@ -15,7 +15,7 @@ Overpass is the exchange of verified African integrations. Developers share what
 
 **Itineraries.** Integration sheets filed by service, country and stack. Each one shows its state: clear when members checked it recently, to verify when nobody has confirmed it, reported broken when an open pothole blocks it. The state is never typed in: it is computed from the checks.
 
-**The test track.** A simulator that replays the real cases of a mobile money payment without a merchant account: Wave, PayDunya, CinetPay and PI-SPI to start with. Signed webhooks reach your machine with a single command, no tunnel, no certificate.
+**The Simulator.** A simulator that replays the real cases of a mobile money payment without a merchant account: Wave, PayDunya, CinetPay and PI-SPI to start with. Signed webhooks reach your machine with a single command, no tunnel, no certificate.
 
 **The MCP server.** It serves the itineraries to coding assistants, so the AI in your editor writes the right local integration instead of an imaginary one.
 

@@ -8,7 +8,7 @@ Status: direction "Grille" retained on 2026-10-12 by Jude Koffi among three prot
 
 Overpass is the exchange for verified African integrations: a developer tool read by hurried developers, contributors, AI-assisted developers and a jury. The interface must feel calm, legible and professional in the first minute, on a 360 px phone over 3G as well as on a laptop.
 
-The visual voice is a printed road atlas, not a dashboard: a neutral paper floor, near-black ink, 1 px rules that organise dense information into a visible grid, square corners everywhere, and one ink-blue accent reserved for the primary action and the links. Density is welcome when the rules carry it; decoration is not. Product vocabulary shapes the UI: an integration sheet is an itinerary, a known trap is a pothole, a recently verified sheet is a clear road, the simulator is the test track.
+The visual voice is a printed road atlas, not a dashboard: a neutral paper floor, near-black ink, 1 px rules that organise dense information into a visible grid, square corners everywhere, and one ink-blue accent reserved for the primary action and the links. Density is welcome when the rules carry it; decoration is not. Product vocabulary shapes the UI: an integration sheet is an itinerary, a known trap is a pothole, a recently verified sheet is a clear road, the simulator page is the Simulator, and the command that brings webhooks to the developer's computer is named by what it is, overpass-cli.
 
 **Key characteristics**
 
@@ -30,15 +30,15 @@ Every colour is declared once as a CSS custom property on `:root`, with the dark
 
 | Role | Token | Light | Dark | Use |
 | --- | --- | --- | --- | --- |
-| Fond (page floor) | `--color-paper` | `#FBFBF9` | `#141416` | Page background |
-| Surface | `--color-surface` | `#F3F3F0` | `#1E1E21` | Code blocks, table head, tabs rail, footer, skeletons |
-| Surface raised | `--color-surface-raised` | `#FDFDFB` | `#27272B` | Dialogs, menus, notifications |
-| Rule | `--color-rule` | `#D4D4D0` | `#38383D` | The grid: section rules, column rules, table rows, card borders |
+| Fond (page floor) | `--color-paper` | `#FCFCFD` | `#141416` | Page background |
+| Surface | `--color-surface` | `#F2F2F4` | `#1E1E21` | Code blocks, table head, tabs rail, footer, skeletons |
+| Surface raised | `--color-surface-raised` | `#FFFFFF` | `#27272B` | Dialogs, menus, notifications |
+| Rule | `--color-rule` | `#D4D4D8` | `#38383D` | The grid: section rules, column rules, table rows, card borders |
 | Control outline | `--color-rule-strong` | `#7A7A80` | `#8A8A90` | Input, select, checkbox, chip and secondary button borders |
 | Texte | `--color-ink` | `#1A1A1C` | `#EDEDEA` | Headings, body |
 | Texte secondaire | `--color-ink-2` | `#55555A` | `#ABABB0` | Captions, metadata, placeholders, table headers |
 | Accent | `--color-accent` | `#213E9E` | `#9DB4FF` | Primary button, links, active tab underline, focus ring |
-| Accent ink | `--color-accent-ink` | `#FBFBF9` | `#0E1A4A` | Text on the accent |
+| Accent ink | `--color-accent-ink` | `#FCFCFD` | `#0E1A4A` | Text on the accent |
 | Accent surface | `--color-accent-surface` | `#E6EBF9` | `#1C2A5C` | Selected row, active filter, ghost button hover |
 | Succès | `--color-success` | `#1D6B3A` | `#7FD39A` | Clear road badge, success notice |
 | Succès surface | `--color-success-surface` | `#E3F2E7` | `#163122` | Badge and notice background |
@@ -48,7 +48,7 @@ Every colour is declared once as a CSS custom property on `:root`, with the dark
 | Danger surface | `--color-danger-surface` | `#FADFDC` | `#43201D` | Badge and notice background |
 | Focus | `--color-focus` | `#213E9E` | `#9DB4FF` | 2 px ring, 2 px offset, on every focusable element |
 
-Measured contrast, light theme: ink on paper 16.8:1, ink-2 on paper 7.2:1, accent on paper 9.0:1, accent ink on accent 9.0:1, success on paper 6.3:1, warning on paper 6.6:1, danger on paper 6.3:1, control outline on paper 4.1:1. Dark theme: ink on paper 15.7:1, accent on paper 9.1:1, accent ink on accent 8.2:1, control outline on paper 5.4:1. Every text pair stays above 4.5:1; every control outline stays above 3:1. The hairline rule is decorative (1.4:1) and never the only boundary of a control. Recheck these numbers whenever a value changes.
+Measured contrast, light theme: ink on paper 16.9:1, ink-2 on paper 7.2:1, accent on paper 9.1:1, accent ink on accent 9.1:1, success on paper 6.4:1, warning on paper 6.7:1, danger on paper 6.3:1, control outline on paper 4.2:1. Dark theme: ink on paper 15.7:1, accent on paper 9.1:1, accent ink on accent 8.2:1, control outline on paper 5.4:1. Every text pair stays above 4.5:1; every control outline stays above 3:1. The hairline rule is decorative (1.4:1) and never the only boundary of a control. Recheck these numbers whenever a value changes.
 
 ### Rules
 
@@ -102,9 +102,9 @@ Measured contrast, light theme: ink on paper 16.8:1, ink-2 on paper 7.2:1, accen
 ### Grid & Container
 
 - Content container 1200 px, centred, with a 1 px rule on both sides from 1024 px (the page reads as a column of the atlas). Reading container 72ch.
-- Home page (approved by the user on 2026-10-24): the promise across the full container, a ruled row with a sentence that names what the product does and the primary action, then the live demo. Then "everything Overpass does", a tour of eight blocks (itineraries, test track, local relay, MCP server, discussions, blogs and newsletter, ranking, catalogue requests). Each block puts a numbered kicker, a title, two sentences and its links beside a small framed screen marked "example" that plays the feature at work, sides alternating from 1024 px, stacked text first below. The simulated operators with their unofficial mention close the tour. Then the latest published itineraries, recent discussions and articles beside the newsletter, and the countries, figures and sign-up.
+- Home page (approved by the user on 2026-10-24): the promise across the full container, a ruled row with a sentence that names what the product does and the primary action, then the live demo. Then "everything Overpass does", a tour of eight blocks (itineraries, Simulator, overpass-cli, MCP server, discussions, blogs and newsletter, ranking, catalogue requests). Each block puts a numbered kicker, a title, two sentences and its links beside a small framed screen marked "example" that plays the feature at work, sides alternating from 1024 px, stacked text first below. The simulated operators with their unofficial mention close the tour. Then the latest published itineraries, recent discussions and articles beside the newsletter, and the countries, figures and sign-up.
 - Catalogue: filters above the list under 1024 px, filters in a 280 px left column above.
-- Test track: one column under 1024 px (form, then inspector, then webhook log); two columns above (form left, inspector and log right).
+- Simulator: one column under 1024 px (form, then inspector, then webhook log); two columns above (form left, inspector and log right). A Tools section closes the page with two numbered guides side by side from 1024 px, overpass-cli then the MCP server.
 - Tables scroll horizontally inside their container under 768 px; they never break the page width.
 
 ### Whitespace Philosophy
@@ -175,7 +175,7 @@ Every component is keyboard operable, shows a visible focus ring (2 px accent, 2
 
 ### Tabs
 
-- **tabs**: a rail with a hairline bottom border; each tab is a 44 px button, ink-2 text, active tab in ink with a 2 px accent underline. Arrow keys move between tabs, `role="tablist"`, panels labelled by their tab. Tab labels never wrap; when they do not fit, the rail scrolls inside itself, never the page. Used in the test track inspector (request, response, headers) and in settings.
+- **tabs**: a rail with a hairline bottom border; each tab is a 44 px button, ink-2 text, active tab in ink with a 2 px accent underline. Arrow keys move between tabs, `role="tablist"`, panels labelled by their tab. Tab labels never wrap; when they do not fit, the rail scrolls inside itself, never the page. Used in the Simulator inspector (request, response, headers) and in settings.
 
 ### Confirmation dialog
 
@@ -199,7 +199,7 @@ Every component is keyboard operable, shows a visible focus ring (2 px accent, 2
 
 ### Header
 
-- **header** (masthead): a 64 px wordmark row (IBM Plex Sans 700, 22 px) with the language selector and account actions at the right, then the primary navigation (itineraries, test track, discussions, blog, docs) on its own ruled row, each item separated by a vertical rule, the current page marked with `aria-current` and a 2 px accent underline. Under 1024 px the navigation row collapses behind a 44 px "Menu" button and opens as a ruled list under the wordmark row. The language selector is a labelled `select` listing every supported language by its own name, never a two-state toggle.
+- **header** (masthead): a 64 px wordmark row (IBM Plex Sans 700, 22 px) with the language selector and account actions at the right, then the primary navigation (itineraries, Simulator, discussions, blog, docs) on its own ruled row, each item separated by a vertical rule, the current page marked with `aria-current` and a 2 px accent underline. Under 1024 px the navigation row collapses behind a 44 px "Menu" button and opens as a ruled list under the wordmark row. The language selector is a labelled `select` listing every supported language by its own name, never a two-state toggle.
 
 ### Footer
 
@@ -241,7 +241,7 @@ Every component is keyboard operable, shows a visible focus ring (2 px accent, 2
 | --- | --- | --- |
 | Phone | 360 to 767 px | One column, 16 px gutter, navigation behind a menu button, tables scroll, dialogs full width minus 16 px |
 | Tablet | 768 to 1023 px | 24 px gutter, two-column grids for cards, inspector under the form |
-| Desktop | 1024 px and up | 32 px gutter, 1120 px container, full navigation, two-column test track and catalogue |
+| Desktop | 1024 px and up | 32 px gutter, 1120 px container, full navigation, two-column Simulator and catalogue |
 
 Touch targets are 44 px minimum at every width, including table row actions and tab buttons. Hover never carries information; every hover state has a focus equivalent.
 

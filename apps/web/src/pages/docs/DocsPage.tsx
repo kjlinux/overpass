@@ -1,7 +1,7 @@
 import type { JSX } from "preact";
 import { useTranslation } from "react-i18next";
 import { useLanguage } from "../../app/useLanguage";
-import { Layout } from "../../layout";
+import { Layout, localizedPath } from "../../layout";
 import { McpConfigTabs } from "../../mcp";
 import { ApiReference } from "./ApiReference";
 import { DocSection } from "./DocSection";
@@ -50,6 +50,12 @@ export function DocsPage(): JSX.Element {
               <p class="max-w-prose">{t("editors.intro")}</p>
               <McpConfigTabs />
               <p class="max-w-prose">{t("editors.readOnly")}</p>
+              <p class="max-w-prose">
+                {t("editors.guide")}{" "}
+                <a href={`${localizedPath(language, "/sandbox")}#sandbox-tools`}>
+                  {t("editors.guideLink")}
+                </a>
+              </p>
             </DocSection>
             <DocSection id="tools" title={t("sections.tools")}>
               <ToolsTable />

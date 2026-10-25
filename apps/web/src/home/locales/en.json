@@ -104,15 +104,15 @@
       }
     },
     "track": {
-      "kicker": "Test track",
+      "kicker": "Simulator",
       "title": "Replay the cases that break in production",
       "body": "Create a test key and call a simulated operator like the real one. Successful payment, insufficient balance, duplicate or late webhook, timeout, with no merchant account.",
       "links": {
-        "open": "Open the test track"
+        "open": "Open the Simulator"
       },
       "screen": {
         "title": "Test key scenarios",
-        "label": "The test track scenarios played one after the other",
+        "label": "The Simulator scenarios played one after the other",
         "scenarios": [
           {
             "name": "Successful payment",
@@ -143,15 +143,15 @@
       }
     },
     "relay": {
-      "kicker": "Local relay",
+      "kicker": "overpass-cli",
       "title": "Webhooks reach your machine",
       "body": "One command opens an outgoing connection to Overpass and replays every webhook on your development server, body and headers intact. No tunnel, no public address.",
       "links": {
-        "open": "Set up the relay"
+        "open": "Set up overpass-cli"
       },
       "screen": {
         "title": "Terminal",
-        "label": "The local relay receives webhooks and replays them on localhost",
+        "label": "The overpass-cli command receives webhooks and replays them on localhost",
         "lines": [
           {
             "tone": "accent",
@@ -167,7 +167,7 @@
           },
           {
             "tone": "out",
-            "text": "Relay ready for wave, key ovp_test_Xk3f. Webhooks are replayed to http://localhost:3000/webhook. Ctrl+C to stop."
+            "text": "Ready for wave, key ovp_test_Xk3f. Webhooks are passed to http://localhost:3000/webhook. Ctrl+C to stop."
           },
           {
             "tone": "code",
@@ -307,7 +307,7 @@
     "requests": {
       "kicker": "Catalogue",
       "title": "An API is missing? Propose it",
-      "body": "Propose a service missing from the catalogue, Overpass validates it. Vote for the next simulator, the test track adds the most requested services first.",
+      "body": "Propose a service missing from the catalogue, Overpass validates it. Vote for the next simulator, the Simulator adds the most requested services first.",
       "links": {
         "propose": "Propose a service",
         "vote": "Vote for a simulator"
