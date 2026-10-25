@@ -5,15 +5,15 @@ export type ThemeStorage = Pick<Storage, "getItem" | "setItem">;
 export const themeKey = "overpass-theme";
 
 export function parseTheme(value: string | null): Theme {
-  return value === "light" ? "light" : "dark";
+  return value === "dark" ? "dark" : "light";
 }
 
-/** Reads the viewer's choice; blocked storage (private window, previews) means dark. */
+/** Reads the viewer's choice; no choice or blocked storage (private window, previews) means light. */
 export function readStoredTheme(storage: ThemeStorage): Theme {
   try {
     return parseTheme(storage.getItem(themeKey));
   } catch {
-    return "dark";
+    return "light";
   }
 }
 

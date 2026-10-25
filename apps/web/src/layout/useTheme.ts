@@ -2,10 +2,10 @@ import { useEffect, useState } from "preact/hooks";
 import { browserStorage, readStoredTheme } from "./theme";
 import type { Theme } from "./theme";
 
-/** The viewer's stored choice, dark where storage is unavailable or on the server. */
+/** The viewer's stored choice, light where storage is unavailable or on the server. */
 export const storedTheme = (): Theme => {
   const storage = typeof window === "undefined" ? null : browserStorage();
-  return storage === null ? "dark" : readStoredTheme(storage);
+  return storage === null ? "light" : readStoredTheme(storage);
 };
 
 const shownTheme = (): Theme =>

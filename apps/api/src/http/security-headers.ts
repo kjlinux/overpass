@@ -4,7 +4,7 @@ import type { FastifyInstance } from "fastify";
 export const apiContentSecurityPolicy = "default-src 'none'; frame-ancestors 'none'";
 
 // The one hash is the inline theme script of apps/web/index.html; a test keeps them in step.
-const themeScript = "'sha256-7FPCoee6Uje0y9WLrI7dZetAZX+TqftNIwp5o8EV+b0='";
+const themeScript = "'sha256-nGYicizQ+S1TS9WJVFlj199CScajNaTZYbEHh0QCWdk='";
 
 /** Policy of every web page, sent by the proxy and by the API share pages alike. */
 export const webContentSecurityPolicy = [
