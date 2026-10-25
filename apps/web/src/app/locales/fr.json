@@ -1,7 +1,7 @@
 {
   "app": {
     "name": "Overpass",
-    "tagline": "Intégrez n'importe quelle API de paiement sans tâtonner.",
+    "tagline": "Intégrez n'importe quelle API sans tâtonner.",
     "intro": "Overpass rassemble des fiches d'intégration pour toutes les API, paiement mobile, SMS, USSD ou autre, classées par service, pays et stack. Chaque fiche donne le code qui marche, les pièges connus et la date du dernier essai. Une piste d'essai simule les opérateurs sans compte marchand, et un serveur MCP sert les fiches à votre assistant de code.",
     "demo": "Essayer la démo",
     "routes": "Parcourir les itinéraires"
